@@ -1,4 +1,4 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-@import 'components-react/dist/main';
+@import '@oliverflecke/components-react/dist/main';

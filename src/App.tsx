@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './compiled.css';
+import Table from './components/Table';
 
-function App() {
+const App: React.FC = () => {
 	return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.tsx</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
+		<main className="dark bg-gray-900 h-screen p-2">
+			<header>
+				<h1 className="text-xl text-gray-900 dark:text-gray-300 uppercase font-sans font-light">
+					Finance tracker
+				</h1>
 			</header>
-		</div>
+			<section className="text-gray-900 dark:text-gray-200">
+				<Table />
+			</section>
+		</main>
 	);
-}
+};
 
 export default App;

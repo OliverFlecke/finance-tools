@@ -18,7 +18,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "build:css:dev": "NODE_ENV=development npx postcss src/main.css -o src/compiled.css -w",
+    "build:css:dev": "NODE_ENV=development npx postcss src/main.css -o src/compiled.css",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
