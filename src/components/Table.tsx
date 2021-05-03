@@ -2,7 +2,11 @@ import React, { FC } from 'react';
 import { Account, DateEntry } from '../models/Account';
 import Cell from './Cell';
 
-const Table: FC = () => {
+interface TableProps {
+	accounts: Account[];
+}
+
+const Table: FC<TableProps> = ({ accounts }: TableProps) => {
 	return (
 		<table className="w-full">
 			<thead>
@@ -15,7 +19,7 @@ const Table: FC = () => {
 			</thead>
 			<tbody className="">
 				{Object.keys(entries).map((date) => (
-					<tr key={date} className="odd:bg-indigo-900">
+					<tr key={date} className="odd:bg-gray-900">
 						<td>{date}</td>
 						{accounts.map((account) => (
 							<Cell
@@ -32,21 +36,6 @@ const Table: FC = () => {
 };
 
 export default Table;
-
-const accounts: Account[] = [
-	{
-		name: 'Primary',
-		type: 'Cash',
-	},
-	{
-		name: 'Savings',
-		type: 'Cash',
-	},
-	{
-		name: 'Investments',
-		type: 'Investment',
-	},
-];
 
 const entries: { [x: string]: DateEntry } = {
 	'2021-03-01': {

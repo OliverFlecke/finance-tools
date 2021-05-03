@@ -1447,10 +1447,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@oliverflecke/components-react@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.1.2.tgz#18f0199045879cf1096b4b0244debcce6cc5fe4c"
-  integrity sha512-yiuMmdkc1tmQQu9Y16S/w6TBY1/FzKmjH3tikMKC45qhLaW2cx0AZ2dM941Pe6f1gY5JD5upz1SeRP2bbOK3Ww==
+"@oliverflecke/components-react@^0.1.3":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.1.5.tgz#3bcc052f6c81a756f6f2cb74df0b3f821b41ee9b"
+  integrity sha512-yZ4bTCObprudGO5JjpM/JLknSiG0yV4sAKWUbIkFaftQzs5JntJoQ0/B9wyRXplMeePyWVdJjWTSwN2cVNa4ow==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.3":
   version "0.4.3"
@@ -9911,6 +9911,11 @@ react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
+
+react-hook-form@^7.3.6:
+  version "7.3.6"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.3.6.tgz#21da0f1aff834a9ae9f80a604ebbc28c5b229f79"
+  integrity sha512-3LRjxMDn+CUKZ2G9TA9BgNQXX7M9I8WcE5GkcMNg6eOHa9mFc+uF6rKY9QAKlNNjKhdL1atOmOTVBEj2gJVuEQ==
 
 react-is@^16.8.1:
   version "16.13.1"
