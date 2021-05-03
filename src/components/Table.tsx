@@ -19,7 +19,7 @@ const Table: FC<TableProps> = ({ accounts }: TableProps) => {
 			</thead>
 			<tbody className="">
 				{Object.keys(entries).map((date) => (
-					<tr key={date} className="odd:bg-gray-900">
+					<tr key={date} className="odd:bg-gray-300 dark:odd:bg-gray-900">
 						<td>{date}</td>
 						{accounts.map((account) => (
 							<Cell
