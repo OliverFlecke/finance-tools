@@ -1448,9 +1448,9 @@
     rimraf "^3.0.2"
 
 "@oliverflecke/components-react@^0.1.3":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.1.5.tgz#3bcc052f6c81a756f6f2cb74df0b3f821b41ee9b"
-  integrity sha512-yZ4bTCObprudGO5JjpM/JLknSiG0yV4sAKWUbIkFaftQzs5JntJoQ0/B9wyRXplMeePyWVdJjWTSwN2cVNa4ow==
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.1.8.tgz#db934197026a30b0f9fb30cf18d7e86490013d3b"
+  integrity sha512-MbkVQem1balAysFw8yyeYh0R0gSUNWTHA9lCcKbSOhb02qbPNKMLjmcHOXMy6n0MQh8MbC9GPOS/rYnigl4Izw==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.3":
   version "0.4.3"
