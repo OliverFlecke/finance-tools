@@ -1,46 +1,33 @@
 import { Button, Input } from '@oliverflecke/components-react';
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import NumberFormat from 'react-number-format';
 
 interface CompoundInterestProps {
 	name?: string;
 }
 
+type InterestAccrual = 'Yearly' | 'Monthly';
 type FormDate = {
 	existingAmount: number;
-	yearlyGrowth: number;
+	interestRate: number;
 	investmentPeriod: number;
-	intervalOfInterestAccrual: 'Yearly' | 'Monthly';
+	interestAccural: InterestAccrual;
 	monthlyDeposit: number;
 };
 
-type CompoundCalculation = {
-	totalAtEndOfPeriod: number;
-};
-
 const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) => {
-	const [calculation, setCalculation] = useState<CompoundCalculation | null>(
-		null
-	);
+	const [showCalculation, setShowCalculation] = useState(false);
 	const { register, handleSubmit, getValues } = useForm<FormDate>({
 		defaultValues: {
 			existingAmount: 100_000,
-			yearlyGrowth: 0.07,
+			interestRate: 0.07,
 			investmentPeriod: 10,
-			intervalOfInterestAccrual: 'Yearly',
+			interestAccural: 'Yearly',
 			monthlyDeposit: 10_000,
 		},
 	});
-	const onSubmit = handleSubmit((data) => {
-		const p = data.existingAmount;
-		const r = data.yearlyGrowth;
-		const t = data.investmentPeriod;
-		const n = 1;
-		const amount = p * (1 + r / n) ** (n * t);
-		setCalculation({
-			totalAtEndOfPeriod: amount,
-		});
-	});
+	const onSubmit = handleSubmit(() => setShowCalculation(true));
 
 	return (
 		<>
@@ -49,15 +36,18 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 				className="w-full flex flex-col items-center justify-center"
 			>
 				<fieldset className="flex flex-col items-center space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
-					<Input
+					<NumberFormat
+						customInput={Input}
+						thousandSeparator={true}
 						label="Existing amount"
 						placeholder="20.000"
+						inputMode="numeric"
 						{...register('existingAmount')}
 					/>
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
-						{...register('yearlyGrowth')}
+						{...register('interestRate')}
 					/>
 					<Input
 						label="Investment period"
@@ -67,7 +57,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					<Input
 						label="Interval of interest accrual"
 						placeholder="Yearly"
-						{...register('intervalOfInterestAccrual')}
+						{...register('interestAccural')}
 					/>
 					<Input
 						label="Monthly deposit"
@@ -79,9 +69,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					<Button type="submit">Calculate</Button>
 				</div>
 			</form>
-			{!!calculation && (
-				<CalculationSummary {...calculation} {...getValues()} />
-			)}
+			{showCalculation && <CalculationSummary {...getValues()} />}
 		</>
 	);
 };
@@ -93,11 +81,18 @@ const formatter = Intl.NumberFormat('en-US', {
 	currency: 'DKK',
 });
 
-const CalculationSummary = (props: CompoundCalculation & FormDate) => {
+const CalculationSummary = (props: FormDate) => {
+	const amount = calculateCompoundInterest(
+		props.existingAmount,
+		props.interestRate,
+		props.investmentPeriod,
+		props.interestAccural
+	);
+
 	return (
 		<div>
 			<AmountSummary
-				amount={props.totalAtEndOfPeriod}
+				amount={amount}
 				label={`Total amount after ${props.investmentPeriod} years`}
 				color="bg-blue-900 dark:bg-blue-300"
 			/>
@@ -125,3 +120,24 @@ const AmountSummary: FC<AmountSummaryProps> = ({
 		</div>
 	</div>
 );
+
+function calculateCompoundInterest(
+	principal: number,
+	interestRate: number,
+	time: number,
+	interestAccrual: InterestAccrual
+): number {
+	const n = getInterestAccrualPerYear(interestAccrual);
+	return principal * Math.pow(1 + interestRate / n, n * time);
+}
+
+function getInterestAccrualPerYear(interestAccrual: InterestAccrual): number {
+	switch (interestAccrual) {
+		case 'Monthly':
+			return 12;
+
+		case 'Yearly':
+		default:
+			return 1;
+	}
+}
