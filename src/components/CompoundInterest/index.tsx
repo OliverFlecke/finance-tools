@@ -22,15 +22,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<FormData>({
-		// defaultValues: {
-		// 	existingAmount: 100_000,
-		// 	interestRate: 0.07,
-		// 	investmentPeriod: 10,
-		// 	interestAccural: 'Yearly',
-		// 	monthlyDeposit: 10_000,
-		// },
-	});
+	} = useForm<FormData>({});
 	const onSubmit = handleSubmit((d) => setData(d));
 
 	return (
@@ -103,33 +95,19 @@ const formatter = Intl.NumberFormat('en-US', {
 });
 
 const CalculationSummary = (props: FormData) => {
-	const rate = useMemo(() => props.interestRate / 100, [props.interestRate]);
+	const r = useMemo(() => props.interestRate / 100, [props.interestRate]);
 	const isWithDeposits = useMemo(() => props.monthlyDeposit !== 0, [props.monthlyDeposit]);
-	const amount = compoundInterest(
-		props.existingAmount,
-		rate,
-		props.investmentPeriod,
-		props.interestAccural
-	);
 
-	const future = futureValue(
-		props.monthlyDeposit,
-		rate,
-		props.investmentPeriod,
-		props.interestAccural
-	);
-
-	// console.log(props);
-	// console.log(`Amount: ${amount}`);
-	// console.log(`Future: ${future}`);
-	// console.log(`Sum:    ${amount + future}`);
+	const balance = FV(props.existingAmount, props.monthlyDeposit, r, props.investmentPeriod);
+	const totalDeposits = 12 * props.monthlyDeposit * props.investmentPeriod + props.existingAmount;
+	const totalInterest = balance - totalDeposits;
 
 	return (
 		<>
 			<div className="flex flex-wrap justify-center p-8 space-x-8">
 				<AmountSummary
-					amount={amount}
-					label={`Total amount after ${props.investmentPeriod} years`}
+					amount={balance}
+					label={`Balance after ${props.investmentPeriod} years`}
 					color="bg-blue-900 dark:bg-blue-300"
 				/>
 				<AmountSummary
@@ -138,9 +116,14 @@ const CalculationSummary = (props: FormData) => {
 					color="bg-green-900 dark:bg-green-300"
 				/>
 				<AmountSummary
-					amount={12 * props.monthlyDeposit * props.investmentPeriod}
-					label={`Total monthly deposits`}
+					amount={totalDeposits}
+					label={`Total deposits`}
 					color="bg-indigo-900 dark:bg-indigo-300"
+				/>
+				<AmountSummary
+					amount={totalInterest}
+					label={'Gain from interest'}
+					color="bg-yellow-900 dark:bg-yellow-300"
 				/>
 			</div>
 			<table className="w-full">
@@ -156,26 +139,16 @@ const CalculationSummary = (props: FormData) => {
 				</thead>
 				<tbody className="text-right font-mono">
 					{[...Array(props.investmentPeriod + 1).keys()].map((year) => {
-						const existingAmount = props.existingAmount + year * 12 * props.monthlyDeposit;
 						const deposit = year === 0 ? props.existingAmount : 12 * props.monthlyDeposit;
 						const totalDeposit = year * 12 * props.monthlyDeposit + props.existingAmount;
+						const totalBalance = FV(props.existingAmount, props.monthlyDeposit, r, year);
+						const lastYear = year - 1;
 
-						const interestOnCurrentBalance =
-							year <= 0
-								? 0
-								: compoundInterest(existingAmount, rate, year - 1, props.interestAccural) -
-								  existingAmount;
+						const depositPrevious = lastYear * 12 * props.monthlyDeposit + props.existingAmount;
+						const balancePrevious = FV(props.existingAmount, props.monthlyDeposit, r, lastYear);
 
-						const totalInterestOnCurrentBalance =
-							compoundInterest(props.existingAmount, rate, year, props.interestAccural) -
-							props.existingAmount;
-						const future =
-							futureValue(props.monthlyDeposit, rate, year, 'Monthly', 'beginning') -
-							year * 12 * props.monthlyDeposit;
-
-						const interest = totalInterestOnCurrentBalance - interestOnCurrentBalance;
-						const totalInterest = totalInterestOnCurrentBalance;
-						const balance = existingAmount + totalInterest;
+						const totalInterest = totalBalance - totalDeposit;
+						const interest = year === 0 ? 0 : totalInterest - (balancePrevious - depositPrevious);
 
 						return (
 							<tr key={year} className="odd:bg-warmGray-900 py-2">
@@ -184,7 +157,7 @@ const CalculationSummary = (props: FormData) => {
 								<td>{formatter.format(interest)}</td>
 								{isWithDeposits && <td>{formatter.format(totalDeposit)}</td>}
 								<td>{formatter.format(totalInterest)}</td>
-								<td>{formatter.format(balance)}</td>
+								<td>{formatter.format(totalBalance)}</td>
 							</tr>
 						);
 					})}
@@ -193,6 +166,12 @@ const CalculationSummary = (props: FormData) => {
 		</>
 	);
 };
+
+function FV(P: number, A: number, r: number, year: number, n = 12): number {
+	const rate = ratePerPaymentPeriod(r, 1, n);
+	const nper = n * year;
+	return P * Math.pow(1 + rate, nper) + A * ((Math.pow(1 + rate, nper) - 1) / rate);
+}
 
 type AmountSummaryProps = {
 	amount: number;
@@ -204,7 +183,7 @@ const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }: AmountS
 		<div className={`w-6 h-6 rounded-full ${color}`}></div>
 		<div>
 			<span className="text-black dark:text-warmGray-300">{label}</span>
-			<div className="text-black dark:text-white">{formatter.format(amount)}</div>
+			<div className="text-black dark:text-white text-2xl">{formatter.format(amount)}</div>
 		</div>
 	</div>
 );
@@ -220,19 +199,25 @@ function compoundInterest(
 }
 
 function futureValue(
-	monthlyPayment: number,
+	regularDeposit: number,
 	interestRate: number,
 	time: number,
 	interestAccrual: InterestAccrual,
+	numberOfDeposits: number,
 	depositsMadeAt: 'beginning' | 'end' = 'end'
 ): number {
 	const n = getInterestAccrualPerYear(interestAccrual);
 
 	return (
-		monthlyPayment *
-		((Math.pow(1 + interestRate / n, n * time) - 1) / (interestRate / n)) *
-		(depositsMadeAt === 'end' ? 1 : 1 + interestRate / n)
+		regularDeposit *
+		numberOfDeposits *
+		(((Math.pow(1 + interestRate / n, n * time) - 1) / (interestRate / n)) *
+			(depositsMadeAt === 'end' ? 1 : 1 + interestRate / n))
 	);
+}
+
+function ratePerPaymentPeriod(r: number, n: number, p: number) {
+	return Math.pow(1 + r / n, n / p) - 1;
 }
 
 function getInterestAccrualPerYear(interestAccrual: InterestAccrual): number {

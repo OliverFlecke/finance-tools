@@ -20,7 +20,7 @@ module.exports = {
 	},
 	variants: {
 		extend: {
-			backgroundColor: ['odd'],
+			backgroundColor: ['odd', 'last', 'first'],
 		},
 	},
 	plugins: [],
