@@ -22,14 +22,14 @@ const App: React.FC = () => {
 	}, [isDarkMode]);
 
 	return (
-		<main className="h-screen bg-white dark:bg-warmGray-900">
+		<main className="h-screen bg-white dark:bg-warmGray-900 text-gray-900 dark:text-gray-200">
 			<header className="p-2 flex flex-row justify-between text-gray-300 bg-emerald-900 ">
 				<h1 className="p-4 text-xl uppercase font-sans font-light">
 					Finance tracker
 				</h1>
 				<Button onClick={() => setDarkMode(!isDarkMode)}>Dark</Button>
 			</header>
-			<section className="text-gray-900 dark:text-gray-200 p-4">
+			<section className="p-4">
 				<Table accounts={accountService.getAccounts()} />
 				{/* <AddAccount accountService={accountService} /> */}
 			</section>
