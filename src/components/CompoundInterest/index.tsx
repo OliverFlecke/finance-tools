@@ -3,6 +3,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 import { FV, InterestAccrual } from '../../services/formulas';
+import { parseNumber } from '../../utils/converters';
 
 interface CompoundInterestProps {
 	name?: string;
@@ -76,10 +77,10 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 			</form>
 			{data && (
 				<CalculationSummary
-					existingAmount={parse(data.existingAmount)}
-					interestRate={parse(data.interestRate)}
-					investmentPeriod={parse(data.investmentPeriod)}
-					monthlyDeposit={parse(data.monthlyDeposit)}
+					existingAmount={parseNumber(data.existingAmount)}
+					interestRate={parseNumber(data.interestRate)}
+					investmentPeriod={parseNumber(data.investmentPeriod)}
+					monthlyDeposit={parseNumber(data.monthlyDeposit)}
 					interestAccural={data.interestAccural}
 				/>
 			)}
@@ -185,8 +186,3 @@ const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }: AmountS
 		</div>
 	</div>
 );
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parse(value: any): number {
-	return Number.parseFloat(value.toString().replace(/,/g, ''));
-}

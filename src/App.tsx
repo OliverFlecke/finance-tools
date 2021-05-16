@@ -2,9 +2,10 @@ import { Button, useDarkMode } from '@oliverflecke/components-react';
 import React, { memo, useEffect, useReducer } from 'react';
 import './compiled.css';
 import AddAccount from './components/AddAccountModal';
+import AddEntryModal from './components/AddEntryModal';
 import CompoundInterest from './components/CompoundInterest';
 import Table from './components/Table';
-import { accountReducer, initAccountState } from './services/AccountService';
+import { AccountContext, accountReducer, initAccountState } from './services/AccountService';
 
 const App: React.FC = () => {
 	const { isDarkMode, setDarkMode } = useDarkMode();
@@ -43,13 +44,13 @@ const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
 	return (
-		<>
+		<AccountContext.Provider value={{ state, dispatch }}>
 			<Table accounts={state.accounts} entries={state.entries} />
 			<div className="py-4 flex flex-row justify-between">
 				<AddAccount addAccount={(account) => dispatch({ type: 'add account', account })} />
-				<Button buttonType="Primary">Add entry</Button>
+				<AddEntryModal />
 			</div>
-		</>
+		</AccountContext.Provider>
 	);
 });
 AccountOverview.displayName = 'AccountOverview';

@@ -1,33 +1,39 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, { FC, useCallback, useContext, useRef } from 'react';
 import { Account, DateEntry } from '../models/Account';
+import { AccountContext } from '../services/AccountService';
+import { currencyFormatter, parseNumber } from '../utils/converters';
 
 interface CellProps {
 	account: Account;
 	entry: DateEntry;
+	date: string;
 }
 
-const Cell: FC<CellProps> = ({ account, entry }: CellProps) => {
+const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
+	const { dispatch } = useContext(AccountContext);
 	const entryRef = useRef<HTMLTableDataCellElement>(null);
-	const onInput = useCallback(
-		(x: React.FormEvent<HTMLTableDataCellElement>) => {
-			const amount = Number.parseFloat(x.currentTarget.innerText);
-			console.log(`Amount: ${amount}`);
+	const onBlur = useCallback(
+		(element: React.FormEvent<HTMLTableDataCellElement>) => {
+			const amount = parseNumber(element.currentTarget.innerText);
 			if (amount !== NaN) {
-				entry[account.name] = amount;
+				console.log(`Got amount ${amount}`);
+				dispatch({ type: 'edit entry for account', name: account.name, key: date, value: amount });
 			}
 		},
-		[entry, account]
+		[account.name, date, dispatch]
 	);
+
+	const value = currencyFormatter.format(entry[account.name] ?? 0);
 
 	return (
 		<td
 			key={account.name}
 			contentEditable
 			ref={entryRef}
-			onInput={onInput}
+			onBlur={onBlur}
 			className="px-2 text-right"
 		>
-			{entry[account.name]}
+			{value}
 		</td>
 	);
 };
