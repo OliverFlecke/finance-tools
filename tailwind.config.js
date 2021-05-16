@@ -8,7 +8,7 @@ module.exports = {
 	purge: {
 		mode: 'all',
 		enable: true,
-		content: ['src/**/*.html', 'src/**/*.tsx'],
+		content: ['src/**/*.html', 'src/**/*.tsx', 'node_modules/@oliverflecke/**/*.tsx'],
 	},
 	darkMode: 'class', // or 'media' or 'class'
 	theme: {
