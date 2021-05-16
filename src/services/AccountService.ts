@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { Account, AccountEntries } from '../models/Account';
+import { sortObject } from '../utils/converters';
 
 export const AccountContext = createContext({
 	state: {
@@ -29,7 +30,7 @@ export function accountReducer(state: AccountState, action: AccountAction): Acco
 export function initAccountState(): AccountState {
 	return {
 		accounts: getData('accounts', []),
-		entries: getData('entries', {}),
+		entries: sortObject(getData('entries', {})),
 	};
 }
 
@@ -52,6 +53,7 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 			};
 		case 'edit entry for account':
 			state.entries[action.key][action.name] = action.value;
+			state.entries = sortObject(state.entries);
 			return {
 				...state,
 			};
