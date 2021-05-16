@@ -1,19 +1,24 @@
 import React, { FC } from 'react';
-import { Account, DateEntry } from '../models/Account';
+import { Account, AccountEntries } from '../models/Account';
 import Cell from './Cell';
 
 interface TableProps {
 	accounts: Account[];
+	entries: AccountEntries;
 }
 
-const Table: FC<TableProps> = ({ accounts }: TableProps) => {
+const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
+	console.log(accounts);
+
 	return (
 		<table className="w-full">
 			<thead>
 				<tr>
 					<th>Date</th>
 					{accounts.map((account) => (
-						<th key={account.name}>{account.name}</th>
+						<th key={account.name}>
+							<span>{account.name}</span>
+						</th>
 					))}
 				</tr>
 			</thead>
@@ -22,11 +27,7 @@ const Table: FC<TableProps> = ({ accounts }: TableProps) => {
 					<tr key={date} className="odd:bg-gray-300 dark:odd:bg-gray-900">
 						<td>{date}</td>
 						{accounts.map((account) => (
-							<Cell
-								key={account.name}
-								account={account}
-								entry={entries[date]}
-							/>
+							<Cell key={account.name} account={account} entry={entries[date]} />
 						))}
 					</tr>
 				))}
@@ -36,19 +37,3 @@ const Table: FC<TableProps> = ({ accounts }: TableProps) => {
 };
 
 export default Table;
-
-const entries: { [x: string]: DateEntry } = {
-	'2021-03-01': {
-		Primary: 50,
-		Savings: 100,
-		Investments: 500,
-	},
-	'2021-04-01': {
-		Primary: 100,
-		Savings: 300,
-	},
-	'2021-05-01': {
-		Primary: 200,
-		Savings: 400,
-	},
-};

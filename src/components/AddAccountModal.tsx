@@ -1,66 +1,59 @@
-import {
-	Button,
-	ButtonContainer,
-	Input,
-	Modal,
-} from '@oliverflecke/components-react';
-import React, { FC, useState } from 'react';
+import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
+import React, { FC, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import AccountService from '../services/AccountService';
+import { Account } from '../models/Account';
 
 interface AddAccountProps {
-	accountService: AccountService;
+	addAccount: (account: Account) => void;
 }
 
-const AddAccount: FC<AddAccountProps> = ({
-	accountService,
-}: AddAccountProps) => {
-	const [showPrompt, setShowPrompt] = useState(true);
-	const { register, handleSubmit } = useForm();
-	const onSubmit = (data: any) => {
-		console.log(data);
-		accountService.add({
-			name: data.name,
-			type: data.type,
-		});
+const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
+	const [showPrompt, setShowPrompt] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Account>();
+	const close = useCallback(() => setShowPrompt(false), [setShowPrompt]);
+	const onSubmit = (account: Account) => {
+		console.log(`Adding account: ${account}`);
+		addAccount(account);
+		close();
 	};
 
 	return (
-		<div>
+		<>
 			<Button onClick={() => setShowPrompt((x) => !x)}>Add account</Button>
-			<Modal isOpen={showPrompt}>
+			<Modal isOpen={showPrompt} onDismiss={close}>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className="p-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-400">
-							Add new account
-						</h2>
+						<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new account</h2>
 
-						<div className="space-y-2">
+						<fieldset className="space-y-2">
 							<Input
 								placeholder="Savings, Investments..."
 								label="Name"
-								{...register('name')}
+								{...register('name', { required: true })}
+								errorMessage={errors.name && 'Please provide a name for your account'}
 							/>
 							<Input
-								placeholder="Cash, Investments..."
+								placeholder="Cash, Investment..."
 								label="Type"
-								{...register('type')}
+								{...register('type', { required: true })}
+								errorMessage={errors.type && 'Please choose cash or investment'}
 							/>
-						</div>
+						</fieldset>
 					</div>
 
 					<ButtonContainer>
-						<Button
-							buttonType="Transparent"
-							onClick={() => setShowPrompt(false)}
-						>
+						<Button buttonType="Transparent" onClick={close}>
 							Cancel
 						</Button>
 						<Button type="submit">Add</Button>
 					</ButtonContainer>
 				</form>
 			</Modal>
-		</div>
+		</>
 	);
 };
 

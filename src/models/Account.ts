@@ -6,3 +6,5 @@ export interface Account {
 }
 
 export type DateEntry = { [key: string]: number };
+
+export type AccountEntries = { [x: string]: DateEntry };

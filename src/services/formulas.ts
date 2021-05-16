@@ -34,7 +34,7 @@ export function futureValue(
 	);
 }
 
-export function ratePerPaymentPeriod(r: number, n: number, p: number) {
+export function ratePerPaymentPeriod(r: number, n: number, p: number): number {
 	return Math.pow(1 + r / n, n / p) - 1;
 }
 
