@@ -1,5 +1,5 @@
-import { Button, useDarkMode } from '@oliverflecke/components-react';
-import React, { memo, useEffect, useReducer } from 'react';
+import { DarkModeToggle, useDarkModeWithClass } from '@oliverflecke/components-react';
+import React, { memo, useReducer } from 'react';
 import './compiled.css';
 import AddAccount from './components/AddAccountModal';
 import AddEntryModal from './components/AddEntryModal';
@@ -8,23 +8,15 @@ import Table from './components/Table';
 import { AccountContext, accountReducer, initAccountState } from './services/AccountService';
 
 const App: React.FC = () => {
-	const { isDarkMode, setDarkMode } = useDarkMode();
-
-	useEffect(() => {
-		if (isDarkMode) {
-			if (!document.body.classList.contains('dark')) {
-				document.body.classList.add('dark');
-			}
-		} else {
-			document.body.classList.remove('dark');
-		}
-	}, [isDarkMode]);
+	const { isDarkMode, setDarkMode } = useDarkModeWithClass();
 
 	return (
 		<main className="h-screen bg-white dark:bg-warmGray-900 text-gray-900 dark:text-gray-200">
 			<header className="p-2 flex flex-row justify-between text-gray-300 bg-emerald-900 ">
 				<h1 className="p-4 text-xl uppercase font-sans font-light">Finance tracker</h1>
-				<Button onClick={() => setDarkMode(!isDarkMode)}>Dark</Button>
+				<div className="p-4">
+					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
+				</div>
 			</header>
 			<section className="p-4">
 				<AccountOverview />
