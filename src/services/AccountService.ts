@@ -20,23 +20,18 @@ export function accountReducer(state: AccountState, action: AccountAction): Acco
 	console.log(`Got action '${action.type}'`);
 	const newState = reducer(state, action);
 
-	localStorage.setItem('accounts', JSON.stringify(newState.accounts));
-	localStorage.setItem('entries', JSON.stringify(newState.entries));
-
-	console.debug(newState);
+	localStorage.setItem('account_state', JSON.stringify(newState));
 
 	return newState;
 }
 export function initAccountState(): AccountState {
-	return {
-		accounts: getData('accounts', []),
-		entries: sortObject(getData('entries', {})),
-	};
+	return getData('account_state');
 }
 
 export type AccountAction =
 	| { type: 'add account'; account: Account }
 	| { type: 'add entry'; date: string }
+	| { type: 'delete entry'; date: string }
 	| { type: 'edit entry for account'; name: string; value: number; key: string };
 
 function reducer(state: AccountState, action: AccountAction): AccountState {
@@ -56,6 +51,12 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 			state.entries = sortObject(state.entries);
 			return {
 				...state,
+			};
+		case 'delete entry':
+			delete state.entries[action.date];
+			return {
+				...state,
+				entries: state.entries,
 			};
 
 		default:
