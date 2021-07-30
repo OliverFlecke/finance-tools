@@ -22,9 +22,9 @@
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {
-		"build:css:dev": "NODE_ENV=development npx postcss src/main.css -o src/compiled.css",
+		"css": "TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",
 		"start": "react-scripts start",
-		"prebuild": "NODE_ENV=production npx postcss src/main.css -o src/compiled.css",
+		"prebuild": "yarn postcss src/main.css -o src/compiled.css -v",
 		"build": "react-scripts build",
 		"postbuild": "react-snap",
 		"test": "react-scripts test",
@@ -53,6 +53,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.22.0",
 		"@typescript-eslint/parser": "^4.22.0",
 		"autoprefixer": "^10.2.5",
+		"cssnano": "^5.0.7",
 		"eslint": "^7.25.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^3.4.0",
@@ -65,6 +66,6 @@
 		"postcss-nested": "^5.0.5",
 		"prettier": "^2.2.1",
 		"react-snap": "^1.23.0",
-		"tailwindcss": "^2.1.2"
+		"tailwindcss": "^2.2.7"
 	}
 }
