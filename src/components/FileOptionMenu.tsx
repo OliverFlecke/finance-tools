@@ -1,16 +1,19 @@
 import React, { useCallback, useContext } from 'react';
 import { AccountContext } from '../services/AccountService';
+import { saveAs } from 'file-saver';
 
 const FileOptionMenu: React.FC = () => {
 	const { dispatch, state } = useContext(AccountContext);
 
+	const closeFile = useCallback(() => dispatch({ type: 'reset' }), [dispatch]);
 	const save = useCallback(() => {
 		const blob = new Blob([JSON.stringify(state)], {
-			type: 'application/json;charset=utf-8',
+			type: 'text/plain;charset=utf-8',
 		});
 		const filename = `finance_${new Date().toISOString().slice(0, 19)}.json`;
 		saveAs(blob, filename);
 	}, [state]);
+
 	const fileChange = useCallback(
 		async (e: React.ChangeEvent<HTMLInputElement>) => {
 			const files = e.target.files;
@@ -27,10 +30,9 @@ const FileOptionMenu: React.FC = () => {
 		},
 		[dispatch]
 	);
-	const closeFile = useCallback(() => dispatch({ type: 'reset' }), [dispatch]);
 
 	return (
-		<div className="space-x-4">
+		<div className="flex justify-end space-x-4">
 			<button className="btn btn-primary" onClick={save}>
 				Save
 			</button>
