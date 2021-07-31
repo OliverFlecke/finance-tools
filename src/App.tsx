@@ -4,6 +4,7 @@ import './compiled.css';
 import AddAccount from './components/AddAccountModal';
 import AddEntryModal from './components/AddEntryModal';
 import CompoundInterest from './components/CompoundInterest';
+import FileOptionMenu from './components/FileOptionMenu';
 import Table from './components/Table';
 import { AccountContext, accountReducer, initAccountState } from './services/AccountService';
 
@@ -42,6 +43,7 @@ const AccountOverview = memo(() => {
 				<AddAccount addAccount={(account) => dispatch({ type: 'add account', account })} />
 				<AddEntryModal />
 			</div>
+			<FileOptionMenu />
 		</AccountContext.Provider>
 	);
 });

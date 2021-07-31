@@ -16,6 +16,13 @@ export interface AccountState {
 	entries: AccountEntries;
 }
 
+function getDefaultAccountState(): AccountState {
+	return {
+		accounts: [],
+		entries: {},
+	};
+}
+
 export function accountReducer(state: AccountState, action: AccountAction): AccountState {
 	console.log(`Got action '${action.type}'`);
 	const newState = reducer(state, action);
@@ -25,17 +32,23 @@ export function accountReducer(state: AccountState, action: AccountAction): Acco
 	return newState;
 }
 export function initAccountState(): AccountState {
-	return getData('account_state');
+	return getData('account_state', getDefaultAccountState());
 }
 
 export type AccountAction =
 	| { type: 'add account'; account: Account }
 	| { type: 'add entry'; date: string }
 	| { type: 'delete entry'; date: string }
+	| { type: 'reset' }
+	| { type: 'load state'; state: AccountState }
 	| { type: 'edit entry for account'; name: string; value: number; key: string };
 
 function reducer(state: AccountState, action: AccountAction): AccountState {
 	switch (action.type) {
+		case 'reset':
+			return getDefaultAccountState();
+		case 'load state':
+			return action.state;
 		case 'add account':
 			return {
 				...state,
@@ -66,6 +79,6 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 }
 
 function getData(key: string, defaultValue: any = {}): any {
-	const data = localStorage.getItem(key) ?? '';
+	const data = localStorage.getItem(key) ?? undefined;
 	return data === undefined || data === '' ? defaultValue : JSON.parse(data);
 }
