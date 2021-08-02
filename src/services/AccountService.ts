@@ -5,7 +5,7 @@ import { sortObject } from '../utils/converters';
 export const AccountContext = createContext({
 	state: {
 		accounts: [] as Account[],
-		entries: {},
+		entries: {} as AccountEntries,
 	},
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	dispatch: (_: AccountAction) => {},

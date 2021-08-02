@@ -1,12 +1,8 @@
 import { DarkModeToggle, useDarkModeWithClass } from '@oliverflecke/components-react';
-import React, { memo, useReducer } from 'react';
+import React from 'react';
+import { AccountOverview } from './AccountOverview';
 import './compiled.css';
-import AddAccount from './components/AddAccountModal';
-import AddEntryModal from './components/AddEntryModal';
 import CompoundInterest from './components/CompoundInterest';
-import FileOptionMenu from './components/FileOptionMenu';
-import Table from './components/Table';
-import { AccountContext, accountReducer, initAccountState } from './services/AccountService';
 
 const App: React.FC = () => {
 	const { isDarkMode, setDarkMode } = useDarkModeWithClass();
@@ -32,19 +28,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-const AccountOverview = memo(() => {
-	const [state, dispatch] = useReducer(accountReducer, initAccountState());
-
-	return (
-		<AccountContext.Provider value={{ state, dispatch }}>
-			<Table accounts={state.accounts} entries={state.entries} />
-			<div className="py-4 flex flex-row justify-between">
-				<AddAccount addAccount={(account) => dispatch({ type: 'add account', account })} />
-				<AddEntryModal />
-			</div>
-			<FileOptionMenu />
-		</AccountContext.Provider>
-	);
-});
-AccountOverview.displayName = 'AccountOverview';
