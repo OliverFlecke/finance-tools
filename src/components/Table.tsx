@@ -1,8 +1,8 @@
 import React, { FC, useContext } from 'react';
-import DeleteIcon from '../icons/DeleteIcon';
-import { Account, AccountEntries } from '../models/Account';
-import { AccountContext } from '../services/AccountService';
-import { currencyFormatter } from '../utils/converters';
+import DeleteIcon from 'icons/DeleteIcon';
+import { Account, AccountEntries } from 'models/Account';
+import { AccountContext } from 'services/AccountService';
+import { currencyFormatter } from 'utils/converters';
 import Cell from './Cell';
 
 interface TableProps {
@@ -50,10 +50,18 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 								className="odd:bg-gray-300 dark:odd:bg-warmGray-800 text-right whitespace-nowrap font-mono"
 							>
 								<td className="text-center">{date}</td>
-								<td className="text-green-700 dark:text-green-500">{currencyFormatter.format(gain)}</td>
-								<td className="text-blue-700 dark:text-blue-500">{currencyFormatter.format(total)}</td>
-								<td className="text-yellow-700 dark:text-yellow-500">{currencyFormatter.format(totalCash)}</td>
-								<td className="text-purple-700 dark:text-purple-500">{currencyFormatter.format(totalInvested)}</td>
+								<td className="text-green-700 dark:text-green-500">
+									{currencyFormatter.format(gain)}
+								</td>
+								<td className="text-blue-700 dark:text-blue-500">
+									{currencyFormatter.format(total)}
+								</td>
+								<td className="text-yellow-700 dark:text-yellow-500">
+									{currencyFormatter.format(totalCash)}
+								</td>
+								<td className="text-purple-700 dark:text-purple-500">
+									{currencyFormatter.format(totalInvested)}
+								</td>
 								{accounts.map((account) => (
 									<Cell key={account.name} account={account} entry={entries[date]} date={date} />
 								))}
