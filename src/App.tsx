@@ -15,7 +15,7 @@ const App: React.FC = () => {
 					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
 				</div>
 			</header>
-			<section className="p-4">
+			<section className="p-4 dark:bg-warmGray-900">
 				<AccountOverview />
 			</section>
 

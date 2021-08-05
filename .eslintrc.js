@@ -20,5 +20,6 @@ module.exports = {
 	],
 	rules: {
 		'prettier/prettier': 'warn',
+		'@typescript/no-explicit-any': 'off',
 	},
 };

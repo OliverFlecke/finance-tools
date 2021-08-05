@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import { AccountContext } from '../services/AccountService';
 import { saveAs } from 'file-saver';
+import SaveIcon from '../icons/SaveIcon';
 
 const FileOptionMenu: React.FC = () => {
 	const { dispatch, state } = useContext(AccountContext);
@@ -33,7 +34,8 @@ const FileOptionMenu: React.FC = () => {
 
 	return (
 		<div className="flex justify-end space-x-4">
-			<button className="btn btn-primary" onClick={save}>
+			<button className="btn btn-primary max-h-12 max-w-12" onClick={save}>
+				{/* <SaveIcon /> */}
 				Save
 			</button>
 			<input type="file" onChange={fileChange} className="bg-blue-400 p-2 rounded" />
