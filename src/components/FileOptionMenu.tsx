@@ -1,7 +1,6 @@
+import { saveAs } from 'file-saver';
 import React, { useCallback, useContext } from 'react';
 import { AccountContext } from '../services/AccountService';
-import { saveAs } from 'file-saver';
-import SaveIcon from '../icons/SaveIcon';
 
 const FileOptionMenu: React.FC = () => {
 	const { dispatch, state } = useContext(AccountContext);
