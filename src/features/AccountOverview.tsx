@@ -1,10 +1,10 @@
+import AddAccount from 'components/AddAccountModal';
+import AddEntryModal from 'components/AddEntryModal';
+import FileOptionMenu from 'components/FileOptionMenu';
+import IndividualGrowthGraph from 'components/IndividualGrowthGraph';
+import Table from 'components/Table';
 import React, { memo, useReducer } from 'react';
-import AddAccount from './components/AddAccountModal';
-import AddEntryModal from './components/AddEntryModal';
-import FileOptionMenu from './components/FileOptionMenu';
-import IndividualGrowthGraph from './components/IndividualGrowthGraph';
-import Table from './components/Table';
-import { AccountContext, accountReducer, initAccountState } from './services/AccountService';
+import { AccountContext, accountReducer, initAccountState } from 'services/AccountService';
 
 export const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
