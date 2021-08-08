@@ -7,7 +7,7 @@ export const AccountContext = createContext({
 		accounts: [] as Account[],
 		entries: {} as AccountEntries,
 	},
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
 	dispatch: (_: AccountAction) => {},
 });
 
@@ -78,6 +78,7 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getData(key: string, defaultValue: any = {}): any {
 	const data = localStorage.getItem(key) ?? undefined;
 	return data === undefined || data === '' ? defaultValue : JSON.parse(data);

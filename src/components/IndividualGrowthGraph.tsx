@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { curveLinear } from '@visx/curve';
 import { Group } from '@visx/group';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import { ParentSize } from '@visx/responsive';
-import { scaleLinear, scaleTime, scaleOrdinal, TimeDomain } from '@visx/scale';
+import { scaleLinear, scaleOrdinal, scaleTime, TimeDomain } from '@visx/scale';
 import { LinePath } from '@visx/shape';
 import { extent, max } from 'd3-array';
 import { ScaleLinear, ScaleTime, tickFormat } from 'd3-scale';
-import events from 'events';
 import { Account, DateEntry } from 'models/Account';
 import React, { FC, useContext } from 'react';
 import { AccountContext } from 'services/AccountService';
