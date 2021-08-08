@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
 import dotenv from 'dotenv';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 dotenv.config();
 
 export const authorizeUrl = 'https://github.com/login/oauth/authorize';
 const authCors = process.env.REACT_APP_CORS_AUTH_URL;
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const localStorageUserKey = 'github_user';
+const sessionStorageGithubAuthStateKey = 'github_auth_state';
 
 export interface User {
 	id: number;
@@ -32,7 +33,8 @@ interface UseGithubUserHook {
 
 export function useGithubUser(): UseGithubUserHook {
 	const [user, setUser] = useState<User | null>(null);
-	const state = '1c327c5b-b1f9-470a-9830-cfbb0e37ddce';
+
+	const state = useSessionState(sessionStorageGithubAuthStateKey);
 	const url = `${authorizeUrl}?client_id=${client_id}&state=${state}`;
 	const logout = useCallback(() => {
 		setUser(null);
@@ -40,13 +42,13 @@ export function useGithubUser(): UseGithubUserHook {
 	}, [setUser]);
 
 	useEffect(() => {
-		getUser().then(setUser);
-	}, []);
+		getUser(state).then(setUser);
+	}, [state]);
 
 	return { user, authorizeUrl: url, logout };
 }
 
-export function getUser(): Promise<User | null> {
+export function getUser(state: string): Promise<User | null> {
 	return new Promise<User | null>((resolve) => {
 		const user = getUserFromLocalStorage();
 		if (user) {
@@ -60,6 +62,12 @@ export function getUser(): Promise<User | null> {
 			return;
 		}
 
+		if (!params.has('state') || params.get('state') !== state) {
+			resolve(null);
+			return;
+		}
+
+		sessionStorage.removeItem(sessionStorageGithubAuthStateKey);
 		const code = params.get('code');
 
 		fetch(`${authCors}?code=${code}`, {
@@ -94,4 +102,27 @@ function getUserFromLocalStorage(): User | null {
 	if (!content) return null;
 
 	return JSON.parse(content);
+}
+
+function randomString(length: number): string {
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+	return new Array(length)
+		.fill(null)
+		.map(() => chars.charAt(Math.floor(Math.random() * chars.length)))
+		.reduce((acc, x) => acc + x, '');
+}
+
+function useSessionState(key: string): string {
+	return useMemo(() => {
+		const storedState = sessionStorage.getItem(key);
+		if (storedState) {
+			return storedState;
+		}
+
+		const newState = randomString(32);
+		sessionStorage.setItem(key, newState);
+
+		return newState;
+	}, [key]);
 }
