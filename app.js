@@ -41,6 +41,7 @@ app.post('/authorize', (req, res) => {
 		})
 		.catch(function (error) {
 			console.error('Error ' + error.message);
+			res.status(400).send(error.message);
 		});
 });
 
