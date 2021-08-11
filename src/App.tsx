@@ -1,6 +1,6 @@
 import { DarkModeToggle, useDarkModeWithClass } from '@oliverflecke/components-react';
 import 'compiled.css';
-import CompoundInterest from 'components/CompoundInterest';
+import CompoundInterest from 'features/CompoundInterest';
 import { AccountOverview } from 'features/AccountOverview';
 import React from 'react';
 import { useGithubUser } from 'utils/githubAuth';

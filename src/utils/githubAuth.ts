@@ -68,7 +68,8 @@ export function getUser(state: string): Promise<User | null> {
 		}
 
 		sessionStorage.removeItem(sessionStorageGithubAuthStateKey);
-		const code = params.get('code');
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const code = params.get('code')!;
 
 		fetch(`${authCors}?code=${code}`, {
 			method: 'post',
@@ -77,10 +78,14 @@ export function getUser(state: string): Promise<User | null> {
 			},
 		})
 			.then(async (res) => {
-				const body: AuthorizeResponse = await res.json();
-				const user = await getUserFromGithub(body.access_token);
-				localStorage.setItem(localStorageUserKey, JSON.stringify(user));
-				resolve(user);
+				if (res.status === 200) {
+					const body: AuthorizeResponse = await res.json();
+					const user = await getUserFromGithub(body.access_token);
+					localStorage.setItem(localStorageUserKey, JSON.stringify(user));
+					resolve(user);
+				} else {
+					console.warn(`Got unexpected status code: ${res.status}`);
+				}
 
 				// Remove query parameters from navigation bar
 				window.history.replaceState({}, document.title, window.location.pathname);

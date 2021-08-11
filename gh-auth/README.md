@@ -1,6 +1,7 @@
 # Small NodeJS server for getting around Github authentication CORS
 
 This repository contains a small NodeJS express application, which allows authenticating users with Github's OAuth flow in a Single-Page Application.
+A pure browser-only flow is not yet supported for Github OAuth apps, see [this issue](https://github.com/isaacs/github/issues/330) for more details.
 
 ## Development
 
