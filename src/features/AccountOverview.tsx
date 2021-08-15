@@ -12,11 +12,13 @@ export const AccountOverview = memo(() => {
 	return (
 		<AccountContext.Provider value={{ state, dispatch }}>
 			<Table accounts={state.accounts} entries={state.entries} />
-			<div className="py-4 flex flex-row justify-between">
+			<div className="px-4 flex flex-row justify-between">
 				<AddAccount addAccount={(account) => dispatch({ type: 'add account', account })} />
 				<AddEntryModal />
 			</div>
-			<FileOptionMenu />
+			<div className="px-4">
+				<FileOptionMenu />
+			</div>
 			<IndividualGrowthGraph />
 		</AccountContext.Provider>
 	);

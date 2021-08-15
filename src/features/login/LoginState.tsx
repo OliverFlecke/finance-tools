@@ -26,10 +26,10 @@ const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }: L
 					className="max-h-12 rounded-full"
 					loading="lazy"
 				/>
-				<div className="hidden group-hover:block absolute rounded py-4 shadow bg-warmGray-100 dark:bg-warmGray-700">
+				<div className="hidden group-hover:block absolute rounded py-4 shadow bg-coolGray-100 dark:bg-coolGray-700">
 					<button
 						onClick={logout}
-						className="btn hover:text-warmGray-900 dark:hover:text-warmGray-400 hover:underline"
+						className="btn hover:text-coolGray-900 dark:hover:text-coolGray-400 hover:underline"
 					>
 						Logout
 					</button>
