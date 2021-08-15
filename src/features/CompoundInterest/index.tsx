@@ -28,7 +28,10 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 
 	return (
 		<>
-			<form onSubmit={onSubmit} className="w-full flex flex-col items-center justify-center">
+			<form
+				onSubmit={onSubmit}
+				className="w-full overflow-x-hidden flex flex-col items-center justify-center"
+			>
 				<fieldset className="flex flex-col items-center space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
 					<NumberFormat
 						customInput={Input}

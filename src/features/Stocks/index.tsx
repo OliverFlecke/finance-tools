@@ -1,13 +1,13 @@
 import React from 'react';
-import { sum } from 'utils/math';
 import { StockList } from './models';
+import StockRow from './StockRow';
 
 const Stocks: React.FC = () => {
 	const stocks = sampleData;
 
 	return (
-		<div className="p-2">
-			<h2 className="text-lg">Stocks</h2>
+		<div>
+			<h2 className="p-2 font-bold text-lg">Stocks</h2>
 			<StocksTable stocks={stocks} />
 		</div>
 	);
@@ -21,7 +21,7 @@ interface StocksTableProps {
 
 const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
 	return (
-		<table>
+		<table className="w-full">
 			<thead>
 				<tr>
 					<th>Symbol</th>
@@ -33,19 +33,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 			</thead>
 			<tbody>
 				{Object.keys(stocks).map((key) => {
-					const stock = stocks[key];
-					const totalShares = sum(...stock.lots.map((x) => x.shares));
-					const avgPrice = sum(...stock.lots.map((x) => x.shares * x.price)) / totalShares;
-
-					return (
-						<tr key={key} className="odd:bg-coolGray-800">
-							<td>{key}</td>
-							<td>{stock.currentValue}</td>
-							<td>{stock.currentValue * totalShares}</td>
-							<td>{totalShares}</td>
-							<td>{avgPrice}</td>
-						</tr>
-					);
+					return <StockRow key={key} stock={stocks[key]} />;
 				})}
 			</tbody>
 		</table>
@@ -54,6 +42,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 
 const sampleData: StockList = {
 	AAPL: {
+		symbol: 'AAPL',
 		currentValue: 100,
 		lots: [
 			{
@@ -64,6 +53,7 @@ const sampleData: StockList = {
 		],
 	},
 	MSFT: {
+		symbol: 'MSFT',
 		currentValue: 200,
 		lots: [
 			{
