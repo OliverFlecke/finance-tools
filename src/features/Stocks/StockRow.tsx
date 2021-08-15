@@ -16,7 +16,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	return (
 		<>
-			<tr className="w-full relative odd:bg-coolGray-800">
+			<tr className="w-full relative bg-coolGray-800">
 				<td>{stock.symbol}</td>
 				<td>{stock.currentValue}</td>
 				<td>{stock.currentValue * totalShares}</td>

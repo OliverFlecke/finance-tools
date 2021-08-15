@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useReducer } from 'react';
+import AddStock from './AddStock';
 import { StockList } from './models';
+import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
 
 const Stocks: React.FC = () => {
-	const stocks = sampleData;
+	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
 
 	return (
 		<div>
-			<h2 className="p-2 font-bold text-lg">Stocks</h2>
-			<StocksTable stocks={stocks} />
+			<StockContext.Provider value={{ state, dispatch }}>
+				<h2 className="p-2 font-bold text-lg">Stocks</h2>
+				<StocksTable stocks={state.stocks} />
+				<AddStock />
+			</StockContext.Provider>
 		</div>
 	);
 };
@@ -38,34 +43,4 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 			</tbody>
 		</table>
 	);
-};
-
-const sampleData: StockList = {
-	AAPL: {
-		symbol: 'AAPL',
-		currentValue: 100,
-		lots: [
-			{
-				date: new Date('2020-01-01'),
-				shares: 15,
-				price: 10,
-			},
-		],
-	},
-	MSFT: {
-		symbol: 'MSFT',
-		currentValue: 200,
-		lots: [
-			{
-				date: new Date('2020-02-01'),
-				shares: 3,
-				price: 100,
-			},
-			{
-				date: new Date('2020-03-01'),
-				shares: 5,
-				price: 120,
-			},
-		],
-	},
 };

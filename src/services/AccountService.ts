@@ -1,6 +1,7 @@
 import { createContext } from 'react';
-import { Account, AccountEntries } from '../models/Account';
-import { sortObject } from '../utils/converters';
+import { Account, AccountEntries } from 'models/Account';
+import { sortObject } from 'utils/converters';
+import { getDataFromStorage, storedReducer } from 'utils/storage';
 
 export const AccountContext = createContext({
 	state: {
@@ -24,15 +25,11 @@ function getDefaultAccountState(): AccountState {
 }
 
 export function accountReducer(state: AccountState, action: AccountAction): AccountState {
-	console.log(`Got action '${action.type}'`);
-	const newState = reducer(state, action);
-
-	localStorage.setItem('account_state', JSON.stringify(newState));
-
-	return newState;
+	return storedReducer('account_state', reducer)(state, action);
 }
+
 export function initAccountState(): AccountState {
-	return getData('account_state', getDefaultAccountState());
+	return getDataFromStorage('account_state', getDefaultAccountState());
 }
 
 export type AccountAction =
@@ -76,10 +73,4 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 			console.warn(`action type not handled: ${JSON.stringify(action)}`);
 			return state;
 	}
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getData(key: string, defaultValue: any = {}): any {
-	const data = localStorage.getItem(key) ?? undefined;
-	return data === undefined || data === '' ? defaultValue : JSON.parse(data);
 }
