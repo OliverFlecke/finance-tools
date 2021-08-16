@@ -17,7 +17,7 @@ const AddStock: React.FC = () => {
 	const addSymbol = useCallback(
 		(stock: Stock) => {
 			dispatch({
-				type: 'add stock',
+				type: 'ADD_STOCK',
 				stock: {
 					symbol: stock.symbol,
 					currentValue: 100,

@@ -1,17 +1,30 @@
-import React from 'react';
+import { Button } from '@oliverflecke/components-react';
+import React, { useCallback } from 'react';
 import { Stock, StockLot } from './models';
+import { StockAction } from './state';
+import StockLotRow from './StockLotRow';
 
 interface StockLotsTableProps {
 	stock: Stock;
 	lots: StockLot[];
+	dispatch: (_: StockAction) => void;
 }
 
-const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
+const StockLotsTable: React.FC<StockLotsTableProps> = ({
+	lots,
+	stock,
+	dispatch,
+}: StockLotsTableProps) => {
+	const addLot = useCallback(() => {
+		console.debug('Clicked add lot');
+		dispatch({ type: 'ADD_LOT', symbol: stock.symbol });
+	}, [dispatch, stock]);
+
 	return (
 		<>
 			<h3 className="text-center text-2xl text-green-400">Lots</h3>
-			<div className="bg-coolGray-700 rounded mx-8">
-				<table className="w-full mb-4">
+			<div className="bg-coolGray-700 rounded mx-8 mb-4">
+				<table className="w-full">
 					<thead>
 						<tr>
 							<th>Buy date</th>
@@ -22,31 +35,18 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 						</tr>
 					</thead>
 					<tbody>
-						{lots.map((lot) => {
-							const marketValue = lot.shares * stock.currentValue;
-							const gain = marketValue - lot.price * lot.shares;
-
-							return (
-								<tr key={lot.date.toISOString()} className="odd:bg-coolGray-600">
-									<td>{lot.date.toDateString()}</td>
-									<td>{lot.price}</td>
-									<td>{lot.shares}</td>
-									<td>{marketValue}</td>
-									<td className={getValueColorIndicator(gain)}>{gain}</td>
-								</tr>
-							);
-						})}
+						{lots.map((lot, i) => (
+							<StockLotRow key={i} lot={lot} stock={stock} />
+						))}
 					</tbody>
 				</table>
+
+				<div className="p-4">
+					<Button onClick={addLot}>Add lot</Button>
+				</div>
 			</div>
 		</>
 	);
 };
 
 export default StockLotsTable;
-
-function getValueColorIndicator(value: number): string {
-	if (value > 0) return 'text-green-500';
-	else if (value < 0) return 'text-red-500';
-	else return '';
-}

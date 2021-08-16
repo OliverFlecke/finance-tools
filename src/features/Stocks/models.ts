@@ -7,6 +7,7 @@ export interface Stock {
 }
 
 export interface StockLot {
+	id: string;
 	date: Date;
 	shares: number;
 	price: number;

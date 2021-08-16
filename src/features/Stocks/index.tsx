@@ -8,13 +8,13 @@ const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
 
 	return (
-		<div>
-			<StockContext.Provider value={{ state, dispatch }}>
+		<StockContext.Provider value={{ dispatch }}>
+			<div>
 				<h2 className="p-2 font-bold text-lg">Stocks</h2>
 				<StocksTable stocks={state.stocks} />
 				<AddStock />
-			</StockContext.Provider>
-		</div>
+			</div>
+		</StockContext.Provider>
 	);
 };
 
