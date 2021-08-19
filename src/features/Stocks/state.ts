@@ -2,11 +2,12 @@ import { createContext } from 'react';
 import { getDataFromStorage, storedReducer } from '../../utils/storage';
 import { Stock, StockList, StockLot } from './models';
 import { v4 as uuidv4 } from 'uuid';
+import { QuoteResponse } from './API/yahoo';
 
 const storageKey = 'stocks_state';
 
 export const StockContext = createContext({
-	// state: getDefaultStockState(),
+	state: getDefaultStockState(),
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
 	dispatch: (_: StockAction) => {},
 });
@@ -36,6 +37,7 @@ export interface StockState {
 export type StockAction =
 	| { type: 'ADD_STOCK'; stock: Stock }
 	| { type: 'DELETE_STOCK'; symbol: string }
+	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
 	| { type: 'ADD_LOT'; symbol: string }
 	| { type: 'DELETE_LOT'; symbol: string; id: string }
 	| { type: 'EDIT_LOT'; symbol: string; lot: StockLot };
@@ -48,18 +50,26 @@ function reducer(state: StockState, action: StockAction): StockState {
 				...state,
 				stocks: state.stocks.filter((x) => x.symbol !== action.stock.symbol).concat(action.stock),
 			};
-
 		case 'DELETE_STOCK':
 			return {
 				...state,
 				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
+			};
+		case 'UPDATE STOCKS':
+			console.debug(action.stocks);
+			return {
+				...state,
+				stocks: state.stocks.map((old) => ({
+					...old,
+					...action.stocks.find((x) => x.symbol === old.symbol),
+				})),
 			};
 
 		case 'ADD_LOT': {
 			const lot = {
 				id: uuidv4(),
 				date: new Date(),
-				price: state.stocks.find((x) => x.symbol === action.symbol)?.currentValue ?? 0,
+				price: state.stocks.find((x) => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
 				shares: 0,
 			};
 

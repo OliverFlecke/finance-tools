@@ -16,13 +16,14 @@ const AddStock: React.FC = () => {
 
 	const addSymbol = useCallback(
 		(stock: Stock) => {
+			// TODO: Check that the symbol exists and get the latest data from API
 			dispatch({
 				type: 'ADD_STOCK',
-				stock: {
+				stock: ({
 					symbol: stock.symbol,
-					currentValue: 100,
+					regularMarketPrice: 100,
 					lots: [],
-				},
+				} as unknown) as Stock,
 			});
 			reset();
 		},
@@ -30,7 +31,7 @@ const AddStock: React.FC = () => {
 	);
 
 	return (
-		<div className="p-4">
+		<>
 			<button className="btn btn-primary" onClick={() => setIsOpen(true)}>
 				Add symbol
 			</button>
@@ -60,7 +61,7 @@ const AddStock: React.FC = () => {
 					</form>
 				</div>
 			</Modal>
-		</div>
+		</>
 	);
 };
 

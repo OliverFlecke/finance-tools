@@ -45,11 +45,25 @@ app.post('/authorize', (req, res) => {
 		});
 });
 
+const yahooBaseURL = 'https://query2.finance.yahoo.com/v7/finance/quote';
+app.get('/shares', (req, res) => {
+	const { symbols } = req.query;
+
+	fetch(`${yahooBaseURL}?symbols=${symbols}`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+		},
+	})
+		.then(async (response) => res.send(await response.json()))
+		.catch((err) => console.error(err));
+});
+
 app.get('/', function (req, res) {
 	console.log('Health check OK');
 	res.send('OK');
 });
 
 app.listen(port, function () {
-	console.log('Authorization proxy is running');
+	console.log(`Authorization proxy is running. Listing on port ${port}`);
 });

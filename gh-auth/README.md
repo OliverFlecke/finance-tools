@@ -20,3 +20,6 @@ This file has the following format:
 CLIENT_ID=<client id from Github>
 CLIENT_SECRET=<client secret from Github>
 ```
+
+## Deployment
+

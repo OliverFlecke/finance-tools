@@ -47,7 +47,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		dispatch({ type: 'DELETE_LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
-	const marketValue = watch('shares') * stock.currentValue;
+	const marketValue = watch('shares') * stock.regularMarketPrice;
 	const gain = new Money(marketValue - watch('price') * watch('shares'));
 
 	return (

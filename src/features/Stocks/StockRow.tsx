@@ -23,8 +23,8 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 		<>
 			<tr className="w-full relative bg-coolGray-800">
 				<td>{stock.symbol}</td>
-				<td>{stock.currentValue}</td>
-				<td>{stock.currentValue * totalShares}</td>
+				<td>{stock.regularMarketPrice}</td>
+				<td>{stock.regularMarketPrice * totalShares}</td>
 				<td>{totalShares}</td>
 				<td>{avgPrice.toLocaleString()}</td>
 				<td className="flex flex-row items-center">

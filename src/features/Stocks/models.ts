@@ -1,8 +1,8 @@
+import { QuoteResponse } from './API/yahoo';
+
 export type StockList = Stock[];
 
-export interface Stock {
-	symbol: string;
-	currentValue: number;
+export interface Stock extends QuoteResponse {
 	lots: StockLot[];
 }
 
