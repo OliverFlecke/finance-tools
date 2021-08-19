@@ -16,7 +16,6 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 	dispatch,
 }: StockLotsTableProps) => {
 	const addLot = useCallback(() => {
-		console.debug('Clicked add lot');
 		dispatch({ type: 'ADD_LOT', symbol: stock.symbol });
 	}, [dispatch, stock]);
 

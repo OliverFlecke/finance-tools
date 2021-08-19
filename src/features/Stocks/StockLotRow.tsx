@@ -36,8 +36,8 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 			symbol: stock.symbol,
 			lot: {
 				id: lot.id,
-				shares: lot.shares,
-				price: lot.price,
+				shares: Number(lot.shares),
+				price: Number(lot.price),
 				date: new Date(Date.parse(lot.date.toString())),
 			},
 		});
