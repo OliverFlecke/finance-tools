@@ -26,7 +26,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td>{stock.currentValue}</td>
 				<td>{stock.currentValue * totalShares}</td>
 				<td>{totalShares}</td>
-				<td>{avgPrice}</td>
+				<td>{avgPrice.toLocaleString()}</td>
 				<td className="flex flex-row items-center">
 					<span
 						onClick={() => setShowLots((x) => !x)}

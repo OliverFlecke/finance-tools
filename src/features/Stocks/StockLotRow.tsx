@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatDate } from 'utils/date';
 import DeleteIcon from '../../icons/DeleteIcon';
+import { Money } from '../../models/General';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -47,7 +48,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	}, [dispatch, lot.id, stock.symbol]);
 
 	const marketValue = watch('shares') * stock.currentValue;
-	const gain = marketValue - watch('price') * watch('shares');
+	const gain = new Money(marketValue - watch('price') * watch('shares'));
 
 	return (
 		<tr className="odd:bg-coolGray-600">
@@ -63,7 +64,9 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 				</form>
 			</td>
 			<td className="text-right">{marketValue}</td>
-			<td className={`${getValueColorIndicator(gain)} text-right`}>{gain}</td>
+			<td className={`${getValueColorIndicator(gain.value)} text-right`}>
+				{gain.formatCurrency()}
+			</td>
 			<td className="w-14 text-red-800 dark:text-red-500">
 				<div className="hover:cursor-pointer" onClick={deleteLot}>
 					<DeleteIcon />
