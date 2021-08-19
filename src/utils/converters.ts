@@ -9,6 +9,16 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 	currencyDisplay: 'code',
 });
 
+export function formatCurrency(value: number, currency?: string): string {
+	if (Number.isNaN(value)) return '-';
+
+	return value.toLocaleString(undefined, {
+		style: 'currency',
+		currency: currency ?? 'USD',
+		currencyDisplay: 'code',
+	});
+}
+
 export function sortObject<T>(unordered: T): T {
 	return (
 		Object.keys(unordered)

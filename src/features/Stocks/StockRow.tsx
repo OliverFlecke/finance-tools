@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
+import { formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
 import DeleteIcon from '../../icons/DeleteIcon';
 import { Stock } from './models';
@@ -23,10 +24,10 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 		<>
 			<tr className="w-full relative bg-coolGray-800">
 				<td>{stock.symbol}</td>
-				<td>{stock.regularMarketPrice}</td>
-				<td>{stock.regularMarketPrice * totalShares}</td>
+				<td>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
+				<td>{formatCurrency(stock.regularMarketPrice * totalShares, stock.currency)}</td>
 				<td>{totalShares}</td>
-				<td>{avgPrice.toLocaleString()}</td>
+				<td>{formatCurrency(avgPrice, stock.currency)}</td>
 				<td className="flex flex-row items-center">
 					<span
 						onClick={() => setShowLots((x) => !x)}

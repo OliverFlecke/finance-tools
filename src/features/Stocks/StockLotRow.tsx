@@ -2,8 +2,9 @@ import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatDate } from 'utils/date';
-import DeleteIcon from '../../icons/DeleteIcon';
-import { Money } from '../../models/General';
+import DeleteIcon from 'icons/DeleteIcon';
+import { Money } from 'models/General';
+import { formatCurrency } from 'utils/converters';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -63,9 +64,9 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 					<input type="number" {...register('price')} className="bg-transparent w-20 text-center" />
 				</form>
 			</td>
-			<td className="text-right">{marketValue}</td>
+			<td className="text-right">{formatCurrency(marketValue, stock.currency)}</td>
 			<td className={`${getValueColorIndicator(gain.value)} text-right`}>
-				{gain.formatCurrency()}
+				{formatCurrency(gain.value, stock.currency)}
 			</td>
 			<td className="w-14 text-red-800 dark:text-red-500">
 				<div className="hover:cursor-pointer" onClick={deleteLot}>
