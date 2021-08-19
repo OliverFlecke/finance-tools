@@ -1,4 +1,4 @@
-export type StockList = { [key: string]: Stock };
+export type StockList = Stock[];
 
 export interface Stock {
 	symbol: string;

@@ -9,11 +9,9 @@ const Stocks: React.FC = () => {
 
 	return (
 		<StockContext.Provider value={{ dispatch }}>
-			<div>
-				<h2 className="p-2 font-bold text-lg">Stocks</h2>
-				<StocksTable stocks={state.stocks} />
-				<AddStock />
-			</div>
+			<h2 className="p-2 font-bold text-lg">Stocks</h2>
+			<StocksTable stocks={state.stocks} />
+			<AddStock />
 		</StockContext.Provider>
 	);
 };
@@ -26,21 +24,23 @@ interface StocksTableProps {
 
 const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
 	return (
-		<table className="w-full">
-			<thead>
-				<tr>
-					<th>Symbol</th>
-					<th>Current price</th>
-					<th>Total value</th>
-					<th>Total shares</th>
-					<th>Average price</th>
-				</tr>
-			</thead>
-			<tbody>
-				{Object.keys(stocks).map((key) => {
-					return <StockRow key={key} stock={stocks[key]} />;
-				})}
-			</tbody>
-		</table>
+		<div className=" overflow-x-scroll">
+			<table className="w-full">
+				<thead>
+					<tr>
+						<th>Symbol</th>
+						<th>Current price</th>
+						<th>Total value</th>
+						<th>Total shares</th>
+						<th>Average price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{stocks.map((stock) => (
+						<StockRow key={stock.symbol} stock={stock} />
+					))}
+				</tbody>
+			</table>
+		</div>
 	);
 };

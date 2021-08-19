@@ -17,7 +17,7 @@ export function stockReducer(state: StockState, action: StockAction): StockState
 
 export function getDefaultStockState(): StockState {
 	const state = getDataFromStorage(storageKey, {
-		stocks: {},
+		stocks: [],
 	});
 
 	for (const symbol of Object.keys(state.stocks)) {
@@ -43,50 +43,63 @@ export type StockAction =
 function reducer(state: StockState, action: StockAction): StockState {
 	console.debug(`received action: ${action.type}`);
 	switch (action.type) {
-		case 'ADD_STOCK': {
-			const newState = { ...state };
-			newState.stocks[action.stock.symbol] = action.stock;
-
-			return newState;
-		}
-		case 'DELETE_STOCK': {
-			const newStocks = { ...state.stocks };
-			delete newStocks[action.symbol];
-
+		case 'ADD_STOCK':
 			return {
 				...state,
-				stocks: newStocks,
+				stocks: state.stocks.filter((x) => x.symbol !== action.stock.symbol).concat(action.stock),
 			};
-		}
+
+		case 'DELETE_STOCK':
+			return {
+				...state,
+				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
+			};
 
 		case 'ADD_LOT': {
 			const lot = {
 				id: uuidv4(),
 				date: new Date(),
-				price: state.stocks[action.symbol].currentValue,
+				price: state.stocks.find((x) => x.symbol === action.symbol)?.currentValue ?? 0,
 				shares: 0,
 			};
 
-			const newState = { ...state };
-			newState.stocks[action.symbol].lots = state.stocks[action.symbol].lots.concat(lot);
-
-			return newState;
+			return {
+				...state,
+				stocks: state.stocks.map((stock) =>
+					stock.symbol !== action.symbol
+						? stock
+						: {
+								...stock,
+								lots: stock.lots.concat(lot),
+						  }
+				),
+			};
 		}
-		case 'DELETE_LOT': {
-			const newState = { ...state };
-			newState.stocks[action.symbol].lots = newState.stocks[action.symbol].lots.filter(
-				(x) => x.id !== action.id
-			);
+		case 'DELETE_LOT':
+			return {
+				...state,
+				stocks: state.stocks.map((stock) =>
+					stock.symbol !== action.symbol
+						? stock
+						: {
+								...stock,
+								lots: stock.lots.filter((x) => x.id !== action.id),
+						  }
+				),
+			};
 
-			return newState;
-		}
-		case 'EDIT_LOT': {
-			state.stocks[action.symbol].lots = state.stocks[action.symbol].lots
-				.filter((x) => x.id !== action.lot.id)
-				.concat(action.lot);
-
-			return state;
-		}
+		case 'EDIT_LOT':
+			return {
+				...state,
+				stocks: state.stocks.map((stock) =>
+					stock.symbol !== action.symbol
+						? stock
+						: {
+								...stock,
+								lots: stock.lots.filter((x) => x.id !== action.lot.id).concat(action.lot),
+						  }
+				),
+			};
 
 		default:
 			console.warn('action not implemented');
