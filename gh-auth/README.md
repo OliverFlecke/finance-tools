@@ -23,3 +23,9 @@ CLIENT_SECRET=<client secret from Github>
 
 ## Deployment
 
+Website can be deployed to [heroku](https://www.heroku.com/).
+It is setup with a git remote, which can be pushed to for new deployment:
+
+```sh
+git push heroku master
+```

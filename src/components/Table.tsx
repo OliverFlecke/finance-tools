@@ -1,6 +1,6 @@
-import React, { FC, useContext } from 'react';
-import DeleteIcon from 'icons/DeleteIcon';
 import { Account, AccountEntries } from 'models/Account';
+import React, { FC, useContext } from 'react';
+import { IoTrashOutline } from 'react-icons/io5';
 import { AccountContext } from 'services/AccountService';
 import { currencyFormatter } from 'utils/converters';
 import Cell from './Cell';
@@ -68,9 +68,9 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 								<td>
 									<button
 										onClick={() => dispatch({ type: 'delete entry', date: date })}
-										className="flex h-6 w-6 text-red-700 dark:text-red-500 focus:outline-none"
+										className="flex  focus:outline-none"
 									>
-										<DeleteIcon />
+										<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />
 									</button>
 								</td>
 							</tr>

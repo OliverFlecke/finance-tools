@@ -28,7 +28,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 		<div className="overflow-x-scroll">
 			<table className="w-full">
 				<thead>
-					<tr>
+					<tr className="text-coolGray-600 dark:text-coolGray-400">
 						<th>Symbol</th>
 						<th>Current price</th>
 						<th>Total value</th>

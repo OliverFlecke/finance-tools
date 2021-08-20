@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { Stock, StockLot } from './models';
 import { StockAction } from './state';
 import StockLotRow from './StockLotRow';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
 interface StockLotsTableProps {
 	stock: Stock;
@@ -21,8 +22,10 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 
 	return (
 		<>
-			<h3 className="text-center text-2xl text-green-400">Lots</h3>
-			<div className="bg-coolGray-700 rounded mx-8 mb-4">
+			<h3 className="text-center text-2xl text-green-700 dark:text-green-400">
+				Lots for {stock.displayName}
+			</h3>
+			<div className="bg-coolGray-300 dark:bg-coolGray-700 rounded shadow mx-8">
 				<table className="w-full">
 					<thead>
 						<tr>
@@ -41,7 +44,10 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 				</table>
 
 				<div className="p-4">
-					<Button onClick={addLot}>Add lot</Button>
+					<Button onClick={addLot} className="space-x-2 btn btn-primary">
+						<IoAddCircleOutline className="inline" />
+						<span className="align-middle">Add lot</span>
+					</Button>
 				</div>
 			</div>
 		</>

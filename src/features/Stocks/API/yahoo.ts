@@ -1,12 +1,17 @@
+// const apiUrl = 'https://gh-finance-tools.herokuapp.com';
 const apiUrl = 'http://localhost:8000';
 
-export function getShares(...symbols: string[]): Promise<QuoteResponse[]> {
-	return fetch(`${apiUrl}/shares?symbols=${symbols.join(',')}`, {
+export async function getShares(...symbols: string[]): Promise<QuoteResponse[]> {
+	const response = await fetch(`${apiUrl}/shares?symbols=${symbols.join(',')}`, {
 		method: 'GET',
-	})
-		.then(async (res) => await res.json())
-		.then((res) => res.quoteResponse.result)
-		.catch((err) => console.debug(err));
+	});
+
+	const json = await response.json();
+	if (json.error) {
+		throw new Error(json.error);
+	} else {
+		return json.quoteResponse.result ?? [];
+	}
 }
 
 export interface QuoteResponse {

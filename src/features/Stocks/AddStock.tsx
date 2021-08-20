@@ -1,6 +1,7 @@
 import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
 import React, { useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { IoAddCircleOutline } from 'react-icons/io5';
 import { Stock } from './models';
 import { StockContext } from './state';
 
@@ -32,8 +33,9 @@ const AddStock: React.FC = () => {
 
 	return (
 		<>
-			<button className="btn btn-primary" onClick={() => setIsOpen(true)}>
-				Add symbol
+			<button className="btn btn-primary space-x-2" onClick={() => setIsOpen(true)}>
+				<IoAddCircleOutline className="inline" />
+				<span className="align-middle">Add symbol</span>
 			</button>
 
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>

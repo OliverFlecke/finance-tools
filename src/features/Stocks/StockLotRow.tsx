@@ -1,10 +1,9 @@
 import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
-import { formatDate } from 'utils/date';
-import DeleteIcon from 'icons/DeleteIcon';
-import { Money } from 'models/General';
 import { formatCurrency } from 'utils/converters';
+import { formatDate } from 'utils/date';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -49,10 +48,10 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	}, [dispatch, lot.id, stock.symbol]);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;
-	const gain = new Money(marketValue - watch('price') * watch('shares'));
+	const gain = marketValue - watch('price') * watch('shares');
 
 	return (
-		<tr className="odd:bg-coolGray-600">
+		<tr className="odd:bg-coolGray-200 dark:odd:bg-coolGray-600">
 			<td colSpan={3}>
 				<form onChange={handleSubmit(onChange)} className="flex flex-row justify-evenly w-full">
 					<input type="date" {...register('date')} className="bg-transparent" />
@@ -65,13 +64,13 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 				</form>
 			</td>
 			<td className="text-right">{formatCurrency(marketValue, stock.currency)}</td>
-			<td className={`${getValueColorIndicator(gain.value)} text-right`}>
-				{formatCurrency(gain.value, stock.currency)}
+			<td className={`${getValueColorIndicator(gain)} text-right`}>
+				{formatCurrency(gain, stock.currency)}
 			</td>
-			<td className="w-14 text-red-800 dark:text-red-500">
-				<div className="hover:cursor-pointer" onClick={deleteLot}>
-					<DeleteIcon />
-				</div>
+			<td>
+				<button onClick={deleteLot}>
+					<IoTrashOutline className="text-red-700 dark:text-red-500" size={24} />
+				</button>
 			</td>
 		</tr>
 	);

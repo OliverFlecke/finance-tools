@@ -7,13 +7,19 @@ import { StockContext } from './state';
 const RefreshStocksButton: React.FC = () => {
 	const { state, dispatch } = useContext(StockContext);
 	const reload = useCallback(async () => {
-		const quotes = await getShares(...state.stocks.map((x) => x.symbol));
-		dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
+		try {
+			const quotes = await getShares(...state.stocks.map((x) => x.symbol));
+			dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
+		} catch (err) {
+			// TODO: Display error to user
+			console.error(err);
+		}
 	}, [state.stocks, dispatch]);
 
 	return (
-		<Button onClick={reload}>
-			<IoReload aria-label="Reload current stock prices" />
+		<Button onClick={reload} className="btn btn-primary space-x-2">
+			<IoReload aria-label="Reload current stock prices" className="inline" />
+			<span className="align-middle">Refresh stocks</span>
 		</Button>
 	);
 };

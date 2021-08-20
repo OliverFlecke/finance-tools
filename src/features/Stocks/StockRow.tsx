@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
+import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
 import { formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
-import DeleteIcon from '../../icons/DeleteIcon';
 import { Stock } from './models';
 import { StockContext } from './state';
 import StockLotsTable from './StockLotsTable';
@@ -22,26 +22,23 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	return (
 		<>
-			<tr className="w-full relative bg-coolGray-800">
+			<tr className="w-full relative bg-coolGray-200 dark:bg-coolGray-800">
 				<td>{stock.symbol}</td>
 				<td>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td>{formatCurrency(stock.regularMarketPrice * totalShares, stock.currency)}</td>
 				<td>{totalShares}</td>
 				<td>{formatCurrency(avgPrice, stock.currency)}</td>
-				<td className="flex flex-row items-center">
-					<span
-						onClick={() => setShowLots((x) => !x)}
-						className="underline hover:cursor-pointer w-16"
-					>
-						See lots
-					</span>
-					<div onClick={deleteStock} className="w-8 text-red-500 hover:cursor-pointer">
-						<DeleteIcon />
-					</div>
+				<td className="flex flex-row items-center space-x-2">
+					<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
+						<IoEllipsisHorizontalCircleOutline size={24} />
+					</button>
+					<button onClick={deleteStock} className="hover:cursor-pointer">
+						<IoTrashOutline className="text-red-500" size={24} />
+					</button>
 				</td>
 			</tr>
 			<tr>
-				<td colSpan={6} className={`p-0 ${showLots ? '' : 'hidden'}`}>
+				<td colSpan={6} className={`p-0 pb-4 ${showLots ? '' : 'hidden'}`}>
 					<StockLotsTable lots={stock.lots} stock={stock} dispatch={dispatch} />
 				</td>
 			</tr>
