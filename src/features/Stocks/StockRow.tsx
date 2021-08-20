@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
 import { formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
+import colors from '../../utils/colors';
 import { Stock } from './models';
 import { StockContext } from './state';
 import StockLotsTable from './StockLotsTable';
@@ -22,12 +23,18 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	return (
 		<>
-			<tr className="w-full relative bg-coolGray-200 dark:bg-coolGray-800">
-				<td>{stock.symbol}</td>
+			<tr className="w-full relative text-right bg-coolGray-200 dark:bg-coolGray-800">
+				<td className="text-left">{stock.symbol}</td>
 				<td>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td>{formatCurrency(stock.regularMarketPrice * totalShares, stock.currency)}</td>
 				<td>{totalShares}</td>
-				<td>{formatCurrency(avgPrice, stock.currency)}</td>
+				<td
+					className={
+						stock.regularMarketPrice >= avgPrice ? colors.positiveColor : colors.negativeColor
+					}
+				>
+					{formatCurrency(avgPrice, stock.currency)}
+				</td>
 				<td className="flex flex-row items-center space-x-2">
 					<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 						<IoEllipsisHorizontalCircleOutline size={24} />

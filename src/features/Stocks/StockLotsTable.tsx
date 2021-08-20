@@ -23,7 +23,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 	return (
 		<>
 			<h3 className="text-center text-2xl text-green-700 dark:text-green-400">
-				Lots for {stock.displayName}
+				Lots for {stock.displayName ?? stock.symbol}
 			</h3>
 			<div className="bg-coolGray-300 dark:bg-coolGray-700 rounded shadow mx-8">
 				<table className="w-full">

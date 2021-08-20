@@ -47,8 +47,8 @@ app.post('/authorize', (req, res) => {
 
 const yahooBaseURL = 'https://query2.finance.yahoo.com/v7/finance/quote';
 app.get('/shares', (req, res) => {
-	console.log(`Getting shares with: ${req.query}`);
 	const { symbols } = req.query;
+	console.log(`Getting shares with: ${symbols}`);
 
 	fetch(`${yahooBaseURL}?symbols=${symbols}`, {
 		method: 'GET',

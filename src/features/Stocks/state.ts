@@ -27,6 +27,8 @@ export function getDefaultStockState(): StockState {
 		}
 	}
 
+	console.debug(state);
+
 	return state;
 }
 
@@ -46,10 +48,15 @@ function reducer(state: StockState, action: StockAction): StockState {
 	console.debug(`received action: ${action.type}`);
 	switch (action.type) {
 		case 'ADD_STOCK':
+			if (state.stocks.find((x) => x.symbol === action.stock.symbol)) {
+				return state;
+			}
+
 			return {
 				...state,
-				stocks: state.stocks.filter((x) => x.symbol !== action.stock.symbol).concat(action.stock),
+				stocks: state.stocks.concat(action.stock),
 			};
+
 		case 'DELETE_STOCK':
 			return {
 				...state,
