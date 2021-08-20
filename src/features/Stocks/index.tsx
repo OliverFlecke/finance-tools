@@ -1,4 +1,6 @@
 import React, { useReducer } from 'react';
+import { convertToCurrency, formatCurrency } from '../../utils/converters';
+import { sum } from '../../utils/math';
 import AddStock from './AddStock';
 import { StockList } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
@@ -24,6 +26,14 @@ interface StocksTableProps {
 }
 
 const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
+	const totalValue = sum(
+		...stocks.flatMap((stock) =>
+			stock.lots.map((lot) =>
+				convertToCurrency(stock.regularMarketPrice * lot.shares, stock.currency)
+			)
+		)
+	);
+
 	return (
 		<div className="overflow-x-scroll">
 			<table className="w-full">
@@ -41,6 +51,13 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 						<StockRow key={stock.symbol} stock={stock} />
 					))}
 				</tbody>
+				<tfoot>
+					<tr className="dark:text-purple-400">
+						<td></td>
+						<td></td>
+						<td>{formatCurrency(totalValue)}</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	);

@@ -27,8 +27,6 @@ export function getDefaultStockState(): StockState {
 		}
 	}
 
-	console.debug(state);
-
 	return state;
 }
 
@@ -63,7 +61,6 @@ function reducer(state: StockState, action: StockAction): StockState {
 				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
 			};
 		case 'UPDATE STOCKS':
-			console.debug(action.stocks);
 			return {
 				...state,
 				stocks: state.stocks.map((old) => ({

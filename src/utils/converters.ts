@@ -19,6 +19,36 @@ export function formatCurrency(value: number, currency?: string): string {
 	});
 }
 
+export function convertToCurrency(
+	value: number,
+	fromCurrency?: string,
+	toCurrency?: string
+): number {
+	return value * getConversionRate(fromCurrency, toCurrency);
+}
+
+function getConversionRate(fromCurrency?: string, toCurrency?: string): number {
+	if (fromCurrency && fromCurrency in currencyConversionRates) {
+		const from = currencyConversionRates[fromCurrency];
+
+		return toCurrency && toCurrency in from ? from[toCurrency] : from.USD;
+	}
+
+	return 1;
+}
+
+const currencyConversionRates: { [key: string]: { [key: string]: number } } = {
+	DKK: {
+		USD: 0.16,
+	},
+	NOK: {
+		USD: 0.11,
+	},
+	EUR: {
+		USD: 1.17,
+	},
+};
+
 export function sortObject<T>(unordered: T): T {
 	return (
 		Object.keys(unordered)
