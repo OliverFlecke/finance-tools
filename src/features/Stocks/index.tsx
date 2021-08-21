@@ -1,5 +1,7 @@
 import React, { useReducer } from 'react';
+import { useEffect } from 'react';
 import AddStock from './AddStock';
+import { getCurrencies } from './API/currenciesApi';
 import { StockList } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
@@ -9,6 +11,12 @@ import StockSummaryRow from './StockSummaryRow';
 
 const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
+
+	useEffect(() => {
+		getCurrencies()
+			.then((rates) => dispatch({ type: 'SET CURRENCY RATES', rates }))
+			.catch((err) => console.warn(err));
+	}, []);
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>

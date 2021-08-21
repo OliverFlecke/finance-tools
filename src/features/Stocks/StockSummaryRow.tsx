@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { convertToCurrency, formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
 import { StockList } from './models';
@@ -11,7 +10,7 @@ interface StockSummaryRowProps {
 
 const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummaryRowProps) => {
 	const {
-		state: { preferredCurrency },
+		state: { preferredCurrency, currencyRates },
 	} = useContext(StockContext);
 	const totalValue = useMemo(
 		() =>
@@ -21,12 +20,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares,
 							stock.currency,
-							preferredCurrency
+							preferredCurrency,
+							currencyRates.usd
 						)
 					)
 				)
 			),
-		[preferredCurrency, stocks]
+		[currencyRates.usd, preferredCurrency, stocks]
 	);
 	const totalGain = useMemo(
 		() =>
@@ -36,12 +36,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares - lot.price * lot.shares,
 							stock.currency,
-							preferredCurrency
+							preferredCurrency,
+							currencyRates.usd
 						)
 					)
 				)
 			),
-		[preferredCurrency, stocks]
+		[currencyRates.usd, preferredCurrency, stocks]
 	);
 
 	return (

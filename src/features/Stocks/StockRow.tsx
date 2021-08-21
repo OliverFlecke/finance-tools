@@ -13,14 +13,15 @@ interface StockRowProps {
 
 const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const {
-		state: { preferredCurrency },
+		state: { preferredCurrency, currencyRates },
 	} = useContext(StockContext);
 	const totalShares = sum(...stock.lots.map((x) => x.shares));
 	const avgPrice = sum(...stock.lots.map((x) => x.shares * x.price)) / totalShares;
 	const gain = convertToCurrency(
 		totalShares * stock.regularMarketPrice - totalShares * avgPrice,
 		stock.currency,
-		preferredCurrency
+		preferredCurrency,
+		currencyRates.usd
 	);
 
 	const [showLots, setShowLots] = useState(false);

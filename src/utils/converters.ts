@@ -22,15 +22,21 @@ export function formatCurrency(value: number, currency?: string): string {
 export function convertToCurrency(
 	value: number,
 	fromCurrency?: string,
-	toCurrency?: string
+	toCurrency?: string,
+	rates?: Rates
 ): number {
-	return value * getConversionRate(fromCurrency, toCurrency);
+	return value * getConversionRate(fromCurrency, toCurrency, rates);
 }
 
-export function getConversionRate(fromCurrency?: string, toCurrency?: string): number {
+export function getConversionRate(
+	fromCurrency?: string,
+	toCurrency?: string,
+	rates?: Rates
+): number {
 	const baseCurrency = 'usd';
 	fromCurrency = fromCurrency?.toLowerCase();
 	toCurrency = toCurrency?.toLowerCase();
+	rates = rates ?? defaultRates;
 
 	if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
 		return 1;
@@ -47,7 +53,9 @@ export function getConversionRate(fromCurrency?: string, toCurrency?: string): n
 	}
 }
 
-const rates: { [key: string]: number } = {
+type Rates = { [key: string]: number };
+
+const defaultRates: { [key: string]: number } = {
 	dkk: 6.36,
 	nok: 9,
 	eur: 0.85,
