@@ -27,26 +27,30 @@ export function convertToCurrency(
 	return value * getConversionRate(fromCurrency, toCurrency);
 }
 
-function getConversionRate(fromCurrency?: string, toCurrency?: string): number {
-	if (fromCurrency && fromCurrency in currencyConversionRates) {
-		const from = currencyConversionRates[fromCurrency];
+export function getConversionRate(fromCurrency?: string, toCurrency?: string): number {
+	const baseCurrency = 'usd';
+	fromCurrency = fromCurrency?.toLowerCase();
+	toCurrency = toCurrency?.toLowerCase();
 
-		return toCurrency && toCurrency in from ? from[toCurrency] : from.USD;
+	if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
+		return 1;
 	}
 
-	return 1;
+	if (fromCurrency === baseCurrency) {
+		return toCurrency in rates ? rates[toCurrency] : 1;
+	} else if (toCurrency === baseCurrency) {
+		return fromCurrency in rates ? 1 / rates[fromCurrency] : 1;
+	} else {
+		return (
+			getConversionRate(fromCurrency, baseCurrency) * getConversionRate(baseCurrency, toCurrency)
+		);
+	}
 }
 
-const currencyConversionRates: { [key: string]: { [key: string]: number } } = {
-	DKK: {
-		USD: 0.16,
-	},
-	NOK: {
-		USD: 0.11,
-	},
-	EUR: {
-		USD: 1.17,
-	},
+const rates: { [key: string]: number } = {
+	dkk: 6.36,
+	nok: 9,
+	eur: 0.85,
 };
 
 export function sortObject<T>(unordered: T): T {
