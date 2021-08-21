@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import { convertToCurrency, formatCurrency } from '../../utils/converters';
 import { sum } from '../../utils/math';
 import AddStock from './AddStock';
@@ -26,24 +26,17 @@ interface StocksTableProps {
 }
 
 const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
-	const totalValue = sum(
-		...stocks.flatMap((stock) =>
-			stock.lots.map((lot) =>
-				convertToCurrency(stock.regularMarketPrice * lot.shares, stock.currency)
-			)
-		)
-	);
-
 	return (
 		<div className="overflow-x-scroll">
 			<table className="w-full">
 				<thead>
-					<tr className="text-coolGray-600 dark:text-coolGray-400">
+					<tr className="text-sm align-bottom text-coolGray-600 dark:text-coolGray-400">
 						<th>Symbol</th>
 						<th>Current price</th>
 						<th>Total value</th>
 						<th>Total shares</th>
 						<th>Average price</th>
+						<th>Gain</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -52,11 +45,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 					))}
 				</tbody>
 				<tfoot>
-					<tr className="dark:text-purple-400">
-						<td></td>
-						<td></td>
-						<td>{formatCurrency(totalValue)}</td>
-					</tr>
+					<SummaryRow stocks={stocks} />
 				</tfoot>
 			</table>
 		</div>
@@ -69,5 +58,44 @@ const StockActionBar = () => {
 			<AddStock />
 			<RefreshStocksButton />
 		</div>
+	);
+};
+
+const SummaryRow = ({ stocks }: { stocks: StockList }) => {
+	const totalValue = useMemo(
+		() =>
+			sum(
+				...stocks.flatMap((stock) =>
+					stock.lots.map((lot) =>
+						convertToCurrency(stock.regularMarketPrice * lot.shares, stock.currency)
+					)
+				)
+			),
+		[stocks]
+	);
+	const totalGain = useMemo(
+		() =>
+			sum(
+				...stocks.flatMap((stock) =>
+					stock.lots.map((lot) =>
+						convertToCurrency(
+							stock.regularMarketPrice * lot.shares - lot.price * lot.shares,
+							stock.currency
+						)
+					)
+				)
+			),
+		[stocks]
+	);
+
+	return (
+		<tr className="text-right dark:text-purple-400">
+			<td></td>
+			<td></td>
+			<td>{formatCurrency(totalValue)}</td>
+			<td></td>
+			<td></td>
+			<td>{formatCurrency(totalGain)}</td>
+		</tr>
 	);
 };

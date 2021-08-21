@@ -1,21 +1,18 @@
 import { Button } from '@oliverflecke/components-react';
-import React, { useCallback } from 'react';
-import { Stock, StockLot } from './models';
-import { StockAction } from './state';
-import StockLotRow from './StockLotRow';
+import React, { useCallback, useContext } from 'react';
 import { IoAddCircleOutline } from 'react-icons/io5';
+import { Stock, StockLot } from './models';
+import { StockContext } from './state';
+import StockLotRow from './StockLotRow';
 
 interface StockLotsTableProps {
 	stock: Stock;
 	lots: StockLot[];
-	dispatch: (_: StockAction) => void;
 }
 
-const StockLotsTable: React.FC<StockLotsTableProps> = ({
-	lots,
-	stock,
-	dispatch,
-}: StockLotsTableProps) => {
+const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
+	const { dispatch } = useContext(StockContext);
+
 	const addLot = useCallback(() => {
 		dispatch({ type: 'ADD_LOT', symbol: stock.symbol });
 	}, [dispatch, stock]);
