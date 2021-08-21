@@ -1,5 +1,5 @@
-// const apiUrl = 'https://gh-finance-tools.herokuapp.com';
-const apiUrl = 'http://localhost:8000';
+const apiUrl = 'https://gh-finance-tools.herokuapp.com';
+// const apiUrl = 'http://localhost:8000';
 
 export async function getShares(...symbols: string[]): Promise<QuoteResponse[]> {
 	const response = await fetch(`${apiUrl}/shares?symbols=${symbols.join(',')}`, {
