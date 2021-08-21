@@ -1,11 +1,11 @@
-import React, { useMemo, useReducer } from 'react';
-import { convertToCurrency, formatCurrency } from '../../utils/converters';
-import { sum } from '../../utils/math';
+import React, { useReducer } from 'react';
 import AddStock from './AddStock';
 import { StockList } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
+import StockSettings from './StockSettings';
+import StockSummaryRow from './StockSummaryRow';
 
 const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
@@ -45,7 +45,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 					))}
 				</tbody>
 				<tfoot>
-					<SummaryRow stocks={stocks} />
+					<StockSummaryRow stocks={stocks} />
 				</tfoot>
 			</table>
 		</div>
@@ -54,48 +54,10 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 
 const StockActionBar = () => {
 	return (
-		<div className="p-4 space-x-4">
+		<div className="p-4 space-x-4 flex">
 			<AddStock />
 			<RefreshStocksButton />
+			<StockSettings />
 		</div>
-	);
-};
-
-const SummaryRow = ({ stocks }: { stocks: StockList }) => {
-	const totalValue = useMemo(
-		() =>
-			sum(
-				...stocks.flatMap((stock) =>
-					stock.lots.map((lot) =>
-						convertToCurrency(stock.regularMarketPrice * lot.shares, stock.currency)
-					)
-				)
-			),
-		[stocks]
-	);
-	const totalGain = useMemo(
-		() =>
-			sum(
-				...stocks.flatMap((stock) =>
-					stock.lots.map((lot) =>
-						convertToCurrency(
-							stock.regularMarketPrice * lot.shares - lot.price * lot.shares,
-							stock.currency
-						)
-					)
-				)
-			),
-		[stocks]
-	);
-
-	return (
-		<tr className="text-right dark:text-purple-400">
-			<td></td>
-			<td></td>
-			<td>{formatCurrency(totalValue)}</td>
-			<td></td>
-			<td></td>
-			<td>{formatCurrency(totalGain)}</td>
-		</tr>
 	);
 };

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
-import { formatCurrency } from 'utils/converters';
+import { convertToCurrency, formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
 import { Stock } from './models';
 import { StockContext } from './state';
@@ -12,9 +12,16 @@ interface StockRowProps {
 }
 
 const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
+	const {
+		state: { preferredCurrency },
+	} = useContext(StockContext);
 	const totalShares = sum(...stock.lots.map((x) => x.shares));
 	const avgPrice = sum(...stock.lots.map((x) => x.shares * x.price)) / totalShares;
-	const gain = totalShares * stock.regularMarketPrice - totalShares * avgPrice;
+	const gain = convertToCurrency(
+		totalShares * stock.regularMarketPrice - totalShares * avgPrice,
+		stock.currency,
+		preferredCurrency
+	);
 
 	const [showLots, setShowLots] = useState(false);
 
@@ -28,7 +35,8 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td className={getValueColorIndicator(avgPrice)}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
-				<td className={getValueColorIndicator(gain)}>{formatCurrency(gain, stock.currency)}</td>
+				<td className={getValueColorIndicator(gain)}>{formatCurrency(gain, preferredCurrency)}</td>
+
 				<StockRowActions stock={stock} setShowLots={setShowLots} />
 			</tr>
 			<tr>

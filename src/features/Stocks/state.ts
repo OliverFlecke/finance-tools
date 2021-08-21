@@ -19,6 +19,7 @@ export function stockReducer(state: StockState, action: StockAction): StockState
 export function getDefaultStockState(): StockState {
 	const state = getDataFromStorage(storageKey, {
 		stocks: [],
+		preferredCurrency: 'usd',
 	});
 
 	for (const symbol of Object.keys(state.stocks)) {
@@ -32,12 +33,14 @@ export function getDefaultStockState(): StockState {
 
 export interface StockState {
 	stocks: StockList;
+	preferredCurrency: string;
 }
 
 export type StockAction =
 	| { type: 'ADD_STOCK'; stock: Stock }
 	| { type: 'DELETE_STOCK'; symbol: string }
 	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
+	| { type: 'SET PREFERRED CURRENCY'; currency: string }
 	| { type: 'ADD_LOT'; symbol: string }
 	| { type: 'DELETE_LOT'; symbol: string; id: string }
 	| { type: 'EDIT_LOT'; symbol: string; lot: StockLot };
@@ -113,6 +116,12 @@ function reducer(state: StockState, action: StockAction): StockState {
 								lots: stock.lots.filter((x) => x.id !== action.lot.id).concat(action.lot),
 						  }
 				),
+			};
+
+		case 'SET PREFERRED CURRENCY':
+			return {
+				...state,
+				preferredCurrency: action.currency.toLowerCase(),
 			};
 
 		default:
