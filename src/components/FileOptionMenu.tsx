@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver';
 import React, { useCallback, useContext } from 'react';
+import { IoSaveOutline } from 'react-icons/io5';
 import { AccountContext } from '../services/AccountService';
 
 const FileOptionMenu: React.FC = () => {
@@ -33,9 +34,9 @@ const FileOptionMenu: React.FC = () => {
 
 	return (
 		<div className="flex justify-end space-x-4">
-			<button className="btn btn-primary max-h-12 max-w-12" onClick={save}>
-				{/* <SaveIcon /> */}
-				Save
+			<button className="btn btn-primary space-x-2" onClick={save}>
+				<IoSaveOutline className="inline" />
+				<span className="align-middle">Save</span>
 			</button>
 			<input type="file" onChange={fileChange} className="bg-blue-400 p-2 rounded" />
 			<button className="btn btn-secondary" onClick={closeFile}>

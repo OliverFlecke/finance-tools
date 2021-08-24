@@ -1,9 +1,6 @@
-import { Button, ButtonContainer, Modal } from '@oliverflecke/components-react';
-import React from 'react';
-import { useContext } from 'react';
-import { useState } from 'react';
-import { useCallback } from 'react';
-import { IoCloseCircle, IoCloseCircleOutline, IoSettingsOutline } from 'react-icons/io5';
+import { ButtonContainer, Modal } from '@oliverflecke/components-react';
+import React, { useCallback, useContext, useState } from 'react';
+import { IoCloseCircleOutline, IoSettingsOutline } from 'react-icons/io5';
 import { StockContext } from './state';
 
 const StockSettings: React.FC = () => {

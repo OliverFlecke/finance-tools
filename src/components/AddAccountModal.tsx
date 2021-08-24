@@ -1,6 +1,7 @@
 import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
 import React, { FC, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { IoAddCircleOutline } from 'react-icons/io5';
 import { Account } from '../models/Account';
 
 interface AddAccountProps {
@@ -23,7 +24,10 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 
 	return (
 		<>
-			<Button onClick={() => setShowPrompt((x) => !x)}>Add account</Button>
+			<button onClick={() => setShowPrompt((x) => !x)} className="btn btn-primary space-x-2">
+				<IoAddCircleOutline className="inline" />
+				<span className="align-middle">Add account</span>
+			</button>
 			<Modal isOpen={showPrompt} onDismiss={close}>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className="p-4">
