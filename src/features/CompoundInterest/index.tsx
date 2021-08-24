@@ -27,7 +27,8 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 	const onSubmit = handleSubmit((d) => setData(d));
 
 	return (
-		<>
+		<div className="px-4 dark:bg-coolGray-700">
+			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
 			<form
 				onSubmit={onSubmit}
 				className="w-full overflow-x-hidden flex flex-col items-center justify-center"
@@ -87,7 +88,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					interestAccural={data.interestAccural}
 				/>
 			)}
-		</>
+		</div>
 	);
 };
 

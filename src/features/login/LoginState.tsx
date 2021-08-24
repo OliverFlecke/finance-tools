@@ -23,7 +23,7 @@ const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }: L
 				<img
 					src={user.avatar_url}
 					alt="Avatar of the logged in user"
-					className="max-h-12 rounded-full"
+					className="max-h-10 rounded-full"
 					loading="lazy"
 				/>
 				<div className="hidden group-hover:block absolute rounded py-4 shadow bg-coolGray-100 dark:bg-coolGray-700">
