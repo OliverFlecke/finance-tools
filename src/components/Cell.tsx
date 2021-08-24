@@ -16,7 +16,6 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 		(element: React.FormEvent<HTMLTableDataCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
 			if (amount !== NaN) {
-				console.log(`Got amount ${amount}`);
 				dispatch({ type: 'edit entry for account', name: account.name, key: date, value: amount });
 			}
 		},

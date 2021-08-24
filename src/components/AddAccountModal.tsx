@@ -17,7 +17,6 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 	} = useForm<Account>();
 	const close = useCallback(() => setShowPrompt(false), [setShowPrompt]);
 	const onSubmit = (account: Account) => {
-		console.log(`Adding account: ${account}`);
 		addAccount(account);
 		close();
 	};

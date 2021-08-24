@@ -21,6 +21,9 @@ export function getDefaultStockState(): StockState {
 	const state = getDataFromStorage(storageKey, {
 		stocks: [],
 		preferredCurrency: 'usd',
+		currencyRates: {
+			usd: {},
+		},
 	});
 
 	for (const symbol of Object.keys(state.stocks)) {
