@@ -9,7 +9,7 @@ import Stocks from './features/Stocks';
 const App: React.FC = () => {
 	return (
 		<Router>
-			<main className="h-screen bg-white dark:bg-coolGray-900 text-gray-900 dark:text-gray-200">
+			<main className="min-h-screen h-full bg-white dark:bg-coolGray-900 text-gray-900 dark:text-gray-200">
 				<Header />
 
 				<Switch>
