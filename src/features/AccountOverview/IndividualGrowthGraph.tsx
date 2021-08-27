@@ -8,10 +8,10 @@ import { scaleLinear, scaleOrdinal, scaleTime, TimeDomain } from '@visx/scale';
 import { LinePath } from '@visx/shape';
 import { extent, max } from 'd3-array';
 import { ScaleLinear, ScaleTime, tickFormat } from 'd3-scale';
-import { Account, DateEntry } from 'models/Account';
+import { Account, DateEntry } from 'features/AccountOverview/models/Account';
 import React, { FC, useContext } from 'react';
-import { AccountContext } from 'services/AccountService';
 import colors from 'tailwindcss/colors';
+import { AccountContext } from './AccountService';
 
 const IndividualGrowthGraph: FC = () => {
 	const { state } = useContext(AccountContext);

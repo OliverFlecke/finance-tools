@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useContext, useRef } from 'react';
-import { Account, DateEntry } from '../models/Account';
-import { AccountContext } from '../services/AccountService';
-import { currencyFormatter, parseNumber } from '../utils/converters';
+import { Account, DateEntry } from './models/Account';
+import { AccountContext } from './AccountService';
+import { currencyFormatter, parseNumber } from 'utils/converters';
 
 interface CellProps {
 	account: Account;

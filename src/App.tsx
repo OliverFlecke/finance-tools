@@ -1,5 +1,5 @@
 import 'compiled.css';
-import { AccountOverview } from 'features/AccountOverview';
+import AccountOverview from 'features/AccountOverview';
 import CompoundInterest from 'features/CompoundInterest';
 import Header from 'features/Header';
 import React from 'react';

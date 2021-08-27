@@ -1,7 +1,7 @@
-import { Account, AccountEntries } from 'models/Account';
+import { Account, AccountEntries } from 'features/AccountOverview/models/Account';
 import React, { FC, useContext } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
-import { AccountContext } from 'services/AccountService';
+import { AccountContext } from 'features/AccountOverview/AccountService';
 import { currencyFormatter } from 'utils/converters';
 import Cell from './Cell';
 

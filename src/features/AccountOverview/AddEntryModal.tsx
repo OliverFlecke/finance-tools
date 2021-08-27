@@ -1,7 +1,7 @@
 import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
 import React, { FC, memo, useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AccountContext } from '../services/AccountService';
+import { AccountContext } from './AccountService';
 
 const AddEntryModal: FC = memo(() => {
 	const { dispatch } = useContext(AccountContext);

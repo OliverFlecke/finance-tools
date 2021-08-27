@@ -2,7 +2,7 @@ import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-
 import React, { FC, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { Account } from '../models/Account';
+import { Account } from './models/Account';
 
 interface AddAccountProps {
 	addAccount: (account: Account) => void;

@@ -1,12 +1,12 @@
-import AddAccount from 'components/AddAccountModal';
-import AddEntryModal from 'components/AddEntryModal';
-import FileOptionMenu from 'components/FileOptionMenu';
-import IndividualGrowthGraph from 'components/IndividualGrowthGraph';
-import Table from 'components/Table';
+import AddAccount from 'features/AccountOverview/AddAccountModal';
 import React, { memo, useReducer } from 'react';
-import { AccountContext, accountReducer, initAccountState } from 'services/AccountService';
+import { AccountContext, accountReducer, initAccountState } from './AccountService';
+import AddEntryModal from './AddEntryModal';
+import FileOptionMenu from './FileOptionMenu';
+import IndividualGrowthGraph from './IndividualGrowthGraph';
+import Table from './Table';
 
-export const AccountOverview = memo(() => {
+const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
 	return (
@@ -16,7 +16,7 @@ export const AccountOverview = memo(() => {
 				<AddAccount addAccount={(account) => dispatch({ type: 'add account', account })} />
 				<AddEntryModal />
 			</div>
-			<div className="px-4">
+			<div className="p-4">
 				<FileOptionMenu />
 			</div>
 			<IndividualGrowthGraph />
@@ -24,3 +24,5 @@ export const AccountOverview = memo(() => {
 	);
 });
 AccountOverview.displayName = 'AccountOverview';
+
+export default AccountOverview;

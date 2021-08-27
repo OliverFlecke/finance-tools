@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { Account, AccountEntries } from 'models/Account';
 import { sortObject } from 'utils/converters';
 import { getDataFromStorage, storedReducer } from 'utils/storage';
+import { Account, AccountEntries } from './models/Account';
 
 export const AccountContext = createContext({
 	state: {
