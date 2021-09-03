@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
-import { useEffect } from 'react';
+import React, { ReactNode, useCallback, useEffect, useReducer, useState } from 'react';
+import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import AddStock from './AddStock';
-import { getCurrencies } from './API/currenciesApi';
-import { StockList } from './models';
+import { CurrencyRates, getCurrencies } from './API/currenciesApi';
+import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
@@ -31,26 +31,87 @@ export default Stocks;
 
 interface StocksTableProps {
 	stocks: StockList;
+	currencyRates?: CurrencyRates;
+	preferredCurrency?: string;
 }
 
-const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
+type StockColumn =
+	| 'Symbol'
+	| 'Current price'
+	| 'Total value'
+	| 'Total shares'
+	| 'Average price'
+	| 'Gain';
+
+const StocksTable: React.FC<StocksTableProps> = ({
+	stocks,
+	currencyRates,
+	preferredCurrency,
+}: StocksTableProps) => {
+	const [sortKey, setSortKey] = useState<StockColumn | undefined>();
+	const [ascending, setAscending] = useState(false);
+	const sort = useCallback(
+		(key: StockColumn) => () => {
+			if (sortKey === key) {
+				setAscending((x) => !x);
+			} else {
+				setSortKey(key);
+			}
+		},
+		[setSortKey, setAscending, sortKey]
+	);
+
 	return (
 		<div className="overflow-x-scroll">
 			<table className="w-full">
 				<thead>
 					<tr className="text-sm align-bottom text-coolGray-600 dark:text-coolGray-400">
-						<th>Symbol</th>
-						<th>Current price</th>
-						<th>Total value</th>
-						<th>Total shares</th>
-						<th>Average price</th>
-						<th>Gain</th>
+						<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
+							Symbol
+						</Header>
+						<Header
+							sort={sort}
+							currentSortKey={sortKey}
+							sortKey={'Current price'}
+							ascending={ascending}
+						>
+							Current price
+						</Header>
+						<Header
+							sort={sort}
+							currentSortKey={sortKey}
+							sortKey={'Total value'}
+							ascending={ascending}
+						>
+							Total value
+						</Header>
+						<Header
+							sort={sort}
+							currentSortKey={sortKey}
+							sortKey={'Total shares'}
+							ascending={ascending}
+						>
+							Total shares
+						</Header>
+						<Header
+							sort={sort}
+							currentSortKey={sortKey}
+							sortKey={'Average price'}
+							ascending={ascending}
+						>
+							Average price
+						</Header>
+						<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
+							Gain
+						</Header>
 					</tr>
 				</thead>
 				<tbody>
-					{stocks.map((stock) => (
-						<StockRow key={stock.symbol} stock={stock} />
-					))}
+					{stocks
+						.sort(stocksComparer(sortKey, ascending, preferredCurrency, currencyRates))
+						.map((stock) => (
+							<StockRow key={stock.symbol} stock={stock} />
+						))}
 				</tbody>
 				<tfoot>
 					<StockSummaryRow stocks={stocks} />
@@ -69,3 +130,65 @@ const StockActionBar = () => {
 		</div>
 	);
 };
+
+interface HeaderProps {
+	sort: (key: StockColumn) => () => void;
+	children: ReactNode;
+	currentSortKey?: StockColumn;
+	sortKey: StockColumn;
+	ascending: boolean;
+}
+const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) => (
+	<th>
+		<button
+			onClick={sort(sortKey)}
+			className="px-2 focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm"
+		>
+			{children}
+			{sortKey === currentSortKey && <Caret ascending={ascending} />}
+		</button>
+	</th>
+);
+
+const Caret = ({ ascending }: { ascending: boolean }) => (
+	<>{ascending ? <IoCaretDown className="inline" /> : <IoCaretUp className="inline" />}</>
+);
+
+function stocksComparer(
+	key?: StockColumn,
+	ascending?: boolean,
+	preferredCurrency?: string,
+	currencyRates?: CurrencyRates
+): (a: Stock, b: Stock) => number {
+	if (!key) return () => 0;
+
+	return (a, b) => {
+		let result = 0;
+		switch (key) {
+			case 'Symbol':
+				result = a.symbol.localeCompare(b.symbol);
+				break;
+			case 'Gain':
+				result =
+					stockGain(a, preferredCurrency, currencyRates) -
+					stockGain(b, preferredCurrency, currencyRates);
+				break;
+			case 'Average price':
+				// TODO: This should properly be converted to the same currency
+				result = stockAvgPrice(a) - stockAvgPrice(b);
+				break;
+			case 'Current price':
+				result = a.regularMarketPrice - b.regularMarketPrice;
+				break;
+			case 'Total shares':
+				result = stockTotalShares(a) - stockTotalShares(b);
+				break;
+			case 'Total value':
+				result =
+					a.regularMarketPrice * stockTotalShares(a) - b.regularMarketPrice * stockTotalShares(b);
+				break;
+		}
+
+		return result * (ascending ? 1 : -1);
+	};
+}

@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
-import { convertToCurrency, formatCurrency } from 'utils/converters';
-import { sum } from 'utils/math';
-import { Stock } from './models';
+import { formatCurrency } from 'utils/converters';
+import { Stock, stockAvgPrice, stockGain, stockTotalShares } from './models';
 import { StockContext } from './state';
 import StockLotsTable from './StockLotsTable';
 
@@ -15,14 +14,9 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const {
 		state: { preferredCurrency, currencyRates },
 	} = useContext(StockContext);
-	const totalShares = sum(...stock.lots.map((x) => x.shares));
-	const avgPrice = sum(...stock.lots.map((x) => x.shares * x.price)) / totalShares;
-	const gain = convertToCurrency(
-		totalShares * stock.regularMarketPrice - totalShares * avgPrice,
-		stock.currency,
-		preferredCurrency,
-		currencyRates.usd
-	);
+	const totalShares = stockTotalShares(stock);
+	const avgPrice = stockAvgPrice(stock);
+	const gain = stockGain(stock, preferredCurrency, currencyRates);
 
 	const [showLots, setShowLots] = useState(false);
 
