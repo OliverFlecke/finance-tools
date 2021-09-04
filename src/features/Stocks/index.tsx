@@ -2,6 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useReducer, useState } from '
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import AddStock from './AddStock';
 import { CurrencyRates, getCurrencies } from './API/currenciesApi';
+import { getStocksForUser } from './API/stockApi';
 import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
@@ -16,6 +17,11 @@ const Stocks: React.FC = () => {
 		getCurrencies()
 			.then((rates) => dispatch({ type: 'SET CURRENCY RATES', rates }))
 			.catch((err) => console.warn(err));
+	}, []);
+
+	useEffect(() => {
+		console.debug('running effect');
+		getStocksForUser().then((x) => console.debug(x));
 	}, []);
 
 	return (

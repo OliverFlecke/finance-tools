@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 dotenv.config();
 
-export const authorizeUrl = 'https://github.com/login/oauth/authorize';
+const authorizeUrl = 'https://github.com/login/oauth/authorize';
 const authCors = process.env.REACT_APP_CORS_AUTH_URL;
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const localStorageUserKey = 'github_user';
@@ -19,7 +19,7 @@ export interface User {
 	login: string | null;
 }
 
-interface AuthorizeResponse {
+export interface AuthorizeResponse {
 	access_token: string;
 	scopes: string;
 	token_type: string;
@@ -81,6 +81,7 @@ export function getUser(state: string): Promise<User | null> {
 				if (res.status === 200) {
 					const body: AuthorizeResponse = await res.json();
 					const user = await getUserFromGithub(body.access_token);
+					localStorage.setItem('auth_token', JSON.stringify(body));
 					localStorage.setItem(localStorageUserKey, JSON.stringify(user));
 					resolve(user);
 				} else {
