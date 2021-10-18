@@ -42,6 +42,17 @@ export async function updateStockLot(id: string, lot: UpdateStockLotRequest): Pr
 	});
 }
 
+export async function deleteStockLot(id: string): Promise<void> {
+	await fetch(`${uri}/stock/lot/${id}`, {
+		method: 'DELETE',
+		credentials: 'include',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+}
+
 interface AddStockLotRequest extends UpdateStockLotRequest {
 	symbol: string;
 }

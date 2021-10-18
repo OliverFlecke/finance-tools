@@ -4,7 +4,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency } from 'utils/converters';
 import { formatDate } from 'utils/date';
-import { updateStockLot } from './API/stockApi';
+import { deleteStockLot, updateStockLot } from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -54,7 +54,8 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		},
 		[dispatch, stock.symbol]
 	);
-	const deleteLot = useCallback(() => {
+	const deleteLot = useCallback(async () => {
+		await deleteStockLot(lot.id);
 		dispatch({ type: 'DELETE_LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
