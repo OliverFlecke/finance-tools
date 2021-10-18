@@ -2,6 +2,7 @@ import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-
 import React, { useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoAddCircleOutline } from 'react-icons/io5';
+import { trackStock } from './API/stockApi';
 import { getShares } from './API/yahoo';
 import { Stock } from './models';
 import { StockContext } from './state';
@@ -24,6 +25,7 @@ const AddStock: React.FC = () => {
 				// TODO: Better error dialog to inform user that stock quote was not found
 				alert(`Stock with symbol '${stock.symbol}' was not found`);
 			} else {
+				await trackStock(stock.symbol);
 				dispatch({
 					type: 'ADD_STOCK',
 					stock: {

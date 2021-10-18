@@ -1,18 +1,57 @@
-import { AuthorizeResponse } from 'utils/githubAuth';
 import { StockList } from '../models';
 
-export async function getStocksForUser(): Promise<StockList> {
-	const storedAuth = localStorage.getItem('auth_token');
-	if (storedAuth === null) return [];
+const uri = 'https://localhost:5001/api/v1';
 
-	const auth: AuthorizeResponse = JSON.parse(storedAuth);
-
-	const response = await fetch('https://localhost:5001/api/v1/stock/tracked', {
-		// mode: 'cors',
+export function getStocksForUser(): Promise<StockList> {
+	return fetch(`${uri}/stock/tracked`, {
 		credentials: 'include',
+	}).then(async (res) => await res.json());
+}
+
+export async function trackStock(symbol: string): Promise<void> {
+	await fetch(`${uri}/stock/tracked`, {
+		method: 'POST',
+		credentials: 'include',
+		body: symbol,
+	})
+		.then(() => console.log(`Stock tracked: ${symbol}`))
+		.catch((err) => console.log(err));
+}
+
+export function addStockLot(lot: AddStockLotRequest): Promise<string> {
+	return fetch(`${uri}/stock/lot`, {
+		method: 'POST',
+		credentials: 'include',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(lot),
+	}).then((res) => res.json());
+}
+
+export async function updateStockLot(id: string, lot: UpdateStockLotRequest): Promise<void> {
+	await fetch(`${uri}/stock/lot/${id}`, {
+		method: 'PUT',
+		credentials: 'include',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(lot),
 	});
+}
 
-	console.debug(await response.json());
+interface AddStockLotRequest extends UpdateStockLotRequest {
+	symbol: string;
+}
 
-	return [];
+interface UpdateStockLotRequest {
+	shares: number;
+	buyDate: Date;
+	buyPrice: number;
+	buyBrokerage: number;
+	soldDate?: Date;
+	soldPrice?: number;
+	soldBrokerage?: number;
 }

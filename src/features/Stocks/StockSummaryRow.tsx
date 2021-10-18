@@ -34,7 +34,7 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 				...stocks.flatMap((stock) =>
 					stock.lots.map((lot) =>
 						convertToCurrency(
-							stock.regularMarketPrice * lot.shares - lot.price * lot.shares,
+							stock.regularMarketPrice * lot.shares - lot.buyPrice * lot.shares,
 							stock.currency,
 							preferredCurrency,
 							currencyRates.usd

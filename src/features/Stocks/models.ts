@@ -11,9 +11,13 @@ export interface Stock extends QuoteResponse {
 
 export interface StockLot {
 	id: string;
-	date: Date;
 	shares: number;
-	price: number;
+	buyDate: Date;
+	buyPrice: number;
+	buyBrokerage: number;
+	soldDate?: Date;
+	soldPrice?: number;
+	soldBrokerage?: number;
 }
 
 export function stockTotalShares(stock: Stock): number {
@@ -21,7 +25,7 @@ export function stockTotalShares(stock: Stock): number {
 }
 export function stockAvgPrice(stock: Stock): number {
 	const totalShares = stockTotalShares(stock);
-	return sum(...stock.lots.map((x) => x.shares * x.price)) / totalShares;
+	return sum(...stock.lots.map((x) => x.shares * x.buyPrice)) / totalShares;
 }
 
 export function stockGain(

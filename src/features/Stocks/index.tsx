@@ -20,8 +20,12 @@ const Stocks: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		console.debug('running effect');
-		getStocksForUser().then((x) => console.debug(x));
+		getStocksForUser().then((stocks) =>
+			dispatch({
+				type: 'SET STOCKS',
+				stocks: stocks,
+			})
+		);
 	}, []);
 
 	return (

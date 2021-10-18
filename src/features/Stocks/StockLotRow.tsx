@@ -4,6 +4,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency } from 'utils/converters';
 import { formatDate } from 'utils/date';
+import { updateStockLot } from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -25,24 +26,34 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		mode: 'onChange',
 		defaultValues: {
 			...lot,
-			date: formatDate(lot.date),
+			date: formatDate(lot.buyDate),
 		},
 	});
 
-	const onChange = (lot: LotForm) => {
-		if (lot.date === '') return;
+	const onChange = useCallback(
+		async (input: LotForm) => {
+			if (input.date === '') return;
 
-		dispatch({
-			type: 'EDIT_LOT',
-			symbol: stock.symbol,
-			lot: {
-				id: lot.id,
-				shares: Number(lot.shares),
-				price: Number(lot.price),
-				date: new Date(Date.parse(lot.date.toString())),
-			},
-		});
-	};
+			const lot = {
+				shares: Number(input.shares),
+				buyPrice: Number(input.price),
+				buyDate: new Date(Date.parse(input.date.toString())),
+				buyBrokerage: 0,
+			};
+
+			await updateStockLot(input.id, lot);
+
+			dispatch({
+				type: 'EDIT_LOT',
+				symbol: stock.symbol,
+				lot: {
+					...lot,
+					id: input.id,
+				},
+			});
+		},
+		[dispatch, stock.symbol]
+	);
 	const deleteLot = useCallback(() => {
 		dispatch({ type: 'DELETE_LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);

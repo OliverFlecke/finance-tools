@@ -45,9 +45,10 @@ export type StockAction =
 	| { type: 'ADD_STOCK'; stock: Stock }
 	| { type: 'DELETE_STOCK'; symbol: string }
 	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
+	| { type: 'SET STOCKS'; stocks: StockList }
 	| { type: 'SET PREFERRED CURRENCY'; currency: string }
 	| { type: 'SET CURRENCY RATES'; rates: CurrencyRates }
-	| { type: 'ADD_LOT'; symbol: string }
+	| { type: 'ADD_LOT'; symbol: string; lotId?: string }
 	| { type: 'DELETE_LOT'; symbol: string; id: string }
 	| { type: 'EDIT_LOT'; symbol: string; lot: StockLot };
 
@@ -78,12 +79,22 @@ function reducer(state: StockState, action: StockAction): StockState {
 				})),
 			};
 
+		case 'SET STOCKS':
+			return {
+				...state,
+				stocks: action.stocks.map((stock) => ({
+					...stock,
+					lots: stock.lots ?? [],
+				})),
+			};
+
 		case 'ADD_LOT': {
-			const lot = {
-				id: uuidv4(),
-				date: new Date(),
-				price: state.stocks.find((x) => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
+			const lot: StockLot = {
+				id: action.lotId ?? uuidv4(),
 				shares: 0,
+				buyDate: new Date(),
+				buyPrice: state.stocks.find((x) => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
+				buyBrokerage: 0,
 			};
 
 			return {
