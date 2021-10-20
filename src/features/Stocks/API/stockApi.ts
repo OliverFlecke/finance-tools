@@ -1,6 +1,7 @@
+import { apiVersion, baseUri } from 'features/apiBase';
 import { StockList } from '../models';
 
-const uri = 'https://localhost:5001/api/v1';
+const uri = `${baseUri}/${apiVersion}`;
 
 export function getStocksForUser(): Promise<StockList> {
 	return fetch(`${uri}/stock/tracked`, {

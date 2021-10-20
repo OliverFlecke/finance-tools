@@ -23,7 +23,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	return (
 		<>
 			<tr className="w-full relative text-right bg-coolGray-200 dark:bg-coolGray-800">
-				<td className="text-left">{stock.symbol}</td>
+				<td className="text-left px-4">{stock.symbol}</td>
 				<td>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td>{formatCurrency(stock.regularMarketPrice * totalShares, stock.currency)}</td>
 				<td>{totalShares}</td>

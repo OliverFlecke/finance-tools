@@ -73,7 +73,7 @@ const StocksTable: React.FC<StocksTableProps> = ({
 
 	return (
 		<div className="overflow-x-scroll">
-			<table className="w-full">
+			<table className="w-full mx-4">
 				<thead>
 					<tr className="text-sm align-bottom text-coolGray-600 dark:text-coolGray-400">
 						<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
