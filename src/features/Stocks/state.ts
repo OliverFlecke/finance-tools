@@ -72,12 +72,18 @@ function reducer(state: StockState, action: StockAction): StockState {
 				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
 			};
 		case 'UPDATE STOCKS':
+			console.log(action.stocks);
 			return {
 				...state,
-				stocks: state.stocks.map((old) => ({
-					...old,
-					...action.stocks.find((x) => x.symbol === old.symbol),
-				})),
+				stocks: state.stocks.map((old) => {
+					const stock = action.stocks.find((x) => x.symbol === old.symbol);
+
+					return {
+						...old,
+						...stock,
+						lots: old.lots,
+					};
+				}),
 			};
 
 		case 'SET STOCKS':

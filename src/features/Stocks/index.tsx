@@ -3,6 +3,7 @@ import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import AddStock from './AddStock';
 import { CurrencyRates, getCurrencies } from './API/currenciesApi';
 import { getStocksForUser } from './API/stockApi';
+import { getShares } from './API/yahoo';
 import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
@@ -20,12 +21,19 @@ const Stocks: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		getStocksForUser().then((stocks) =>
-			dispatch({
-				type: 'SET STOCKS',
-				stocks: stocks,
-			})
-		);
+		getStocksForUser()
+			.then((stocks) =>
+				dispatch({
+					type: 'SET STOCKS',
+					stocks: stocks,
+				})
+			)
+			// TODO: This code is replicated from the RefreshStockButton component.
+			.then(async () => {
+				const quotes = await getShares(...state.stocks.map((x) => x.symbol));
+				dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
