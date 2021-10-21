@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export function parseNumber(value: any): number {
 	return Number.parseFloat(value.toString().replace(/[,a-zA-Z]/g, ''));
@@ -51,6 +53,18 @@ export function getConversionRate(
 			getConversionRate(fromCurrency, baseCurrency) * getConversionRate(baseCurrency, toCurrency)
 		);
 	}
+}
+
+export function useConverter(
+	fromCurrency: string,
+	toCurrency: string,
+	rates: Rates
+): (value: number) => number {
+	return useCallback((value: number) => convertToCurrency(value, fromCurrency, toCurrency, rates), [
+		fromCurrency,
+		rates,
+		toCurrency,
+	]);
 }
 
 type Rates = { [key: string]: number };

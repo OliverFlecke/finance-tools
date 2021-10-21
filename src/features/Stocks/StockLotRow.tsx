@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
-import { convertToCurrency, formatCurrency } from 'utils/converters';
+import { formatCurrency, useConverter } from 'utils/converters';
 import { formatDate } from 'utils/date';
 import { deleteStockLot, updateStockLot } from './API/stockApi';
 import { Stock, StockLot } from './models';
@@ -62,11 +62,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		dispatch({ type: 'DELETE LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
-	const convert = useCallback(
-		(value: number) =>
-			convertToCurrency(value, stock.currency, preferredCurrency, currencyRates.usd),
-		[currencyRates.usd, preferredCurrency, stock.currency]
-	);
+	const convert = useConverter(stock.currency, preferredCurrency, currencyRates.usd);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;
 	const buyMarketValue = watch('buyPrice') * watch('shares');
