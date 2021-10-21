@@ -22,7 +22,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 			buyPrice: 0,
 			buyBrokerage: 0,
 		});
-		dispatch({ type: 'ADD_LOT', symbol: stock.symbol, lotId: lotId });
+		dispatch({ type: 'ADD LOT', symbol: stock.symbol, lotId: lotId });
 	}, [dispatch, stock]);
 
 	return (

@@ -54,7 +54,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	const { dispatch } = useContext(StockContext);
 
 	const deleteStock = useCallback(() => {
-		dispatch({ type: 'DELETE_STOCK', symbol: stock.symbol });
+		dispatch({ type: 'DELETE STOCK', symbol: stock.symbol });
 	}, [dispatch, stock.symbol]);
 
 	return (

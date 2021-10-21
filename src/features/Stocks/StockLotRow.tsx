@@ -44,7 +44,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 			await updateStockLot(input.id, lot);
 
 			dispatch({
-				type: 'EDIT_LOT',
+				type: 'EDIT LOT',
 				symbol: stock.symbol,
 				lot: {
 					...lot,
@@ -56,7 +56,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	);
 	const deleteLot = useCallback(async () => {
 		await deleteStockLot(lot.id);
-		dispatch({ type: 'DELETE_LOT', symbol: stock.symbol, id: lot.id });
+		dispatch({ type: 'DELETE LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;

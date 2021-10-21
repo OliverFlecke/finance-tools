@@ -27,7 +27,7 @@ const AddStock: React.FC = () => {
 			} else {
 				await trackStock(stock.symbol);
 				dispatch({
-					type: 'ADD_STOCK',
+					type: 'ADD STOCK',
 					stock: {
 						...quotes[0],
 						symbol: stock.symbol,

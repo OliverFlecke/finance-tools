@@ -43,20 +43,20 @@ export interface StockState {
 }
 
 export type StockAction =
-	| { type: 'ADD_STOCK'; stock: Stock }
-	| { type: 'DELETE_STOCK'; symbol: string }
+	| { type: 'ADD STOCK'; stock: Stock }
+	| { type: 'DELETE STOCK'; symbol: string }
 	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
 	| { type: 'SET STOCKS'; stocks: StockList }
 	| { type: 'SET PREFERRED CURRENCY'; currency: string }
 	| { type: 'SET CURRENCY RATES'; rates: CurrencyRates }
-	| { type: 'ADD_LOT'; symbol: string; lotId?: string }
-	| { type: 'DELETE_LOT'; symbol: string; id: string }
-	| { type: 'EDIT_LOT'; symbol: string; lot: StockLot };
+	| { type: 'ADD LOT'; symbol: string; lotId?: string }
+	| { type: 'DELETE LOT'; symbol: string; id: string }
+	| { type: 'EDIT LOT'; symbol: string; lot: StockLot };
 
 function reducer(state: StockState, action: StockAction): StockState {
 	console.debug(`received action: ${action.type}`);
 	switch (action.type) {
-		case 'ADD_STOCK':
+		case 'ADD STOCK':
 			if (state.stocks.find((x) => x.symbol === action.stock.symbol)) {
 				return state;
 			}
@@ -66,7 +66,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 				stocks: state.stocks.concat(action.stock),
 			};
 
-		case 'DELETE_STOCK':
+		case 'DELETE STOCK':
 			return {
 				...state,
 				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
@@ -89,7 +89,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 				})),
 			};
 
-		case 'ADD_LOT': {
+		case 'ADD LOT': {
 			const lot: StockLot = {
 				id: action.lotId ?? uuidv4(),
 				shares: 0,
@@ -110,7 +110,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 				),
 			};
 		}
-		case 'DELETE_LOT':
+		case 'DELETE LOT':
 			return {
 				...state,
 				stocks: state.stocks.map((stock) =>
@@ -123,7 +123,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 				),
 			};
 
-		case 'EDIT_LOT':
+		case 'EDIT LOT':
 			return {
 				...state,
 				stocks: state.stocks.map((stock) =>

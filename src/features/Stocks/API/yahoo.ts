@@ -11,7 +11,7 @@ export async function getShares(...symbols: string[]): Promise<QuoteResponse[]> 
 	if (json.error) {
 		throw new Error(json.error);
 	} else {
-		return json.quoteResponse.result ?? [];
+		return json ?? [];
 	}
 }
 
