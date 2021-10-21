@@ -6,7 +6,20 @@ const uri = `${baseUri}/${apiVersion}`;
 export function getStocksForUser(): Promise<StockList> {
 	return fetch(`${uri}/stock/tracked`, {
 		credentials: 'include',
-	}).then(async (res) => await res.json());
+	})
+		.then(async (res) => await res.json())
+		.then((stocks) =>
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			stocks.map((stock: any) => ({
+				...stock,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				lots: stock.lots.map((lot: any) => ({
+					...lot,
+					buyDate: new Date(Date.parse(lot.buyDate)),
+					soldDate: lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined,
+				})),
+			}))
+		);
 }
 
 export async function trackStock(symbol: string): Promise<void> {

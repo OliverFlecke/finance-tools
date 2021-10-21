@@ -28,7 +28,8 @@ export function getDefaultStockState(): StockState {
 
 	for (const symbol of Object.keys(state.stocks)) {
 		for (const lot of state.stocks[symbol].lots) {
-			lot.date = new Date(Date.parse(lot.date));
+			lot.buyDate = new Date(Date.parse(lot.buyDate));
+			lot.soldDate = lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined;
 		}
 	}
 
