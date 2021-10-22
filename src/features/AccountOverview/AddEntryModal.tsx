@@ -10,7 +10,7 @@ const AddEntryModal: FC = memo(() => {
 
 	const { register, handleSubmit } = useForm<{ date: string }>();
 	const onSubmit = handleSubmit(({ date }) => {
-		dispatch({ type: 'add entry', date });
+		dispatch({ type: 'ADD ENTRY', date });
 		dismiss();
 	});
 

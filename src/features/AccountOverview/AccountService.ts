@@ -33,36 +33,36 @@ export function initAccountState(): AccountState {
 }
 
 export type AccountAction =
-	| { type: 'add account'; account: Account }
-	| { type: 'add entry'; date: string }
-	| { type: 'delete entry'; date: string }
-	| { type: 'reset' }
-	| { type: 'load state'; state: AccountState }
-	| { type: 'edit entry for account'; name: string; value: number; key: string };
+	| { type: 'ADD ACCOUNT'; account: Account }
+	| { type: 'ADD ENTRY'; date: string }
+	| { type: 'DELETE ENTRY'; date: string }
+	| { type: 'RESET' }
+	| { type: 'LOAD STATE'; state: AccountState }
+	| { type: 'EDIT ENTRY FOR ACCOUNT'; name: string; value: number; key: string };
 
 function reducer(state: AccountState, action: AccountAction): AccountState {
 	switch (action.type) {
-		case 'reset':
+		case 'RESET':
 			return getDefaultAccountState();
-		case 'load state':
+		case 'LOAD STATE':
 			return action.state;
-		case 'add account':
+		case 'ADD ACCOUNT':
 			return {
 				...state,
 				accounts: state.accounts.concat(action.account),
 			};
-		case 'add entry':
+		case 'ADD ENTRY':
 			state.entries[action.date] = {};
 			return {
 				...state,
 			};
-		case 'edit entry for account':
+		case 'EDIT ENTRY FOR ACCOUNT':
 			state.entries[action.key][action.name] = action.value;
 			state.entries = sortObject(state.entries);
 			return {
 				...state,
 			};
-		case 'delete entry':
+		case 'DELETE ENTRY':
 			delete state.entries[action.date];
 			return {
 				...state,

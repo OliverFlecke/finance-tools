@@ -1,6 +1,7 @@
 export type AccountType = 'Cash' | 'Investment';
 
 export interface Account {
+	id: string;
 	name: string;
 	type: AccountType;
 }

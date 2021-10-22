@@ -6,7 +6,7 @@ import { AccountContext } from './AccountService';
 const FileOptionMenu: React.FC = () => {
 	const { dispatch, state } = useContext(AccountContext);
 
-	const closeFile = useCallback(() => dispatch({ type: 'reset' }), [dispatch]);
+	const closeFile = useCallback(() => dispatch({ type: 'RESET' }), [dispatch]);
 	const save = useCallback(() => {
 		const blob = new Blob([JSON.stringify(state)], {
 			type: 'text/plain;charset=utf-8',
@@ -24,7 +24,7 @@ const FileOptionMenu: React.FC = () => {
 			const text = await file.text();
 			try {
 				const state = JSON.parse(text);
-				dispatch({ type: 'load state', state });
+				dispatch({ type: 'LOAD STATE', state });
 			} catch {
 				console.warn(`Unable to parse file ${file.name}`);
 			}

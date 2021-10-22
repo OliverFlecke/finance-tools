@@ -67,7 +67,7 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 								))}
 								<td>
 									<button
-										onClick={() => dispatch({ type: 'delete entry', date: date })}
+										onClick={() => dispatch({ type: 'DELETE ENTRY', date: date })}
 										className="flex  focus:outline-none"
 									>
 										<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />

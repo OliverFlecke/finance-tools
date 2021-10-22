@@ -5,3 +5,14 @@ export const baseUri = isDevelopement
 	: 'https://finance.oliverflecke.me';
 
 export const apiVersion = 'api/v1';
+
+export function post(uri: RequestInfo, body: unknown): Promise<Response> {
+	return fetch(uri, {
+		method: 'post',
+		credentials: 'include',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(body),
+	});
+}

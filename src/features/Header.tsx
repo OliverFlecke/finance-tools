@@ -11,7 +11,9 @@ const Header: React.FC = () => {
 	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
-		getMyUser().then(setUser);
+		getMyUser().then((user) => {
+			if (user) setUser(user);
+		});
 	}, []);
 
 	return (
