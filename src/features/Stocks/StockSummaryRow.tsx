@@ -46,7 +46,7 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 	);
 
 	return (
-		<tr className="text-right dark:text-purple-400">
+		<tr className="text-right font-bold dark:text-purple-400">
 			<td></td>
 			<td></td>
 			<td>{formatCurrency(totalValue, preferredCurrency)}</td>

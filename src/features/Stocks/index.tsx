@@ -141,7 +141,7 @@ const StocksTable: React.FC<StocksTableProps> = ({
 
 const StockActionBar = () => {
 	return (
-		<div className="p-4 space-x-4 flex">
+		<div className="p-4 justify-between flex">
 			<AddStock />
 			<RefreshStocksButton />
 			<StockSettings />

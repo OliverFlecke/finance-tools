@@ -18,8 +18,10 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	const totalShares = stockTotalShares(stock);
 	const avgPrice = stockAvgPrice(stock);
+	const buyMarketPrice = avgPrice * totalShares;
 	const marketValue = stock.regularMarketPrice * totalShares;
 	const gain = stockGain(stock, preferredCurrency, currencyRates);
+	const gainPercentage = (marketValue / buyMarketPrice - 1) * 100;
 
 	const [showLots, setShowLots] = useState(false);
 
@@ -33,12 +35,17 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td className={getValueColorIndicator(avgPrice)}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
-				<td className={getValueColorIndicator(gain)}>{formatCurrency(gain, preferredCurrency)}</td>
+				<td className={`${getValueColorIndicator(gain)} flex flex-col`}>
+					<span>{formatCurrency(gain, preferredCurrency)}</span>
+					<span className={isNaN(gainPercentage) ? 'hidden' : ''}>
+						{gainPercentage.toFixed(2)}%
+					</span>
+				</td>
 
 				<StockRowActions stock={stock} setShowLots={setShowLots} />
 			</tr>
 			<tr>
-				<td colSpan={6} className={`p-0 pb-4 ${showLots ? '' : 'hidden'}`}>
+				<td colSpan={7} className={`p-0 pb-4 ${showLots ? '' : 'hidden'}`}>
 					<StockLotsTable lots={stock.lots} stock={stock} />
 				</td>
 			</tr>
@@ -61,7 +68,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	}, [dispatch, stock.symbol]);
 
 	return (
-		<td className="flex flex-row items-center space-x-2">
+		<td className="h-full space-x-2">
 			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
