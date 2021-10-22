@@ -68,7 +68,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	}, [dispatch, stock.symbol]);
 
 	return (
-		<td className="h-full space-x-2">
+		<td className="h-full space-x-2 pr-4">
 			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>

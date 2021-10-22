@@ -39,12 +39,16 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 								{...register('name', { required: true })}
 								errorMessage={errors.name && 'Please provide a name for your account'}
 							/>
-							<Input
-								placeholder="Cash, Investment..."
-								label="Type"
-								{...register('type', { required: true })}
-								errorMessage={errors.type && 'Please choose cash or investment'}
-							/>
+							<label className="flex flex-col space-y-2">
+								<span className="text-gray-700 dark:text-gray-300 font-medium text-sm">Type</span>
+								<select
+									className="py-2 px-4 rounded-md shadow focus:outline-none focus:ring focus:border-indigo-400 bg-white dark:bg-gray-900 dark:text-gray-100 undefined"
+									{...register('type', { required: true })}
+								>
+									<option value={'Cash'}>Cash</option>
+									<option value={'Investment'}>Investment</option>
+								</select>
+							</label>
 						</fieldset>
 					</div>
 
