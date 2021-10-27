@@ -32,7 +32,13 @@ const AccountOverview = memo(() => {
 				type: 'LOAD STATE',
 				state: {
 					accounts: accounts,
-					entries,
+					entries: Object.keys(entries)
+						.sort()
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						.reduce((obj: any, key) => {
+							obj[key] = entries[key];
+							return obj;
+						}, {}),
 				},
 			});
 		});
