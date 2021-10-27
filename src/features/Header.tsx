@@ -22,7 +22,7 @@ const Header: React.FC = () => {
 			<div className="flex flex-row justify-center items-center">
 				<LoginState
 					user={user}
-					authorizeUrl={`${baseUri}/signin?returnUrl=${window.location.toString()}`}
+					authorizeUrl={`${baseUri}/signin?returnUrl=${window.location.href}`}
 				/>
 				<div className="p-4">
 					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />

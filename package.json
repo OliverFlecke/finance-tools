@@ -10,7 +10,6 @@
 		"start": "react-scripts start",
 		"prebuild": "yarn postcss src/main.css -o src/compiled.css -v",
 		"build": "react-scripts build",
-		"postbuild": "react-snap",
 		"test": "jest --watch",
 		"eject": "react-scripts eject",
 		"deploy": "yarn build && gh-pages -t true -d build"

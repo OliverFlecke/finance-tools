@@ -36,11 +36,7 @@ interface LoginButtonProps {
 }
 
 const LoginButton = ({ authorizeUrl }: LoginButtonProps) => (
-	// <a className="btn btn-primary" href={authorizeUrl}>
-	<a
-		className="btn btn-primary"
-		href={`https://localhost:5001/signin?returnUrl=${window.location.href}`}
-	>
+	<a className="btn btn-primary" href={authorizeUrl}>
 		Login
 	</a>
 );
