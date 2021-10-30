@@ -6,7 +6,7 @@
 	"homepage": "https://finance.oliverflecke.me",
 	"scripts": {
 		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn start\" \"yarn css\"",
-		"css": "TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",
+		"css": "cross-env TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",
 		"start": "react-scripts start",
 		"prebuild": "yarn postcss src/main.css -o src/compiled.css -v",
 		"build": "react-scripts build",
@@ -63,6 +63,7 @@
 		"autoprefixer": "^10.2.5",
 		"babel-jest": "^27.0.6",
 		"concurrently": "^6.2.1",
+		"cross-env": "^7.0.3",
 		"cssnano": "^5.0.7",
 		"eslint": "^7.25.0",
 		"eslint-config-prettier": "^8.3.0",
