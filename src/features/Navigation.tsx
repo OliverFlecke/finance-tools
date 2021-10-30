@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
 
 const links = [
 	{ path: '/', text: 'Overview' },
@@ -8,7 +7,7 @@ const links = [
 		path: '/stocks',
 		text: 'Stocks',
 	},
-	{ path: '/compound-calculator', text: 'Compound calculator' },
+	{ path: '/interest', text: 'Compound calculator' },
 ];
 
 const Navigation: React.FC = () => {
@@ -20,9 +19,9 @@ const Navigation: React.FC = () => {
 				<button className="md:hidden" onClick={() => setIsOpen((x) => !x)}>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
-				<Link to="/">
+				<a href="/">
 					<h1 className="px-4 md:px-0 text-xl uppercase font-sans font-light">Finance tracker</h1>
-				</Link>
+				</a>
 			</div>
 
 			<ul
@@ -32,9 +31,9 @@ const Navigation: React.FC = () => {
 			>
 				{links.map((x) => (
 					<li key={x.path}>
-						<Link to={x.path} className="align-middle h-full font-light hover:underline">
+						<a href={x.path} className="align-middle h-full font-light hover:underline">
 							{x.text}
-						</Link>
+						</a>
 					</li>
 				))}
 			</ul>

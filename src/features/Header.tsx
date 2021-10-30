@@ -10,6 +10,8 @@ const Header: React.FC = () => {
 	const { isDarkMode, setDarkMode } = useDarkModeWithClass();
 	const [user, setUser] = useState<User | null>(null);
 
+	const returnUrl = typeof window !== 'undefined' ? window.location.href : '';
+
 	useEffect(() => {
 		getMyUser().then((user) => {
 			if (user) setUser(user);
@@ -20,10 +22,7 @@ const Header: React.FC = () => {
 		<header className="p-4 flex flex-row justify-between text-gray-300 bg-emerald-900 ">
 			<Navigation />
 			<div className="flex flex-row justify-center items-center">
-				<LoginState
-					user={user}
-					authorizeUrl={`${baseUri}/signin?returnUrl=${window.location.href}`}
-				/>
+				<LoginState user={user} authorizeUrl={`${baseUri}/signin?returnUrl=${returnUrl}`} />
 				<div className="p-4">
 					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
 				</div>

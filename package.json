@@ -5,13 +5,13 @@
 	"license": "MIT",
 	"homepage": "https://finance.oliverflecke.me",
 	"scripts": {
-		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn start\" \"yarn css\"",
+		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev:js\" \"yarn css\"",
 		"css": "cross-env TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",
-		"start": "react-scripts start",
+		"dev:js": "next dev",
+		"start": "next start",
 		"prebuild": "yarn postcss src/main.css -o src/compiled.css -v",
-		"build": "react-scripts build",
+		"build": "next build",
 		"test": "jest --watch",
-		"eject": "react-scripts eject",
 		"deploy": "yarn build && gh-pages -t true -d build"
 	},
 	"dependencies": {
@@ -33,7 +33,6 @@
 		"react-icons": "^4.2.0",
 		"react-number-format": "^4.5.5",
 		"react-router": "^5.2.0",
-		"react-router-dom": "^5.2.0",
 		"react-spring": "^9.1.2",
 		"typescript": "^4.1.2",
 		"uuid": "^8.3.2",
@@ -42,6 +41,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.15.0",
 		"@babel/preset-env": "^7.15.0",
+		"@babel/preset-react": "^7.16.0",
 		"@babel/preset-typescript": "^7.15.0",
 		"@commitlint/cli": "^13.2.1",
 		"@commitlint/config-conventional": "^13.2.0",
@@ -73,13 +73,12 @@
 		"gh-pages": "^3.1.0",
 		"husky": "^7.0.4",
 		"jest": "^27.0.6",
+		"next": "^12.0.1",
 		"postcss": "^8.2.13",
 		"postcss-cli": "^8.3.1",
 		"postcss-import": "^14.0.1",
 		"postcss-nested": "^5.0.5",
 		"prettier": "^2.2.1",
-		"react-scripts": "4.0.3",
-		"react-snap": "^1.23.0",
 		"tailwindcss": "^2.2.7",
 		"ts-node": "^10.2.1"
 	},
