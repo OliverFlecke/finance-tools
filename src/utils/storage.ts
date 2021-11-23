@@ -2,6 +2,8 @@ import { Reducer } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getDataFromStorage(key: string, defaultValue: any = {}): any {
+	if (typeof window === 'undefined') return defaultValue;
+
 	const data = localStorage.getItem(key) ?? undefined;
 	const parsed = data === undefined || data === '' ? {} : JSON.parse(data);
 
