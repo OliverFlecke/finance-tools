@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { User } from 'utils/githubAuth';
 

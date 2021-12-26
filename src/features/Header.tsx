@@ -10,7 +10,10 @@ const Header: React.FC = () => {
 	const { isDarkMode, setDarkMode } = useDarkModeWithClass();
 	const [user, setUser] = useState<User | null>(null);
 
-	const returnUrl = typeof window !== 'undefined' ? window.location.href : '';
+	const returnUrl =
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:3000'
+			: 'https://finance.oliverflecke.me';
 
 	useEffect(() => {
 		getMyUser().then((user) => {
