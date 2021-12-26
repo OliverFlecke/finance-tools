@@ -63,11 +63,11 @@ const Menu = ({ isOpen, logout }: MenuProps) => (
 	<div
 		className={`${
 			isOpen ? '' : 'hidden'
-		} group-hover:block absolute right-0 rounded py-4 shadow bg-coolGray-100 dark:bg-coolGray-700`}
+		} group-hover:block absolute right-0 rounded py-4 shadow bg-gray-100 dark:bg-gray-700`}
 	>
 		<button
 			onClick={logout}
-			className="btn flex items-center space-x-2 hover:text-coolGray-900 dark:hover:text-coolGray-400 hover:underline"
+			className="btn flex items-center space-x-2 hover:text-gray-900 dark:hover:text-gray-400 hover:underline"
 		>
 			<IoLogOutOutline className="inline" />
 			<span className="align-middle">Logout</span>

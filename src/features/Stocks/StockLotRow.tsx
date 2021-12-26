@@ -69,7 +69,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	const gain = marketValue - buyMarketValue;
 
 	return (
-		<tr className="odd:bg-coolGray-200 dark:odd:bg-coolGray-600">
+		<tr className="odd:bg-gray-200 dark:odd:bg-gray-600">
 			<td colSpan={3}>
 				<form onChange={handleSubmit(onChange)} className="flex flex-row justify-evenly w-full">
 					<input type="date" {...register('buyDate')} className="bg-transparent" />

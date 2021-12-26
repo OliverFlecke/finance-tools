@@ -47,7 +47,7 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 						return (
 							<tr
 								key={date}
-								className="odd:bg-gray-300 dark:odd:bg-coolGray-800 text-right whitespace-nowrap font-mono"
+								className="odd:bg-gray-300 dark:odd:bg-gray-800 text-right whitespace-nowrap font-mono"
 							>
 								<td className="text-center">{date}</td>
 								<td className="text-green-700 dark:text-green-500">

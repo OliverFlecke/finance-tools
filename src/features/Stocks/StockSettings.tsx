@@ -27,7 +27,7 @@ const StockSettings: React.FC = () => {
 			</button>
 
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-				<div className="p-4 dark:bg-coolGray-900">
+				<div className="p-4 dark:bg-gray-900">
 					<h2 className="font-bold text-lg">Stock settings</h2>
 
 					<div className="grid grid-cols-2 gap-8">
@@ -35,7 +35,7 @@ const StockSettings: React.FC = () => {
 						<select
 							onChange={onChange}
 							defaultValue={preferredCurrency}
-							className="rounded dark:bg-coolGray-700"
+							className="rounded dark:bg-gray-700"
 						>
 							{Object.keys(currencyRates.usd).map((key) => (
 								<option key={key} value={key}>

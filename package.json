@@ -4,6 +4,9 @@
 	"private": false,
 	"license": "MIT",
 	"homepage": "https://finance.oliverflecke.me",
+	"engines": {
+		"node": "16"
+	},
 	"scripts": {
 		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev:js\" \"yarn css\"",
 		"css": "cross-env TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",

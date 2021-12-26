@@ -48,7 +48,7 @@ const AddStock: React.FC = () => {
 			</button>
 
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-				<div className="p-4 rounded bg-coolGray-300 dark:bg-coolGray-700">
+				<div className="p-4 rounded bg-gray-300 dark:bg-gray-700">
 					<h3 className="text-lg font-bold pb-4">Add symbol</h3>
 
 					<form onSubmit={handleSubmit(addSymbol)} className="space-y-4">

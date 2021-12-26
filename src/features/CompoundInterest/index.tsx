@@ -27,7 +27,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 	const onSubmit = handleSubmit((d) => setData(d));
 
 	return (
-		<div className="px-4 pb-4 dark:bg-coolGray-800">
+		<div className="px-4 pb-4 dark:bg-gray-800">
 			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
 			<form
 				onSubmit={onSubmit}
@@ -159,7 +159,7 @@ const CalculationSummary = (props: FormData) => {
 							const interest = year === 0 ? 0 : totalInterest - (balancePrevious - depositPrevious);
 
 							return (
-								<tr key={year} className="odd:bg-coolGray-200 dark:odd:bg-coolGray-900">
+								<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
 									<td className="text-center">{year}</td>
 									{isWithDeposits && <td>{formatter.format(deposit)}</td>}
 									<td>{formatter.format(interest)}</td>
@@ -185,7 +185,7 @@ const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }: AmountS
 	<div className="flex space-x-4">
 		<div className={`w-6 h-6 rounded-full ${color}`}></div>
 		<div>
-			<span className="text-black dark:text-coolGray-300">{label}</span>
+			<span className="text-black dark:text-gray-300">{label}</span>
 			<div className="text-black dark:text-white text-2xl">{formatter.format(amount)}</div>
 		</div>
 	</div>
