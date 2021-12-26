@@ -14,7 +14,7 @@ const Navigation: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<nav className="flex flex-col md:flex-row">
+		<nav className="flex flex-col justify-center md:flex-row">
 			<div className="flex items-center">
 				<button className="md:hidden" onClick={() => setIsOpen((x) => !x)}>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
