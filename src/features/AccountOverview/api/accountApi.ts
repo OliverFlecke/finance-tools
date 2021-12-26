@@ -2,22 +2,27 @@ import { apiVersion, baseUri, post } from '../../apiBase';
 import { Account, AccountType } from '../models/Account';
 
 export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
-	const response = await fetch(`${baseUri}/${apiVersion}/account`, {
-		method: 'get',
-		credentials: 'include',
-	});
+	try {
+		const response = await fetch(`${baseUri}/${apiVersion}/account`, {
+			method: 'get',
+			credentials: 'include',
+		});
 
-	const content = await response.json();
+		const content = await response.json();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return content.map((x: any) => ({
-		...x,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		entries: x.entries.map((entry: any) => ({
-			...entry,
-			date: new Date(Date.parse(entry.date)),
-		})),
-	}));
+		return content.map((x: any) => ({
+			...x,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			entries: x.entries.map((entry: any) => ({
+				...entry,
+				date: new Date(Date.parse(entry.date)),
+			})),
+		}));
+	} catch (error) {
+		console.debug(error);
+		return [];
+	}
 }
 
 export async function addAccount(account: Account): Promise<string> {

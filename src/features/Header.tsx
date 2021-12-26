@@ -19,13 +19,11 @@ const Header: React.FC = () => {
 	}, []);
 
 	return (
-		<header className="p-4 flex flex-row justify-between text-gray-300 bg-emerald-900 ">
+		<header className="px-4 py-2 flex flex-row justify-between text-gray-300 bg-emerald-900">
 			<Navigation />
-			<div className="flex flex-row justify-center items-center">
+			<div className="flex flex-row justify-center items-center space-x-4">
 				<LoginState user={user} authorizeUrl={`${baseUri}/signin?returnUrl=${returnUrl}`} />
-				<div className="p-4">
-					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
-				</div>
+				<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
 			</div>
 		</header>
 	);

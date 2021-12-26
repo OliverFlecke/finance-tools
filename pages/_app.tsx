@@ -10,7 +10,8 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<meta charSet="utf-8" />
 			<link rel="icon" href="/favicon.ico" />
 			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<meta name="theme-color" content="#000000" />
+			<meta name="theme-color" media="(prefers-color-scheme: light)" content="#064e3b" />
+			<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#064e3b" />
 			<meta name="description" content="Finance tracker" />
 			<link rel="apple-touch-icon" href="/logo192.png" />
 			<link rel="manifest" href="/manifest.json" />

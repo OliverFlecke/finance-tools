@@ -27,7 +27,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 	const onSubmit = handleSubmit((d) => setData(d));
 
 	return (
-		<div className="px-4 dark:bg-coolGray-700">
+		<div className="px-4 pb-4 dark:bg-coolGray-800">
 			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
 			<form
 				onSubmit={onSubmit}
