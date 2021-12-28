@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useReducer, useState } from 'react';
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
+import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
 import { CurrencyRates, getCurrencies } from './API/currenciesApi';
 import { getStocksForUser } from './API/stockApi';
@@ -180,6 +181,14 @@ function stocksComparer(
 ): (a: Stock, b: Stock) => number {
 	if (!key) return () => 0;
 
+	const convert = (stock: Stock) =>
+		convertToCurrency(
+			stock.regularMarketPrice,
+			stock.currency,
+			preferredCurrency,
+			currencyRates?.usd
+		);
+
 	return (a, b) => {
 		let result = 0;
 		switch (key) {
@@ -192,18 +201,18 @@ function stocksComparer(
 					stockGain(b, preferredCurrency, currencyRates);
 				break;
 			case 'Average price':
-				// TODO: This should properly be converted to the same currency
-				result = stockAvgPrice(a) - stockAvgPrice(b);
+				result =
+					convertToCurrency(stockAvgPrice(a), a.currency, preferredCurrency, currencyRates?.usd) -
+					convertToCurrency(stockAvgPrice(b), b.currency, preferredCurrency, currencyRates?.usd);
 				break;
 			case 'Current price':
-				result = a.regularMarketPrice - b.regularMarketPrice;
+				result = convert(a) - convert(b);
 				break;
 			case 'Total shares':
 				result = stockTotalShares(a) - stockTotalShares(b);
 				break;
 			case 'Total value':
-				result =
-					a.regularMarketPrice * stockTotalShares(a) - b.regularMarketPrice * stockTotalShares(b);
+				result = convert(a) * stockTotalShares(a) - convert(b) * stockTotalShares(b);
 				break;
 		}
 
