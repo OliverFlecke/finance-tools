@@ -1529,10 +1529,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oliverflecke/components-react@^0.3.3-2":
-  version "0.3.3-2"
-  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.3.3-2.tgz#81ee9d62aaf3074c8bb81caea09e47c1ba8a4b0c"
-  integrity sha512-xH0efBGigBFr90J1rd5j9n0d9XN5J5wH1kDzcVbf0SrcHVA2GliS82ZzQrDAbGJxUXGulZY2ehHtJv0VUBQOqQ==
+"@oliverflecke/components-react@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.3.3.tgz#9e2db8df7d8c983791ce06cbd10d3255537b244a"
+  integrity sha512-yWjowUikg3GQuLpCQsjrkL9dWOrCv3Y5jiobHIFTjinsiMNCrx7pdDOMXyBeTVOy1BJxkTHlxyLKO7zanUuYvA==
 
 "@react-spring/animated@~9.3.0":
   version "9.3.0"
