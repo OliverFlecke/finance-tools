@@ -1,6 +1,7 @@
 import { DarkModeToggle, useDarkModeWithClass } from '@oliverflecke/components-react';
 import React, { useEffect, useState } from 'react';
 import { User } from 'utils/githubAuth';
+import ClientOnly from '../components/ClientOnly';
 import { baseUri } from './apiBase';
 import LoginState from './login/LoginState';
 import Navigation from './Navigation';
@@ -27,7 +28,9 @@ const Header: React.FC = () => {
 			<div>
 				<div className="flex flex-row justify-center items-center space-x-4">
 					<LoginState user={user} authorizeUrl={`${baseUri}/signin?returnUrl=${returnUrl}`} />
-					<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
+					<ClientOnly>
+						<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
+					</ClientOnly>
 				</div>
 			</div>
 		</header>
