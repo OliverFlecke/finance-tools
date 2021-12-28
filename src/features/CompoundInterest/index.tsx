@@ -1,7 +1,6 @@
-import { Button, Input } from '@oliverflecke/components-react';
+import { Button, Input, Select, SelectOption } from '@oliverflecke/components-react';
 import React, { FC, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import NumberFormat from 'react-number-format';
 import { FV, InterestAccrual } from '../../services/formulas';
 import { parseNumber } from '../../utils/converters';
 
@@ -29,13 +28,11 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 		setData(d);
 	});
 
-	console.debug(errors);
-
 	return (
-		<div className="px-4 pb-4 dark:bg-gray-800">
-			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
-			<form onSubmit={onSubmit} className="w-full overflow-x-hidden flex-col-center">
-				<fieldset className="flex flex-col items-center space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
+		<div className="pb-4 dark:bg-gray-800">
+			<h2 className="text-xl px-4 py-4 lg:text-left">Compound interest calculator</h2>
+			<form onSubmit={onSubmit} className="w-full px-4 overflow-x-hidden flex-col-center">
+				<fieldset className="flex flex-col items-start space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
 					<Input
 						// customInput={Input}
 						// thousandSeparator={true}
@@ -43,7 +40,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						placeholder="20,000"
 						inputMode="numeric"
 						errorMessage={errors.existingAmount?.message}
-						{...register('existingAmount', { required: true })}
+						{...register('existingAmount', { required: 'Please provide your existing amount' })}
 					/>
 					<Input
 						label="Expected yearly growth"
@@ -61,12 +58,19 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						}
 						{...register('investmentPeriod', { required: true })}
 					/>
-					<Input
+					{/* <Input
 						label="Interval of interest accrual"
 						placeholder="Yearly"
 						errorMessage={errors.interestAccural?.message}
 						{...register('interestAccural', { required: true })}
-					/>
+					/> */}
+					<Select
+						label="Interval of interest accural"
+						{...register('interestAccural', { required: true })}
+					>
+						<SelectOption value="Yearly">Yearly</SelectOption>
+						<SelectOption value="Monthly">Monthly</SelectOption>
+					</Select>
 					<Input
 						// customInput={Input}
 						// thousandSeparator={true}
@@ -74,7 +78,9 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						placeholder="10,000"
 						inputMode="numeric"
 						errorMessage={errors.monthlyDeposit?.message}
-						{...register('monthlyDeposit', { required: true })}
+						{...register('monthlyDeposit', {
+							required: 'Please provide how much you will deposit each month',
+						})}
 					/>
 				</fieldset>
 				<div className="w-full pt-4 flex justify-center">
