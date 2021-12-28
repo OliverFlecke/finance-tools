@@ -45,25 +45,19 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
-						errorMessage={errors.interestRate && 'Please provide a valid value'}
+						errorMessage={errors.interestRate?.message}
 						{...register('interestRate', {
-							required: true,
+							required: 'Please provide a valid value',
 						})}
 					/>
 					<Input
 						label="Investment period"
 						placeholder="10"
-						errorMessage={
-							errors.investmentPeriod && 'Please provide a number of years you are investing'
-						}
-						{...register('investmentPeriod', { required: true })}
+						errorMessage={errors.investmentPeriod?.message}
+						{...register('investmentPeriod', {
+							required: 'Please provide a number of years you are investing',
+						})}
 					/>
-					{/* <Input
-						label="Interval of interest accrual"
-						placeholder="Yearly"
-						errorMessage={errors.interestAccural?.message}
-						{...register('interestAccural', { required: true })}
-					/> */}
 					<Select
 						label="Interval of interest accural"
 						{...register('interestAccural', { required: true })}
