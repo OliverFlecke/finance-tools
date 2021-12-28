@@ -24,19 +24,21 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>({});
-	const onSubmit = handleSubmit((d) => setData(d));
+	const onSubmit = handleSubmit((d) => {
+		console.debug(d);
+		setData(d);
+	});
+
+	console.debug(errors);
 
 	return (
 		<div className="px-4 pb-4 dark:bg-gray-800">
 			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
-			<form
-				onSubmit={onSubmit}
-				className="w-full overflow-x-hidden flex flex-col items-center justify-center"
-			>
+			<form onSubmit={onSubmit} className="w-full overflow-x-hidden flex-col-center">
 				<fieldset className="flex flex-col items-center space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
-					<NumberFormat
-						customInput={Input}
-						thousandSeparator={true}
+					<Input
+						// customInput={Input}
+						// thousandSeparator={true}
 						label="Existing amount"
 						placeholder="20,000"
 						inputMode="numeric"
@@ -65,9 +67,9 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						errorMessage={errors.interestAccural?.message}
 						{...register('interestAccural', { required: true })}
 					/>
-					<NumberFormat
-						customInput={Input}
-						thousandSeparator={true}
+					<Input
+						// customInput={Input}
+						// thousandSeparator={true}
 						label="Monthly deposit"
 						placeholder="10,000"
 						inputMode="numeric"
@@ -137,12 +139,12 @@ const CalculationSummary = (props: FormData) => {
 				<table className="w-full">
 					<thead>
 						<tr className="text-right">
-							<th className="text-center">Year</th>
-							{isWithDeposits && <th>Deposit</th>}
-							<th className="text-green-800 dark:text-green-400">Interest</th>
-							{isWithDeposits && <th>Total deposits</th>}
-							<th className="text-purple-800 dark:text-purple-400">Total interest</th>
-							<th className="text-red-800 dark:text-red-400">Balance</th>
+							<th className="px-4 text-center">Year</th>
+							{isWithDeposits && <th className="px-4">Deposit</th>}
+							<th className="px-4 text-green-800 dark:text-green-400">Interest</th>
+							{isWithDeposits && <th className="px-4">Total deposits</th>}
+							<th className="px-4 text-purple-800 dark:text-purple-400">Total interest</th>
+							<th className="px-4 text-red-800 dark:text-red-400">Balance</th>
 						</tr>
 					</thead>
 					<tbody className="text-right font-mono">
@@ -160,12 +162,12 @@ const CalculationSummary = (props: FormData) => {
 
 							return (
 								<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
-									<td className="text-center">{year}</td>
-									{isWithDeposits && <td>{formatter.format(deposit)}</td>}
-									<td>{formatter.format(interest)}</td>
-									{isWithDeposits && <td>{formatter.format(totalDeposit)}</td>}
-									<td>{formatter.format(totalInterest)}</td>
-									<td>{formatter.format(totalBalance)}</td>
+									<td className="text-center px-4">{year}</td>
+									{isWithDeposits && <td className="px-4">{formatter.format(deposit)}</td>}
+									<td className="px-4">{formatter.format(interest)}</td>
+									{isWithDeposits && <td className="px-4">{formatter.format(totalDeposit)}</td>}
+									<td className="px-4">{formatter.format(totalInterest)}</td>
+									<td className="px-4">{formatter.format(totalBalance)}</td>
 								</tr>
 							);
 						})}
