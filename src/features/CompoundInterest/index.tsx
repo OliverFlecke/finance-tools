@@ -1,7 +1,6 @@
-import { Button, Input } from '@oliverflecke/components-react';
+import { Button, Input, Select, SelectOption } from '@oliverflecke/components-react';
 import React, { FC, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import NumberFormat from 'react-number-format';
 import { FV, InterestAccrual } from '../../services/formulas';
 import { parseNumber } from '../../utils/converters';
 
@@ -24,55 +23,58 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>({});
-	const onSubmit = handleSubmit((d) => setData(d));
+	const onSubmit = handleSubmit((d) => {
+		console.debug(d);
+		setData(d);
+	});
 
 	return (
-		<div className="px-4 pb-4 dark:bg-gray-800">
-			<h2 className="text-xl py-4 lg:text-left">Compound interest calculator</h2>
-			<form
-				onSubmit={onSubmit}
-				className="w-full overflow-x-hidden flex flex-col items-center justify-center"
-			>
-				<fieldset className="flex flex-col items-center space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
-					<NumberFormat
-						customInput={Input}
-						thousandSeparator={true}
+		<div className="pb-4 dark:bg-gray-800">
+			<h2 className="text-xl px-4 py-4 lg:text-left">Compound interest calculator</h2>
+			<form onSubmit={onSubmit} className="w-full px-4 overflow-x-hidden flex-col-center">
+				<fieldset className="flex flex-col items-start space-y-6 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-6">
+					<Input
+						// customInput={Input}
+						// thousandSeparator={true}
 						label="Existing amount"
 						placeholder="20,000"
 						inputMode="numeric"
 						errorMessage={errors.existingAmount?.message}
-						{...register('existingAmount', { required: true })}
+						{...register('existingAmount', { required: 'Please provide your existing amount' })}
 					/>
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
-						errorMessage={errors.interestRate && 'Please provide a valid value'}
+						errorMessage={errors.interestRate?.message}
 						{...register('interestRate', {
-							required: true,
+							required: 'Please provide a valid value',
 						})}
 					/>
 					<Input
 						label="Investment period"
 						placeholder="10"
-						errorMessage={
-							errors.investmentPeriod && 'Please provide a number of years you are investing'
-						}
-						{...register('investmentPeriod', { required: true })}
+						errorMessage={errors.investmentPeriod?.message}
+						{...register('investmentPeriod', {
+							required: 'Please provide a number of years you are investing',
+						})}
 					/>
-					<Input
-						label="Interval of interest accrual"
-						placeholder="Yearly"
-						errorMessage={errors.interestAccural?.message}
+					<Select
+						label="Interval of interest accural"
 						{...register('interestAccural', { required: true })}
-					/>
-					<NumberFormat
-						customInput={Input}
-						thousandSeparator={true}
+					>
+						<SelectOption value="Yearly">Yearly</SelectOption>
+						<SelectOption value="Monthly">Monthly</SelectOption>
+					</Select>
+					<Input
+						// customInput={Input}
+						// thousandSeparator={true}
 						label="Monthly deposit"
 						placeholder="10,000"
 						inputMode="numeric"
 						errorMessage={errors.monthlyDeposit?.message}
-						{...register('monthlyDeposit', { required: true })}
+						{...register('monthlyDeposit', {
+							required: 'Please provide how much you will deposit each month',
+						})}
 					/>
 				</fieldset>
 				<div className="w-full pt-4 flex justify-center">
@@ -137,12 +139,12 @@ const CalculationSummary = (props: FormData) => {
 				<table className="w-full">
 					<thead>
 						<tr className="text-right">
-							<th className="text-center">Year</th>
-							{isWithDeposits && <th>Deposit</th>}
-							<th className="text-green-800 dark:text-green-400">Interest</th>
-							{isWithDeposits && <th>Total deposits</th>}
-							<th className="text-purple-800 dark:text-purple-400">Total interest</th>
-							<th className="text-red-800 dark:text-red-400">Balance</th>
+							<th className="px-4 text-center">Year</th>
+							{isWithDeposits && <th className="px-4">Deposit</th>}
+							<th className="px-4 text-green-800 dark:text-green-400">Interest</th>
+							{isWithDeposits && <th className="px-4">Total deposits</th>}
+							<th className="px-4 text-purple-800 dark:text-purple-400">Total interest</th>
+							<th className="px-4 text-red-800 dark:text-red-400">Balance</th>
 						</tr>
 					</thead>
 					<tbody className="text-right font-mono">
@@ -160,12 +162,12 @@ const CalculationSummary = (props: FormData) => {
 
 							return (
 								<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
-									<td className="text-center">{year}</td>
-									{isWithDeposits && <td>{formatter.format(deposit)}</td>}
-									<td>{formatter.format(interest)}</td>
-									{isWithDeposits && <td>{formatter.format(totalDeposit)}</td>}
-									<td>{formatter.format(totalInterest)}</td>
-									<td>{formatter.format(totalBalance)}</td>
+									<td className="text-center px-4">{year}</td>
+									{isWithDeposits && <td className="px-4">{formatter.format(deposit)}</td>}
+									<td className="px-4">{formatter.format(interest)}</td>
+									{isWithDeposits && <td className="px-4">{formatter.format(totalDeposit)}</td>}
+									<td className="px-4">{formatter.format(totalInterest)}</td>
+									<td className="px-4">{formatter.format(totalBalance)}</td>
 								</tr>
 							);
 						})}
