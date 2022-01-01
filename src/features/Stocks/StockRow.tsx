@@ -35,8 +35,10 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td className={getValueColorIndicator(avgPrice)}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
-				<td className={`${getValueColorIndicator(gain)} flex flex-col`}>
+				<td className={getValueColorIndicator(gain)}>
 					<span>{formatCurrency(gain, preferredCurrency)}</span>
+				</td>
+				<td className={getValueColorIndicator(gainPercentage)}>
 					<span className={isNaN(gainPercentage) ? 'hidden' : ''}>
 						{gainPercentage.toFixed(2)}%
 					</span>

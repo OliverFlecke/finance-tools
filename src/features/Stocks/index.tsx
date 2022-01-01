@@ -64,7 +64,8 @@ type StockColumn =
 	| 'Total value'
 	| 'Total shares'
 	| 'Average price'
-	| 'Gain';
+	| 'Gain'
+	| 'Gain percentage';
 
 const StocksTable: React.FC<StocksTableProps> = ({
 	stocks,
@@ -126,6 +127,14 @@ const StocksTable: React.FC<StocksTableProps> = ({
 						</Header>
 						<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
 							Gain
+						</Header>
+						<Header
+							sort={sort}
+							currentSortKey={sortKey}
+							sortKey="Gain percentage"
+							ascending={ascending}
+						>
+							Percentage
 						</Header>
 					</tr>
 				</thead>
@@ -203,6 +212,15 @@ function stocksComparer(
 				result =
 					stockGain(a, preferredCurrency, currencyRates) -
 					stockGain(b, preferredCurrency, currencyRates);
+				break;
+			case 'Gain percentage':
+				const getStockGainInPercentage = (stock: Stock): number => {
+					const totalShares = stockTotalShares(stock);
+					const buyMarketPrice = stockAvgPrice(stock) * totalShares;
+					return ((stock.regularMarketPrice * totalShares) / buyMarketPrice - 1) * 100;
+				};
+
+				result = getStockGainInPercentage(a) - getStockGainInPercentage(b);
 				break;
 			case 'Average price':
 				result =
