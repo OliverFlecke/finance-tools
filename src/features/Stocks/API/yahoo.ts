@@ -1,8 +1,10 @@
-import { apiVersion, baseUri } from 'features/apiBase';
-
-const apiUrl = `${baseUri}/${apiVersion}/stock`;
+import { apiVersion, baseUri, useSampleData } from 'features/apiBase';
+import stocksForUserSampleData from './sampleData/stocksForUser';
 
 export async function getShares(...symbols: string[]): Promise<QuoteResponse[]> {
+	if (useSampleData) return Promise.resolve(stocksForUserSampleData);
+
+	const apiUrl = `${baseUri}/${apiVersion}/stock`;
 	const response = await fetch(`${apiUrl}?symbols=${symbols.join(',')}`, {
 		method: 'GET',
 	});

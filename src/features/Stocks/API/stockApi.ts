@@ -1,9 +1,12 @@
-import { apiVersion, baseUri } from 'features/apiBase';
+import { apiVersion, baseUri, useSampleData } from 'features/apiBase';
 import { StockList } from '../models';
+import stocksForUserSampleData from './sampleData/stocksForUser';
 
 const uri = `${baseUri}/${apiVersion}`;
 
 export function getStocksForUser(): Promise<StockList> {
+	if (useSampleData) return Promise.resolve(stocksForUserSampleData);
+
 	return fetch(`${uri}/stock/tracked`, {
 		credentials: 'include',
 	})

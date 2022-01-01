@@ -54,7 +54,10 @@ export type StockAction =
 	| { type: 'EDIT LOT'; symbol: string; lot: StockLot };
 
 function reducer(state: StockState, action: StockAction): StockState {
-	console.debug(`received action: ${action.type}`);
+	if (process.env.NODE_ENV === 'development') {
+		console.debug(`received action: ${action.type}`);
+	}
+
 	switch (action.type) {
 		case 'ADD STOCK':
 			if (state.stocks.find((x) => x.symbol === action.stock.symbol)) {
