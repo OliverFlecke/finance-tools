@@ -45,6 +45,8 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 		[currencyRates.usd, preferredCurrency, stocks]
 	);
 
+	const gainPercentage = (totalValue / (totalValue - totalGain) - 1) * 100;
+
 	return (
 		<tr className="text-right font-bold dark:text-purple-400">
 			<td></td>
@@ -53,6 +55,7 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 			<td></td>
 			<td></td>
 			<td>{formatCurrency(totalGain, preferredCurrency)}</td>
+			<td>{gainPercentage.toFixed(2)} %</td>
 		</tr>
 	);
 };

@@ -172,7 +172,7 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 	<th>
 		<button
 			onClick={sort(sortKey)}
-			className="focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm"
+			className="focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm whitespace-nowrap"
 		>
 			{children}
 			{sortKey === currentSortKey && <Caret ascending={ascending} />}
