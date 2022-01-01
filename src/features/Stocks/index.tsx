@@ -74,69 +74,17 @@ const StocksTable: React.FC<StocksTableProps> = ({
 }: StocksTableProps) => {
 	const [sortKey, setSortKey] = useState<StockColumn | undefined>();
 	const [ascending, setAscending] = useState(false);
-	const sort = useCallback(
-		(key: StockColumn) => () => {
-			if (sortKey === key) {
-				setAscending((x) => !x);
-			} else {
-				setSortKey(key);
-			}
-		},
-		[setSortKey, setAscending, sortKey]
-	);
 
 	return (
 		<div className="overflow-x-scroll">
 			<table className="w-full">
 				<thead>
-					<tr className="text-sm align-bottom text-gray-600 dark:text-gray-400">
-						<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
-							Symbol
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Current price'}
-							ascending={ascending}
-						>
-							Current price
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Total value'}
-							ascending={ascending}
-						>
-							Total value
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Total shares'}
-							ascending={ascending}
-						>
-							Total shares
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Average price'}
-							ascending={ascending}
-						>
-							Average price
-						</Header>
-						<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
-							Gain
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey="Gain percentage"
-							ascending={ascending}
-						>
-							Percentage
-						</Header>
-					</tr>
+					<StockTableHeader
+						sortKey={sortKey}
+						ascending={ascending}
+						setAscending={setAscending}
+						setSortKey={setSortKey}
+					/>
 				</thead>
 				<tbody>
 					{stocks
@@ -150,6 +98,56 @@ const StocksTable: React.FC<StocksTableProps> = ({
 				</tfoot>
 			</table>
 		</div>
+	);
+};
+
+interface StockTableHeaderProps {
+	sortKey?: StockColumn;
+	ascending: boolean;
+	setAscending: React.Dispatch<React.SetStateAction<boolean>>;
+	setSortKey: React.Dispatch<React.SetStateAction<StockColumn | undefined>>;
+}
+const StockTableHeader = ({
+	sortKey,
+	ascending,
+	setAscending,
+	setSortKey,
+}: StockTableHeaderProps) => {
+	const sort = useCallback(
+		(key: StockColumn) => () => {
+			if (sortKey === key) {
+				setAscending((x) => !x);
+			} else {
+				setSortKey(key);
+			}
+		},
+		[setSortKey, setAscending, sortKey]
+	);
+
+	return (
+		<tr className="text-sm align-bottom text-gray-600 dark:text-gray-400">
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
+				Symbol
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Current price'} ascending={ascending}>
+				Price
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total value'} ascending={ascending}>
+				Total value
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total shares'} ascending={ascending}>
+				Shares
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Average price'} ascending={ascending}>
+				Avg price
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
+				Gain
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey="Gain percentage" ascending={ascending}>
+				Percentage
+			</Header>
+		</tr>
 	);
 };
 
@@ -174,7 +172,7 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 	<th>
 		<button
 			onClick={sort(sortKey)}
-			className="px-2 focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm"
+			className="focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm"
 		>
 			{children}
 			{sortKey === currentSortKey && <Caret ascending={ascending} />}

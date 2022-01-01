@@ -28,19 +28,21 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	return (
 		<>
 			<tr className="w-full relative text-right bg-gray-200 dark:bg-gray-800">
-				<td className="text-left px-4">{stock.symbol}</td>
-				<td>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
-				<td>{formatCurrency(currencyConverter(marketValue), preferredCurrency)}</td>
+				<td className="text-left px-2">{stock.symbol}</td>
+				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
+				<td className="px-0">
+					{formatCurrency(currencyConverter(marketValue), preferredCurrency)}
+				</td>
 				<td>{totalShares}</td>
-				<td className={getValueColorIndicator(avgPrice)}>
+				<td className={`px-2 ${getValueColorIndicator(avgPrice)}`}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
-				<td className={getValueColorIndicator(gain)}>
+				<td className={`px-2 ${getValueColorIndicator(gain)}`}>
 					<span>{formatCurrency(gain, preferredCurrency)}</span>
 				</td>
-				<td className={getValueColorIndicator(gainPercentage)}>
+				<td className={`px-1 ${getValueColorIndicator(gainPercentage)}`}>
 					<span className={isNaN(gainPercentage) ? 'hidden' : ''}>
-						{gainPercentage.toFixed(2)}%
+						{gainPercentage.toFixed(2)} %
 					</span>
 				</td>
 
@@ -70,7 +72,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	}, [dispatch, stock.symbol]);
 
 	return (
-		<td className="h-full space-x-2 pr-4">
+		<td className="h-full space-x-2 px-4 flex flex-row">
 			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
