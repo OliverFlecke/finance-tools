@@ -1,4 +1,5 @@
 const isDevelopement = process.env.NODE_ENV === 'development';
+export const useSampleData = isDevelopement && true;
 
 export const baseUri = isDevelopement
 	? 'https://localhost:5001'

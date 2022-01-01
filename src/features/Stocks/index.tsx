@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useReducer, useState } from 'react';
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
+import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
 import { CurrencyRates, getCurrencies } from './API/currenciesApi';
 import { getStocksForUser } from './API/stockApi';
@@ -39,7 +40,11 @@ const Stocks: React.FC = () => {
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>
 			<h2 className="text-xl px-4 py-4">Stocks</h2>
-			<StocksTable stocks={state.stocks} />
+			<StocksTable
+				stocks={state.stocks}
+				preferredCurrency={state.preferredCurrency}
+				currencyRates={state.currencyRates}
+			/>
 			<StockActionBar />
 		</StockContext.Provider>
 	);
@@ -59,7 +64,8 @@ type StockColumn =
 	| 'Total value'
 	| 'Total shares'
 	| 'Average price'
-	| 'Gain';
+	| 'Gain'
+	| 'Gain percentage';
 
 const StocksTable: React.FC<StocksTableProps> = ({
 	stocks,
@@ -68,61 +74,17 @@ const StocksTable: React.FC<StocksTableProps> = ({
 }: StocksTableProps) => {
 	const [sortKey, setSortKey] = useState<StockColumn | undefined>();
 	const [ascending, setAscending] = useState(false);
-	const sort = useCallback(
-		(key: StockColumn) => () => {
-			if (sortKey === key) {
-				setAscending((x) => !x);
-			} else {
-				setSortKey(key);
-			}
-		},
-		[setSortKey, setAscending, sortKey]
-	);
 
 	return (
 		<div className="overflow-x-scroll">
 			<table className="w-full">
 				<thead>
-					<tr className="text-sm align-bottom text-gray-600 dark:text-gray-400">
-						<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
-							Symbol
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Current price'}
-							ascending={ascending}
-						>
-							Current price
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Total value'}
-							ascending={ascending}
-						>
-							Total value
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Total shares'}
-							ascending={ascending}
-						>
-							Total shares
-						</Header>
-						<Header
-							sort={sort}
-							currentSortKey={sortKey}
-							sortKey={'Average price'}
-							ascending={ascending}
-						>
-							Average price
-						</Header>
-						<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
-							Gain
-						</Header>
-					</tr>
+					<StockTableHeader
+						sortKey={sortKey}
+						ascending={ascending}
+						setAscending={setAscending}
+						setSortKey={setSortKey}
+					/>
 				</thead>
 				<tbody>
 					{stocks
@@ -136,6 +98,56 @@ const StocksTable: React.FC<StocksTableProps> = ({
 				</tfoot>
 			</table>
 		</div>
+	);
+};
+
+interface StockTableHeaderProps {
+	sortKey?: StockColumn;
+	ascending: boolean;
+	setAscending: React.Dispatch<React.SetStateAction<boolean>>;
+	setSortKey: React.Dispatch<React.SetStateAction<StockColumn | undefined>>;
+}
+const StockTableHeader = ({
+	sortKey,
+	ascending,
+	setAscending,
+	setSortKey,
+}: StockTableHeaderProps) => {
+	const sort = useCallback(
+		(key: StockColumn) => () => {
+			if (sortKey === key) {
+				setAscending((x) => !x);
+			} else {
+				setSortKey(key);
+			}
+		},
+		[setSortKey, setAscending, sortKey]
+	);
+
+	return (
+		<tr className="text-sm align-bottom text-gray-600 dark:text-gray-400">
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
+				Symbol
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Current price'} ascending={ascending}>
+				Price
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total value'} ascending={ascending}>
+				Total value
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total shares'} ascending={ascending}>
+				Shares
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Average price'} ascending={ascending}>
+				Avg price
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
+				Gain
+			</Header>
+			<Header sort={sort} currentSortKey={sortKey} sortKey="Gain percentage" ascending={ascending}>
+				Percentage
+			</Header>
+		</tr>
 	);
 };
 
@@ -160,7 +172,7 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 	<th>
 		<button
 			onClick={sort(sortKey)}
-			className="px-2 focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm"
+			className="focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm whitespace-nowrap"
 		>
 			{children}
 			{sortKey === currentSortKey && <Caret ascending={ascending} />}
@@ -180,6 +192,14 @@ function stocksComparer(
 ): (a: Stock, b: Stock) => number {
 	if (!key) return () => 0;
 
+	const convert = (stock: Stock) =>
+		convertToCurrency(
+			stock.regularMarketPrice,
+			stock.currency,
+			preferredCurrency,
+			currencyRates?.usd
+		);
+
 	return (a, b) => {
 		let result = 0;
 		switch (key) {
@@ -191,19 +211,28 @@ function stocksComparer(
 					stockGain(a, preferredCurrency, currencyRates) -
 					stockGain(b, preferredCurrency, currencyRates);
 				break;
+			case 'Gain percentage':
+				const getStockGainInPercentage = (stock: Stock): number => {
+					const totalShares = stockTotalShares(stock);
+					const buyMarketPrice = stockAvgPrice(stock) * totalShares;
+					return ((stock.regularMarketPrice * totalShares) / buyMarketPrice - 1) * 100;
+				};
+
+				result = getStockGainInPercentage(a) - getStockGainInPercentage(b);
+				break;
 			case 'Average price':
-				// TODO: This should properly be converted to the same currency
-				result = stockAvgPrice(a) - stockAvgPrice(b);
+				result =
+					convertToCurrency(stockAvgPrice(a), a.currency, preferredCurrency, currencyRates?.usd) -
+					convertToCurrency(stockAvgPrice(b), b.currency, preferredCurrency, currencyRates?.usd);
 				break;
 			case 'Current price':
-				result = a.regularMarketPrice - b.regularMarketPrice;
+				result = convert(a) - convert(b);
 				break;
 			case 'Total shares':
 				result = stockTotalShares(a) - stockTotalShares(b);
 				break;
 			case 'Total value':
-				result =
-					a.regularMarketPrice * stockTotalShares(a) - b.regularMarketPrice * stockTotalShares(b);
+				result = convert(a) * stockTotalShares(a) - convert(b) * stockTotalShares(b);
 				break;
 		}
 
