@@ -1,7 +1,10 @@
-import { apiVersion, baseUri, post } from '../../apiBase';
+import { apiVersion, baseUri, post, useSampleData } from '../../apiBase';
 import { Account, AccountType } from '../models/Account';
+import sampleData from './sampleData';
 
 export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
+	if (useSampleData) return Promise.resolve(sampleData);
+
 	try {
 		const response = await fetch(`${baseUri}/${apiVersion}/account`, {
 			method: 'get',
@@ -33,7 +36,7 @@ export async function updateEntry(entry: AddAccountEntryRequest): Promise<void> 
 	await post(`${baseUri}/${apiVersion}/account/entry`, entry);
 }
 
-interface AccountResponse {
+export interface AccountResponse {
 	id: string;
 	name: string;
 	type: AccountType;

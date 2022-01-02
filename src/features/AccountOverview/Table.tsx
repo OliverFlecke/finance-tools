@@ -19,13 +19,13 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 			<table className="w-full">
 				<thead>
 					<tr className="text-right whitespace-nowrap">
-						<th className="text-center">Date</th>
-						<th className="text-green-700 dark:text-green-500">Gain</th>
-						<th className="text-blue-700 dark:text-blue-500">Total</th>
-						<th className="text-yellow-700 dark:text-yellow-500">Total cash</th>
-						<th className="text-purple-700 dark:text-purple-500">Total investments</th>
+						<th className="text-center pr-6">Date</th>
+						<th className="text-green-700 dark:text-green-500 px-4">Gain</th>
+						<th className="text-blue-700 dark:text-blue-500 px-4">Total</th>
+						<th className="text-yellow-700 dark:text-yellow-500 px-4">Total cash</th>
+						<th className="text-purple-700 dark:text-purple-500 px-4">Total investments</th>
 						{accounts.map((account) => (
-							<th key={account.name}>
+							<th key={account.name} className="px-4">
 								<span>{account.name}</span>
 							</th>
 						))}
@@ -49,26 +49,26 @@ const Table: FC<TableProps> = ({ accounts, entries }: TableProps) => {
 								key={date}
 								className="odd:bg-gray-300 dark:odd:bg-gray-800 text-right whitespace-nowrap font-mono"
 							>
-								<td className="text-center">{date}</td>
+								<td className="text-center pr-6">{date}</td>
 								<td className="text-green-700 dark:text-green-500">
 									{currencyFormatter.format(gain)}
 								</td>
-								<td className="text-blue-700 dark:text-blue-500">
+								<td className="text-blue-700 dark:text-blue-500 px-4">
 									{currencyFormatter.format(total)}
 								</td>
-								<td className="text-yellow-700 dark:text-yellow-500">
+								<td className="text-yellow-700 dark:text-yellow-500 px-4">
 									{currencyFormatter.format(totalCash)}
 								</td>
-								<td className="text-purple-700 dark:text-purple-500">
+								<td className="text-purple-700 dark:text-purple-500 px-4">
 									{currencyFormatter.format(totalInvested)}
 								</td>
 								{accounts.map((account) => (
 									<Cell key={account.name} account={account} entry={entries[date]} date={date} />
 								))}
-								<td>
+								<td className="pl-4">
 									<button
 										onClick={() => dispatch({ type: 'DELETE ENTRY', date: date })}
-										className="flex  focus:outline-none"
+										className="flex focus:outline-none"
 									>
 										<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />
 									</button>

@@ -36,7 +36,7 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 			contentEditable
 			ref={entryRef}
 			onBlur={onBlur}
-			className="px-2 text-right"
+			className="px-4 text-right"
 		>
 			{value}
 		</td>
