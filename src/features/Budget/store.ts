@@ -18,14 +18,16 @@ export function initState(currencyRates: CurrencyRates): BudgetState {
 	if (data) {
 		return {
 			...data,
-			income: new Category(
-				{ currency: data.currency, ...data.income },
-				currencyRates
-			),
-			expense: new Category(
-				{ currency: data.currency, ...data.expense },
-				currencyRates
-			),
+			income: new Category({
+				currencyRates,
+				currency: data.currency,
+				...data.income,
+			}),
+			expense: new Category({
+				currencyRates,
+				currency: data.currency,
+				...data.expense,
+			}),
 		};
 	}
 
@@ -40,12 +42,16 @@ export function initState(currencyRates: CurrencyRates): BudgetState {
 	};
 }
 
-type BudgetAction = { type: 'remove category'; name: string; parent: Category };
+type BudgetAction = { type: 'REMOVE_CATEGORY'; category: Category };
 
 export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
 	switch (action.type) {
-		case 'remove category':
-			return state;
+		case 'REMOVE_CATEGORY':
+			return {
+				...state,
+				income: state.income.removeChild(action.category),
+				expense: state.expense.removeChild(action.category),
+			};
 
 		default:
 			return state;

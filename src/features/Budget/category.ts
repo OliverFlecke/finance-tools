@@ -1,4 +1,4 @@
-import { CurrencyRates, getCurrencies } from '@/API/currency';
+import { CurrencyRates } from '@/API/currency';
 import { convertToCurrency, formatCurrency } from '../../utils/converters';
 
 type Period = 'Month' | 'Quarter' | 'Year';
@@ -9,88 +9,98 @@ interface CategoryData {
 	children?: CategoryData[];
 	period?: string;
 	amount?: number;
+	money?: number;
 	currency?: string;
+	currencyRates?: CurrencyRates;
 }
 
-export class Category {
+export class Category implements CategoryData {
 	public name: string;
 	public color: string;
 	public children: Category[];
 	public isOpen = true;
 
 	period: Period;
-	money?: number;
+	amount?: number;
 	currency: string;
-	rates?: CurrencyRates;
+	currencyRates?: CurrencyRates;
 
-	constructor(data: CategoryData, rates?: CurrencyRates) {
+	constructor(data: CategoryData) {
 		this.name = data.name;
 		this.color = data.color ?? '#64748B';
-		this.money = data.amount;
+		this.amount = data.amount;
 		this.period = (data.period as Period) ?? 'Month';
 		this.currency = data.currency ?? 'GBP';
-		this.rates = rates;
+		this.currencyRates = data.currencyRates;
 		this.children = (data.children ?? [])
-			.map((x) => new Category(x, rates))
-			.sort((a, b) => b.amount - a.amount);
+			.map(x => new Category({ currencyRates: data.currencyRates, ...x }))
+			.sort((a, b) => b.getAmount() - a.getAmount());
 	}
 
 	get isLeaf(): boolean {
 		return this.children.length === 0;
 	}
 
-	get amount(): number {
-		if (this.money) {
+	private calculateAmount(): number {
+		if (this.amount) {
 			switch (this.period) {
 				case 'Year':
-					return this.money / 12;
+					return this.amount / 12;
 				case 'Quarter':
-					return this.money / 3;
+					return this.amount / 3;
 
 				case 'Month':
 				default:
-					return this.money;
+					return this.amount;
 			}
 		}
 
 		return this.children.reduce((acc, c) => {
 			const amount =
-				this.currency !== c.currency && this.rates
+				this.currency !== c.currency && this.currencyRates
 					? convertToCurrency(
-							c.amount,
+							c.getAmount(),
 							c.currency,
 							this.currency,
-							this.rates.usd
+							this.currencyRates.usd
 					  )
-					: c.amount;
+					: c.getAmount();
 
 			return acc + amount;
 		}, 0);
 	}
 
-	public getAmount(currency: string): number {
-		return convertToCurrency(
-			this.amount,
-			this.currency,
-			currency,
-			this.rates?.usd
-		);
+	public getAmount(currency?: string): number {
+		if (currency) {
+			return convertToCurrency(
+				this.calculateAmount(),
+				this.currency,
+				currency,
+				this.currencyRates?.usd
+			);
+		}
+
+		return this.calculateAmount();
 	}
 
 	public getFormatted(currency?: string): string {
-		const amount = currency ? this.getAmount(currency) : this.amount;
-		return formatCurrency(amount, currency ?? this.currency, {
+		return formatCurrency(this.getAmount(currency), currency ?? this.currency, {
 			maximumFractionDigits: 0,
 		});
 	}
 
 	public expand(open = true): void {
 		this.isOpen = open;
-		this.children.forEach((x) => x.expand(open));
+		this.children.forEach(x => x.expand(open));
 	}
 
-	public removeChild(child: Category): void {
-		this.children = this.children.filter((x) => x.name !== child.name);
-		this.children.forEach((x) => x.removeChild(child));
+	public removeChild(child: Category): Category {
+		return new Category({
+			...this,
+			amount: this.amount,
+			children: this.children
+				.filter(x => x.name !== child.name)
+				.map(x => x.removeChild(child)),
+		});
 	}
 }

@@ -7,12 +7,13 @@ const Budget: React.FC = () => {
 	const {
 		state: { income, currency, expense },
 	} = useContext(BudgetContext);
+
 	const total = useMemo(
-		() => income.amount - expense.amount,
-		[expense.amount, income.amount]
+		() => income.getAmount() - expense.getAmount(),
+		[expense, income]
 	);
 	const totalFormatted = useMemo(
-		() => formatCurrency(total, currency),
+		() => formatCurrency(total, currency, { maximumFractionDigits: 0 }),
 		[currency, total]
 	);
 
@@ -50,7 +51,7 @@ const BudgetLine: React.FC<{ category: Category }> = ({ category }) => {
 				<Line category={category} />
 			</summary>
 			<ul className="pl-4">
-				{category.children.map((child) => (
+				{category.children.map(child => (
 					<BudgetLine key={child.name} category={child} />
 				))}
 			</ul>
@@ -61,6 +62,7 @@ const BudgetLine: React.FC<{ category: Category }> = ({ category }) => {
 const Line: React.FC<{ category: Category }> = ({ category }) => {
 	const {
 		state: { income, expense },
+		dispatch,
 	} = useContext(BudgetContext);
 	return (
 		<span
@@ -75,15 +77,22 @@ const Line: React.FC<{ category: Category }> = ({ category }) => {
 			<span className="flex flex-row space-x-4">
 				<span className="hidden space-x-4 sm:inline">
 					<Percentage
-						value={category.getAmount(expense.currency) / expense.amount}
+						value={category.getAmount(expense.currency) / expense.getAmount()}
 						tooltip="% of total expenses"
 					/>
 					<Percentage
-						value={category.getAmount(income.currency) / income.amount}
+						value={category.getAmount(income.currency) / income.getAmount()}
 						tooltip="% of total income"
 					/>
 				</span>
 				<span className="w-24 text-right">{category.getFormatted()}</span>
+				<span>
+					<button
+						onClick={() => dispatch({ type: 'REMOVE_CATEGORY', category })}
+					>
+						-
+					</button>
+				</span>
 			</span>
 		</span>
 	);
