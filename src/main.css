@@ -3,9 +3,31 @@
 @import 'tailwindcss/utilities';
 @import '@oliverflecke/components-react/dist/main';
 
-@layer {
+@layer base {
 	h2 {
 		@apply text-2xl;
+	}
+}
+
+@layer utilities {
+	.tooltip {
+		@apply absolute w-32 rounded px-2 text-center dark:bg-gray-800 dark:text-white;
+		visibility: hidden;
+		z-index: 1;
+		bottom: 125%;
+		left: 50%;
+		margin-left: -60px;
+		opacity: 0;
+		transition: opacity 0.3s;
+
+		&::after {
+			@apply absolute top-full left-1/2;
+			content: '';
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #555 transparent transparent transparent;
+		}
 	}
 }
 

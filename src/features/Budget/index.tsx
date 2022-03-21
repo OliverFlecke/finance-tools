@@ -1,16 +1,12 @@
-import { CurrencyRates } from '@/API/currency';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { formatCurrency } from '../../utils/converters';
 import { Category } from './category';
+import { BudgetContext } from './store';
 
-interface Props {
-	currencyRates: CurrencyRates;
-	currency: string;
-	income: Category;
-	expense: Category;
-}
-
-const Budget: React.FC<Props> = ({ currency, income, expense }) => {
+const Budget: React.FC = () => {
+	const {
+		state: { income, currency, expense },
+	} = useContext(BudgetContext);
 	const total = useMemo(
 		() => income.amount - expense.amount,
 		[expense.amount, income.amount]
@@ -21,7 +17,7 @@ const Budget: React.FC<Props> = ({ currency, income, expense }) => {
 	);
 
 	return (
-		<div className="divide-y divide-gray-500 space-y-2">
+		<div className="space-y-2 divide-y divide-gray-500">
 			<section>
 				<div className="flex flex-row justify-between">
 					<span>Monthly leftover:</span>
@@ -63,6 +59,9 @@ const BudgetLine: React.FC<{ category: Category }> = ({ category }) => {
 };
 
 const Line: React.FC<{ category: Category }> = ({ category }) => {
+	const {
+		state: { income, expense },
+	} = useContext(BudgetContext);
 	return (
 		<span
 			className={`inline-flex flex-row justify-between ${
@@ -74,20 +73,32 @@ const Line: React.FC<{ category: Category }> = ({ category }) => {
 		>
 			<span>{category.name}</span>
 			<span className="flex flex-row space-x-4">
-				<span className="hidden sm:inline space-x-4">
-					{/* <Percentage value={category.amount / totalExpenses} />
-					<Percentage value={category.amount / totalIncome} /> */}
+				<span className="hidden space-x-4 sm:inline">
+					<Percentage
+						value={category.getAmount(expense.currency) / expense.amount}
+						tooltip="% of total expenses"
+					/>
+					<Percentage
+						value={category.getAmount(income.currency) / income.amount}
+						tooltip="% of total income"
+					/>
 				</span>
-				<span className="w-24 text-right">{category.formatted}</span>
+				<span className="w-24 text-right">{category.getFormatted()}</span>
 			</span>
 		</span>
 	);
 };
 
-const Percentage: React.FC<{ value: number }> = ({ value }) => {
+const Percentage: React.FC<{ value: number; tooltip: string }> = ({
+	value,
+	tooltip,
+}) => {
 	return (
-		<span className="text-purple-400 w-10 text-right">
+		<span className="group relative w-10 text-right text-purple-400">
 			{value.toLocaleString(undefined, { style: 'percent' })}
+			<span className="tooltip group-hover:visible group-hover:opacity-100">
+				{tooltip}
+			</span>
 		</span>
 	);
 };

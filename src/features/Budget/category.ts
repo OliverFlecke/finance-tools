@@ -1,14 +1,7 @@
-import type { CurrencyRates } from '@/API/currency';
-import { convertToCurrency } from '../../utils/converters';
+import { CurrencyRates, getCurrencies } from '@/API/currency';
+import { convertToCurrency, formatCurrency } from '../../utils/converters';
 
 type Period = 'Month' | 'Quarter' | 'Year';
-
-export const formatter = (currency: string) =>
-	new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency,
-		maximumFractionDigits: 0,
-	});
 
 interface CategoryData {
 	name: string;
@@ -75,16 +68,28 @@ export class Category {
 		}, 0);
 	}
 
-	get formatted(): string {
-		return formatter(this.currency).format(this.amount);
+	public getAmount(currency: string): number {
+		return convertToCurrency(
+			this.amount,
+			this.currency,
+			currency,
+			this.rates?.usd
+		);
 	}
 
-	public expand(open = true) {
+	public getFormatted(currency?: string): string {
+		const amount = currency ? this.getAmount(currency) : this.amount;
+		return formatCurrency(amount, currency ?? this.currency, {
+			maximumFractionDigits: 0,
+		});
+	}
+
+	public expand(open = true): void {
 		this.isOpen = open;
 		this.children.forEach((x) => x.expand(open));
 	}
 
-	public removeChild(child: Category) {
+	public removeChild(child: Category): void {
 		this.children = this.children.filter((x) => x.name !== child.name);
 		this.children.forEach((x) => x.removeChild(child));
 	}
