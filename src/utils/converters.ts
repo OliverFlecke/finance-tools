@@ -50,7 +50,8 @@ export function getConversionRate(
 		return fromCurrency in rates ? 1 / rates[fromCurrency] : 1;
 	} else {
 		return (
-			getConversionRate(fromCurrency, baseCurrency) * getConversionRate(baseCurrency, toCurrency)
+			getConversionRate(fromCurrency, baseCurrency, rates) *
+			getConversionRate(baseCurrency, toCurrency, rates)
 		);
 	}
 }
@@ -60,11 +61,11 @@ export function useConverter(
 	toCurrency: string,
 	rates: Rates
 ): (value: number) => number {
-	return useCallback((value: number) => convertToCurrency(value, fromCurrency, toCurrency, rates), [
-		fromCurrency,
-		rates,
-		toCurrency,
-	]);
+	return useCallback(
+		(value: number) =>
+			convertToCurrency(value, fromCurrency, toCurrency, rates),
+		[fromCurrency, rates, toCurrency]
+	);
 }
 
 type Rates = { [key: string]: number };

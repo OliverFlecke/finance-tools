@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useReducer, useState } from '
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
-import { CurrencyRates, getCurrencies } from './API/currenciesApi';
+import { CurrencyRates, getCurrencies } from '../../API/currency';
 import { getStocksForUser } from './API/stockApi';
 import { getShares } from './API/yahoo';
 import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';

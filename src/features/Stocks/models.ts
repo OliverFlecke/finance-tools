@@ -1,6 +1,6 @@
 import { convertToCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
-import { CurrencyRates } from './API/currenciesApi';
+import { CurrencyRates } from '../../API/currency';
 import { QuoteResponse } from './API/yahoo';
 
 export type StockList = Stock[];

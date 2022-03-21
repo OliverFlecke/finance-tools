@@ -1,0 +1,87 @@
+{
+	"currency": "GBP",
+	"income": {
+		"name": "Total income",
+		"children": [{ "name": "Salary after taxes", "amount": 4800 }]
+	},
+	"expense": {
+		"name": "Total expenses",
+		"children": [
+			{
+				"name": "Housing",
+				"color": "#F59E0B",
+				"children": [
+					{ "name": "Rent", "amount": 2000 },
+					{
+						"name": "Utilities",
+						"children": [{ "name": "Heating" }, { "name": "Electricity" }, { "name": "Internet" }]
+					}
+				]
+			},
+			{
+				"name": "Transportation",
+				"color": "#84CC16",
+				"children": [{ "name": "Train" }, { "name": "Car", "children": [] }]
+			},
+			{
+				"name": "Food",
+				"color": "#0EA5E9",
+				"children": [
+					{ "name": "Groceries", "amount": 200 },
+					{ "name": "Fast food", "amount": 50 },
+					{ "name": "Restaurant", "amount": 50 }
+				]
+			},
+			{
+				"name": "Healthcare",
+				"color": "#D946EF",
+				"children": [{ "name": "Dentist", "amount": 0 }]
+			},
+			{
+				"name": "Insurance",
+				"color": "#7DD3FC",
+				"children": [
+					{
+						"name": "Sygeforsikring Danmark",
+						"amount": 500,
+						"currency": "DKK"
+					},
+					{
+						"name": "Indboforsikring",
+						"amount": 695,
+						"period": "Year",
+						"currency": "DKK"
+					},
+					{
+						"name": "Ulykkesforsikring",
+						"amount": 677,
+						"period": "Year",
+						"currency": "DKK"
+					},
+					{
+						"name": "Travel insurance",
+						"amount": 482,
+						"period": "Year",
+						"currency": "DKK"
+					}
+				]
+			},
+			{
+				"name": "Recreation and lifestyle",
+				"color": "#F43F5E",
+				"children": [
+					{ "name": "Phone", "amount": 49, "currency": "DKK" },
+					{
+						"name": "Subscriptions",
+						"children": [
+							{ "name": "Disney+", "amount": 79, "currency": "DKK" },
+							{ "name": "Xbox Game Pass", "amount": 100, "currency": "DKK" },
+							{ "name": "iCloud+", "amount": 25, "currency": "DKK" },
+							{ "name": "LinNode", "amount": 42, "currency": "DKK" }
+						]
+					}
+				]
+			}
+		]
+	}
+}
