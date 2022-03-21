@@ -21,17 +21,23 @@ const Budget: React.FC<Props> = ({ currency, income, expense }) => {
 	);
 
 	return (
-		<>
-			<div className="flex flex-row justify-between">
-				<span>Monthly total:</span>
-				<span className={`${total > 0 ? 'text-green-600' : 'text-red-600'}`}>
-					{totalFormatted}
-				</span>
-			</div>
+		<div className="divide-y divide-gray-500 space-y-2">
+			<section>
+				<div className="flex flex-row justify-between">
+					<span>Monthly leftover:</span>
+					<span className={`${total > 0 ? 'text-green-600' : 'text-red-600'}`}>
+						{totalFormatted}
+					</span>
+				</div>
+			</section>
 
-			<BudgetLine category={income} />
-			<BudgetLine category={expense} />
-		</>
+			<section>
+				<BudgetLine category={income} />
+			</section>
+			<section>
+				<BudgetLine category={expense} />
+			</section>
+		</div>
 	);
 };
 
