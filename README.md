@@ -30,6 +30,8 @@ openssl req -x509 -out localhost.crt -keyout localhost.key \
    printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
 
+If using Chrome or any other Chromium based browser, you can turn off the certificate warning using the `chrome://flags/#allow-insecure-localhost` flag.
+
 ## Build and deploy
 
 The build is generating a static site, with statically generated HTML from React using [react-snap](https://www.npmjs.com/package/react-snap).
