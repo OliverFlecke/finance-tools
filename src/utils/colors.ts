@@ -5,8 +5,8 @@ export function getValueColorIndicator(value: number): string {
 }
 
 const colors = {
-	positiveColor: 'text-green-700 dark:text-green-400',
-	negativeColor: 'text-red-700 dark:text-red-400',
+	positiveColor: 'text-green-700 dark:text-green-500',
+	negativeColor: 'text-red-700 dark:text-red-500',
 };
 
 export default colors;

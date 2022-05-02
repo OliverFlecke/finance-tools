@@ -52,7 +52,7 @@ const AccountOverview = memo(() => {
 
 	return (
 		<AccountContext.Provider value={{ state, dispatch }}>
-			<Table accounts={state.accounts} entries={state.entries} />
+			<Table />
 			<div className="px-4 flex flex-row justify-between">
 				<AddAccount addAccount={add} />
 				<AddEntryModal />

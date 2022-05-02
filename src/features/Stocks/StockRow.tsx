@@ -27,8 +27,8 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	return (
 		<>
-			<tr className="w-full relative text-right bg-gray-200 dark:bg-gray-800">
-				<td className="text-left px-2">{stock.symbol}</td>
+			<tr className="relative w-full bg-gray-200 text-right dark:bg-gray-800">
+				<td className="px-2 text-left">{stock.symbol}</td>
 				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td className="px-0">
 					{formatCurrency(currencyConverter(marketValue), preferredCurrency)}
@@ -72,7 +72,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	}, [dispatch, stock.symbol]);
 
 	return (
-		<td className="h-full space-x-2 px-4 flex flex-row justify-end">
+		<td className="flex h-full flex-row justify-end space-x-2 px-4">
 			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>

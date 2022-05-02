@@ -15,6 +15,23 @@ Tailwindcss is running in JIT mode, see [tailwindcss.com](https://tailwindcss.co
 
 Both the build of JS and CSS along with serving the website can be run concurrently with `yarn run dev`.
 
+### Running with HTTPS
+
+In order to be able to authenticate against the API, the app MUST be run over HTTPS.
+This can be done using the custom `server.js`, which uses a self-signed certificate for your localhost.
+Note that the custom server is only used for development and not for production, as it is not required when in production where SSL termination is offloaded.
+
+To generate the required key and certificate use:
+
+```sh
+openssl req -x509 -out localhost.crt -keyout localhost.key \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=localhost' -extensions EXT -config <( \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+```
+
+If using Chrome or any other Chromium based browser, you can turn off the certificate warning using the `chrome://flags/#allow-insecure-localhost` flag.
+
 ## Build and deploy
 
 The build is generating a static site, with statically generated HTML from React using [react-snap](https://www.npmjs.com/package/react-snap).
