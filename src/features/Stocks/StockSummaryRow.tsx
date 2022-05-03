@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
 import { convertToCurrency, formatCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
+import SettingsContext from '../Settings/context';
 import { StockList } from './models';
-import { StockContext } from './state';
 
 interface StockSummaryRowProps {
 	stocks: StockList;
@@ -10,8 +10,9 @@ interface StockSummaryRowProps {
 
 const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummaryRowProps) => {
 	const {
-		state: { preferredCurrency, currencyRates },
-	} = useContext(StockContext);
+		values: { preferredDisplayCurrency, currencyRates },
+	} = useContext(SettingsContext);
+
 	const totalValue = useMemo(
 		() =>
 			sum(
@@ -20,13 +21,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares,
 							stock.currency,
-							preferredCurrency,
+							preferredDisplayCurrency,
 							currencyRates.usd
 						)
 					)
 				)
 			),
-		[currencyRates.usd, preferredCurrency, stocks]
+		[currencyRates.usd, preferredDisplayCurrency, stocks]
 	);
 	const totalGain = useMemo(
 		() =>
@@ -36,13 +37,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares - lot.buyPrice * lot.shares,
 							stock.currency,
-							preferredCurrency,
+							preferredDisplayCurrency,
 							currencyRates.usd
 						)
 					)
 				)
 			),
-		[currencyRates.usd, preferredCurrency, stocks]
+		[currencyRates.usd, preferredDisplayCurrency, stocks]
 	);
 
 	const gainPercentage = (totalValue / (totalValue - totalGain) - 1) * 100;
@@ -51,10 +52,10 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 		<tr className="text-right font-bold dark:text-purple-400">
 			<td></td>
 			<td></td>
-			<td>{formatCurrency(totalValue, preferredCurrency)}</td>
+			<td>{formatCurrency(totalValue, preferredDisplayCurrency)}</td>
 			<td></td>
 			<td></td>
-			<td>{formatCurrency(totalGain, preferredCurrency)}</td>
+			<td>{formatCurrency(totalGain, preferredDisplayCurrency)}</td>
 			<td>{gainPercentage.toFixed(2)} %</td>
 		</tr>
 	);

@@ -3784,7 +3784,7 @@ get-symbol-description@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
-gh-pages@^3.1.0:
+gh-pages@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/gh-pages/-/gh-pages-3.2.3.tgz#897e5f15e111f42af57d21d430b83e5cdf29472c"
   integrity sha512-jA1PbapQ1jqzacECfjUaO9gV8uBgU6XNMV0oXLtfCX3haGLe5Atq8BxlrADhbD6/UdG9j6tZLWAkAybndOXTJg==
@@ -5552,6 +5552,11 @@ prettier-linter-helpers@^1.0.0:
   integrity sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==
   dependencies:
     fast-diff "^1.1.2"
+
+prettier-plugin-tailwindcss@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.1.10.tgz#437bd0757819c8393fc780e17e50e8a7518e2a6b"
+  integrity sha512-ooDGNuXUjgCXfShliVYQ6+0iXqUFXn+zdNInPe0WZN9qINt9srbLGFGY5jeVL4MXtY20/4S8JaBcd8l6N6NfCQ==
 
 prettier@^2.2.1:
   version "2.6.2"

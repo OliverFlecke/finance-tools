@@ -3,7 +3,7 @@ import { getDataFromStorage, storedReducer } from '../../utils/storage';
 import { Stock, StockList, StockLot } from './models';
 import { v4 as uuidv4 } from 'uuid';
 import { QuoteResponse } from './API/yahoo';
-import { CurrencyRates } from './API/currenciesApi';
+import { CurrencyRates } from '../Currency/api';
 
 const storageKey = 'stocks_state';
 
@@ -38,8 +38,6 @@ export function getDefaultStockState(): StockState {
 
 export interface StockState {
 	stocks: StockList;
-	currencyRates: CurrencyRates;
-	preferredCurrency: string;
 }
 
 export type StockAction =
@@ -47,8 +45,6 @@ export type StockAction =
 	| { type: 'DELETE STOCK'; symbol: string }
 	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
 	| { type: 'SET STOCKS'; stocks: StockList }
-	| { type: 'SET PREFERRED CURRENCY'; currency: string }
-	| { type: 'SET CURRENCY RATES'; rates: CurrencyRates }
 	| { type: 'ADD LOT'; symbol: string; lotId?: string }
 	| { type: 'DELETE LOT'; symbol: string; id: string }
 	| { type: 'EDIT LOT'; symbol: string; lot: StockLot };
@@ -143,17 +139,6 @@ function reducer(state: StockState, action: StockAction): StockState {
 								lots: stock.lots.filter((x) => x.id !== action.lot.id).concat(action.lot),
 						  }
 				),
-			};
-
-		case 'SET PREFERRED CURRENCY':
-			return {
-				...state,
-				preferredCurrency: action.currency.toLowerCase(),
-			};
-		case 'SET CURRENCY RATES':
-			return {
-				...state,
-				currencyRates: action.rates,
 			};
 
 		default:
