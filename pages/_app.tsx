@@ -1,8 +1,9 @@
 import 'compiled.css';
-import React from 'react';
-import type { AppProps } from 'next/app';
 import Header from 'features/Header';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import React from 'react';
+import Settings from '../src/features/Settings';
 
 const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 	<>
@@ -18,8 +19,10 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<meta name="color-scheme" content="dark light" />
 		</Head>
 		<main className="min-h-screen h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200">
-			<Header />
-			<Component {...pageProps} />
+			<Settings>
+				<Header />
+				<Component {...pageProps} />
+			</Settings>
 		</main>
 	</>
 );
