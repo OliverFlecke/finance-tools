@@ -45,7 +45,10 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 		case 'RESET':
 			return getDefaultAccountState();
 		case 'LOAD STATE':
-			return action.state;
+			return {
+				...action.state,
+				accounts: action.state.accounts.sort((a, z) => a.name.localeCompare(z.name)),
+			};
 		case 'ADD ACCOUNT':
 			return {
 				...state,
