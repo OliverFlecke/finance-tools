@@ -3,7 +3,7 @@ import Header from 'features/Header';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
-import Settings from '../src/features/Settings';
+import Settings from 'features/Settings';
 
 const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 	<>

@@ -3,7 +3,7 @@ import { getDataFromStorage, storedReducer } from '../../utils/storage';
 import { Stock, StockList, StockLot } from './models';
 import { v4 as uuidv4 } from 'uuid';
 import { QuoteResponse } from './API/yahoo';
-import { CurrencyRates } from './API/currenciesApi';
+import { CurrencyRates } from '../Currency/api';
 
 const storageKey = 'stocks_state';
 
