@@ -4,6 +4,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
 import { formatDate } from 'utils/date';
+import SettingsContext from 'features/Settings/context';
 import { deleteStockLot, updateStockLot } from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
@@ -21,10 +22,11 @@ interface LotForm {
 }
 
 const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProps) => {
+	const { dispatch } = useContext(StockContext);
+
 	const {
-		dispatch,
-		state: { preferredCurrency, currencyRates },
-	} = useContext(StockContext);
+		values: { currencyRates, preferredDisplayCurrency },
+	} = useContext(SettingsContext);
 	const { register, handleSubmit, watch } = useForm<LotForm>({
 		mode: 'onChange',
 		defaultValues: {
@@ -62,7 +64,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		dispatch({ type: 'DELETE LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
-	const convert = useConverter(stock.currency, preferredCurrency, currencyRates.usd);
+	const convert = useConverter(stock.currency, preferredDisplayCurrency, currencyRates.usd);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;
 	const buyMarketValue = watch('buyPrice') * watch('shares');
@@ -71,23 +73,25 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	return (
 		<tr className="odd:bg-gray-200 dark:odd:bg-gray-600">
 			<td colSpan={3}>
-				<form onChange={handleSubmit(onChange)} className="flex flex-row justify-evenly w-full">
+				<form onChange={handleSubmit(onChange)} className="flex w-full flex-row justify-evenly">
 					<input type="date" {...register('buyDate')} className="bg-transparent" />
 					<input
 						type="number"
 						{...register('shares')}
-						className="bg-transparent w-20 text-center"
+						className="w-20 bg-transparent text-center"
 					/>
 					<input
 						type="number"
 						{...register('buyPrice')}
-						className="bg-transparent w-20 text-center"
+						className="w-20 bg-transparent text-center"
 					/>
 				</form>
 			</td>
-			<td className="text-right">{formatCurrency(convert(marketValue), preferredCurrency)}</td>
-			<td className={`${getValueColorIndicator(gain)} text-right flex flex-col`}>
-				<span>{formatCurrency(convert(gain), preferredCurrency)}</span>
+			<td className="text-right">
+				{formatCurrency(convert(marketValue), preferredDisplayCurrency)}
+			</td>
+			<td className={`${getValueColorIndicator(gain)} flex flex-col text-right`}>
+				<span>{formatCurrency(convert(gain), preferredDisplayCurrency)}</span>
 				<span>{((marketValue / buyMarketValue - 1) * 100).toFixed(2)} %</span>
 			</td>
 			<td className="pl-4">

@@ -3,7 +3,7 @@ import { CurrencyRates } from 'features/Currency/api';
 
 export default interface SettingsValues {
 	preferredDisplayCurrency: string;
-	currencyRates?: CurrencyRates;
+	currencyRates: CurrencyRates;
 }
 
 export function initSettings(): SettingsValues {
@@ -13,5 +13,6 @@ export function initSettings(): SettingsValues {
 export function getDefaultSettings(): SettingsValues {
 	return {
 		preferredDisplayCurrency: 'DKK',
+		currencyRates: { usd: {}, date: new Date().toString() },
 	};
 }

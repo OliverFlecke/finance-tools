@@ -1,25 +1,19 @@
-import React, { ReactNode, useCallback, useEffect, useReducer, useState } from 'react';
+import { CurrencyRates } from 'features/Currency/api';
+import SettingsContext from 'features/Settings/context';
+import React, { ReactNode, useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
-import { CurrencyRates, getCurrencies } from '../Currency/api';
 import { getStocksForUser } from './API/stockApi';
 import { getShares } from './API/yahoo';
 import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
-import StockSettings from './StockSettings';
 import StockSummaryRow from './StockSummaryRow';
 
 const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
-
-	useEffect(() => {
-		getCurrencies()
-			.then((rates) => dispatch({ type: 'SET CURRENCY RATES', rates }))
-			.catch((err) => console.warn(err));
-	}, []);
 
 	useEffect(() => {
 		getStocksForUser()
@@ -39,12 +33,8 @@ const Stocks: React.FC = () => {
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>
-			<h2 className="text-xl px-4 py-4">Stocks</h2>
-			<StocksTable
-				stocks={state.stocks}
-				preferredCurrency={state.preferredCurrency}
-				currencyRates={state.currencyRates}
-			/>
+			<h2 className="px-4 py-4 text-xl">Stocks</h2>
+			<StocksTable stocks={state.stocks} />
 			<StockActionBar />
 		</StockContext.Provider>
 	);
@@ -54,8 +44,6 @@ export default Stocks;
 
 interface StocksTableProps {
 	stocks: StockList;
-	currencyRates?: CurrencyRates;
-	preferredCurrency?: string;
 }
 
 type StockColumn =
@@ -67,11 +55,10 @@ type StockColumn =
 	| 'Gain'
 	| 'Gain percentage';
 
-const StocksTable: React.FC<StocksTableProps> = ({
-	stocks,
-	currencyRates,
-	preferredCurrency,
-}: StocksTableProps) => {
+const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
+	const {
+		values: { currencyRates, preferredDisplayCurrency },
+	} = useContext(SettingsContext);
 	const [sortKey, setSortKey] = useState<StockColumn | undefined>();
 	const [ascending, setAscending] = useState(false);
 
@@ -88,7 +75,7 @@ const StocksTable: React.FC<StocksTableProps> = ({
 				</thead>
 				<tbody>
 					{stocks
-						.sort(stocksComparer(sortKey, ascending, preferredCurrency, currencyRates))
+						.sort(stocksComparer(sortKey, ascending, preferredDisplayCurrency, currencyRates))
 						.map((stock) => (
 							<StockRow key={stock.symbol} stock={stock} />
 						))}
@@ -125,7 +112,7 @@ const StockTableHeader = ({
 	);
 
 	return (
-		<tr className="text-sm align-bottom text-gray-600 dark:text-gray-400">
+		<tr className="align-bottom text-sm text-gray-600 dark:text-gray-400">
 			<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
 				Symbol
 			</Header>
@@ -153,10 +140,9 @@ const StockTableHeader = ({
 
 const StockActionBar = () => {
 	return (
-		<div className="p-4 justify-between flex">
+		<div className="flex justify-between p-4">
 			<AddStock />
 			<RefreshStocksButton />
-			<StockSettings />
 		</div>
 	);
 };
@@ -172,7 +158,7 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 	<th>
 		<button
 			onClick={sort(sortKey)}
-			className="focus:ring-1 ring-red-800 dark:ring-red-600 rounded-sm whitespace-nowrap"
+			className="whitespace-nowrap rounded-sm ring-red-800 focus:ring-1 dark:ring-red-600"
 		>
 			{children}
 			{sortKey === currentSortKey && <Caret ascending={ascending} />}

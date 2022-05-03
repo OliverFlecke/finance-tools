@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
+import SettingsContext from 'features/Settings/context';
 import { Stock, stockAvgPrice, stockGain, stockTotalShares } from './models';
 import { StockContext } from './state';
 import StockLotsTable from './StockLotsTable';
@@ -12,15 +13,19 @@ interface StockRowProps {
 
 const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const {
-		state: { preferredCurrency, currencyRates },
-	} = useContext(StockContext);
-	const currencyConverter = useConverter(stock.currency, preferredCurrency, currencyRates.usd);
+		values: { preferredDisplayCurrency, currencyRates },
+	} = useContext(SettingsContext);
+	const currencyConverter = useConverter(
+		stock.currency,
+		preferredDisplayCurrency,
+		currencyRates.usd
+	);
 
 	const totalShares = stockTotalShares(stock);
 	const avgPrice = stockAvgPrice(stock);
 	const buyMarketPrice = avgPrice * totalShares;
 	const marketValue = stock.regularMarketPrice * totalShares;
-	const gain = stockGain(stock, preferredCurrency, currencyRates);
+	const gain = stockGain(stock, preferredDisplayCurrency, currencyRates);
 	const gainPercentage = (marketValue / buyMarketPrice - 1) * 100;
 
 	const [showLots, setShowLots] = useState(false);
@@ -31,14 +36,14 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td className="px-2 text-left">{stock.symbol}</td>
 				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td className="px-0">
-					{formatCurrency(currencyConverter(marketValue), preferredCurrency)}
+					{formatCurrency(currencyConverter(marketValue), preferredDisplayCurrency)}
 				</td>
 				<td>{totalShares}</td>
 				<td className={`px-2 ${getValueColorIndicator(avgPrice)}`}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
 				<td className={`px-2 ${getValueColorIndicator(gain)}`}>
-					<span>{formatCurrency(gain, preferredCurrency)}</span>
+					<span>{formatCurrency(gain, preferredDisplayCurrency)}</span>
 				</td>
 				<td className={`px-1 ${getValueColorIndicator(gainPercentage)}`}>
 					<span className={isNaN(gainPercentage) ? 'hidden' : ''}>
