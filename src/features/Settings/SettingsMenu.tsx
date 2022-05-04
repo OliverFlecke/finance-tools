@@ -1,7 +1,7 @@
 import { Button, Modal } from '@oliverflecke/components-react';
 import { getCurrencies } from 'features/Currency/api';
-import SettingsIcon from 'icons/SettingsIcon';
 import React, { FC, useCallback, useContext, useEffect, useId, useState } from 'react';
+import { IoSettingsOutline } from 'react-icons/io5';
 import SettingsContext from './context';
 
 const SettingsMenu: FC = () => {
@@ -16,8 +16,8 @@ const SettingsMenu: FC = () => {
 
 	return (
 		<div className="z-50">
-			<button className="flex h-full w-6 justify-center" onClick={() => setIsOpen((x) => !x)}>
-				<SettingsIcon />
+			<button className="flex h-full justify-center" onClick={() => setIsOpen((x) => !x)}>
+				<IoSettingsOutline size={24} />
 			</button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
 				<div className="space-y-4 rounded bg-indigo-500 p-4 dark:bg-indigo-900">
