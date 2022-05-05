@@ -1,9 +1,12 @@
+import { CurrencySymbol } from 'features/Currency/api';
+
 export type AccountType = 'Cash' | 'Investment';
 
 export interface Account {
 	id: string;
 	name: string;
 	type: AccountType;
+	currency: CurrencySymbol;
 }
 
 export type DateEntry = { [key: string]: number };

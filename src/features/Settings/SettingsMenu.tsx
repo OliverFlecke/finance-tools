@@ -1,7 +1,8 @@
 import { Button, Modal } from '@oliverflecke/components-react';
 import { getCurrencies } from 'features/Currency/api';
-import React, { FC, useCallback, useContext, useEffect, useId, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { IoSettingsOutline } from 'react-icons/io5';
+import SelectCurrency from '../../components/SelectCurrency';
 import SettingsContext from './context';
 
 const SettingsMenu: FC = () => {
@@ -38,41 +39,21 @@ const SettingsMenu: FC = () => {
 export default SettingsMenu;
 
 const DisplayCurrencySetting: FC = () => {
-	const id = useId();
 	const {
-		values: { preferredDisplayCurrency, currencyRates },
+		values: { preferredDisplayCurrency },
 		dispatch,
 	} = useContext(SettingsContext);
 
 	const onChange = useCallback(
-		(x: React.ChangeEvent<HTMLSelectElement>) => {
-			const currency = x.currentTarget.value;
-			if (!currency) return;
-
-			dispatch({ type: 'SET DISPLAY CURRENCY', currency });
-		},
+		(currency: string) => dispatch({ type: 'SET DISPLAY CURRENCY', currency }),
 		[dispatch]
 	);
 
-	if (!currencyRates) return null;
-
 	return (
-		<>
-			<label htmlFor={id}>Preferred display currency</label>
-			<select
-				id={id}
-				onChange={onChange}
-				defaultValue={preferredDisplayCurrency}
-				className="rounded dark:bg-gray-700"
-			>
-				{Object.keys(currencyRates.usd)
-					.map((x) => x.toUpperCase())
-					.map((key) => (
-						<option key={key} value={key}>
-							{key}
-						</option>
-					))}
-			</select>
-		</>
+		<SelectCurrency
+			label="Preferred display currency"
+			defaultCurrency={preferredDisplayCurrency}
+			onChange={onChange}
+		/>
 	);
 };

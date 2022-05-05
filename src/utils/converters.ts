@@ -11,14 +11,24 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 	currencyDisplay: 'code',
 });
 
-export function formatCurrency(value: number, currency?: string): string {
-	if (Number.isNaN(value)) return '-';
+export function formatCurrency(value?: number, currency?: string): string {
+	if (!value || Number.isNaN(value)) return '0';
+	const format = (currency: string) =>
+		value.toLocaleString(undefined, {
+			style: 'currency',
+			currency,
+			currencyDisplay: 'code',
+		});
 
-	return value.toLocaleString(undefined, {
-		style: 'currency',
-		currency: currency ?? 'USD',
-		currencyDisplay: 'code',
-	});
+	try {
+		return format(currency ?? 'USD');
+	} catch (ex) {
+		if (ex instanceof RangeError && ex.message.startsWith('Invalid currency code') && currency) {
+			return format('USD').replace('USD', currency);
+		}
+
+		return value.toString();
+	}
 }
 
 export function convertToCurrency(
@@ -60,11 +70,10 @@ export function useConverter(
 	toCurrency: string,
 	rates: Rates
 ): (value: number) => number {
-	return useCallback((value: number) => convertToCurrency(value, fromCurrency, toCurrency, rates), [
-		fromCurrency,
-		rates,
-		toCurrency,
-	]);
+	return useCallback(
+		(value: number) => convertToCurrency(value, fromCurrency, toCurrency, rates),
+		[fromCurrency, rates, toCurrency]
+	);
 }
 
 type Rates = { [key: string]: number };

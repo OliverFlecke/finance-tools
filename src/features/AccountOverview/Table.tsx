@@ -3,7 +3,7 @@ import { Account, AccountEntries } from 'features/AccountOverview/models/Account
 import React, { FC, useContext } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { currencyFormatter } from 'utils/converters';
-import { getValueColorIndicator } from '../../utils/colors';
+import { getValueColorIndicator } from 'utils/colors';
 import Cell from './Cell';
 
 const Table: FC = () => {
@@ -22,9 +22,9 @@ const Table: FC = () => {
 						return (
 							<tr
 								key={date}
-								className="odd:bg-gray-300 dark:odd:bg-gray-800 text-right whitespace-nowrap font-mono"
+								className="whitespace-nowrap text-right font-mono odd:bg-gray-300 dark:odd:bg-gray-800"
 							>
-								<td className="text-center pr-6">{date}</td>
+								<td className="pr-6 text-center">{date}</td>
 								<RowSummary date={date} index={i} totals={totals} />
 								{accounts.map((account) => (
 									<Cell key={account.name} account={account} entry={entries[date]} date={date} />
@@ -43,12 +43,12 @@ export default Table;
 
 const TableHeader = ({ accounts }: { accounts: Account[] }) => (
 	<thead>
-		<tr className="text-right whitespace-nowrap">
-			<th className="text-center pr-6">Date</th>
-			<th className="text-green-700 dark:text-green-500 px-4">Gain</th>
-			<th className="text-blue-700 dark:text-blue-500 px-4">Total</th>
-			<th className="text-yellow-700 dark:text-yellow-500 px-4">Total cash</th>
-			<th className="text-purple-700 dark:text-purple-500 px-4">Total investments</th>
+		<tr className="whitespace-nowrap text-right">
+			<th className="pr-6 text-center">Date</th>
+			<th className="px-4 text-green-700 dark:text-green-500">Gain</th>
+			<th className="px-4 text-blue-700 dark:text-blue-500">Total</th>
+			<th className="px-4 text-yellow-700 dark:text-yellow-500">Total cash</th>
+			<th className="px-4 text-purple-700 dark:text-purple-500">Total investments</th>
 			{accounts.map((account) => (
 				<th key={account.name} className="px-4">
 					<span>{account.name}</span>
@@ -76,11 +76,11 @@ const RowSummary: FC<{
 	return (
 		<>
 			<td className={getValueColorIndicator(gain)}>{currencyFormatter.format(gain)}</td>
-			<td className="text-blue-700 dark:text-blue-500 px-4">{currencyFormatter.format(total)}</td>
-			<td className="text-yellow-700 dark:text-yellow-500 px-4">
+			<td className="px-4 text-blue-700 dark:text-blue-500">{currencyFormatter.format(total)}</td>
+			<td className="px-4 text-yellow-700 dark:text-yellow-500">
 				{currencyFormatter.format(totalCash)}
 			</td>
-			<td className="text-purple-700 dark:text-purple-500 px-4">
+			<td className="px-4 text-purple-700 dark:text-purple-500">
 				{currencyFormatter.format(totalInvested)}
 			</td>
 		</>

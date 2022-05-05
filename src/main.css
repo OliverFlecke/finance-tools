@@ -22,3 +22,12 @@ input[type='number'] {
 .flex-col-center {
 	@apply flex flex-col items-center justify-center
 }
+
+@layer utilities {
+	.modal-form-label {
+		@apply text-sm font-medium text-gray-700 dark:text-gray-300;
+	}
+	.modal-select {
+		@apply rounded-md bg-white py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100;
+	}
+}

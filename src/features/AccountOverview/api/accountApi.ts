@@ -1,4 +1,5 @@
-import { apiVersion, baseUri, post, useSampleData } from '../../apiBase';
+import { apiVersion, baseUri, post, useSampleData } from 'features/apiBase';
+import { CurrencySymbol } from 'features/Currency/api';
 import { Account, AccountType } from '../models/Account';
 import sampleData from './sampleData';
 
@@ -23,6 +24,7 @@ export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
 			})),
 		}));
 	} catch (error) {
+		console.warn("Failed to get user's accounts");
 		console.debug(error);
 		return [];
 	}
@@ -41,6 +43,7 @@ export interface AccountResponse {
 	name: string;
 	type: AccountType;
 	entries: EntryResponse[];
+	currency: CurrencySymbol;
 }
 
 interface EntryResponse {
