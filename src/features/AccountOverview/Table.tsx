@@ -127,9 +127,9 @@ function useSummarizedAccounts(
 		.map(account =>
 			convertToCurrency(
 				entries[date][account.name] ?? 0,
+				currencyRates.usd,
 				account.currency,
-				preferredDisplayCurrency,
-				currencyRates.usd
+				preferredDisplayCurrency
 			)
 		)
 		.reduce((sum, value) => sum + value, 0);

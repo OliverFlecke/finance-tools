@@ -16,13 +16,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 	const totalValue = useMemo(
 		() =>
 			sum(
-				...stocks.flatMap((stock) =>
-					stock.lots.map((lot) =>
+				...stocks.flatMap(stock =>
+					stock.lots.map(lot =>
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares,
+							currencyRates.usd,
 							stock.currency,
-							preferredDisplayCurrency,
-							currencyRates.usd
+							preferredDisplayCurrency
 						)
 					)
 				)
@@ -32,13 +32,13 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 	const totalGain = useMemo(
 		() =>
 			sum(
-				...stocks.flatMap((stock) =>
-					stock.lots.map((lot) =>
+				...stocks.flatMap(stock =>
+					stock.lots.map(lot =>
 						convertToCurrency(
 							stock.regularMarketPrice * lot.shares - lot.buyPrice * lot.shares,
+							currencyRates.usd,
 							stock.currency,
-							preferredDisplayCurrency,
-							currencyRates.usd
+							preferredDisplayCurrency
 						)
 					)
 				)

@@ -18,7 +18,7 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="color-scheme" content="dark light" />
 		</Head>
-		<main className="min-h-screen h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+		<main className="h-full min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
 			<Settings>
 				<Header />
 				<Component {...pageProps} />

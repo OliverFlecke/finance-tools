@@ -25,7 +25,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const avgPrice = stockAvgPrice(stock);
 	const buyMarketPrice = avgPrice * totalShares;
 	const marketValue = stock.regularMarketPrice * totalShares;
-	const gain = stockGain(stock, preferredDisplayCurrency, currencyRates);
+	const gain = stockGain(stock, currencyRates, preferredDisplayCurrency);
 	const gainPercentage = (marketValue / buyMarketPrice - 1) * 100;
 
 	const [showLots, setShowLots] = useState(false);
@@ -78,7 +78,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 
 	return (
 		<td className="flex h-full flex-row justify-end space-x-2 px-4">
-			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
+			<button onClick={() => setShowLots(x => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
 			<button onClick={deleteStock} className="hover:cursor-pointer">

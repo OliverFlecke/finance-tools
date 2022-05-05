@@ -17,7 +17,7 @@ const Stocks: React.FC = () => {
 
 	useEffect(() => {
 		getStocksForUser()
-			.then((stocks) =>
+			.then(stocks =>
 				dispatch({
 					type: 'SET STOCKS',
 					stocks: stocks,
@@ -25,7 +25,7 @@ const Stocks: React.FC = () => {
 			)
 			// TODO: This code is replicated from the RefreshStockButton component.
 			.then(async () => {
-				const quotes = await getShares(...state.stocks.map((x) => x.symbol));
+				const quotes = await getShares(...state.stocks.map(x => x.symbol));
 				dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
 			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,8 +75,8 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 				</thead>
 				<tbody>
 					{stocks
-						.sort(stocksComparer(sortKey, ascending, preferredDisplayCurrency, currencyRates))
-						.map((stock) => (
+						.sort(stocksComparer(currencyRates, sortKey, ascending, preferredDisplayCurrency))
+						.map(stock => (
 							<StockRow key={stock.symbol} stock={stock} />
 						))}
 				</tbody>
@@ -103,7 +103,7 @@ const StockTableHeader = ({
 	const sort = useCallback(
 		(key: StockColumn) => () => {
 			if (sortKey === key) {
-				setAscending((x) => !x);
+				setAscending(x => !x);
 			} else {
 				setSortKey(key);
 			}
@@ -171,19 +171,19 @@ const Caret = ({ ascending }: { ascending: boolean }) => (
 );
 
 function stocksComparer(
+	currencyRates: CurrencyRates,
 	key?: StockColumn,
 	ascending?: boolean,
-	preferredCurrency?: string,
-	currencyRates?: CurrencyRates
+	preferredCurrency?: string
 ): (a: Stock, b: Stock) => number {
 	if (!key) return () => 0;
 
 	const convert = (stock: Stock) =>
 		convertToCurrency(
 			stock.regularMarketPrice,
+			currencyRates?.usd,
 			stock.currency,
-			preferredCurrency,
-			currencyRates?.usd
+			preferredCurrency
 		);
 
 	return (a, b) => {
@@ -194,8 +194,8 @@ function stocksComparer(
 				break;
 			case 'Gain':
 				result =
-					stockGain(a, preferredCurrency, currencyRates) -
-					stockGain(b, preferredCurrency, currencyRates);
+					stockGain(a, currencyRates, preferredCurrency) -
+					stockGain(b, currencyRates, preferredCurrency);
 				break;
 			case 'Gain percentage':
 				const getStockGainInPercentage = (stock: Stock): number => {
@@ -208,8 +208,8 @@ function stocksComparer(
 				break;
 			case 'Average price':
 				result =
-					convertToCurrency(stockAvgPrice(a), a.currency, preferredCurrency, currencyRates?.usd) -
-					convertToCurrency(stockAvgPrice(b), b.currency, preferredCurrency, currencyRates?.usd);
+					convertToCurrency(stockAvgPrice(a), currencyRates.usd, a.currency, preferredCurrency) -
+					convertToCurrency(stockAvgPrice(b), currencyRates.usd, b.currency, preferredCurrency);
 				break;
 			case 'Current price':
 				result = convert(a) - convert(b);
