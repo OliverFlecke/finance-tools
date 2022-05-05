@@ -1,9 +1,10 @@
 import { AccountContext } from 'features/AccountOverview/AccountService';
 import { Account, AccountEntries } from 'features/AccountOverview/models/Account';
+import SettingsContext from 'features/Settings/context';
 import React, { FC, useContext } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
-import { currencyFormatter } from 'utils/converters';
 import { getValueColorIndicator } from 'utils/colors';
+import { convertToCurrency, currencyFormatter } from 'utils/converters';
 import Cell from './Cell';
 
 const Table: FC = () => {
@@ -11,7 +12,7 @@ const Table: FC = () => {
 		state: { accounts, entries },
 	} = useContext(AccountContext);
 
-	const totals = Object.keys(entries).map((date) => filterAndSum(accounts, entries, date));
+	const totals = calculateTotals(accounts, entries);
 
 	return (
 		<div className="h-full overflow-x-auto pb-4">
@@ -26,7 +27,7 @@ const Table: FC = () => {
 							>
 								<td className="pr-6 text-center">{date}</td>
 								<RowSummary date={date} index={i} totals={totals} />
-								{accounts.map((account) => (
+								{accounts.map(account => (
 									<Cell key={account.name} account={account} entry={entries[date]} date={date} />
 								))}
 								<RowActions date={date} />
@@ -49,7 +50,7 @@ const TableHeader = ({ accounts }: { accounts: Account[] }) => (
 			<th className="px-4 text-blue-700 dark:text-blue-500">Total</th>
 			<th className="px-4 text-yellow-700 dark:text-yellow-500">Total cash</th>
 			<th className="px-4 text-purple-700 dark:text-purple-500">Total investments</th>
-			{accounts.map((account) => (
+			{accounts.map(account => (
 				<th key={account.name} className="px-4">
 					<span>{account.name}</span>
 				</th>
@@ -70,8 +71,13 @@ const RowSummary: FC<{
 
 	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
 	const total = totals[index];
-	const totalCash = filterAndSum(accounts, entries, date, (x) => x.type === 'Cash');
-	const totalInvested = filterAndSum(accounts, entries, date, (x) => x.type === 'Investment');
+	const totalCash = useSummarizedAccounts(accounts, entries, date, x => x.type === 'Cash');
+	const totalInvested = useSummarizedAccounts(
+		accounts,
+		entries,
+		date,
+		x => x.type === 'Investment'
+	);
 
 	return (
 		<>
@@ -102,14 +108,29 @@ const RowActions: FC<{ date: string }> = ({ date }) => {
 	);
 };
 
-function filterAndSum(
+function calculateTotals(accounts: Account[], entries: AccountEntries): number[] {
+	return Object.keys(entries).map(date => useSummarizedAccounts(accounts, entries, date));
+}
+
+function useSummarizedAccounts(
 	accounts: Account[],
 	entries: AccountEntries,
 	date: string,
 	filter: (account: Account) => boolean = () => true
 ): number {
+	const {
+		values: { currencyRates, preferredDisplayCurrency },
+	} = useContext(SettingsContext);
+
 	return accounts
 		.filter(filter)
-		.map((x) => entries[date][x.name] ?? 0)
-		.reduce((acc, x) => acc + x, 0);
+		.map(account =>
+			convertToCurrency(
+				entries[date][account.name] ?? 0,
+				account.currency,
+				preferredDisplayCurrency,
+				currencyRates.usd
+			)
+		)
+		.reduce((sum, value) => sum + value, 0);
 }

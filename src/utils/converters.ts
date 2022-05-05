@@ -60,7 +60,8 @@ export function getConversionRate(
 		return fromCurrency in rates ? 1 / rates[fromCurrency] : 1;
 	} else {
 		return (
-			getConversionRate(fromCurrency, baseCurrency) * getConversionRate(baseCurrency, toCurrency)
+			getConversionRate(fromCurrency, baseCurrency, rates) *
+			getConversionRate(baseCurrency, toCurrency, rates)
 		);
 	}
 }
