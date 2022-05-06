@@ -47,7 +47,7 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 		case 'LOAD STATE':
 			return {
 				...action.state,
-				accounts: action.state.accounts.sort((a, z) => a.name.localeCompare(z.name)),
+				accounts: action.state.accounts.sort((a, z) => a.sortKey - z.sortKey),
 			};
 		case 'ADD ACCOUNT':
 			return {

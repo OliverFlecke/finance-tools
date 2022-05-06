@@ -7,6 +7,7 @@ export interface Account {
 	name: string;
 	type: AccountType;
 	currency: CurrencySymbol;
+	sortKey: number;
 }
 
 export type DateEntry = { [key: string]: number };
