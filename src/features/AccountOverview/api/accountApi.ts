@@ -31,7 +31,7 @@ export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
 }
 
 export async function addAccount(account: Account): Promise<string> {
-	return await post(`${baseUri}/${apiVersion}/account`, account).then((res) => res.json());
+	return await post(`${baseUri}/${apiVersion}/account`, account).then(res => res.json());
 }
 
 export async function updateEntry(entry: AddAccountEntryRequest): Promise<void> {
@@ -44,6 +44,7 @@ export interface AccountResponse {
 	type: AccountType;
 	entries: EntryResponse[];
 	currency: CurrencySymbol;
+	sortKey: number;
 }
 
 interface EntryResponse {

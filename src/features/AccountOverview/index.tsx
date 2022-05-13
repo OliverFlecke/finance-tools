@@ -5,13 +5,14 @@ import { AccountContext, accountReducer, initAccountState } from './AccountServi
 import AddEntryModal from './AddEntryModal';
 import { addAccount, getAccountsWithEntries } from './api/accountApi';
 import { Account, AccountEntries } from './models/Account';
+import OrderAccountsModal from './OrderAccountsModal';
 import Table from './Table';
 
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
 	useEffect(() => {
-		getAccountsWithEntries().then((accounts) => {
+		getAccountsWithEntries().then(accounts => {
 			const entries: AccountEntries = {};
 
 			for (const account of accounts) {
@@ -61,6 +62,7 @@ const AccountOverview = memo(() => {
 				<FileOptionMenu />
 			</div> */}
 			{/* <IndividualGrowthGraph /> */}
+			<OrderAccountsModal />
 		</AccountContext.Provider>
 	);
 });
