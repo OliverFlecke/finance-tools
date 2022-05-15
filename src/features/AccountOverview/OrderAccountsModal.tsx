@@ -1,10 +1,14 @@
 import type { Identifier } from 'dnd-core';
+import update from 'immutability-helper';
 import React, { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop, XYCoord } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { AccountContext } from './AccountService';
 import { Account } from './models/Account';
-import update from 'immutability-helper';
+
+const AccountCard: FC<{ account: Account }> = ({ account }) => {
+	return <div>{account.name}</div>;
+};
 
 const OrderAccountsModal: FC = () => {
 	const {
@@ -12,31 +16,60 @@ const OrderAccountsModal: FC = () => {
 	} = useContext(AccountContext);
 
 	const [items, setItems] = useState(useMemo(() => accounts, [accounts]));
-
-	const moveAccounts = useCallback((dragIndex: number, hoverIndex: number) => {
-		console.debug(`moving: ${dragIndex} hover ${hoverIndex}`);
-		setItems(prevItems =>
-			update(prevItems, {
-				$splice: [
-					[dragIndex, 1],
-					[hoverIndex, 0, prevItems[dragIndex]],
-				],
-			})
-		);
-	}, []);
+	const renderCard = useCallback((account: Account) => <AccountCard account={account} />, []);
 
 	return (
-		<DndProvider backend={HTML5Backend}>
-			<ol>
-				{items.map((account, index) => (
-					<AccountCard key={account.id} index={index} account={account} move={moveAccounts} />
-				))}
-			</ol>
-		</DndProvider>
+		<SortableDragAndDropList items={items} setItems={setItems}>
+			{renderCard}
+		</SortableDragAndDropList>
 	);
 };
 
 export default OrderAccountsModal;
+
+interface SortableDragAndDropListProps<T> {
+	items: T[];
+	setItems: React.Dispatch<React.SetStateAction<T[]>>;
+	children: (item: T) => React.ReactNode;
+}
+
+function SortableDragAndDropList<T extends { id: string }>({
+	items,
+	setItems,
+	children,
+}: SortableDragAndDropListProps<T>) {
+	const updateItems = useCallback(
+		(dragIndex: number, hoverIndex: number) => {
+			setItems(prevItems =>
+				update(prevItems, {
+					$splice: [
+						[dragIndex, 1],
+						[hoverIndex, 0, prevItems[dragIndex]],
+					],
+				})
+			);
+		},
+		[setItems]
+	);
+
+	return (
+		<DndProvider backend={HTML5Backend}>
+			<ol>
+				{items.map((item, index) => (
+					<SortableDragAndDropItem
+						key={item.id}
+						id={item.id}
+						index={index}
+						move={updateItems}
+						type={'ACCOUNT'}
+					>
+						{children(item)}
+					</SortableDragAndDropItem>
+				))}
+			</ol>
+		</DndProvider>
+	);
+}
 
 interface DragItem {
 	index: number;
@@ -44,16 +77,18 @@ interface DragItem {
 	type: string;
 }
 
-const AccountCard: FC<{
-	account: Account;
+const SortableDragAndDropItem: FC<{
+	id: string;
+	type: string;
 	index: number;
 	move: (dragIndex: number, hoverIndex: number) => void;
-}> = ({ account, index, move }) => {
+	children: React.ReactNode;
+}> = ({ id, type, index, move, children }) => {
 	const ref = useRef<HTMLLIElement>(null);
 
 	const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>(
 		{
-			accept: 'ACCOUNT',
+			accept: type,
 			collect(monitor) {
 				return {
 					handlerId: monitor.getHandlerId(),
@@ -103,8 +138,8 @@ const AccountCard: FC<{
 
 	const [{ isDragging }, drag] = useDrag(
 		() => ({
-			type: 'ACCOUNT',
-			item: () => ({ id: account.id, index }),
+			type: type,
+			item: () => ({ id, index }),
 			collect: monitor => ({
 				isDragging: !!monitor.isDragging(),
 			}),
@@ -119,7 +154,7 @@ const AccountCard: FC<{
 			data-handler-id={handlerId}
 			className={`m-4 cursor-move rounded bg-green-500 p-2 ${isDragging ? 'opacity-25' : ''}`}
 		>
-			{account.name} - {index}
+			{children}
 		</li>
 	);
 };
