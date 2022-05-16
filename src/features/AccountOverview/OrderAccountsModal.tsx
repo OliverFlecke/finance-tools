@@ -1,5 +1,6 @@
 import { Button, ButtonContainer, Modal } from '@oliverflecke/components-react';
 import SortableDragAndDropList from 'components/SortableDragAndDropList';
+import Spinner from 'components/Spinner';
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { AccountContext } from './AccountService';
 import { updateAccounts } from './api/accountApi';
@@ -16,16 +17,21 @@ const OrderAccountsModal: FC = () => {
 	} = useContext(AccountContext);
 
 	const [isOpen, setIsOpen] = useState(false);
+	const [state, setState] = useState<'NONE' | 'SAVING' | 'SAVED'>('NONE');
 	const [items, setItems] = useState(useMemo(() => accounts, [accounts]));
 	const renderCard = useCallback((account: Account) => <AccountCard account={account} />, []);
 
 	const saveOrder = useCallback(async () => {
 		try {
+			setState('SAVING');
 			const order = items.map((a, i) => ({ id: a.id, sortKey: i, name: a.name }));
 			await updateAccounts(order);
 			dispatch({ type: 'SORT ACCOUNTS', order });
+			setState('SAVED');
+			setTimeout(() => setState('NONE'), 1000);
 		} catch {
 			console.warn('Unable to save order of accounts');
+			setState('NONE');
 		}
 	}, [dispatch, items]);
 
@@ -44,9 +50,18 @@ const OrderAccountsModal: FC = () => {
 						{renderCard}
 					</SortableDragAndDropList>
 					<ButtonContainer>
+						<Button buttonType="Secondary" onClick={() => setIsOpen(false)}>
+							Close
+						</Button>
 						<Button onClick={saveOrder}>Save order</Button>
 					</ButtonContainer>
 				</div>
+				{state !== 'NONE' && (
+					<div className="absolute top-0 left-0 z-10 flex h-full w-full flex-row items-center justify-center bg-black opacity-75">
+						{state === 'SAVING' && <Spinner />}
+						{state === 'SAVED' && <div className="text-xl font-bold">Order saved!</div>}
+					</div>
+				)}
 			</Modal>
 		</>
 	);
