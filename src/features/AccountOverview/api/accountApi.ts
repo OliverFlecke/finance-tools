@@ -1,4 +1,4 @@
-import { apiVersion, baseUri, post, useSampleData } from 'features/apiBase';
+import { apiVersion, baseUri, post, put, useSampleData } from 'features/apiBase';
 import { CurrencySymbol } from 'features/Currency/api';
 import { Account, AccountType } from '../models/Account';
 import sampleData from './sampleData';
@@ -38,6 +38,10 @@ export async function updateEntry(entry: AddAccountEntryRequest): Promise<void> 
 	await post(`${baseUri}/${apiVersion}/account/entry`, entry);
 }
 
+export async function updateAccounts(accounts: UpdateAccount[]): Promise<Response> {
+	return put(`${baseUri}/${apiVersion}/account`, accounts);
+}
+
 export interface AccountResponse {
 	id: string;
 	name: string;
@@ -56,4 +60,12 @@ interface AddAccountEntryRequest {
 	accountId: string;
 	date: string; // Must be a DateOnly formatted string
 	amount: number;
+}
+
+interface UpdateAccount {
+	id: string;
+	name?: string;
+	type?: AccountType;
+	currency?: string;
+	sortKey?: number;
 }
