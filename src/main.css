@@ -30,4 +30,8 @@ input[type='number'] {
 	.modal-select {
 		@apply rounded-md bg-white py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100;
 	}
+
+	.modal-header {
+		@apply text-2xl;
+	}
 }

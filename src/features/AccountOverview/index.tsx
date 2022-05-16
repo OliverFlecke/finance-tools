@@ -56,13 +56,13 @@ const AccountOverview = memo(() => {
 			<Table />
 			<div className="flex flex-row justify-between px-4">
 				<AddAccount addAccount={add} />
+				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
 			{/* <div className="p-4">
 				<FileOptionMenu />
 			</div> */}
 			{/* <IndividualGrowthGraph /> */}
-			<OrderAccountsModal />
 		</AccountContext.Provider>
 	);
 });
