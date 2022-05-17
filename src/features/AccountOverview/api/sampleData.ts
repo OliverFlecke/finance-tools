@@ -18,6 +18,7 @@ const accounts: AccountResponse[] = [
 		name: 'Cash 1',
 		type: 'Cash',
 		currency: 'USD',
+		sortKey: 0,
 	},
 	{
 		entries: [
@@ -36,6 +37,7 @@ const accounts: AccountResponse[] = [
 		name: 'Cash 2',
 		type: 'Cash',
 		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -54,6 +56,7 @@ const accounts: AccountResponse[] = [
 		name: 'Cash 3',
 		type: 'Cash',
 		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -72,6 +75,7 @@ const accounts: AccountResponse[] = [
 		name: 'Invest 1',
 		type: 'Investment',
 		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -90,6 +94,7 @@ const accounts: AccountResponse[] = [
 		name: 'Invest 2',
 		type: 'Investment',
 		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -108,6 +113,7 @@ const accounts: AccountResponse[] = [
 		name: 'Invest 3',
 		type: 'Investment',
 		currency: 'USD',
+		sortKey: 1,
 	},
 ];
 
