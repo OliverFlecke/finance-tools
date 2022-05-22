@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const useThemeDetector = () => {
-	const [isDarkTheme, setIsDarkTheme] = useState(getCurrentThemeQuery().matches);
+	const [isDarkTheme, setIsDarkTheme] = useState(getCurrentThemeQuery()?.matches ?? false);
 	const listener = (e: MediaQueryListEvent) => setIsDarkTheme(e.matches);
 
 	useEffect(() => {
 		const darkThemeMediaQuery = getCurrentThemeQuery();
-		darkThemeMediaQuery.addEventListener('change', listener);
+		darkThemeMediaQuery?.addEventListener('change', listener);
 
-		return () => darkThemeMediaQuery.removeEventListener('change', listener);
+		return () => darkThemeMediaQuery?.removeEventListener('change', listener);
 	}, []);
 
 	return isDarkTheme;
@@ -16,6 +16,8 @@ const useThemeDetector = () => {
 
 export default useThemeDetector;
 
-function getCurrentThemeQuery() {
+function getCurrentThemeQuery(): MediaQueryList | null {
+	if (typeof window === 'undefined') return null;
+
 	return window.matchMedia('(prefers-color-scheme: dark)');
 }
