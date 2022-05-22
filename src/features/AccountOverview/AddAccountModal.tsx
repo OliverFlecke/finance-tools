@@ -1,5 +1,6 @@
 import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
-import React, { FC, useCallback, useState } from 'react';
+import SettingsContext from 'features/Settings/context';
+import React, { FC, useCallback, useContext, useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { Account } from './models/Account';
@@ -13,13 +14,23 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm<Account>();
 	const close = useCallback(() => setShowPrompt(false), [setShowPrompt]);
-	const onSubmit = (account: Account) => {
-		addAccount(account);
-		close();
-	};
+	const onSubmit = useCallback(
+		(account: Account) => {
+			addAccount(account);
+			reset();
+			close();
+		},
+		[addAccount, close, reset]
+	);
+
+	const currencyId = useId();
+	const {
+		values: { currencyRates, preferredDisplayCurrency },
+	} = useContext(SettingsContext);
 
 	return (
 		<>
@@ -28,9 +39,12 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 				<span className="align-middle">Add account</span>
 			</button>
 			<Modal isOpen={showPrompt} onDismiss={close}>
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<div className="p-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new account</h2>
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
+				>
+					<div className="pb-4">
+						<h2 className="text-lg text-gray-700 dark:text-gray-200">Add new account</h2>
 
 						<fieldset className="space-y-2">
 							<Input
@@ -40,13 +54,27 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 								errorMessage={errors.name && 'Please provide a name for your account'}
 							/>
 							<label className="flex flex-col space-y-2">
-								<span className="text-gray-700 dark:text-gray-300 font-medium text-sm">Type</span>
-								<select
-									className="py-2 px-4 rounded-md shadow focus:outline-none focus:ring focus:border-indigo-400 bg-white dark:bg-gray-900 dark:text-gray-100 undefined"
-									{...register('type', { required: true })}
-								>
+								<span className="modal-form-label">Account type</span>
+								<select className="modal-select" {...register('type', { required: true })}>
 									<option value={'Cash'}>Cash</option>
 									<option value={'Investment'}>Investment</option>
+								</select>
+							</label>
+							<label htmlFor={currencyId} className="flex flex-col space-y-2">
+								<span className="modal-form-label">Account currency</span>
+								<select
+									id={currencyId}
+									defaultValue={preferredDisplayCurrency}
+									className="modal-select"
+									{...register('currency', { required: true })}
+								>
+									{Object.keys(currencyRates.usd)
+										.map((x) => x.toUpperCase())
+										.map((key) => (
+											<option key={key} value={key}>
+												{key}
+											</option>
+										))}
 								</select>
 							</label>
 						</fieldset>

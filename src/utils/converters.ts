@@ -11,34 +11,40 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 	currencyDisplay: 'code',
 });
 
-export function formatCurrency(value: number, currency?: string): string {
-	if (Number.isNaN(value)) return '-';
+export function formatCurrency(value?: number, currency?: string): string {
+	if (!value || Number.isNaN(value)) return '0';
+	const format = (currency: string) =>
+		value.toLocaleString(undefined, {
+			style: 'currency',
+			currency,
+			currencyDisplay: 'code',
+		});
 
-	return value.toLocaleString(undefined, {
-		style: 'currency',
-		currency: currency ?? 'USD',
-		currencyDisplay: 'code',
-	});
+	try {
+		return format(currency ?? 'USD');
+	} catch (ex) {
+		if (ex instanceof RangeError && ex.message.startsWith('Invalid currency code') && currency) {
+			return format('USD').replace('USD', currency);
+		}
+
+		return value.toString();
+	}
 }
 
 export function convertToCurrency(
 	value: number,
+	rates: Rates,
 	fromCurrency?: string,
-	toCurrency?: string,
-	rates?: Rates
+	toCurrency?: string
 ): number {
-	return value * getConversionRate(fromCurrency, toCurrency, rates);
+	return value * getConversionRate(rates, fromCurrency, toCurrency);
 }
 
-export function getConversionRate(
-	fromCurrency?: string,
-	toCurrency?: string,
-	rates?: Rates
-): number {
+function getConversionRate(rates: Rates, fromCurrency?: string, toCurrency?: string): number {
 	const baseCurrency = 'usd';
 	fromCurrency = fromCurrency?.toLowerCase();
 	toCurrency = toCurrency?.toLowerCase();
-	rates = rates ?? defaultRates;
+	rates = rates;
 
 	if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
 		return 1;
@@ -50,7 +56,8 @@ export function getConversionRate(
 		return fromCurrency in rates ? 1 / rates[fromCurrency] : 1;
 	} else {
 		return (
-			getConversionRate(fromCurrency, baseCurrency) * getConversionRate(baseCurrency, toCurrency)
+			getConversionRate(rates, fromCurrency, baseCurrency) *
+			getConversionRate(rates, baseCurrency, toCurrency)
 		);
 	}
 }
@@ -60,20 +67,13 @@ export function useConverter(
 	toCurrency: string,
 	rates: Rates
 ): (value: number) => number {
-	return useCallback((value: number) => convertToCurrency(value, fromCurrency, toCurrency, rates), [
-		fromCurrency,
-		rates,
-		toCurrency,
-	]);
+	return useCallback(
+		(value: number) => convertToCurrency(value, rates, fromCurrency, toCurrency),
+		[fromCurrency, rates, toCurrency]
+	);
 }
 
 type Rates = { [key: string]: number };
-
-const defaultRates: { [key: string]: number } = {
-	dkk: 6.36,
-	nok: 9,
-	eur: 0.85,
-};
 
 export function sortObject<T>(unordered: T): T {
 	return (

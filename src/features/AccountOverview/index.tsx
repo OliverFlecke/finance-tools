@@ -5,13 +5,14 @@ import { AccountContext, accountReducer, initAccountState } from './AccountServi
 import AddEntryModal from './AddEntryModal';
 import { addAccount, getAccountsWithEntries } from './api/accountApi';
 import { Account, AccountEntries } from './models/Account';
+import OrderAccountsModal from './OrderAccountsModal';
 import Table from './Table';
 
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
 	useEffect(() => {
-		getAccountsWithEntries().then((accounts) => {
+		getAccountsWithEntries().then(accounts => {
 			const entries: AccountEntries = {};
 
 			for (const account of accounts) {
@@ -53,8 +54,9 @@ const AccountOverview = memo(() => {
 	return (
 		<AccountContext.Provider value={{ state, dispatch }}>
 			<Table />
-			<div className="px-4 flex flex-row justify-between">
+			<div className="flex flex-row justify-between px-4">
 				<AddAccount addAccount={add} />
+				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
 			{/* <div className="p-4">

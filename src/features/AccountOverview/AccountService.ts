@@ -34,6 +34,7 @@ export function initAccountState(): AccountState {
 
 export type AccountAction =
 	| { type: 'ADD ACCOUNT'; account: Account }
+	| { type: 'SORT ACCOUNTS'; order: { id: string; sortKey: number }[] }
 	| { type: 'ADD ENTRY'; date: string }
 	| { type: 'DELETE ENTRY'; date: string }
 	| { type: 'RESET' }
@@ -47,7 +48,7 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 		case 'LOAD STATE':
 			return {
 				...action.state,
-				accounts: action.state.accounts.sort((a, z) => a.name.localeCompare(z.name)),
+				accounts: action.state.accounts.sort((a, z) => a.sortKey - z.sortKey),
 			};
 		case 'ADD ACCOUNT':
 			return {
@@ -70,6 +71,16 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 			return {
 				...state,
 				entries: state.entries,
+			};
+		case 'SORT ACCOUNTS':
+			return {
+				...state,
+				accounts: state.accounts
+					.map(a => ({
+						...a,
+						sortKey: action.order.find(x => x.id === a.id)?.sortKey ?? 0,
+					}))
+					.sort((a, z) => a.sortKey - z.sortKey),
 			};
 
 		default:

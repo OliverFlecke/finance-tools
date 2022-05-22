@@ -17,6 +17,8 @@ const accounts: AccountResponse[] = [
 		id: '519486d6-41c1-4368-b6ef-678a513f6d77',
 		name: 'Cash 1',
 		type: 'Cash',
+		currency: 'USD',
+		sortKey: 0,
 	},
 	{
 		entries: [
@@ -34,6 +36,8 @@ const accounts: AccountResponse[] = [
 		id: 'b1bb265c-1f43-4c55-be89-d45d5980f6c9',
 		name: 'Cash 2',
 		type: 'Cash',
+		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -51,6 +55,8 @@ const accounts: AccountResponse[] = [
 		id: '409d4daf-1e82-41e6-868f-10f7b07e4eea',
 		name: 'Cash 3',
 		type: 'Cash',
+		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -68,6 +74,8 @@ const accounts: AccountResponse[] = [
 		id: '35814c7b-c6c0-4d42-9999-c6a3bb5fabe5',
 		name: 'Invest 1',
 		type: 'Investment',
+		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -85,6 +93,8 @@ const accounts: AccountResponse[] = [
 		id: '89cc16a3-1940-4fb3-bb78-759ede40006a',
 		name: 'Invest 2',
 		type: 'Investment',
+		currency: 'USD',
+		sortKey: 1,
 	},
 	{
 		entries: [
@@ -102,6 +112,8 @@ const accounts: AccountResponse[] = [
 		id: 'd05d7e7c-120c-4d15-8f79-14bcbf24c353',
 		name: 'Invest 3',
 		type: 'Investment',
+		currency: 'USD',
+		sortKey: 1,
 	},
 ];
 

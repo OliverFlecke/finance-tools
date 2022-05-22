@@ -1,8 +1,8 @@
 import React, { FC, useCallback, useContext, useRef } from 'react';
-import { Account, DateEntry } from './models/Account';
+import { formatCurrency, parseNumber } from 'utils/converters';
 import { AccountContext } from './AccountService';
-import { currencyFormatter, parseNumber } from 'utils/converters';
 import { updateEntry } from './api/accountApi';
+import { Account, DateEntry } from './models/Account';
 
 interface CellProps {
 	account: Account;
@@ -12,9 +12,9 @@ interface CellProps {
 
 const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const { dispatch } = useContext(AccountContext);
-	const entryRef = useRef<HTMLTableDataCellElement>(null);
+	const entryRef = useRef<HTMLTableCellElement>(null);
 	const onBlur = useCallback(
-		async (element: React.FormEvent<HTMLTableDataCellElement>) => {
+		async (element: React.FormEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
 			if (amount !== NaN) {
 				await updateEntry({
@@ -28,7 +28,7 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 		[account.id, account.name, date, dispatch]
 	);
 
-	const value = currencyFormatter.format(entry[account.name] ?? 0);
+	const value = formatCurrency(entry[account.name], account.currency);
 
 	return (
 		<td

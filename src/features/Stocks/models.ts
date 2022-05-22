@@ -1,6 +1,6 @@
 import { convertToCurrency } from 'utils/converters';
 import { sum } from 'utils/math';
-import { CurrencyRates } from '../Currency/api';
+import { CurrencyRates } from 'features/Currency/api';
 import { QuoteResponse } from './API/yahoo';
 
 export type StockList = Stock[];
@@ -21,25 +21,25 @@ export interface StockLot {
 }
 
 export function stockTotalShares(stock: Stock): number {
-	return sum(...stock.lots.map((x) => x.shares));
+	return sum(...stock.lots.map(x => x.shares));
 }
 export function stockAvgPrice(stock: Stock): number {
 	const totalShares = stockTotalShares(stock);
-	return sum(...stock.lots.map((x) => x.shares * x.buyPrice)) / totalShares;
+	return sum(...stock.lots.map(x => x.shares * x.buyPrice)) / totalShares;
 }
 
 export function stockGain(
 	stock: Stock,
-	preferredCurrency?: string,
-	currencyRates?: CurrencyRates
+	currencyRates: CurrencyRates,
+	preferredCurrency?: string
 ): number {
 	const totalShares = stockTotalShares(stock);
 	const avgPrice = stockAvgPrice(stock);
 
 	return convertToCurrency(
 		totalShares * stock.regularMarketPrice - totalShares * avgPrice,
+		currencyRates?.usd,
 		stock.currency,
-		preferredCurrency,
-		currencyRates?.usd
+		preferredCurrency
 	);
 }

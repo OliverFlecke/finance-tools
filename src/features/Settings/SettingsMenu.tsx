@@ -1,7 +1,8 @@
 import { Button, Modal } from '@oliverflecke/components-react';
 import { getCurrencies } from 'features/Currency/api';
-import SettingsIcon from 'icons/SettingsIcon';
-import React, { FC, useCallback, useContext, useEffect, useId, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
+import { IoSettingsOutline } from 'react-icons/io5';
+import SelectCurrency from '../../components/SelectCurrency';
 import SettingsContext from './context';
 
 const SettingsMenu: FC = () => {
@@ -16,8 +17,8 @@ const SettingsMenu: FC = () => {
 
 	return (
 		<div className="z-50">
-			<button className="flex h-full w-6 justify-center" onClick={() => setIsOpen((x) => !x)}>
-				<SettingsIcon />
+			<button className="flex h-full justify-center" onClick={() => setIsOpen((x) => !x)}>
+				<IoSettingsOutline size={24} />
 			</button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
 				<div className="space-y-4 rounded bg-indigo-500 p-4 dark:bg-indigo-900">
@@ -38,41 +39,21 @@ const SettingsMenu: FC = () => {
 export default SettingsMenu;
 
 const DisplayCurrencySetting: FC = () => {
-	const id = useId();
 	const {
-		values: { preferredDisplayCurrency, currencyRates },
+		values: { preferredDisplayCurrency },
 		dispatch,
 	} = useContext(SettingsContext);
 
 	const onChange = useCallback(
-		(x: React.ChangeEvent<HTMLSelectElement>) => {
-			const currency = x.currentTarget.value;
-			if (!currency) return;
-
-			dispatch({ type: 'SET DISPLAY CURRENCY', currency });
-		},
+		(currency: string) => dispatch({ type: 'SET DISPLAY CURRENCY', currency }),
 		[dispatch]
 	);
 
-	if (!currencyRates) return null;
-
 	return (
-		<>
-			<label htmlFor={id}>Preferred display currency</label>
-			<select
-				id={id}
-				onChange={onChange}
-				defaultValue={preferredDisplayCurrency}
-				className="rounded dark:bg-gray-700"
-			>
-				{Object.keys(currencyRates.usd)
-					.map((x) => x.toUpperCase())
-					.map((key) => (
-						<option key={key} value={key}>
-							{key}
-						</option>
-					))}
-			</select>
-		</>
+		<SelectCurrency
+			label="Preferred display currency"
+			defaultCurrency={preferredDisplayCurrency}
+			onChange={onChange}
+		/>
 	);
 };
