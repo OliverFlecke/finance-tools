@@ -1,15 +1,13 @@
-import { DarkModeToggle, useDarkModeWithClass } from '@oliverflecke/components-react';
+import ClientOnly from 'components/ClientOnly';
+import SettingsMenu from 'features/Settings/SettingsMenu';
 import React, { useEffect, useState } from 'react';
 import { User } from 'utils/githubAuth';
-import ClientOnly from 'components/ClientOnly';
 import { baseUri } from './apiBase';
 import LoginState from './login/LoginState';
 import Navigation from './Navigation';
-import SettingsMenu from 'features/Settings/SettingsMenu';
 import { getMyUser } from './user/userApi';
 
 const Header: React.FC = () => {
-	const { isDarkMode, setDarkMode } = useDarkModeWithClass();
 	const [user, setUser] = useState<User | null>(null);
 
 	const returnUrl =
@@ -18,7 +16,7 @@ const Header: React.FC = () => {
 			: 'https://finance.oliverflecke.me';
 
 	useEffect(() => {
-		getMyUser().then((user) => {
+		getMyUser().then(user => {
 			if (user) setUser(user);
 		});
 	}, []);
@@ -30,7 +28,6 @@ const Header: React.FC = () => {
 				<div className="flex flex-row items-center justify-center space-x-4">
 					<LoginState user={user} authorizeUrl={`${baseUri}/signin?returnUrl=${returnUrl}`} />
 					<ClientOnly>
-						<DarkModeToggle darkMode={isDarkMode} onToggle={() => setDarkMode(!isDarkMode)} />
 						<SettingsMenu />
 					</ClientOnly>
 				</div>
