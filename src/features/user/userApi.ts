@@ -5,6 +5,6 @@ export function getMyUser(): Promise<User> {
 	return fetch(`${baseUri}/${apiVersion}/user/me`, {
 		credentials: 'include',
 	})
-		.then((res) => res.json())
-		.catch((err) => console.log(err));
+		.then(res => res.json())
+		.catch(err => console.log(err));
 }

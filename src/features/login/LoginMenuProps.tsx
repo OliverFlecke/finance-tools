@@ -3,22 +3,22 @@ import { IoLogOutOutline } from 'react-icons/io5';
 
 interface LoginMenuProps {
 	isOpen: boolean;
-	logout?: () => void;
+	logoutUrl: string;
 }
 
-const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen, logout }) => (
+const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen, logoutUrl }) => (
 	<div
 		className={`${
 			isOpen ? '' : 'hidden'
 		} absolute top-full right-0 z-10 rounded bg-gray-100 py-4 shadow outline group-hover:block dark:bg-gray-700`}
 	>
-		<button
-			onClick={logout}
+		<a
+			href={logoutUrl}
 			className="btn flex items-center space-x-2 hover:text-gray-900 hover:underline dark:hover:text-gray-400"
 		>
 			<IoLogOutOutline className="inline" />
 			<span className="align-middle">Logout</span>
-		</button>
+		</a>
 	</div>
 );
 

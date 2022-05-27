@@ -8,24 +8,24 @@ import UserAvatar from './UserAvatarProps';
 interface LoginStateProps {
 	user: User | null;
 	authorizeUrl: string;
-	logout?: () => void;
+	logoutUrl: string;
 }
 
-const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }) =>
+const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logoutUrl }) =>
 	user === null ? (
 		<LoginButton authorizeUrl={authorizeUrl} />
 	) : (
-		<LoginDropDownMenu user={user} logout={logout} />
+		<LoginDropDownMenu user={user} logoutUrl={logoutUrl} />
 	);
 
 export default LoginState;
 
 interface LoginDropDownMenuProps {
 	user: User;
-	logout?: () => void;
+	logoutUrl: string;
 }
 
-const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logout }) => {
+const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logoutUrl }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const ref = useRef<HTMLDivElement>(null);
@@ -33,6 +33,8 @@ const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logout }) =
 		ref,
 		useCallback(() => setIsOpen(false), [])
 	);
+
+	console.debug(logoutUrl);
 
 	return (
 		<div ref={ref} className="relative flex items-center space-x-4">
@@ -42,7 +44,7 @@ const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logout }) =
 					<UserAvatar user={user} />
 				</button>
 			</div>
-			<LoginMenu isOpen={isOpen} logout={logout} />
+			<LoginMenu isOpen={isOpen} logoutUrl={logoutUrl} />
 		</div>
 	);
 };
