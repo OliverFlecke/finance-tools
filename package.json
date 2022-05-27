@@ -18,7 +18,7 @@
 		"deploy": "yarn build && gh-pages -t true -d build"
 	},
 	"dependencies": {
-		"@oliverflecke/components-react": "^0.3.3",
+		"@oliverflecke/components-react": "^0.5.1",
 		"@visx/curve": "^2.1.0",
 		"@visx/group": "^2.1.0",
 		"@visx/legend": "^2.2.2",

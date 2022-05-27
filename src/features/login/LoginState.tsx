@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useOnOutsideMouseDown } from '@oliverflecke/components-react';
+import React, { useCallback, useRef, useState } from 'react';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { User } from 'utils/githubAuth';
 
@@ -8,18 +9,34 @@ interface LoginStateProps {
 	logout?: () => void;
 }
 
-const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }: LoginStateProps) => {
+const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }) =>
+	user === null ? (
+		<LoginButton authorizeUrl={authorizeUrl} />
+	) : (
+		<LoginMenu user={user} logout={logout} />
+	);
+
+export default LoginState;
+
+interface LoginMenuProps {
+	user: User;
+	logout?: () => void;
+}
+
+const LoginMenu: React.FC<LoginMenuProps> = ({ user, logout }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	if (user === null) {
-		return <LoginButton authorizeUrl={authorizeUrl} />;
-	}
+	const ref = useRef<HTMLDivElement>(null);
+	useOnOutsideMouseDown(
+		ref,
+		useCallback(() => setIsOpen(false), [])
+	);
 
 	return (
-		<div className="flex items-center space-x-4">
+		<div ref={ref} className="relative flex items-center space-x-4">
 			<span className="hidden sm:inline">{user.login}</span>
-			<div className="group" onMouseLeave={() => setIsOpen(false)}>
-				<button onClick={() => setIsOpen((x) => !x)}>
+			<div className="group">
+				<button onClick={() => setIsOpen(x => !x)}>
 					<UserAvatar user={user} />
 				</button>
 			</div>
@@ -27,8 +44,6 @@ const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logout }: L
 		</div>
 	);
 };
-
-export default LoginState;
 
 interface LoginButtonProps {
 	authorizeUrl: string;
@@ -62,11 +77,11 @@ const Menu = ({ isOpen, logout }: MenuProps) => (
 	<div
 		className={`${
 			isOpen ? '' : 'hidden'
-		} group-hover:block absolute right-0 rounded py-4 shadow bg-gray-100 dark:bg-gray-700`}
+		} absolute top-full right-0 z-10 rounded bg-gray-100 py-4 shadow outline group-hover:block dark:bg-gray-700`}
 	>
 		<button
 			onClick={logout}
-			className="btn flex items-center space-x-2 hover:text-gray-900 dark:hover:text-gray-400 hover:underline"
+			className="btn flex items-center space-x-2 hover:text-gray-900 hover:underline dark:hover:text-gray-400"
 		>
 			<IoLogOutOutline className="inline" />
 			<span className="align-middle">Logout</span>

@@ -1520,10 +1520,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oliverflecke/components-react@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.3.3.tgz#9e2db8df7d8c983791ce06cbd10d3255537b244a"
-  integrity sha512-yWjowUikg3GQuLpCQsjrkL9dWOrCv3Y5jiobHIFTjinsiMNCrx7pdDOMXyBeTVOy1BJxkTHlxyLKO7zanUuYvA==
+"@oliverflecke/components-react@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@oliverflecke/components-react/-/components-react-0.5.1.tgz#5d03f0c67af64e649686977ad82000091820d22e"
+  integrity sha512-jE/Gl7f1/pc6l2sxJ/zc58nAlhdIK4GQ/z4PbBWktNOSg3IAHqVzQ8JiWkUerqialCfO+Vo+pqWC4Cb6VOw+AQ==
 
 "@react-dnd/asap@^5.0.1":
   version "5.0.2"
