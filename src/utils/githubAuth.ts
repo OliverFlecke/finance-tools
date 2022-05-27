@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { baseUri } from '../features/apiBase';
 dotenv.config();
 
 const authorizeUrl = 'https://github.com/login/oauth/authorize';
@@ -49,7 +50,7 @@ export function useGithubUser(): UseGithubUserHook {
 }
 
 export function getUser(state: string): Promise<User | null> {
-	return new Promise<User | null>((resolve) => {
+	return new Promise<User | null>(resolve => {
 		const user = getUserFromLocalStorage();
 		if (user) {
 			resolve(user);
@@ -77,7 +78,7 @@ export function getUser(state: string): Promise<User | null> {
 				Accept: 'application/json',
 			},
 		})
-			.then(async (res) => {
+			.then(async res => {
 				if (res.status === 200) {
 					const body: AuthorizeResponse = await res.json();
 					const user = await getUserFromGithub(body.access_token);
@@ -91,7 +92,7 @@ export function getUser(state: string): Promise<User | null> {
 				// Remove query parameters from navigation bar
 				window.history.replaceState({}, document.title, window.location.pathname);
 			})
-			.catch((err) => console.debug(err));
+			.catch(err => console.debug(err));
 	});
 }
 
@@ -100,7 +101,7 @@ function getUserFromGithub(token: string): Promise<User> {
 		headers: {
 			Authorization: `token ${token}`,
 		},
-	}).then(async (res) => (await res.json()) as User);
+	}).then(async res => (await res.json()) as User);
 }
 
 function getUserFromLocalStorage(): User | null {

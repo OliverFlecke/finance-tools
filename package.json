@@ -18,7 +18,7 @@
 		"deploy": "yarn build && gh-pages -t true -d build"
 	},
 	"dependencies": {
-		"@oliverflecke/components-react": "^0.3.3",
+		"@oliverflecke/components-react": "^0.5.1",
 		"@visx/curve": "^2.1.0",
 		"@visx/group": "^2.1.0",
 		"@visx/legend": "^2.2.2",
@@ -76,7 +76,7 @@
 		"gh-pages": "^3.2.3",
 		"husky": "^7.0.4",
 		"jest": "^28.0.3",
-		"next": "^12.1.5",
+		"next": "^12.1.6",
 		"postcss": "^8.4.5",
 		"postcss-cli": "^9.1.0",
 		"postcss-import": "^14.0.1",
