@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Button, Input, Select, SelectOption } from '@oliverflecke/components-react';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import NumberFormat from 'react-number-format';
 import { InterestAccrual } from 'services/formulas';
 import { parseNumber } from 'utils/converters';
+import { allPropertiesAreDefined } from 'utils/general';
 import CalculationSummary from './CalculationSummary';
-import NumberFormat from 'react-number-format';
 
 interface CompoundInterestProps {
 	name?: string;
@@ -18,17 +20,32 @@ export type FormData = {
 	monthlyDeposit: number;
 };
 
-const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) => {
+const CompoundInterest: FC<CompoundInterestProps> = () => {
 	const [data, setData] = useState<FormData | null>(null);
+	const defaultValues = useDefaultValues();
+
+	useEffect(() => {
+		if (allPropertiesAreDefined(defaultValues)) {
+			setData(defaultValues);
+		}
+	}, [defaultValues]);
+
 	const {
 		register,
+		setValue,
 		handleSubmit,
 		formState: { errors },
-		setValue,
-	} = useForm<FormData>({});
-	const onSubmit = handleSubmit(d => {
-		console.debug(d);
-		setData(d);
+	} = useForm<FormData>({
+		defaultValues,
+	});
+	const onSubmit = handleSubmit(data => {
+		const url = new URL(window.location.href);
+		Object.keys(data).forEach(key =>
+			url.searchParams.set(key, data[key as keyof FormData].toString())
+		);
+		window.history.replaceState(null, '', url.toString());
+
+		setData(data);
 	});
 
 	return (
@@ -48,9 +65,13 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 								inputMode="numeric"
 							/>
 						)}
+						defaultValue={defaultValues.existingAmount}
 						thousandSeparator={true}
 						onValueChange={x => setValue('existingAmount', x.floatValue ?? 0)}
-						{...register('existingAmount', { required: 'Please provide your existing amount' })}
+						{...register('existingAmount', {
+							required: 'Please provide your existing amount',
+							valueAsNumber: true,
+						})}
 					/>
 					<Input
 						label="Expected yearly growth"
@@ -89,10 +110,12 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 								errorMessage={errors.monthlyDeposit?.message}
 							/>
 						)}
+						defaultValue={defaultValues.monthlyDeposit}
 						thousandSeparator={true}
 						onValueChange={x => setValue('monthlyDeposit', x.floatValue ?? 0)}
 						{...register('monthlyDeposit', {
 							required: 'Please provide how much you will deposit each month',
+							valueAsNumber: true,
 						})}
 					/>
 				</fieldset>
@@ -119,3 +142,24 @@ export const formatter = Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'DKK',
 });
+
+function useDefaultValues(): FormData {
+	return useMemo<FormData>(() => {
+		if (typeof window === 'undefined') return {} as FormData;
+
+		const params = new URL(window.location.href).searchParams;
+
+		function getNumber(name: string): number {
+			// We allow return of undefined here even though the type does not match. It us only used to populate the default value of the form.
+			return params.has(name) ? Number.parseFloat(params.get(name)!) : undefined!;
+		}
+
+		return {
+			existingAmount: getNumber('existingAmount'),
+			interestRate: getNumber('interestRate'),
+			investmentPeriod: getNumber('investmentPeriod'),
+			interestAccural: (params.get('interestAccural') as InterestAccrual) ?? 'Yearly',
+			monthlyDeposit: getNumber('monthlyDeposit'),
+		};
+	}, []);
+}
