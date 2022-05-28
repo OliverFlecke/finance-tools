@@ -43,6 +43,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
+						className="dark:placeholder-gray-600"
 						errorMessage={errors.interestRate?.message}
 						{...register('interestRate', {
 							required: 'Please provide a valid value',
@@ -51,6 +52,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 					<Input
 						label="Investment period"
 						placeholder="10"
+						className="dark:placeholder-gray-600"
 						errorMessage={errors.investmentPeriod?.message}
 						{...register('investmentPeriod', {
 							required: 'Please provide a number of years you are investing',
@@ -69,6 +71,7 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						label="Monthly deposit"
 						placeholder="10,000"
 						inputMode="numeric"
+						className="dark:placeholder-gray-600"
 						errorMessage={errors.monthlyDeposit?.message}
 						{...register('monthlyDeposit', {
 							required: 'Please provide how much you will deposit each month',
