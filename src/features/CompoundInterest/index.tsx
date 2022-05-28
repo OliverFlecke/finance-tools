@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Button, Input, Select, SelectOption } from '@oliverflecke/components-react';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 import { InterestAccrual } from 'services/formulas';
@@ -47,6 +47,12 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 
 		setData(data);
 	});
+
+	const resetForm = useCallback(() => {
+		const url = new URL(window.location.href);
+		url.search = '';
+		window.location.href = url.toString();
+	}, []);
 
 	return (
 		<div className="pb-4 dark:bg-gray-800">
@@ -119,8 +125,11 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 						})}
 					/>
 				</fieldset>
-				<div className="flex w-full justify-center pt-4">
+				<div className="flex w-full justify-center space-x-4 pt-4">
 					<Button type="submit">Calculate</Button>
+					<Button type="reset" buttonType="Secondary" onClick={resetForm}>
+						Reset
+					</Button>
 				</div>
 			</form>
 			{data && (
