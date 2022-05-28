@@ -4,7 +4,7 @@ import CompoundInterest from 'features/CompoundInterest';
 
 const CompoundInterestCalculatorPage: React.FC = () => (
 	<>
-		<SEO title="Compound Interest calculator" />
+		<SEO title="Interest calculator" />
 		<CompoundInterest />
 	</>
 );

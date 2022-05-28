@@ -35,7 +35,7 @@
 		"react-dnd": "^16.0.1",
 		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "^18.1.0",
-		"react-hook-form": "^7.3.6",
+		"react-hook-form": "^7.31.3",
 		"react-icons": "^4.2.0",
 		"react-number-format": "^4.5.5",
 		"react-spring": "^9.1.2",
