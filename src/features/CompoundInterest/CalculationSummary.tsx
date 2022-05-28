@@ -37,7 +37,7 @@ const CalculationSummary: React.FC<FormData> = props => {
 					/>
 				</div>
 			</div>
-			<div className="-mx-4 overflow-x-scroll lg:m-0 lg:w-full lg:overflow-x-auto">
+			<div className="overflow-x-scroll lg:m-0 lg:w-full lg:overflow-x-auto">
 				<table className="w-full">
 					<TableHeader isWithDeposits={isWithDeposits} />
 					<tbody className="text-right font-mono">
@@ -48,6 +48,7 @@ const CalculationSummary: React.FC<FormData> = props => {
 								year={year}
 								rate={rate}
 								isWithDeposits={isWithDeposits}
+								isLastRow={year === props.investmentPeriod}
 							/>
 						))}
 					</tbody>
@@ -59,15 +60,24 @@ const CalculationSummary: React.FC<FormData> = props => {
 
 export default CalculationSummary;
 
+const typeColors = {
+	deposit: 'text-teal-800 dark:text-teal-400',
+	interest: 'text-green-800 dark:text-green-400',
+	totalDeposit: 'text-orange-800 dark:text-orange-400',
+	totalInterest: 'text-purple-800 dark:text-purple-400',
+	balance: 'text-red-800 dark:text-red-400',
+};
+
 const TableHeader: React.FC<{ isWithDeposits: boolean }> = ({ isWithDeposits }) => (
 	<thead>
 		<tr className="text-right">
 			<th className="px-4 text-center">Year</th>
-			{isWithDeposits && <th className="px-4">Deposit</th>}
-			<th className="px-4 text-green-800 dark:text-green-400">Interest</th>
-			{isWithDeposits && <th className="px-4">Total deposits</th>}
-			<th className="px-4 text-purple-800 dark:text-purple-400">Total interest</th>
-			<th className="px-4 text-red-800 dark:text-red-400">Balance</th>
+			{isWithDeposits && <th className={`px-4 ${typeColors.deposit}`}>Deposit</th>}
+			<th className={`px-4 ${typeColors.interest}`}>Interest</th>
+			{isWithDeposits && <th className={`px-4 ${typeColors.totalDeposit}`}>Total deposits</th>}
+			<th className={`px-4 ${typeColors.totalInterest}`}>Total interest</th>
+			<th className={`px-4 ${typeColors.balance}`}>Balance</th>
+			<th className="px-4">Date</th>
 		</tr>
 	</thead>
 );
@@ -76,10 +86,11 @@ interface TableRowProps extends FormData {
 	year: number;
 	rate: number;
 	isWithDeposits: boolean;
+	isLastRow: boolean;
 }
 
 const TableRow: React.FC<TableRowProps> = props => {
-	const { rate, year, isWithDeposits } = props;
+	const { rate, year, isWithDeposits, isLastRow } = props;
 	const deposit = year === 0 ? props.existingAmount : 12 * props.monthlyDeposit;
 	const totalDeposit = year * 12 * props.monthlyDeposit + props.existingAmount;
 	const totalBalance = FV(props.existingAmount, props.monthlyDeposit, rate, year);
@@ -94,11 +105,31 @@ const TableRow: React.FC<TableRowProps> = props => {
 	return (
 		<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
 			<td className="px-4 text-center">{year}</td>
-			{isWithDeposits && <td className="px-4">{formatter.format(deposit)}</td>}
-			<td className="px-4">{formatter.format(interest)}</td>
-			{isWithDeposits && <td className="px-4">{formatter.format(totalDeposit)}</td>}
-			<td className="px-4">{formatter.format(totalInterest)}</td>
-			<td className="px-4">{formatter.format(totalBalance)}</td>
+			{isWithDeposits && (
+				<td className={`px-4 ${isLastRow ? typeColors.deposit : ''}`.trim()}>
+					{formatter.format(deposit)}
+				</td>
+			)}
+			<td className={`px-4 ${isLastRow ? typeColors.interest : ''}`.trim()}>
+				{formatter.format(interest)}
+			</td>
+			{isWithDeposits && (
+				<td className={`px-4 ${isLastRow ? typeColors.totalDeposit : ''}`.trim()}>
+					{formatter.format(totalDeposit)}
+				</td>
+			)}
+			<td className={`px-4 ${isLastRow ? typeColors.totalInterest : ''}`.trim()}>
+				{formatter.format(totalInterest)}
+			</td>
+			<td className={`px-4 ${isLastRow ? typeColors.balance : ''}`.trim()}>
+				{formatter.format(totalBalance)}
+			</td>
+			<td className="px-4">{addYears(new Date(), year).toLocaleDateString()}</td>
 		</tr>
 	);
 };
+
+function addYears(date: Date, years: number): Date {
+	date.setFullYear(date.getFullYear() + years);
+	return date;
+}
