@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { InterestAccrual } from 'services/formulas';
 import { parseNumber } from 'utils/converters';
 import CalculationSummary from './CalculationSummary';
+import NumberFormat from 'react-number-format';
 
 interface CompoundInterestProps {
 	name?: string;
@@ -23,21 +24,32 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 		register,
 		handleSubmit,
 		formState: { errors },
+		setValue,
 	} = useForm<FormData>({});
-	const onSubmit = handleSubmit(d => setData(d));
+	const onSubmit = handleSubmit(d => {
+		console.debug(d);
+		setData(d);
+	});
 
 	return (
 		<div className="pb-4 dark:bg-gray-800">
 			<h2 className="px-4 py-4 text-xl lg:text-left">Compound interest calculator</h2>
 			<form onSubmit={onSubmit} className="flex-col-center w-full overflow-x-hidden px-4">
 				<fieldset className="flex flex-col items-start space-y-6 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
-					<Input
-						// customInput={Input}
-						// thousandSeparator={true}
-						label="Existing amount"
-						placeholder="20,000"
-						inputMode="numeric"
-						errorMessage={errors.existingAmount?.message}
+					<NumberFormat
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						customInput={(props: any) => (
+							<Input
+								{...props}
+								label="Existing amount"
+								errorMessage={errors.existingAmount?.message}
+								className="dark:placeholder-gray-600"
+								placeholder="20,000"
+								inputMode="numeric"
+							/>
+						)}
+						thousandSeparator={true}
+						onValueChange={x => setValue('existingAmount', x.floatValue ?? 0)}
 						{...register('existingAmount', { required: 'Please provide your existing amount' })}
 					/>
 					<Input
@@ -65,14 +77,20 @@ const CompoundInterest: FC<CompoundInterestProps> = ({}: CompoundInterestProps) 
 						<SelectOption value="Yearly">Yearly</SelectOption>
 						<SelectOption value="Monthly">Monthly</SelectOption>
 					</Select>
-					<Input
-						// customInput={Input}
-						// thousandSeparator={true}
-						label="Monthly deposit"
-						placeholder="10,000"
-						inputMode="numeric"
-						className="dark:placeholder-gray-600"
-						errorMessage={errors.monthlyDeposit?.message}
+					<NumberFormat
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						customInput={(props: any) => (
+							<Input
+								{...props}
+								label="Monthly deposit"
+								placeholder="10,000"
+								inputMode="numeric"
+								className="dark:placeholder-gray-600"
+								errorMessage={errors.monthlyDeposit?.message}
+							/>
+						)}
+						thousandSeparator={true}
+						onValueChange={x => setValue('monthlyDeposit', x.floatValue ?? 0)}
 						{...register('monthlyDeposit', {
 							required: 'Please provide how much you will deposit each month',
 						})}
