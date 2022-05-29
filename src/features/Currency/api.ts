@@ -1,7 +1,7 @@
 export type CurrencySymbol = string;
 
 export function getCurrencies(currency = 'usd'): Promise<CurrencyRates> {
-	return fetch(getUrl(currency)).then(async (res) => await res.json());
+	return fetch(getUrl(currency)).then(async res => await res.json());
 }
 
 export interface CurrencyRates {
