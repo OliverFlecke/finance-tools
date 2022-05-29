@@ -2,6 +2,7 @@ import { Button, ButtonContainer, Modal } from '@oliverflecke/components-react';
 import SortableDragAndDropList from 'components/SortableDragAndDropList';
 import Spinner from 'components/Spinner';
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
+import { IoShuffleOutline } from 'react-icons/io5';
 import { AccountContext } from './AccountService';
 import { updateAccounts } from './api/accountApi';
 import { Account } from './models/Account';
@@ -37,7 +38,10 @@ const OrderAccountsModal: FC = () => {
 
 	return (
 		<>
-			<Button onClick={() => setIsOpen(true)}>Order accounts</Button>
+			<Button onClick={() => setIsOpen(true)} className="btn btn-primary flex items-center gap-x-2">
+				<IoShuffleOutline className="inline" />
+				<span className="align-middle">Order accounts</span>
+			</Button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
 				<div className="max-h-screen w-80 max-w-full overflow-y-scroll rounded bg-slate-200 p-4 dark:bg-slate-700">
 					<h2 className="modal-header">Reorder accounts</h2>
