@@ -1,6 +1,7 @@
 import SettingsContext from 'features/Settings/context';
 import React, { useContext } from 'react';
 import { convertToCurrency, useConverter } from 'utils/converters';
+import { CurrencyRates } from '../Currency/api';
 import taxCalculator, { constants, TaxSystem } from './taxRates';
 
 const TaxCalculator: React.FC = () => {
@@ -23,11 +24,57 @@ const TaxCalculator: React.FC = () => {
 		'Salary (DKK)',
 	];
 
-	function calculateAndPrintTaxResults(amount: number, system: TaxSystem) {
+	const countries = Object.keys(taxCalculator).sort();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const salaries = countries.reduce((obj: any, key) => {
+		obj[key] = convertToCurrency(salary, rates.usd, defaultCurrency, taxCalculator[key].currency);
+		return obj;
+	}, {});
+
+	const calculator = getCalculator(defaultCurrency, rates);
+
+	return (
+		<div className="overflow-x-auto">
+			<table className="w-full">
+				<TableHeader columns={columns} />
+				<tbody>
+					{countries.map(country => {
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						const result: any = calculator(salaries[country], taxCalculator[country]);
+
+						return (
+							<tr key={country} className="odd:bg-gray-100 dark:odd:bg-gray-800">
+								{columns.map(c => (
+									<td key={c} className="whitespace-nowrap px-4 text-right first:text-left">
+										{result[c]}
+									</td>
+								))}
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		</div>
+	);
+};
+
+export default TaxCalculator;
+
+const TableHeader: React.FC<{ columns: string[] }> = ({ columns }) => (
+	<thead>
+		{columns.map(c => (
+			<th key={c} className="whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500">
+				{c}
+			</th>
+		))}
+	</thead>
+);
+
+function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
+	return function (amount: number, system: TaxSystem): CalculationResult {
 		let result = system.calculate(amount);
 
 		if (defaultCurrency !== system.currency) {
-			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const converter = useConverter(system.currency, defaultCurrency, rates.usd);
 
 			result = {
@@ -84,49 +131,19 @@ const TaxCalculator: React.FC = () => {
 				constants.output_currency
 			),
 		};
-	}
+	};
+}
 
-	const countries = Object.keys(taxCalculator).sort();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const salaries = countries.reduce((obj: any, key) => {
-		obj[key] = convertToCurrency(salary, rates.usd, defaultCurrency, taxCalculator[key].currency);
-		return obj;
-	}, {});
-
-	return (
-		<div className="overflow-x-auto">
-			<table className="w-full">
-				<TableHeader columns={columns} />
-				<tbody>
-					{countries.map(country => {
-						const result: { [key: string]: string } = calculateAndPrintTaxResults(
-							salaries[country],
-							taxCalculator[country]
-						);
-						return (
-							<tr key={country}>
-								{columns.map(c => (
-									<td key={c} className="text-right">
-										{result[c]}
-									</td>
-								))}
-							</tr>
-						);
-					})}
-				</tbody>
-			</table>
-		</div>
-	);
-};
-
-export default TaxCalculator;
-
-const TableHeader: React.FC<{ columns: string[] }> = ({ columns }) => (
-	<thead>
-		{columns.map(c => (
-			<th key={c} className="whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-400">
-				{c}
-			</th>
-		))}
-	</thead>
-);
+interface CalculationResult {
+	Country: string;
+	'Base salary': string;
+	Taxes: string;
+	'After tax': string;
+	'Hourly rate': string;
+	'Tax percent': string;
+	'Local gross salary': string;
+	'Local salary': string;
+	'Monthly cash': string;
+	'Gross salary (DKK)': string;
+	'Salary (DKK)': string;
+}
