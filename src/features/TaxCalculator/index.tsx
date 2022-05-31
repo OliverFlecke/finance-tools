@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useReducer } from 'react';
+import { getDefaultState, TaxCalculatorContext, taxCalculatorReducer } from './state';
+import TaxCalculatorInput from './TaxCalculatorInput';
 import TaxTable from './TaxTable';
 
 const TaxCalculator: React.FC = () => {
-	const salary = 500_000; // TODO: Needs input
+	const [state, dispatch] = useReducer(taxCalculatorReducer, getDefaultState());
 
 	return (
-		<>
-			<TaxTable salary={salary} />
-		</>
+		<div className="h-full min-h-screen bg-gray-800">
+			<TaxCalculatorContext.Provider value={{ state, dispatch }}>
+				<TaxCalculatorInput />
+				<TaxTable />
+			</TaxCalculatorContext.Provider>
+		</div>
 	);
 };
 

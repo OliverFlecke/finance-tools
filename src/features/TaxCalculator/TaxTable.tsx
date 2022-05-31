@@ -2,13 +2,10 @@ import SettingsContext from 'features/Settings/context';
 import React, { useCallback, useContext } from 'react';
 import { convertToCurrency, useConverter } from 'utils/converters';
 import { CurrencyRates } from '../Currency/api';
+import { TaxCalculatorContext } from './state';
 import taxCalculator, { constants, TaxSystem } from './taxRates';
 
-interface TableProps {
-	salary: number;
-}
-
-const TaxTable: React.FC<TableProps> = ({ salary }) => {
+const TaxTable: React.FC = () => {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
@@ -23,12 +20,7 @@ const TaxTable: React.FC<TableProps> = ({ salary }) => {
 		<div className="overflow-x-auto">
 			<table className="w-full">
 				<TableHeader columns={columns} />
-				<TableBody
-					columns={columns}
-					countries={countries}
-					calculator={calculator}
-					salary={salary}
-				/>
+				<TableBody columns={columns} countries={countries} calculator={calculator} />
 			</table>
 		</div>
 	);
@@ -37,16 +29,20 @@ const TaxTable: React.FC<TableProps> = ({ salary }) => {
 export default TaxTable;
 
 interface TableBodyProps {
-	salary: number;
 	countries: string[];
 	columns: string[];
 	calculator: (amount: number, system: TaxSystem) => CalculationResult;
 }
 
-const TableBody: React.FC<TableBodyProps> = ({ salary, countries, columns, calculator }) => {
+const TableBody: React.FC<TableBodyProps> = ({ countries, columns, calculator }) => {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
+	const {
+		state: { salary },
+	} = useContext(TaxCalculatorContext);
+
+	if (!salary) return null;
 
 	return (
 		<tbody>
