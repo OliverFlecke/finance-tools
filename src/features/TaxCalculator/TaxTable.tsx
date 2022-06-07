@@ -7,20 +7,24 @@ import taxCalculator, { constants, TaxSystem } from './taxRates';
 
 const TaxTable: React.FC = () => {
 	const {
-		values: { currencyRates, preferredDisplayCurrency },
+		values: { currencyRates },
 	} = useContext(SettingsContext);
+	const {
+		state: { currency },
+	} = useContext(TaxCalculatorContext);
+
 	const countries = Object.keys(taxCalculator).sort();
 
 	const calculator = useCallback(
-		(a: number, s: TaxSystem) => getCalculator(preferredDisplayCurrency, currencyRates)(a, s),
-		[preferredDisplayCurrency, currencyRates]
+		(a: number, s: TaxSystem) => getCalculator(currency, currencyRates)(a, s),
+		[currency, currencyRates]
 	);
 
 	return (
 		<div className="overflow-x-auto">
 			<table className="w-full">
-				<TableHeader columns={columns} />
-				<TableBody columns={columns} countries={countries} calculator={calculator} />
+				<TableHeader />
+				<TableBody countries={countries} calculator={calculator} />
 			</table>
 		</div>
 	);
@@ -30,16 +34,15 @@ export default TaxTable;
 
 interface TableBodyProps {
 	countries: string[];
-	columns: string[];
 	calculator: (amount: number, system: TaxSystem) => CalculationResult;
 }
 
-const TableBody: React.FC<TableBodyProps> = ({ countries, columns, calculator }) => {
+const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 	const {
-		values: { currencyRates, preferredDisplayCurrency },
+		values: { currencyRates },
 	} = useContext(SettingsContext);
 	const {
-		state: { salary },
+		state: { salary, currency },
 	} = useContext(TaxCalculatorContext);
 
 	if (!salary) return null;
@@ -50,19 +53,23 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, columns, calculator })
 				const localSalary = convertToCurrency(
 					salary,
 					currencyRates.usd,
-					preferredDisplayCurrency,
+					currency,
 					taxCalculator[country].currency
 				);
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const result: any = calculator(localSalary, taxCalculator[country]);
+				const result = calculator(localSalary, taxCalculator[country]);
 
 				return (
-					<tr key={country} className="odd:bg-gray-100 dark:odd:bg-gray-800">
-						{columns.map(c => (
-							<td key={c} className="whitespace-nowrap px-4 text-right first:text-left">
-								{result[c]}
-							</td>
-						))}
+					<tr key={country} className="tax-row">
+						<td>{result.Country}</td>
+						<td>{result.Taxes}</td>
+						<td>{result['After tax']}</td>
+						<td>{result['Tax percent']}</td>
+						<td>{result['Local gross salary']}</td>
+						<td>{result['Local salary']}</td>
+						<td>{result['Monthly cash']}</td>
+						<td>{result['Gross salary (DKK)']}</td>
+						<td>{result['Salary (DKK)']}</td>
 					</tr>
 				);
 			})}
@@ -70,29 +77,25 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, columns, calculator })
 	);
 };
 
-const TableHeader: React.FC<{ columns: string[] }> = ({ columns }) => (
-	<thead>
-		{columns.map(c => (
-			<th key={c} className="whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500">
-				{c}
-			</th>
-		))}
-	</thead>
-);
+const TableHeader: React.FC = () => {
+	const {
+		values: { preferredDisplayCurrency },
+	} = useContext(SettingsContext);
 
-const columns = [
-	'Country',
-	// 'Base salary',
-	'Taxes',
-	'After tax',
-	// 'Hourly rate',
-	'Tax percent',
-	'Local gross salary',
-	'Local salary',
-	'Monthly cash',
-	'Gross salary (DKK)',
-	'Salary (DKK)',
-];
+	return (
+		<thead className="tax-header">
+			<th>Country</th>
+			<th>Taxes</th>
+			<th>Net salary</th>
+			<th>Tax percent</th>
+			<th>Local gross salary</th>
+			<th>Local net salary</th>
+			<th>Net salary (monthly)</th>
+			<th>Gross salary ({preferredDisplayCurrency})</th>
+			<th>Net salary ({preferredDisplayCurrency})</th>
+		</thead>
+	);
+};
 
 function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 	return function (amount: number, system: TaxSystem): CalculationResult {
@@ -136,7 +139,7 @@ function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 
 		return {
 			Country: system.country,
-			'Base salary': format(amount),
+			baseSalary: format(amount),
 			Taxes: format(result.taxes),
 			'After tax': format(result.after_tax),
 			'Hourly rate': format(salary_per_hour_after_tax),
@@ -160,7 +163,7 @@ function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 
 interface CalculationResult {
 	Country: string;
-	'Base salary': string;
+	baseSalary: string;
 	Taxes: string;
 	'After tax': string;
 	'Hourly rate': string;

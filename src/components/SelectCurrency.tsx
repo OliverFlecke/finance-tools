@@ -28,21 +28,23 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 
 	return (
 		<>
-			<label htmlFor={id}>{label}</label>
-			<select
-				id={id}
-				onChange={onSelection}
-				defaultValue={defaultCurrency}
-				className="rounded dark:bg-gray-700"
-			>
-				{Object.keys(currencyRates.usd)
-					.map(x => x.toUpperCase())
-					.map(key => (
-						<option key={key} value={key}>
-							{key}
-						</option>
-					))}
-			</select>
+			<label htmlFor={id} className="space-y-2">
+				<span className="input-label">{label}</span>
+				<select
+					id={id}
+					onChange={onSelection}
+					defaultValue={defaultCurrency}
+					className="block rounded px-4 py-2 shadow dark:bg-gray-700"
+				>
+					{Object.keys(currencyRates.usd)
+						.map(x => x.toUpperCase())
+						.map(key => (
+							<option key={key} value={key}>
+								{key}
+							</option>
+						))}
+				</select>
+			</label>
 		</>
 	);
 };
