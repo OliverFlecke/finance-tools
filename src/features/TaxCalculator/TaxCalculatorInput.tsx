@@ -5,9 +5,7 @@ import NumberFormat from 'react-number-format';
 import { TaxCalculatorContext } from './state';
 
 const TaxCalculatorInput: React.FC = () => {
-	const {
-		values: { preferredDisplayCurrency },
-	} = useContext(SettingsContext);
+	const { values } = useContext(SettingsContext);
 	const { state, dispatch } = useContext(TaxCalculatorContext);
 
 	const onCurrencyChanged = useCallback(
@@ -15,6 +13,7 @@ const TaxCalculatorInput: React.FC = () => {
 		[dispatch]
 	);
 
+	console.debug(values.preferredDisplayCurrency);
 	return (
 		<div className="flex space-x-4 p-4">
 			<label className="flex flex-col space-y-2">
@@ -31,7 +30,7 @@ const TaxCalculatorInput: React.FC = () => {
 			<SelectCurrency
 				label="Currency"
 				onChange={onCurrencyChanged}
-				defaultCurrency={preferredDisplayCurrency}
+				defaultCurrency={values.preferredDisplayCurrency}
 			/>
 		</div>
 	);

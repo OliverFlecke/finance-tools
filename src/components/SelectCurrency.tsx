@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useContext, useId } from 'react';
-import SettingsContext from 'features/Settings/context';
 import { CurrencySymbol } from 'features/Currency/api';
+import SettingsContext from 'features/Settings/context';
+import React, { FC, useCallback, useContext, useId, useState } from 'react';
 
 interface Props {
 	label: string;
@@ -11,14 +11,16 @@ interface Props {
 const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 	const id = useId();
 	const {
-		values: { currencyRates },
+		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
+	const [currency, setCurrency] = useState(defaultCurrency ?? preferredDisplayCurrency);
 
 	const onSelection = useCallback(
 		(x: React.ChangeEvent<HTMLSelectElement>) => {
 			const currency = x.currentTarget.value;
 			if (!currency) return;
 
+			setCurrency(currency);
 			onChange(currency);
 		},
 		[onChange]
@@ -33,13 +35,12 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 				<select
 					id={id}
 					onChange={onSelection}
-					defaultValue={defaultCurrency}
 					className="block rounded px-4 py-2 shadow dark:bg-gray-700"
 				>
 					{Object.keys(currencyRates.usd)
 						.map(x => x.toUpperCase())
 						.map(key => (
-							<option key={key} value={key}>
+							<option key={key} value={key} selected={key === currency}>
 								{key}
 							</option>
 						))}
