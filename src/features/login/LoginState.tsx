@@ -34,8 +34,6 @@ const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logoutUrl }
 		useCallback(() => setIsOpen(false), [])
 	);
 
-	console.debug(logoutUrl);
-
 	return (
 		<div ref={ref} className="relative flex items-center space-x-4">
 			<span className="hidden sm:inline">{user.login}</span>

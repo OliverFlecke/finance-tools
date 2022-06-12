@@ -13,7 +13,6 @@ const TaxCalculatorInput: React.FC = () => {
 		[dispatch]
 	);
 
-	console.debug(values.preferredDisplayCurrency);
 	return (
 		<div className="flex space-x-4 p-4">
 			<label className="flex flex-col space-y-2">
