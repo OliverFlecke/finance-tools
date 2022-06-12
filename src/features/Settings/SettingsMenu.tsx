@@ -39,7 +39,9 @@ export default SettingsMenu;
 
 const SettingsList: FC = () => (
 	<div className="grid grid-cols-2 gap-y-4 gap-x-12">
-		<DisplayCurrencySetting />
+		<div className="col-span-2">
+			<DisplayCurrencySetting />
+		</div>
 		<ThemeSetting />
 	</div>
 );

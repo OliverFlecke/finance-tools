@@ -10,7 +10,7 @@ const TaxTable: React.FC = () => {
 		values: { currencyRates },
 	} = useContext(SettingsContext);
 	const {
-		state: { currency },
+		state: { salary, currency },
 	} = useContext(TaxCalculatorContext);
 
 	const countries = Object.keys(taxCalculator).sort();
@@ -19,6 +19,8 @@ const TaxTable: React.FC = () => {
 		(a: number, s: TaxSystem) => getCalculator(currency, currencyRates)(a, s),
 		[currency, currencyRates]
 	);
+
+	if (!salary) return null;
 
 	return (
 		<div className="overflow-x-auto">
@@ -120,7 +122,7 @@ function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 			result.after_tax,
 			rates.usd,
 			defaultCurrency,
-			defaultCurrency
+			system.currency
 		);
 
 		return {
