@@ -1,6 +1,6 @@
 import SettingsContext from 'features/Settings/context';
 import React, { useCallback, useContext } from 'react';
-import { convertToCurrency, useConverter } from 'utils/converters';
+import { convertToCurrency, formatCurrency, useConverter } from 'utils/converters';
 import { CurrencyRates } from '../Currency/api';
 import { TaxCalculatorContext } from './state';
 import taxCalculator, { constants, TaxSystem } from './taxRates';
@@ -50,26 +50,26 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 	return (
 		<tbody>
 			{countries.map(country => {
-				const localSalary = convertToCurrency(
-					salary,
-					currencyRates.usd,
-					currency,
-					taxCalculator[country].currency
-				);
+				const localCurrency = taxCalculator[country].currency;
+				const localSalary = convertToCurrency(salary, currencyRates.usd, currency, localCurrency);
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				const result = calculator(localSalary, taxCalculator[country]);
 
 				return (
 					<tr key={country} className="tax-row">
-						<td>{result.Country}</td>
-						<td>{result.Taxes}</td>
-						<td>{result['After tax']}</td>
-						<td>{result['Tax percent']}</td>
-						<td>{result['Local gross salary']}</td>
-						<td>{result['Local salary']}</td>
-						<td>{result['Monthly cash']}</td>
-						<td>{result['Gross salary (DKK)']}</td>
-						<td>{result['Salary (DKK)']}</td>
+						<td>{result.country}</td>
+						<td>{formatCurrency(result.baseSalaryLocal, localCurrency)}</td>
+						<td>{formatCurrency(result.taxes, currency)}</td>
+						<td>{formatCurrency(result.afterTax, currency)}</td>
+						<td>
+							{result.taxPercent.toLocaleString(undefined, {
+								style: 'percent',
+							})}
+						</td>
+						<td>{formatCurrency(result.localSalaryGross, localCurrency)}</td>
+						<td>{formatCurrency(result.localSalary, localCurrency)}</td>
+						<td>{formatCurrency(result.monthlyCash, localCurrency)}</td>
+						<td>{formatCurrency(result.hourlyRate, localCurrency)}</td>
 					</tr>
 				);
 			})}
@@ -78,21 +78,17 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 };
 
 const TableHeader: React.FC = () => {
-	const {
-		values: { preferredDisplayCurrency },
-	} = useContext(SettingsContext);
-
 	return (
 		<thead className="tax-header">
 			<th>Country</th>
+			<th>Local base salary</th>
 			<th>Taxes</th>
 			<th>Net salary</th>
 			<th>Tax percent</th>
 			<th>Local gross salary</th>
 			<th>Local net salary</th>
 			<th>Net salary (monthly)</th>
-			<th>Gross salary ({preferredDisplayCurrency})</th>
-			<th>Net salary ({preferredDisplayCurrency})</th>
+			<th>Hourly net salary</th>
 		</thead>
 	);
 };
@@ -100,10 +96,9 @@ const TableHeader: React.FC = () => {
 function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 	return function (amount: number, system: TaxSystem): CalculationResult {
 		let result = system.calculate(amount);
+		const converter = useConverter(system.currency, defaultCurrency, rates.usd);
 
 		if (defaultCurrency !== system.currency) {
-			const converter = useConverter(system.currency, defaultCurrency, rates.usd);
-
 			result = {
 				pre_tax: converter(amount),
 				taxes: converter(result.taxes),
@@ -128,49 +123,30 @@ function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 			defaultCurrency
 		);
 
-		const format = (n: number, currency: string = defaultCurrency) => {
-			const formatter = new Intl.NumberFormat('en-US', {
-				style: 'currency',
-				currency,
-			});
-
-			return formatter.format(n);
-		};
-
 		return {
-			Country: system.country,
-			baseSalary: format(amount),
-			Taxes: format(result.taxes),
-			'After tax': format(result.after_tax),
-			'Hourly rate': format(salary_per_hour_after_tax),
-			'Tax percent': tax_percentage.toLocaleString(undefined, {
-				style: 'percent',
-			}),
-			'Local gross salary': format(local_salary_gross, system.currency),
-			'Local salary': format(local_salary, system.currency),
-			'Monthly cash': format(local_salary / 12, system.currency),
-			'Gross salary (DKK)': format(
-				convertToCurrency(amount, rates.usd, system.currency, defaultCurrency),
-				constants.output_currency
-			),
-			'Salary (DKK)': format(
-				convertToCurrency(result.after_tax, rates.usd, system.currency, defaultCurrency),
-				constants.output_currency
-			),
+			country: system.country,
+			baseSalary: amount,
+			baseSalaryLocal: convertToCurrency(amount, rates.usd, defaultCurrency, system.currency),
+			taxes: result.taxes,
+			afterTax: result.after_tax,
+			hourlyRate: salary_per_hour_after_tax,
+			taxPercent: tax_percentage,
+			localSalaryGross: local_salary_gross,
+			localSalary: local_salary,
+			monthlyCash: local_salary / 12,
 		};
 	};
 }
 
 interface CalculationResult {
-	Country: string;
-	baseSalary: string;
-	Taxes: string;
-	'After tax': string;
-	'Hourly rate': string;
-	'Tax percent': string;
-	'Local gross salary': string;
-	'Local salary': string;
-	'Monthly cash': string;
-	'Gross salary (DKK)': string;
-	'Salary (DKK)': string;
+	country: string;
+	baseSalary: number;
+	baseSalaryLocal: number;
+	taxes: number;
+	afterTax: number;
+	hourlyRate: number;
+	taxPercent: number;
+	localSalaryGross: number;
+	localSalary: number;
+	monthlyCash: number;
 }
