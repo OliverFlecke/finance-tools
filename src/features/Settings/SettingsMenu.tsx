@@ -18,7 +18,11 @@ const SettingsMenu: FC = () => {
 
 	return (
 		<div className="z-50">
-			<button className="flex h-full justify-center" onClick={() => setIsOpen(x => !x)}>
+			<button
+				className="flex h-full justify-center"
+				title="Settings"
+				onClick={() => setIsOpen(x => !x)}
+			>
 				<IoSettingsOutline size={24} />
 			</button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>

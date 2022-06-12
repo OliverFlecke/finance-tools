@@ -1,9 +1,9 @@
 import 'compiled.css';
 import Header from 'features/Header';
+import Settings from 'features/Settings';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
-import Settings from 'features/Settings';
 
 const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 	<>
@@ -18,12 +18,12 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="color-scheme" content="dark light" />
 		</Head>
-		<main className="h-full min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
-			<Settings>
-				<Header />
+		<Settings>
+			<Header />
+			<main className="h-full min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
 				<Component {...pageProps} />
-			</Settings>
-		</main>
+			</main>
+		</Settings>
 	</>
 );
 
