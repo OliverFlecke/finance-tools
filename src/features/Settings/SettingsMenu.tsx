@@ -18,11 +18,15 @@ const SettingsMenu: FC = () => {
 
 	return (
 		<div className="z-50">
-			<button className="flex h-full justify-center" onClick={() => setIsOpen(x => !x)}>
+			<button
+				className="flex h-full justify-center"
+				title="Settings"
+				onClick={() => setIsOpen(x => !x)}
+			>
 				<IoSettingsOutline size={24} />
 			</button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-				<div className="space-y-4 rounded bg-indigo-500 p-4 dark:bg-indigo-900">
+				<div className="space-y-4 rounded bg-indigo-100 p-4 text-black dark:bg-indigo-900 dark:text-white">
 					<h2 className="bold col-span-2 text-xl">Settings</h2>
 					<SettingsList />
 
@@ -39,7 +43,9 @@ export default SettingsMenu;
 
 const SettingsList: FC = () => (
 	<div className="grid grid-cols-2 gap-y-4 gap-x-12">
-		<DisplayCurrencySetting />
+		<div className="col-span-2">
+			<DisplayCurrencySetting />
+		</div>
 		<ThemeSetting />
 	</div>
 );

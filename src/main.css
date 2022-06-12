@@ -20,7 +20,7 @@ input[type='number'] {
 }
 
 .flex-col-center {
-	@apply flex flex-col items-center justify-center
+	@apply flex flex-col items-center justify-center;
 }
 
 @layer utilities {
@@ -33,5 +33,19 @@ input[type='number'] {
 
 	.modal-header {
 		@apply text-2xl;
+	}
+
+	tr.tax-row {
+		@apply odd:bg-gray-200 dark:odd:bg-gray-900;
+
+		td {
+			@apply whitespace-nowrap px-4 text-right first:text-left;
+		}
+	}
+
+	thead.tax-header {
+		th {
+			@apply whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500;
+		}
 	}
 }

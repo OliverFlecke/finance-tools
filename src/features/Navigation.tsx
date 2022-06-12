@@ -8,6 +8,7 @@ const links = [
 		text: 'Stocks',
 	},
 	{ path: '/interest', text: 'Interest' },
+	{ path: '/tax', text: 'Tax calculator' },
 ];
 
 const Navigation: React.FC = () => {
@@ -16,7 +17,7 @@ const Navigation: React.FC = () => {
 	return (
 		<nav className="flex flex-col justify-center md:flex-row">
 			<div className="flex items-center">
-				<button className="md:hidden" onClick={() => setIsOpen(x => !x)}>
+				<button className="md:hidden" title="Menu" onClick={() => setIsOpen(x => !x)}>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
 				<a href="/">
