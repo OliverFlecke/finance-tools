@@ -61,8 +61,12 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 					<tr key={country} className="tax-row">
 						<td>{result.country}</td>
 						<td>{formatCurrency(result.baseSalaryLocal, localCurrency)}</td>
-						<td>{formatCurrency(result.taxes, currency)}</td>
-						<td>{formatCurrency(result.afterTax, currency)}</td>
+						<td className="text-green-700 dark:text-green-400">
+							{formatCurrency(result.afterTax, currency)}
+						</td>
+						<td className="text-red-700 dark:text-red-400">
+							{formatCurrency(result.taxes, currency)}
+						</td>
 						<td>
 							{result.taxPercent.toLocaleString(undefined, {
 								style: 'percent',
@@ -84,8 +88,8 @@ const TableHeader: React.FC = () => {
 		<thead className="tax-header">
 			<th>Country</th>
 			<th>Local base salary</th>
-			<th>Taxes</th>
 			<th>Net salary</th>
+			<th>Taxes</th>
 			<th>Tax percent</th>
 			<th>Local gross salary</th>
 			<th>Local net salary</th>

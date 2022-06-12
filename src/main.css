@@ -36,7 +36,7 @@ input[type='number'] {
 	}
 
 	tr.tax-row {
-		@apply odd:bg-gray-100 dark:odd:bg-gray-900;
+		@apply odd:bg-gray-200 dark:odd:bg-gray-900;
 
 		td {
 			@apply whitespace-nowrap px-4 text-right first:text-left;

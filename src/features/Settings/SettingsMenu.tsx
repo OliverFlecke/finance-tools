@@ -26,7 +26,7 @@ const SettingsMenu: FC = () => {
 				<IoSettingsOutline size={24} />
 			</button>
 			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
-				<div className="space-y-4 rounded bg-indigo-500 p-4 dark:bg-indigo-900">
+				<div className="space-y-4 rounded bg-indigo-100 p-4 text-black dark:bg-indigo-900 dark:text-white">
 					<h2 className="bold col-span-2 text-xl">Settings</h2>
 					<SettingsList />
 
