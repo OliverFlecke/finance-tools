@@ -8,6 +8,7 @@ const links = [
 		text: 'Stocks',
 	},
 	{ path: '/interest', text: 'Interest' },
+	{ path: '/tax', text: 'Tax calculator' },
 ];
 
 const Navigation: React.FC = () => {
