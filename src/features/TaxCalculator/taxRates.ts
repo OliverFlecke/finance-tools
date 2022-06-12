@@ -48,14 +48,6 @@ function calculateTaxes(amount: number, system: TaxSystem): TaxResult {
 	};
 }
 
-export const constants = {
-	hours_per_week: 40,
-	hours_per_day: 8,
-	workdays_per_year: 260,
-	vacation_days: 0,
-	output_currency: 'DKK',
-};
-
 // TODO: These should be editable outside of a new deployment. Preferably stored somewhere in a database and possible made editable to the user
 const taxCalculator: { [key: string]: TaxSystem } = {
 	uk: {

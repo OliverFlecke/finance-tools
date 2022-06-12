@@ -2,22 +2,22 @@ import SettingsContext from 'features/Settings/context';
 import React, { useCallback, useContext } from 'react';
 import { convertToCurrency, formatCurrency, useConverter } from 'utils/converters';
 import { CurrencyRates } from '../Currency/api';
-import { TaxCalculatorContext } from './state';
-import taxCalculator, { constants, TaxSystem } from './taxRates';
+import { TaxCalculatorContext, TaxCalculatorOptions } from './state';
+import taxCalculator, { TaxSystem } from './taxRates';
 
 const TaxTable: React.FC = () => {
 	const {
 		values: { currencyRates },
 	} = useContext(SettingsContext);
 	const {
-		state: { salary, currency },
+		state: { salary, currency, workOptions },
 	} = useContext(TaxCalculatorContext);
 
 	const countries = Object.keys(taxCalculator).sort();
 
 	const calculator = useCallback(
-		(a: number, s: TaxSystem) => getCalculator(currency, currencyRates)(a, s),
-		[currency, currencyRates]
+		(a: number, s: TaxSystem) => getCalculator(currency, currencyRates, workOptions)(a, s),
+		[currency, currencyRates, workOptions]
 	);
 
 	if (!salary) return null;
@@ -99,7 +99,11 @@ const TableHeader: React.FC = () => {
 	);
 };
 
-function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
+function getCalculator(
+	defaultCurrency: string,
+	rates: CurrencyRates,
+	options: TaxCalculatorOptions
+) {
 	return function (amount: number, system: TaxSystem): CalculationResult {
 		let result = system.calculate(amount);
 		const converter = useConverter(system.currency, defaultCurrency, rates.usd);
@@ -113,7 +117,7 @@ function getCalculator(defaultCurrency: string, rates: CurrencyRates) {
 			amount = converter(amount);
 		}
 		const salary_per_hour_after_tax =
-			result.after_tax / constants.workdays_per_year / constants.hours_per_day;
+			result.after_tax / (options.workdaysPerYear * options.hoursPerDay);
 		const tax_percentage = result.taxes / amount;
 
 		const local_salary_gross = convertToCurrency(
