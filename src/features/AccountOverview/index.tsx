@@ -4,6 +4,7 @@ import { formatDate } from 'utils/date';
 import { AccountContext, accountReducer, initAccountState } from './AccountService';
 import AddEntryModal from './AddEntryModal';
 import { addAccount, getAccountsWithEntries } from './api/accountApi';
+import OverviewChart from './OverviewChart';
 import { Account, AccountEntries } from './models/Account';
 import OrderAccountsModal from './OrderAccountsModal';
 import Table from './Table';
@@ -59,10 +60,7 @@ const AccountOverview = memo(() => {
 				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
-			{/* <div className="p-4">
-				<FileOptionMenu />
-			</div> */}
-			{/* <IndividualGrowthGraph /> */}
+			<OverviewChart />
 		</AccountContext.Provider>
 	);
 });
