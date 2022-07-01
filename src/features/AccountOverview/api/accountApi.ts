@@ -25,7 +25,6 @@ export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
 		}));
 	} catch (error) {
 		console.warn("Failed to get user's accounts");
-		console.debug(error);
 		return [];
 	}
 }

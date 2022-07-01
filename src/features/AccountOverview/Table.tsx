@@ -4,7 +4,7 @@ import SettingsContext from 'features/Settings/context';
 import React, { FC, useContext } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
-import { convertToCurrency, currencyFormatter } from 'utils/converters';
+import { convertToCurrency, formatCurrency } from 'utils/converters';
 import Cell from './Cell';
 
 const Table: FC = () => {
@@ -68,6 +68,9 @@ const RowSummary: FC<{
 	const {
 		state: { accounts, entries },
 	} = useContext(AccountContext);
+	const {
+		values: { preferredDisplayCurrency },
+	} = useContext(SettingsContext);
 
 	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
 	const total = totals[index];
@@ -81,13 +84,17 @@ const RowSummary: FC<{
 
 	return (
 		<>
-			<td className={getValueColorIndicator(gain)}>{currencyFormatter.format(gain)}</td>
-			<td className="px-4 text-blue-700 dark:text-blue-500">{currencyFormatter.format(total)}</td>
+			<td className={getValueColorIndicator(gain)}>
+				{formatCurrency(gain, preferredDisplayCurrency)}
+			</td>
+			<td className="px-4 text-blue-700 dark:text-blue-500">
+				{formatCurrency(total, preferredDisplayCurrency)}
+			</td>
 			<td className="px-4 text-yellow-700 dark:text-yellow-500">
-				{currencyFormatter.format(totalCash)}
+				{formatCurrency(totalCash, preferredDisplayCurrency)}
 			</td>
 			<td className="px-4 text-purple-700 dark:text-purple-500">
-				{currencyFormatter.format(totalInvested)}
+				{formatCurrency(totalInvested, preferredDisplayCurrency)}
 			</td>
 		</>
 	);
