@@ -54,13 +54,13 @@ const AccountOverview = memo(() => {
 
 	return (
 		<AccountContext.Provider value={{ state, dispatch }}>
-			<OverviewChart />
 			<Table />
 			<div className="flex flex-row justify-between px-4">
 				<AddAccount addAccount={add} />
 				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
+			<OverviewChart />
 		</AccountContext.Provider>
 	);
 });
