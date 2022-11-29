@@ -33,7 +33,7 @@ const Stocks: React.FC = () => {
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>
-			<h2 className="px-4 py-4 text-xl">Stocks</h2>
+			<h2 className="page-header">Stocks</h2>
 			<StocksTable stocks={state.stocks} />
 			<StockActionBar />
 		</StockContext.Provider>

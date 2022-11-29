@@ -23,6 +23,12 @@ input[type='number'] {
 	@apply flex flex-col items-center justify-center;
 }
 
+@layer components {
+	.page-header {
+		@apply px-4 py-4 text-xl;
+	}
+}
+
 @layer utilities {
 	.modal-form-label {
 		@apply text-sm font-medium text-gray-700 dark:text-gray-300;
