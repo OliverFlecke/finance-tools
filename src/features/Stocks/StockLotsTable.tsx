@@ -30,7 +30,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 			<h3 className="text-center text-2xl text-green-700 dark:text-green-400">
 				Lots for {stock.displayName ?? stock.symbol}
 			</h3>
-			<div className="bg-gray-300 dark:bg-gray-700 rounded shadow mx-8">
+			<div className="mx-8 rounded bg-gray-300 shadow dark:bg-gray-700">
 				<table className="w-full">
 					<thead>
 						<tr>
@@ -42,14 +42,14 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 						</tr>
 					</thead>
 					<tbody>
-						{lots.map((lot) => (
+						{lots.map(lot => (
 							<StockLotRow key={lot.id} lot={lot} stock={stock} />
 						))}
 					</tbody>
 				</table>
 
 				<div className="p-4">
-					<Button onClick={addLot} className="space-x-2 btn btn-primary">
+					<Button onClick={addLot} className="btn btn-primary space-x-2">
 						<IoAddCircleOutline className="inline" />
 						<span className="align-middle">Add lot</span>
 					</Button>

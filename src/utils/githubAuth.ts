@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { baseUri } from '../features/apiBase';
 dotenv.config();
 
 const authorizeUrl = 'https://github.com/login/oauth/authorize';
@@ -12,12 +11,12 @@ const sessionStorageGithubAuthStateKey = 'github_auth_state';
 export interface User {
 	id: number;
 	avatar_url: string;
-	bio: string | null;
-	blog: string | null;
-	email: string | null;
-	html_url: string | null;
-	name: string | null;
-	login: string | null;
+	bio?: string;
+	blog?: string;
+	email?: string;
+	html_url?: string;
+	name?: string;
+	login?: string;
 }
 
 export interface AuthorizeResponse {

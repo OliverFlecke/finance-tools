@@ -7,6 +7,7 @@ interface State {
 }
 
 interface Line {
+	name: string;
 	category: string;
 	amount: number;
 }
@@ -23,16 +24,20 @@ const Budget: React.FC = () => {
 		<>
 			<h2 className="page-header">Budget</h2>
 
-			<table className="mx-4 w-full">
-				<thead>
-					<th></th>
-					<th>Per month</th>
-					<th>Per year</th>
-				</thead>
+			<div className="mx-4">
+				<table className="w-full">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Per month</th>
+							<th>Per year</th>
+						</tr>
+					</thead>
 
-				<Body title="Income" data={income} />
-				<Body title="Expenses" data={expenses} />
-			</table>
+					<Body title="Income" data={income} />
+					<Body title="Expenses" data={expenses} />
+				</table>
+			</div>
 		</>
 	);
 };
@@ -45,8 +50,8 @@ const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => (
 			<th className="text-left">{title}</th>
 		</tr>
 		{data.map(line => (
-			<tr key={line.category} className="odd:bg-slate-700">
-				<td>{line.category}</td>
+			<tr key={line.name} className="mx-2 odd:bg-slate-700">
+				<td>{line.name}</td>
 				<td>{line.amount}</td>
 				<td>{12 * line.amount}</td>
 			</tr>
