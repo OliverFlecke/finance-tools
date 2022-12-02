@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { formatCurrency } from '../../utils/converters';
 import mock from './budget_mock.json';
 
 interface State {
@@ -44,17 +45,35 @@ const Budget: React.FC = () => {
 
 export default Budget;
 
-const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => (
-	<tbody>
-		<tr>
-			<th className="text-left">{title}</th>
-		</tr>
-		{data.map(line => (
-			<tr key={line.name} className="mx-2 odd:bg-slate-700">
-				<td>{line.name}</td>
-				<td>{line.amount}</td>
-				<td>{12 * line.amount}</td>
+const currency = 'GBP';
+
+const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => {
+	const total = useMemo(
+		() => data.map(line => line.amount).reduce((acc, v) => acc + v, 0),
+		[data]
+	);
+
+	return (
+		<tbody>
+			<tr>
+				<th className="text-left">{title}</th>
 			</tr>
-		))}
-	</tbody>
-);
+			{data.map(line => (
+				<tr key={line.name} className="mx-2 odd:bg-slate-700">
+					<td>{line.name}</td>
+					<td className="text-right">
+						{formatCurrency(line.amount, currency)}
+					</td>
+					<td className="text-right">
+						{formatCurrency(12 * line.amount, currency)}
+					</td>
+				</tr>
+			))}
+			<tr>
+				<th>Total</th>
+				<th className="text-right">{formatCurrency(total, currency)}</th>
+				<th className="text-right">{formatCurrency(12 * total, currency)}</th>
+			</tr>
+		</tbody>
+	);
+};
