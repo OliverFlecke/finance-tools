@@ -44,7 +44,7 @@ export function convertToCurrency(
 	return value * getConversionRate(rates, fromCurrency, toCurrency);
 }
 
-function getConversionRate(
+export function getConversionRate(
 	rates: Rates,
 	fromCurrency?: string,
 	toCurrency?: string
