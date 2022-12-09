@@ -13,6 +13,8 @@ import { parseNumber } from 'utils/converters';
 import { allPropertiesAreDefined } from 'utils/general';
 import CalculationSummary from './CalculationSummary';
 
+// TODO: Need to fix the missing fields for NumberFormat
+
 interface CompoundInterestProps {
 	name?: string;
 }
@@ -69,7 +71,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 				className="flex-col-center w-full overflow-x-hidden px-4"
 			>
 				<fieldset className="flex flex-col items-start space-y-6 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
-					<NumberFormat
+					{/* <NumberFormat
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						customInput={(props: any) => (
 							<Input
@@ -88,7 +90,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 							required: 'Please provide your existing amount',
 							valueAsNumber: true,
 						})}
-					/>
+					/> */}
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
@@ -114,7 +116,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 						<SelectOption value="Yearly">Yearly</SelectOption>
 						<SelectOption value="Monthly">Monthly</SelectOption>
 					</Select>
-					<NumberFormat
+					{/* <NumberFormat
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						customInput={(props: any) => (
 							<Input
@@ -133,7 +135,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 							required: 'Please provide how much you will deposit each month',
 							valueAsNumber: true,
 						})}
-					/>
+					/> */}
 				</fieldset>
 				<div className="flex w-full justify-center space-x-4 pt-4">
 					<Button type="submit">Calculate</Button>
