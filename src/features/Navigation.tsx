@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
+import Link from 'next/link';
 
 const links = [
 	{ path: '/', text: 'Overview' },
@@ -25,11 +26,11 @@ const Navigation: React.FC = () => {
 				>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
-				<a href="/">
+				<Link href="/">
 					<h1 className="px-4 font-sans text-xl font-light uppercase md:px-0">
 						Finance tracker
 					</h1>
-				</a>
+				</Link>
 			</div>
 
 			<ul

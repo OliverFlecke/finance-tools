@@ -84,7 +84,8 @@ export function useConverter(
 
 type Rates = { [key: string]: number };
 
-export function sortObject<T>(unordered: T): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sortObject<T>(unordered: any): T {
 	return (
 		Object.keys(unordered)
 			.sort()

@@ -7,13 +7,11 @@ import {
 } from '@oliverflecke/components-react';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import { InterestAccrual } from 'services/formulas';
 import { parseNumber } from 'utils/converters';
 import { allPropertiesAreDefined } from 'utils/general';
 import CalculationSummary from './CalculationSummary';
-
-// TODO: Need to fix the missing fields for NumberFormat
 
 interface CompoundInterestProps {
 	name?: string;
@@ -47,6 +45,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 	});
 	const onSubmit = handleSubmit(data => {
 		const url = new URL(window.location.href);
+		console.log(data);
 		Object.keys(data).forEach(key =>
 			url.searchParams.set(key, data[key as keyof FormData].toString())
 		);
@@ -71,7 +70,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 				className="flex-col-center w-full overflow-x-hidden px-4"
 			>
 				<fieldset className="flex flex-col items-start space-y-6 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
-					{/* <NumberFormat
+					<NumericFormat
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						customInput={(props: any) => (
 							<Input
@@ -90,7 +89,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 							required: 'Please provide your existing amount',
 							valueAsNumber: true,
 						})}
-					/> */}
+					/>
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
@@ -116,7 +115,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 						<SelectOption value="Yearly">Yearly</SelectOption>
 						<SelectOption value="Monthly">Monthly</SelectOption>
 					</Select>
-					{/* <NumberFormat
+					<NumericFormat
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						customInput={(props: any) => (
 							<Input
@@ -135,7 +134,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 							required: 'Please provide how much you will deposit each month',
 							valueAsNumber: true,
 						})}
-					/> */}
+					/>
 				</fieldset>
 				<div className="flex w-full justify-center space-x-4 pt-4">
 					<Button type="submit">Calculate</Button>

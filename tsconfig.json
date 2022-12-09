@@ -19,6 +19,6 @@
 		"baseUrl": "src",
 		"incremental": true
 	},
-	"include": ["src", "pages", "cypress"],
+	"include": ["src", "pages"],
 	"exclude": ["node_modules"]
 }

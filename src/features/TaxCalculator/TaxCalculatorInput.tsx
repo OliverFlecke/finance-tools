@@ -1,7 +1,7 @@
 import SelectCurrency from 'components/SelectCurrency';
 import SettingsContext from 'features/Settings/context';
 import React, { useCallback, useContext } from 'react';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import { TaxCalculatorContext } from './state';
 
 const TaxCalculatorInput: React.FC = () => {
@@ -17,7 +17,7 @@ const TaxCalculatorInput: React.FC = () => {
 		<div className="flex space-x-4 p-4">
 			<label className="flex flex-col space-y-2">
 				<span className="input-label">Income</span>
-				<NumberFormat
+				<NumericFormat
 					inputMode="numeric"
 					placeholder="100,000"
 					className="rounded-md bg-white  py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100"
