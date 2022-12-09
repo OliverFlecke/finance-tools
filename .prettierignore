@@ -1,0 +1,4 @@
+build
+.next
+coverage
+node_modules
