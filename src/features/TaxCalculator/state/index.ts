@@ -24,6 +24,7 @@ export function getDefaultState(): TaxCalculatorState {
 	};
 }
 
-export const TaxCalculatorContext = makeContext<TaxCalculatorState, TaxCalculatorAction>(
-	getDefaultState
-);
+export const TaxCalculatorContext = makeContext<
+	TaxCalculatorState,
+	TaxCalculatorAction
+>(getDefaultState);

@@ -23,7 +23,9 @@ const TaxCalculatorInput: React.FC = () => {
 					className="rounded-md bg-white  py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100"
 					defaultValue={state.salary}
 					thousandSeparator={true}
-					onValueChange={e => dispatch({ type: 'SET SALARY', salary: e.floatValue ?? 0 })}
+					onValueChange={e =>
+						dispatch({ type: 'SET SALARY', salary: e.floatValue ?? 0 })
+					}
 				/>
 			</label>
 			<SelectCurrency

@@ -16,14 +16,17 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const onBlur = useCallback(
 		async (element: React.FormEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
-			if (amount !== NaN) {
-				await updateEntry({
-					date,
-					amount,
-					accountId: account.id,
-				});
-				dispatch({ type: 'EDIT ENTRY FOR ACCOUNT', name: account.name, key: date, value: amount });
-			}
+			await updateEntry({
+				date,
+				amount,
+				accountId: account.id,
+			});
+			dispatch({
+				type: 'EDIT ENTRY FOR ACCOUNT',
+				name: account.name,
+				key: date,
+				value: amount,
+			});
 		},
 		[account.id, account.name, date, dispatch]
 	);

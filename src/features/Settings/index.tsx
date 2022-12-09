@@ -16,7 +16,9 @@ const Settings: FC<{ children: React.ReactNode }> = ({ children }) => {
 	}, [values.preferresDarkMode, values.themeFollowsOS, osTheme, setDarkMode]);
 
 	return (
-		<SettingsContext.Provider value={{ values, dispatch }}>{children}</SettingsContext.Provider>
+		<SettingsContext.Provider value={{ values, dispatch }}>
+			{children}
+		</SettingsContext.Provider>
 	);
 };
 

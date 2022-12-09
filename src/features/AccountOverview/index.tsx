@@ -1,7 +1,11 @@
 import AddAccount from 'features/AccountOverview/AddAccountModal';
 import React, { memo, useCallback, useEffect, useReducer } from 'react';
 import { formatDate } from 'utils/date';
-import { AccountContext, accountReducer, initAccountState } from './AccountService';
+import {
+	AccountContext,
+	accountReducer,
+	initAccountState,
+} from './AccountService';
 import AddEntryModal from './AddEntryModal';
 import { addAccount, getAccountsWithEntries } from './api/accountApi';
 import OverviewChart from './OverviewChart';

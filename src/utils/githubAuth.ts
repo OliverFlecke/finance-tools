@@ -89,7 +89,11 @@ export function getUser(state: string): Promise<User | null> {
 				}
 
 				// Remove query parameters from navigation bar
-				window.history.replaceState({}, document.title, window.location.pathname);
+				window.history.replaceState(
+					{},
+					document.title,
+					window.location.pathname
+				);
 			})
 			.catch(err => console.debug(err));
 	});
@@ -111,7 +115,8 @@ function getUserFromLocalStorage(): User | null {
 }
 
 function randomString(length: number): string {
-	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const chars =
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 	return new Array(length)
 		.fill(null)

@@ -1,4 +1,9 @@
-import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
+import {
+	Button,
+	ButtonContainer,
+	Input,
+	Modal,
+} from '@oliverflecke/components-react';
 import SettingsContext from 'features/Settings/context';
 import React, { FC, useCallback, useContext, useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,7 +39,10 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 
 	return (
 		<>
-			<button onClick={() => setShowPrompt((x) => !x)} className="btn btn-primary space-x-2">
+			<button
+				onClick={() => setShowPrompt(x => !x)}
+				className="btn btn-primary space-x-2"
+			>
 				<IoAddCircleOutline className="inline" />
 				<span className="align-middle">Add account</span>
 			</button>
@@ -44,18 +52,25 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 					className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
 				>
 					<div className="pb-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-200">Add new account</h2>
+						<h2 className="text-lg text-gray-700 dark:text-gray-200">
+							Add new account
+						</h2>
 
 						<fieldset className="space-y-2">
 							<Input
 								placeholder="Savings, Investments..."
 								label="Name"
 								{...register('name', { required: true })}
-								errorMessage={errors.name && 'Please provide a name for your account'}
+								errorMessage={
+									errors.name && 'Please provide a name for your account'
+								}
 							/>
 							<label className="flex flex-col space-y-2">
 								<span className="modal-form-label">Account type</span>
-								<select className="modal-select" {...register('type', { required: true })}>
+								<select
+									className="modal-select"
+									{...register('type', { required: true })}
+								>
 									<option value={'Cash'}>Cash</option>
 									<option value={'Investment'}>Investment</option>
 								</select>
@@ -69,8 +84,8 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 									{...register('currency', { required: true })}
 								>
 									{Object.keys(currencyRates.usd)
-										.map((x) => x.toUpperCase())
-										.map((key) => (
+										.map(x => x.toUpperCase())
+										.map(key => (
 											<option key={key} value={key}>
 												{key}
 											</option>

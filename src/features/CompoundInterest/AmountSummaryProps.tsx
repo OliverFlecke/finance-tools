@@ -12,7 +12,9 @@ const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }) => (
 		<div className={`h-6 w-6 rounded-full ${color}`}></div>
 		<div>
 			<span className="text-black dark:text-gray-300">{label}</span>
-			<div className="text-2xl text-black dark:text-white">{formatter.format(amount)}</div>
+			<div className="text-2xl text-black dark:text-white">
+				{formatter.format(amount)}
+			</div>
 		</div>
 	</div>
 );

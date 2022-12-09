@@ -31,7 +31,8 @@ function calculateTaxes(amount: number, system: TaxSystem): TaxResult {
 	let after_tax = system.taxFreeAllowance;
 
 	for (let i = 0; i < system.brackets.length; i++) {
-		const prev = i === 0 ? system.taxFreeAllowance : system.brackets[i - 1].limit;
+		const prev =
+			i === 0 ? system.taxFreeAllowance : system.brackets[i - 1].limit;
 		const bracket = system.brackets[i];
 
 		const a = Math.min(amount, bracket.limit) - prev;

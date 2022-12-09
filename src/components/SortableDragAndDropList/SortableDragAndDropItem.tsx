@@ -18,7 +18,11 @@ const SortableDragAndDropItem: FC<{
 }> = ({ id, type, index, move, children, className }) => {
 	const ref = useRef<HTMLLIElement>(null);
 
-	const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>(
+	const [{ handlerId }, drop] = useDrop<
+		DragItem,
+		void,
+		{ handlerId: Identifier | null }
+	>(
 		{
 			accept: type,
 			collect(monitor) {
@@ -42,13 +46,15 @@ const SortableDragAndDropItem: FC<{
 				const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
 				// Get vertical middle
-				const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+				const hoverMiddleY =
+					(hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
 				// Determine mouse position
 				const clientOffset = monitor.getClientOffset();
 
 				// Get pixels to the top
-				const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+				const hoverClientY =
+					(clientOffset as XYCoord).y - hoverBoundingRect.top;
 
 				// Dragging downwards
 				if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -84,7 +90,9 @@ const SortableDragAndDropItem: FC<{
 		<li
 			ref={ref}
 			data-handler-id={handlerId}
-			className={`cursor-move ${isDragging ? 'opacity-25' : ''} ${!className ? '' : className}`}
+			className={`cursor-move ${isDragging ? 'opacity-25' : ''} ${
+				!className ? '' : className
+			}`}
 		>
 			{children}
 		</li>

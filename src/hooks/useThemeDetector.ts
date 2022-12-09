@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 
 const useThemeDetector = () => {
-	const [isDarkTheme, setIsDarkTheme] = useState(getCurrentThemeQuery()?.matches ?? false);
+	const [isDarkTheme, setIsDarkTheme] = useState(
+		getCurrentThemeQuery()?.matches ?? false
+	);
 	const listener = (e: MediaQueryListEvent) => setIsDarkTheme(e.matches);
 
 	useEffect(() => {

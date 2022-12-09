@@ -8,7 +8,7 @@ const RefreshStocksButton: React.FC = () => {
 	const { state, dispatch } = useContext(StockContext);
 	const reload = useCallback(async () => {
 		try {
-			const quotes = await getShares(...state.stocks.map((x) => x.symbol));
+			const quotes = await getShares(...state.stocks.map(x => x.symbol));
 			dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
 		} catch (err) {
 			// TODO: Display error to user

@@ -43,7 +43,11 @@ const OverviewChart = () => {
 				return { x: date, y };
 			});
 		},
-		[settings.currencyRates.usd, settings.preferredDisplayCurrency, state.entries]
+		[
+			settings.currencyRates.usd,
+			settings.preferredDisplayCurrency,
+			state.entries,
+		]
 	);
 
 	const data = state.accounts.map(account => ({
@@ -76,7 +80,10 @@ const OverviewChart = () => {
 			<div className="flex flex-row justify-end bg-transparent">
 				<label className="space-x-4 px-4">
 					<span className="h-full align-middle">Show totals</span>
-					<Toggle checked={showTotals} onChange={e => setShowTotals(e.target.checked)} />
+					<Toggle
+						checked={showTotals}
+						onChange={e => setShowTotals(e.target.checked)}
+					/>
 				</label>
 			</div>
 			<XYChart
@@ -92,7 +99,12 @@ const OverviewChart = () => {
 
 				{showTotals
 					? types.map(d => (
-							<AnimatedLineSeries key={d.name} dataKey={d.name} data={d.data} {...accessors} />
+							<AnimatedLineSeries
+								key={d.name}
+								dataKey={d.name}
+								data={d.data}
+								{...accessors}
+							/>
 					  ))
 					: data.map(d => (
 							<AnimatedLineSeries
@@ -113,10 +125,14 @@ const OverviewChart = () => {
 
 						return (
 							<div className="flex flex-col">
-								<div style={{ color: colorScale(tooltipData.nearestDatum.key) }}>
+								<div
+									style={{ color: colorScale(tooltipData.nearestDatum.key) }}
+								>
 									{tooltipData.nearestDatum.key}
 								</div>
-								<span>{accessors.xAccessor(tooltipData.nearestDatum.datum)}</span>
+								<span>
+									{accessors.xAccessor(tooltipData.nearestDatum.datum)}
+								</span>
 								<span className="text-green-700 dark:text-green-500">
 									{formatCurrency(
 										accessors.yAccessor(tooltipData.nearestDatum.datum),

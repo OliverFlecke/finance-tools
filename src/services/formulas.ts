@@ -1,9 +1,17 @@
 export type InterestAccrual = 'Yearly' | 'Monthly';
 
-export function FV(P: number, A: number, r: number, year: number, n = 12): number {
+export function FV(
+	P: number,
+	A: number,
+	r: number,
+	year: number,
+	n = 12
+): number {
 	const rate = ratePerPaymentPeriod(r, 1, n);
 	const nper = n * year;
-	return P * Math.pow(1 + rate, nper) + A * ((Math.pow(1 + rate, nper) - 1) / rate);
+	return (
+		P * Math.pow(1 + rate, nper) + A * ((Math.pow(1 + rate, nper) - 1) / rate)
+	);
 }
 
 export function compoundInterest(

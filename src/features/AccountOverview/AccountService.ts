@@ -24,7 +24,10 @@ function getDefaultAccountState(): AccountState {
 	};
 }
 
-export function accountReducer(state: AccountState, action: AccountAction): AccountState {
+export function accountReducer(
+	state: AccountState,
+	action: AccountAction
+): AccountState {
 	return storedReducer('account_state', reducer)(state, action);
 }
 
@@ -39,7 +42,12 @@ export type AccountAction =
 	| { type: 'DELETE ENTRY'; date: string }
 	| { type: 'RESET' }
 	| { type: 'LOAD STATE'; state: AccountState }
-	| { type: 'EDIT ENTRY FOR ACCOUNT'; name: string; value: number; key: string };
+	| {
+			type: 'EDIT ENTRY FOR ACCOUNT';
+			name: string;
+			value: number;
+			key: string;
+	  };
 
 function reducer(state: AccountState, action: AccountAction): AccountState {
 	switch (action.type) {

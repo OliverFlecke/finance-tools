@@ -15,7 +15,7 @@ import { AccountContext } from './AccountService';
 
 const IndividualGrowthGraph: FC = () => {
 	const { state } = useContext(AccountContext);
-	const data = Object.keys(state.entries).map((x) => ({
+	const data = Object.keys(state.entries).map(x => ({
 		date: x,
 		value: state.entries[x],
 	}));
@@ -34,7 +34,7 @@ const IndividualGrowthGraph: FC = () => {
 
 	return (
 		<ParentSize>
-			{(parent) => {
+			{parent => {
 				const margin = { top: 24, bottom: 24, left: 24, right: 24 };
 				const xAxisHeight = 20;
 				const width = parent.width;
@@ -52,7 +52,7 @@ const IndividualGrowthGraph: FC = () => {
 				});
 
 				const yMaxValue = max(
-					data.map((x) => max(state.accounts.map((a) => x.value[a.name])) ?? 0) ?? 0
+					data.map(x => max(state.accounts.map(a => x.value[a.name])) ?? 0) ?? 0
 				);
 				const yScale = scaleLinear({
 					range: [yMax, 0],
@@ -64,7 +64,7 @@ const IndividualGrowthGraph: FC = () => {
 				const labelColor = colors.cyan[500];
 
 				const legendScale = scaleOrdinal({
-					domain: state.accounts.map((x) => x.name),
+					domain: state.accounts.map(x => x.name),
 					range: state.accounts.map((_, i) => lineColors[i][500]),
 				});
 				const legendGlyphSize = 15;
@@ -110,13 +110,20 @@ const IndividualGrowthGraph: FC = () => {
 								))}
 							</Group>
 						</svg>
-						<LegendOrdinal scale={legendScale} labelFormat={(label) => `${label.toUpperCase()}`}>
-							{(labels) => (
+						<LegendOrdinal
+							scale={legendScale}
+							labelFormat={label => `${label.toUpperCase()}`}
+						>
+							{labels => (
 								<div className="flex flex-row flex-wrap">
 									{labels.map((label, i) => (
 										<LegendItem key={`legend-quantile-${i}`} margin="0 5px">
 											<svg width={legendGlyphSize} height={legendGlyphSize}>
-												<rect fill={label.value} width={legendGlyphSize} height={legendGlyphSize} />
+												<rect
+													fill={label.value}
+													width={legendGlyphSize}
+													height={legendGlyphSize}
+												/>
 											</svg>
 											<LegendLabel align="left" margin="0 0 0 4px">
 												{label.text}
@@ -143,11 +150,18 @@ interface AccountLineProps {
 	xScale: ScaleTime<number, number, never>;
 }
 
-const AccountLine = ({ account, color, data, yScale, xScale }: AccountLineProps) => {
+const AccountLine = ({
+	account,
+	color,
+	data,
+	yScale,
+	xScale,
+}: AccountLineProps) => {
 	const x = (d: any) => new Date(d.date);
 	const y = (d: any) => d.value[account.name];
 
-	const compose = (scale: any, accessor: any) => (data: any) => scale(accessor(data));
+	const compose = (scale: any, accessor: any) => (data: any) =>
+		scale(accessor(data));
 	const xCompose = compose(xScale, x);
 	const yCompose = compose(yScale, y);
 

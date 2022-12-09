@@ -21,7 +21,10 @@ interface LotForm {
 	buyDate: string;
 }
 
-const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProps) => {
+const StockLotRow: React.FC<StockLotRowProps> = ({
+	stock,
+	lot,
+}: StockLotRowProps) => {
 	const { dispatch } = useContext(StockContext);
 
 	const {
@@ -64,7 +67,11 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 		dispatch({ type: 'DELETE LOT', symbol: stock.symbol, id: lot.id });
 	}, [dispatch, lot.id, stock.symbol]);
 
-	const convert = useConverter(stock.currency, preferredDisplayCurrency, currencyRates.usd);
+	const convert = useConverter(
+		stock.currency,
+		preferredDisplayCurrency,
+		currencyRates.usd
+	);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;
 	const buyMarketValue = watch('buyPrice') * watch('shares');
@@ -73,8 +80,15 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	return (
 		<tr className="odd:bg-gray-200 dark:odd:bg-gray-600">
 			<td colSpan={3}>
-				<form onChange={handleSubmit(onChange)} className="flex w-full flex-row justify-evenly">
-					<input type="date" {...register('buyDate')} className="bg-transparent" />
+				<form
+					onChange={handleSubmit(onChange)}
+					className="flex w-full flex-row justify-evenly"
+				>
+					<input
+						type="date"
+						{...register('buyDate')}
+						className="bg-transparent"
+					/>
 					<input
 						type="number"
 						{...register('shares')}
@@ -90,13 +104,18 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 			<td className="text-right">
 				{formatCurrency(convert(marketValue), preferredDisplayCurrency)}
 			</td>
-			<td className={`${getValueColorIndicator(gain)} flex flex-col text-right`}>
+			<td
+				className={`${getValueColorIndicator(gain)} flex flex-col text-right`}
+			>
 				<span>{formatCurrency(convert(gain), preferredDisplayCurrency)}</span>
 				<span>{((marketValue / buyMarketValue - 1) * 100).toFixed(2)} %</span>
 			</td>
 			<td className="pl-4">
 				<button onClick={deleteLot}>
-					<IoTrashOutline className="text-red-700 dark:text-red-500" size={24} />
+					<IoTrashOutline
+						className="text-red-700 dark:text-red-500"
+						size={24}
+					/>
 				</button>
 			</td>
 		</tr>

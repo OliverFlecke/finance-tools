@@ -1,12 +1,25 @@
 import { CurrencyRates } from 'features/Currency/api';
 import SettingsContext from 'features/Settings/context';
-import React, { ReactNode, useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import React, {
+	ReactNode,
+	useCallback,
+	useContext,
+	useEffect,
+	useReducer,
+	useState,
+} from 'react';
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
 import { getStocksForUser } from './API/stockApi';
 import { getShares } from './API/yahoo';
-import { Stock, stockAvgPrice, stockGain, StockList, stockTotalShares } from './models';
+import {
+	Stock,
+	stockAvgPrice,
+	stockGain,
+	StockList,
+	stockTotalShares,
+} from './models';
 import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
@@ -55,7 +68,9 @@ type StockColumn =
 	| 'Gain'
 	| 'Gain percentage';
 
-const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
+const StocksTable: React.FC<StocksTableProps> = ({
+	stocks,
+}: StocksTableProps) => {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
@@ -75,7 +90,14 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 				</thead>
 				<tbody>
 					{stocks
-						.sort(stocksComparer(currencyRates, sortKey, ascending, preferredDisplayCurrency))
+						.sort(
+							stocksComparer(
+								currencyRates,
+								sortKey,
+								ascending,
+								preferredDisplayCurrency
+							)
+						)
 						.map(stock => (
 							<StockRow key={stock.symbol} stock={stock} />
 						))}
@@ -113,25 +135,60 @@ const StockTableHeader = ({
 
 	return (
 		<tr className="align-bottom text-sm text-gray-600 dark:text-gray-400">
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Symbol'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Symbol'}
+				ascending={ascending}
+			>
 				Symbol
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Current price'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Current price'}
+				ascending={ascending}
+			>
 				Price
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total value'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Total value'}
+				ascending={ascending}
+			>
 				Total value
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Total shares'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Total shares'}
+				ascending={ascending}
+			>
 				Shares
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Average price'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Average price'}
+				ascending={ascending}
+			>
 				Avg price
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={'Gain'} ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey={'Gain'}
+				ascending={ascending}
+			>
 				Gain
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey="Gain percentage" ascending={ascending}>
+			<Header
+				sort={sort}
+				currentSortKey={sortKey}
+				sortKey="Gain percentage"
+				ascending={ascending}
+			>
 				Percentage
 			</Header>
 		</tr>
@@ -154,7 +211,13 @@ interface HeaderProps {
 	sortKey: StockColumn;
 	ascending: boolean;
 }
-const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) => (
+const Header = ({
+	sort,
+	children,
+	currentSortKey,
+	sortKey,
+	ascending,
+}: HeaderProps) => (
 	<th>
 		<button
 			onClick={sort(sortKey)}
@@ -167,7 +230,13 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 );
 
 const Caret = ({ ascending }: { ascending: boolean }) => (
-	<>{ascending ? <IoCaretDown className="inline" /> : <IoCaretUp className="inline" />}</>
+	<>
+		{ascending ? (
+			<IoCaretDown className="inline" />
+		) : (
+			<IoCaretUp className="inline" />
+		)}
+	</>
 );
 
 function stocksComparer(
@@ -201,15 +270,28 @@ function stocksComparer(
 				const getStockGainInPercentage = (stock: Stock): number => {
 					const totalShares = stockTotalShares(stock);
 					const buyMarketPrice = stockAvgPrice(stock) * totalShares;
-					return ((stock.regularMarketPrice * totalShares) / buyMarketPrice - 1) * 100;
+					return (
+						((stock.regularMarketPrice * totalShares) / buyMarketPrice - 1) *
+						100
+					);
 				};
 
 				result = getStockGainInPercentage(a) - getStockGainInPercentage(b);
 				break;
 			case 'Average price':
 				result =
-					convertToCurrency(stockAvgPrice(a), currencyRates.usd, a.currency, preferredCurrency) -
-					convertToCurrency(stockAvgPrice(b), currencyRates.usd, b.currency, preferredCurrency);
+					convertToCurrency(
+						stockAvgPrice(a),
+						currencyRates.usd,
+						a.currency,
+						preferredCurrency
+					) -
+					convertToCurrency(
+						stockAvgPrice(b),
+						currencyRates.usd,
+						b.currency,
+						preferredCurrency
+					);
 				break;
 			case 'Current price':
 				result = convert(a) - convert(b);
@@ -218,7 +300,8 @@ function stocksComparer(
 				result = stockTotalShares(a) - stockTotalShares(b);
 				break;
 			case 'Total value':
-				result = convert(a) * stockTotalShares(a) - convert(b) * stockTotalShares(b);
+				result =
+					convert(a) * stockTotalShares(a) - convert(b) * stockTotalShares(b);
 				break;
 		}
 

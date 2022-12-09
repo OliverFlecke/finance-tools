@@ -11,7 +11,10 @@ interface StockLotsTableProps {
 	lots: StockLot[];
 }
 
-const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
+const StockLotsTable: React.FC<StockLotsTableProps> = ({
+	lots,
+	stock,
+}: StockLotsTableProps) => {
 	const { dispatch } = useContext(StockContext);
 
 	const addLot = useCallback(async () => {

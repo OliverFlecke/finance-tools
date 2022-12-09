@@ -2,14 +2,14 @@ name: Pull Request Build
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ["18.x"]
+        node: ['18.x']
 
     steps:
       - uses: actions/checkout@v2

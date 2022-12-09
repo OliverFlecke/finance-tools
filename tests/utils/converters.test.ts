@@ -22,7 +22,13 @@ describe('Conversion rate tests', () => {
 		['NOK', 'DKK', 0.71],
 		['DKK', 'EUR', 0.13],
 		['EUR', 'DKK', 7.44],
-	])('Conversion between two non-base currencies', (fromCurrency, toCurrency, expectedRate) => {
-		expect(getConversionRate(fromCurrency, toCurrency)).toBeCloseTo(expectedRate, 1);
-	});
+	])(
+		'Conversion between two non-base currencies',
+		(fromCurrency, toCurrency, expectedRate) => {
+			expect(getConversionRate(fromCurrency, toCurrency)).toBeCloseTo(
+				expectedRate,
+				1
+			);
+		}
+	);
 });

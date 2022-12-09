@@ -13,7 +13,10 @@ export function getDataFromStorage(key: string, defaultValue: any = {}): any {
 	};
 }
 
-export function storedReducer<S, A>(key: string, reducer: Reducer<S, A>): Reducer<S, A> {
+export function storedReducer<S, A>(
+	key: string,
+	reducer: Reducer<S, A>
+): Reducer<S, A> {
 	return (state, action) => {
 		const newState = reducer(state, action);
 

@@ -4,7 +4,10 @@ import SettingsValues from './state';
 
 export default storedReducer('settings', reducer);
 
-function reducer(state: SettingsValues, action: SettingsAction): SettingsValues {
+function reducer(
+	state: SettingsValues,
+	action: SettingsAction
+): SettingsValues {
 	switch (action.type) {
 		case 'SET CURRENCY RATES':
 			return {

@@ -38,7 +38,11 @@ const FileOptionMenu: React.FC = () => {
 				<IoSaveOutline className="inline" />
 				<span className="align-middle">Save</span>
 			</button>
-			<input type="file" onChange={fileChange} className="bg-blue-400 p-2 rounded" />
+			<input
+				type="file"
+				onChange={fileChange}
+				className="rounded bg-blue-400 p-2"
+			/>
 			<button className="btn btn-secondary" onClick={closeFile}>
 				Close
 			</button>

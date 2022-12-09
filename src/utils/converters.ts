@@ -23,7 +23,11 @@ export function formatCurrency(value?: number, currency?: string): string {
 	try {
 		return format(currency ?? 'USD');
 	} catch (ex) {
-		if (ex instanceof RangeError && ex.message.startsWith('Invalid currency code') && currency) {
+		if (
+			ex instanceof RangeError &&
+			ex.message.startsWith('Invalid currency code') &&
+			currency
+		) {
 			return format('USD').replace('USD', currency);
 		}
 
@@ -40,7 +44,11 @@ export function convertToCurrency(
 	return value * getConversionRate(rates, fromCurrency, toCurrency);
 }
 
-function getConversionRate(rates: Rates, fromCurrency?: string, toCurrency?: string): number {
+function getConversionRate(
+	rates: Rates,
+	fromCurrency?: string,
+	toCurrency?: string
+): number {
 	const baseCurrency = 'usd';
 	fromCurrency = fromCurrency?.toLowerCase();
 	toCurrency = toCurrency?.toLowerCase();
@@ -68,7 +76,8 @@ export function useConverter(
 	rates: Rates
 ): (value: number) => number {
 	return useCallback(
-		(value: number) => convertToCurrency(value, rates, fromCurrency, toCurrency),
+		(value: number) =>
+			convertToCurrency(value, rates, fromCurrency, toCurrency),
 		[fromCurrency, rates, toCurrency]
 	);
 }
