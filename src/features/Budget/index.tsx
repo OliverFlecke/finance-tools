@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { formatCurrency } from '../../utils/converters';
+import { sum } from 'utils/math';
 import mock from './budget_mock.json';
 
 interface State {
@@ -18,15 +19,19 @@ function loadData(): State {
 	return { ...mock };
 }
 
+const currency = 'GBP';
+
 const Budget: React.FC = () => {
 	const { income, expenses } = loadData();
+	const totalIncome = sum(...income.map(x => x.amount));
+	const totalExpenses = sum(...expenses.map(x => x.amount));
 
 	return (
 		<>
 			<h2 className="page-header">Budget</h2>
 
 			<div className="mx-4">
-				<table className="w-full">
+				<table className="w-full border-separate border-spacing-2">
 					<thead>
 						<tr>
 							<th></th>
@@ -37,6 +42,18 @@ const Budget: React.FC = () => {
 
 					<Body title="Income" data={income} />
 					<Body title="Expenses" data={expenses} />
+
+					<tfoot>
+						<tr className="bg-green-700">
+							<th>After monthley expenses</th>
+							<th className="text-right">
+								{formatCurrency(totalIncome - totalExpenses, currency)}
+							</th>
+							<th className="text-right">
+								{formatCurrency(12 * (totalIncome - totalExpenses), currency)}
+							</th>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</>
@@ -44,8 +61,6 @@ const Budget: React.FC = () => {
 };
 
 export default Budget;
-
-const currency = 'GBP';
 
 const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => {
 	const total = useMemo(
@@ -59,7 +74,7 @@ const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => {
 				<th className="text-left">{title}</th>
 			</tr>
 			{data.map(line => (
-				<tr key={line.name} className="mx-2 odd:bg-slate-700">
+				<tr key={line.name} className="px-8 odd:bg-slate-700">
 					<td>{line.name}</td>
 					<td className="text-right">
 						{formatCurrency(line.amount, currency)}
