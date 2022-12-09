@@ -1,5 +1,5 @@
 import { User } from 'utils/githubAuth';
-import { apiVersion, baseUri } from 'features/apiBase';
+import { apiUrlWithPath } from 'features/apiBase';
 
 export function getMyUser(): Promise<User> {
 	if (process.env.NODE_ENV === 'development') {
@@ -9,7 +9,7 @@ export function getMyUser(): Promise<User> {
 		});
 	}
 
-	return fetch(`${baseUri}/${apiVersion}/user/me`, {
+	return fetch(`${apiUrlWithPath}/user/me`, {
 		credentials: 'include',
 	})
 		.then(res => res.json())

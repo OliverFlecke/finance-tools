@@ -9,6 +9,7 @@ const links = [
 	},
 	{ path: '/interest', text: 'Interest' },
 	{ path: '/tax', text: 'Tax calculator' },
+	// { path: '/budget', text: 'Budget' },
 ];
 
 const Navigation: React.FC = () => {
@@ -17,11 +18,17 @@ const Navigation: React.FC = () => {
 	return (
 		<nav className="flex flex-col justify-center md:flex-row">
 			<div className="flex items-center">
-				<button className="md:hidden" title="Menu" onClick={() => setIsOpen(x => !x)}>
+				<button
+					className="md:hidden"
+					title="Menu"
+					onClick={() => setIsOpen(x => !x)}
+				>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
 				<a href="/">
-					<h1 className="px-4 font-sans text-xl font-light uppercase md:px-0">Finance tracker</h1>
+					<h1 className="px-4 font-sans text-xl font-light uppercase md:px-0">
+						Finance tracker
+					</h1>
 				</a>
 			</div>
 
@@ -32,7 +39,10 @@ const Navigation: React.FC = () => {
 			>
 				{links.map(x => (
 					<li key={x.path}>
-						<a href={x.path} className="h-full align-middle font-light hover:underline">
+						<a
+							href={x.path}
+							className="h-full align-middle font-light hover:underline"
+						>
 							{x.text}
 						</a>
 					</li>

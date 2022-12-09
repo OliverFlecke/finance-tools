@@ -1,6 +1,8 @@
+import { host } from './constants';
+
 describe('empty spec', () => {
 	it('passes', () => {
-		cy.visit('https://localhost:3000/budget');
-		cy.get('h2.page-header').contains('Budget');
+		cy.visit(`${host}/budget`);
+		cy.get('h2.page-header').should('have.text', 'Budget');
 	});
 });

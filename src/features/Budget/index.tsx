@@ -31,7 +31,7 @@ const Budget: React.FC = () => {
 			<h2 className="page-header">Budget</h2>
 
 			<div className="mx-4">
-				<table className="w-full border-separate border-spacing-2">
+				<table className="w-full border-separate border-spacing-0">
 					<thead>
 						<tr>
 							<th></th>
