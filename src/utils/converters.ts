@@ -14,10 +14,10 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 export function formatCurrency(value?: number, currency?: string): string {
 	if (!value || Number.isNaN(value)) return '0';
 	const format = (currency: string) =>
-		value.toLocaleString(undefined, {
+		value.toLocaleString('en-US', {
 			style: 'currency',
 			currency,
-			currencyDisplay: 'code',
+			currencyDisplay: 'symbol',
 		});
 
 	try {
