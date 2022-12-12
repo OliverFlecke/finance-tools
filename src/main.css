@@ -54,4 +54,9 @@ input[type='number'] {
 			@apply whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500;
 		}
 	}
+
+	th.currency,
+	td.currency {
+		@apply text-right;
+	}
 }
