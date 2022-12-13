@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { formatCurrency } from '../../utils/converters';
 import { sum } from 'utils/math';
 import mock from './budget_mock.json';
 import AddLine from './AddLine';
+import LineOverview from './LineOverview';
+import MonthAndYearCells from './MonthAndYearCells';
+import useAsyncReducer from '../../hooks/useAsyncReducer';
 
 interface State {
 	income: Line[];
@@ -15,10 +17,9 @@ export interface Line {
 	amount: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-type Action = { type: 'ADD INCOME'; line: Line };
-
-type Reducer = (state: State, action: Action) => Promise<State>;
+type Action =
+	| { type: 'ADD INCOME'; line: Line }
+	| { type: 'ADD EXPENSE'; line: Line };
 
 function reducer(state: State, action: Action): Promise<State> {
 	switch (action.type) {
@@ -27,34 +28,23 @@ function reducer(state: State, action: Action): Promise<State> {
 				...state,
 				income: state.income.concat(action.line),
 			});
+		case 'ADD EXPENSE':
+			return Promise.resolve({
+				...state,
+				expenses: state.expenses.concat(action.line),
+			});
 
 		default:
 			return Promise.resolve(state);
 	}
 }
 
-const useAsyncReducer = (
-	reducer: Reducer,
-	initialState: State
-): [State, (action: Action) => Promise<void>] => {
-	const [state, setState] = useState<State>(initialState);
-
-	const dispatch = async (action: Action) => {
-		const result = reducer(state, action);
-
-		// TODO: Handle error
-		setState(await result);
-	};
-
-	return [state, dispatch];
-};
-
 function fetchInitialData(): State {
 	// TODO: Implement proper storage
 	return { ...mock };
 }
 
-const currency = 'GBP';
+export const currency = 'GBP';
 
 function useComputation(state: State, savePercent: number) {
 	const totalIncome = useMemo(
@@ -85,7 +75,8 @@ function useComputation(state: State, savePercent: number) {
 const Budget: React.FC = () => {
 	const [state, dispatch] = useAsyncReducer(reducer, fetchInitialData());
 	const [savePercent, setSavePercent] = useState<number>(0);
-	const { total, savings, remaining } = useComputation(state, savePercent);
+	const { total, totalIncome, totalExpenses, savings, remaining } =
+		useComputation(state, savePercent);
 
 	return (
 		<>
@@ -126,12 +117,23 @@ const Budget: React.FC = () => {
 						</tr>
 					</thead>
 
-					<Body title="Income" data={state.income} />
+					<LineOverview
+						title="Income"
+						data={state.income}
+						total={totalIncome}
+					/>
 					<AddLine
 						add={(line: Line) => dispatch({ type: 'ADD INCOME', line })}
 					/>
 
-					<Body title="Expenses" data={state.expenses} />
+					<LineOverview
+						title="Expenses"
+						data={state.expenses}
+						total={totalExpenses}
+					/>
+					<AddLine
+						add={(line: Line) => dispatch({ type: 'ADD EXPENSE', line })}
+					/>
 
 					<tfoot>
 						<tr className="bg-green-400 dark:bg-green-700">
@@ -154,36 +156,3 @@ const Budget: React.FC = () => {
 };
 
 export default Budget;
-
-const MonthAndYearCells: React.FC<{ value: number }> = ({ value }) => (
-	<>
-		<td className="currency">{formatCurrency(value, currency)}</td>
-		<td className="currency">{formatCurrency(12 * value, currency)}</td>
-	</>
-);
-
-const Body: React.FC<{ title: string; data: Line[] }> = ({ title, data }) => {
-	const total = useMemo(
-		() => data.map(line => line.amount).reduce((acc, v) => acc + v, 0),
-		[data]
-	);
-
-	return (
-		<tbody>
-			<tr>
-				<th className="text-left">{title}</th>
-			</tr>
-			{data.map(line => (
-				<tr key={line.name} className="px-8 odd:bg-slate-700">
-					<td>{line.name}</td>
-					<MonthAndYearCells value={line.amount} />
-				</tr>
-			))}
-			<tr>
-				<th>Total</th>
-				<th className="currency">{formatCurrency(total, currency)}</th>
-				<th className="currency">{formatCurrency(12 * total, currency)}</th>
-			</tr>
-		</tbody>
-	);
-};
