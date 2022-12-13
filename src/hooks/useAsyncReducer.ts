@@ -1,22 +1,42 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface ErrorState {
-	error?: unknown;
+	loading: boolean;
+	error: unknown | null;
 }
 
 export default function useAsyncReducer<State, Action>(
-	reducer: (state: State, action: Action) => Promise<State>,
-	initialState: State
+	reducer: (state: State, action: Action) => Promise<State> | State,
+	initialState: State,
+	cacheKey?: string
 ): [State & ErrorState, (action: Action) => Promise<void>] {
 	const [state, setState] = useState<State & ErrorState>({
 		...initialState,
-		error: undefined,
+		loading: false,
+		error: null,
 	});
 
+	const cacheState = useCallback(
+		(newState: State & ErrorState) => {
+			if (cacheKey) {
+				localStorage.setItem(cacheKey, JSON.stringify(newState));
+			}
+			setState(newState);
+		},
+		[cacheKey]
+	);
+
 	const dispatch = async (action: Action) => {
-		reducer(state as State, action)
-			.then(state => setState({ ...state, error: undefined }))
-			.catch(error => setState({ ...state, error }));
+		const result = reducer(state, action);
+
+		if (result instanceof Promise<State>) {
+			setState({ ...state, loading: true, error: null });
+			result
+				.then(state => cacheState({ ...state, loading: false, error: null }))
+				.catch(error => setState({ ...state, loading: false, error }));
+		} else {
+			cacheState({ ...result, loading: false, error: null });
+		}
 	};
 
 	return [state, dispatch];

@@ -6,3 +6,5 @@ export function sleep(ms: number): Promise<void> {
 export function allPropertiesAreDefined(obj: any): boolean {
 	return Object.keys(obj).every(key => obj[key] !== undefined);
 }
+
+export const isClient = typeof window === 'undefined';

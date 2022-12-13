@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
-import { sum } from 'utils/math';
-import mock from './budget_mock.json';
+import ClientOnly from 'components/ClientOnly';
+import useAsyncReducer from 'hooks/useAsyncReducer';
+import React, { useState } from 'react';
+import { getDataFromStorage } from 'utils/storage';
 import AddLine from './AddLine';
 import LineOverview from './LineOverview';
 import MonthAndYearCells from './MonthAndYearCells';
-import useAsyncReducer from '../../hooks/useAsyncReducer';
+import { useComputation } from './useComputation';
 
-interface State {
+export interface State {
 	income: Line[];
 	expenses: Line[];
 }
@@ -23,6 +24,7 @@ type Action =
 
 function reducer(state: State, action: Action): Promise<State> {
 	switch (action.type) {
+		// TODO: Send this along to some server
 		case 'ADD INCOME':
 			return Promise.resolve({
 				...state,
@@ -40,43 +42,20 @@ function reducer(state: State, action: Action): Promise<State> {
 }
 
 function fetchInitialData(): State {
-	// TODO: Implement proper storage
-	return { ...mock };
+	return getDataFromStorage('budget', { income: [], expenses: [] });
 }
 
 export const currency = 'GBP';
 
-function useComputation(state: State, savePercent: number) {
-	const totalIncome = useMemo(
-		() => sum(...state.income.map(x => x.amount)),
-		[state.income]
-	);
-	const totalExpenses = useMemo(
-		() => sum(...state.expenses.map(x => x.amount)),
-		[state.expenses]
-	);
-	const total = useMemo(
-		() => totalIncome - totalExpenses,
-		[totalIncome, totalExpenses]
-	);
-	const savings = totalIncome * (savePercent / 100);
-
-	const remaining = total - savings;
-
-	return {
-		total,
-		totalIncome,
-		totalExpenses,
-		savings,
-		remaining,
-	};
-}
-
 const Budget: React.FC = () => {
-	const [state, dispatch] = useAsyncReducer(reducer, fetchInitialData());
+	const [state, dispatch] = useAsyncReducer(
+		reducer,
+		fetchInitialData(),
+		'budget'
+	);
 	const [savePercent, setSavePercent] = useState<number>(0);
 	const { total, totalIncome, totalExpenses, savings, remaining } =
-		useComputation(state, savePercent);
+		useComputation(state, { savePercent });
 
 	return (
 		<>
@@ -107,50 +86,52 @@ const Budget: React.FC = () => {
 				</span>
 			</div>
 
-			<div className="mx-4 pb-8">
-				<table className="w-full border-separate border-spacing-0 overflow-hidden rounded">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Per month</th>
-							<th>Per year</th>
-						</tr>
-					</thead>
+			<ClientOnly>
+				<div className="mx-4 pb-8">
+					<table className="w-full border-separate border-spacing-0 overflow-hidden rounded">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Per month</th>
+								<th>Per year</th>
+							</tr>
+						</thead>
 
-					<LineOverview
-						title="Income"
-						data={state.income}
-						total={totalIncome}
-					/>
-					<AddLine
-						add={(line: Line) => dispatch({ type: 'ADD INCOME', line })}
-					/>
+						<LineOverview
+							title="Income"
+							data={state.income}
+							total={totalIncome}
+						/>
+						<AddLine
+							add={(line: Line) => dispatch({ type: 'ADD INCOME', line })}
+						/>
 
-					<LineOverview
-						title="Expenses"
-						data={state.expenses}
-						total={totalExpenses}
-					/>
-					<AddLine
-						add={(line: Line) => dispatch({ type: 'ADD EXPENSE', line })}
-					/>
+						<LineOverview
+							title="Expenses"
+							data={state.expenses}
+							total={totalExpenses}
+						/>
+						<AddLine
+							add={(line: Line) => dispatch({ type: 'ADD EXPENSE', line })}
+						/>
 
-					<tfoot>
-						<tr className="bg-green-400 dark:bg-green-700">
-							<th>After monthley expenses</th>
-							<MonthAndYearCells value={total} />
-						</tr>
-						<tr>
-							<td>Savings</td>
-							<MonthAndYearCells value={savings} />
-						</tr>
-						<tr className="bg-green-400 dark:bg-green-700">
-							<th>Remaining</th>
-							<MonthAndYearCells value={remaining} />
-						</tr>
-					</tfoot>
-				</table>
-			</div>
+						<tfoot>
+							<tr className="bg-green-400 dark:bg-green-700">
+								<th>After monthley expenses</th>
+								<MonthAndYearCells value={total} />
+							</tr>
+							<tr>
+								<td>Savings</td>
+								<MonthAndYearCells value={savings} />
+							</tr>
+							<tr className="bg-green-400 dark:bg-green-700">
+								<th>Remaining</th>
+								<MonthAndYearCells value={remaining} />
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</ClientOnly>
 		</>
 	);
 };
