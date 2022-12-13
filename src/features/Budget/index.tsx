@@ -2,35 +2,90 @@ import React, { useMemo, useState } from 'react';
 import { formatCurrency } from '../../utils/converters';
 import { sum } from 'utils/math';
 import mock from './budget_mock.json';
+import AddLine from './AddLine';
 
 interface State {
 	income: Line[];
 	expenses: Line[];
 }
 
-interface Line {
+export interface Line {
 	name: string;
 	category: string;
 	amount: number;
 }
 
-function loadData(): State {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+type Action = { type: 'ADD INCOME'; line: Line };
+
+type Reducer = (state: State, action: Action) => Promise<State>;
+
+function reducer(state: State, action: Action): Promise<State> {
+	switch (action.type) {
+		case 'ADD INCOME':
+			return Promise.resolve({
+				...state,
+				income: state.income.concat(action.line),
+			});
+
+		default:
+			return Promise.resolve(state);
+	}
+}
+
+const useAsyncReducer = (
+	reducer: Reducer,
+	initialState: State
+): [State, (action: Action) => Promise<void>] => {
+	const [state, setState] = useState<State>(initialState);
+
+	const dispatch = async (action: Action) => {
+		const result = reducer(state, action);
+
+		// TODO: Handle error
+		setState(await result);
+	};
+
+	return [state, dispatch];
+};
+
+function fetchInitialData(): State {
 	// TODO: Implement proper storage
 	return { ...mock };
 }
 
 const currency = 'GBP';
 
-const Budget: React.FC = () => {
-	const { income, expenses } = loadData();
-	const totalIncome = sum(...income.map(x => x.amount));
-	const totalExpenses = sum(...expenses.map(x => x.amount));
-	const total = totalIncome - totalExpenses;
-
-	const [savePercent, setSavePercent] = useState<number>(0);
+function useComputation(state: State, savePercent: number) {
+	const totalIncome = useMemo(
+		() => sum(...state.income.map(x => x.amount)),
+		[state.income]
+	);
+	const totalExpenses = useMemo(
+		() => sum(...state.expenses.map(x => x.amount)),
+		[state.expenses]
+	);
+	const total = useMemo(
+		() => totalIncome - totalExpenses,
+		[totalIncome, totalExpenses]
+	);
 	const savings = totalIncome * (savePercent / 100);
 
 	const remaining = total - savings;
+
+	return {
+		total,
+		totalIncome,
+		totalExpenses,
+		savings,
+		remaining,
+	};
+}
+
+const Budget: React.FC = () => {
+	const [state, dispatch] = useAsyncReducer(reducer, fetchInitialData());
+	const [savePercent, setSavePercent] = useState<number>(0);
+	const { total, savings, remaining } = useComputation(state, savePercent);
 
 	return (
 		<>
@@ -71,8 +126,12 @@ const Budget: React.FC = () => {
 						</tr>
 					</thead>
 
-					<Body title="Income" data={income} />
-					<Body title="Expenses" data={expenses} />
+					<Body title="Income" data={state.income} />
+					<AddLine
+						add={(line: Line) => dispatch({ type: 'ADD INCOME', line })}
+					/>
+
+					<Body title="Expenses" data={state.expenses} />
 
 					<tfoot>
 						<tr className="bg-green-400 dark:bg-green-700">

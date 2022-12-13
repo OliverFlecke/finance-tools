@@ -57,6 +57,10 @@ input[type='number'] {
 
 	th.currency,
 	td.currency {
-		@apply text-right;
+		@apply px-2 text-right;
+	}
+
+	input.budget {
+		@apply w-24 rounded py-2 px-2;
 	}
 }
