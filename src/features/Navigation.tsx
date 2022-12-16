@@ -3,7 +3,7 @@ import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
 import Link from 'next/link';
 
 const links = [
-	{ path: '/', text: 'Overview' },
+	{ path: '/accounts', text: 'Accounts' },
 	{
 		path: '/stocks',
 		text: 'Stocks',

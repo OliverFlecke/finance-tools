@@ -1,4 +1,5 @@
 import 'compiled.css';
+import Footer from 'features/Footer';
 import Header from 'features/Header';
 import Settings from 'features/Settings';
 import type { AppProps } from 'next/app';
@@ -27,10 +28,13 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<meta name="color-scheme" content="dark light" />
 		</Head>
 		<Settings>
-			<Header />
-			<main className="h-full min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
-				<Component {...pageProps} />
-			</main>
+			<div className="flex min-h-screen flex-col">
+				<Header />
+				<main className="h-full grow bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+					<Component {...pageProps} />
+				</main>
+				<Footer />
+			</div>
 		</Settings>
 	</>
 );
