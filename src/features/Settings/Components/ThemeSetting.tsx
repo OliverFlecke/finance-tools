@@ -12,7 +12,10 @@ const ThemeSetting = () => {
 				<Toggle
 					checked={values.themeFollowsOS}
 					onChange={e =>
-						dispatch({ type: 'SET THEME TO FOLLOW OS', shouldFollowOS: e.target.checked })
+						dispatch({
+							type: 'SET THEME TO FOLLOW OS',
+							shouldFollowOS: e.target.checked,
+						})
 					}
 				/>
 			</div>
@@ -23,7 +26,10 @@ const ThemeSetting = () => {
 					<div className="flex flex-row justify-end">
 						<DarkModeToggle
 							onToggle={() =>
-								dispatch({ type: 'SET THEME', preferresDarkMode: !values.preferresDarkMode })
+								dispatch({
+									type: 'SET THEME',
+									preferresDarkMode: !values.preferresDarkMode,
+								})
 							}
 							darkMode={values.preferresDarkMode}
 						/>

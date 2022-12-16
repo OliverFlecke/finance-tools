@@ -5,10 +5,19 @@ import { formatter, FormData } from './index';
 
 const CalculationSummary: React.FC<FormData> = props => {
 	const rate = useMemo(() => props.interestRate / 100, [props.interestRate]);
-	const isWithDeposits = useMemo(() => props.monthlyDeposit !== 0, [props.monthlyDeposit]);
+	const isWithDeposits = useMemo(
+		() => props.monthlyDeposit !== 0,
+		[props.monthlyDeposit]
+	);
 
-	const balance = FV(props.existingAmount, props.monthlyDeposit, rate, props.investmentPeriod);
-	const totalDeposits = 12 * props.monthlyDeposit * props.investmentPeriod + props.existingAmount;
+	const balance = FV(
+		props.existingAmount,
+		props.monthlyDeposit,
+		rate,
+		props.investmentPeriod
+	);
+	const totalDeposits =
+		12 * props.monthlyDeposit * props.investmentPeriod + props.existingAmount;
 	const totalInterest = balance - totalDeposits;
 
 	return (
@@ -68,13 +77,19 @@ const typeColors = {
 	balance: 'text-red-800 dark:text-red-400',
 };
 
-const TableHeader: React.FC<{ isWithDeposits: boolean }> = ({ isWithDeposits }) => (
+const TableHeader: React.FC<{ isWithDeposits: boolean }> = ({
+	isWithDeposits,
+}) => (
 	<thead>
 		<tr className="text-right">
 			<th className="px-4 text-center">Year</th>
-			{isWithDeposits && <th className={`px-4 ${typeColors.deposit}`}>Deposit</th>}
+			{isWithDeposits && (
+				<th className={`px-4 ${typeColors.deposit}`}>Deposit</th>
+			)}
 			<th className={`px-4 ${typeColors.interest}`}>Interest</th>
-			{isWithDeposits && <th className={`px-4 ${typeColors.totalDeposit}`}>Total deposits</th>}
+			{isWithDeposits && (
+				<th className={`px-4 ${typeColors.totalDeposit}`}>Total deposits</th>
+			)}
 			<th className={`px-4 ${typeColors.totalInterest}`}>Total interest</th>
 			<th className={`px-4 ${typeColors.balance}`}>Balance</th>
 			<th className="px-4">Date</th>
@@ -93,14 +108,26 @@ const TableRow: React.FC<TableRowProps> = props => {
 	const { rate, year, isWithDeposits, isLastRow } = props;
 	const deposit = year === 0 ? props.existingAmount : 12 * props.monthlyDeposit;
 	const totalDeposit = year * 12 * props.monthlyDeposit + props.existingAmount;
-	const totalBalance = FV(props.existingAmount, props.monthlyDeposit, rate, year);
+	const totalBalance = FV(
+		props.existingAmount,
+		props.monthlyDeposit,
+		rate,
+		year
+	);
 	const lastYear = year - 1;
 
-	const depositPrevious = lastYear * 12 * props.monthlyDeposit + props.existingAmount;
-	const balancePrevious = FV(props.existingAmount, props.monthlyDeposit, rate, lastYear);
+	const depositPrevious =
+		lastYear * 12 * props.monthlyDeposit + props.existingAmount;
+	const balancePrevious = FV(
+		props.existingAmount,
+		props.monthlyDeposit,
+		rate,
+		lastYear
+	);
 
 	const totalInterest = totalBalance - totalDeposit;
-	const interest = year === 0 ? 0 : totalInterest - (balancePrevious - depositPrevious);
+	const interest =
+		year === 0 ? 0 : totalInterest - (balancePrevious - depositPrevious);
 
 	return (
 		<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
@@ -114,17 +141,23 @@ const TableRow: React.FC<TableRowProps> = props => {
 				{formatter.format(interest)}
 			</td>
 			{isWithDeposits && (
-				<td className={`px-4 ${isLastRow ? typeColors.totalDeposit : ''}`.trim()}>
+				<td
+					className={`px-4 ${isLastRow ? typeColors.totalDeposit : ''}`.trim()}
+				>
 					{formatter.format(totalDeposit)}
 				</td>
 			)}
-			<td className={`px-4 ${isLastRow ? typeColors.totalInterest : ''}`.trim()}>
+			<td
+				className={`px-4 ${isLastRow ? typeColors.totalInterest : ''}`.trim()}
+			>
 				{formatter.format(totalInterest)}
 			</td>
 			<td className={`px-4 ${isLastRow ? typeColors.balance : ''}`.trim()}>
 				{formatter.format(totalBalance)}
 			</td>
-			<td className="px-4">{addYears(new Date(), year).toLocaleDateString()}</td>
+			<td className="px-4">
+				{addYears(new Date(), year).toLocaleDateString()}
+			</td>
 		</tr>
 	);
 };

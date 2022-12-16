@@ -2,7 +2,10 @@ import { storedReducer } from 'utils/storage';
 import TaxCalculatorAction from './actions';
 import { storageKey, TaxCalculatorState } from './index';
 
-function reducer(state: TaxCalculatorState, action: TaxCalculatorAction): TaxCalculatorState {
+function reducer(
+	state: TaxCalculatorState,
+	action: TaxCalculatorAction
+): TaxCalculatorState {
 	switch (action.type) {
 		case 'SET SALARY':
 			return {

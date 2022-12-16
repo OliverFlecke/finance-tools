@@ -14,16 +14,20 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 export function formatCurrency(value?: number, currency?: string): string {
 	if (!value || Number.isNaN(value)) return '0';
 	const format = (currency: string) =>
-		value.toLocaleString(undefined, {
+		value.toLocaleString('en-US', {
 			style: 'currency',
 			currency,
-			currencyDisplay: 'code',
+			currencyDisplay: 'symbol',
 		});
 
 	try {
 		return format(currency ?? 'USD');
 	} catch (ex) {
-		if (ex instanceof RangeError && ex.message.startsWith('Invalid currency code') && currency) {
+		if (
+			ex instanceof RangeError &&
+			ex.message.startsWith('Invalid currency code') &&
+			currency
+		) {
 			return format('USD').replace('USD', currency);
 		}
 
@@ -40,7 +44,11 @@ export function convertToCurrency(
 	return value * getConversionRate(rates, fromCurrency, toCurrency);
 }
 
-function getConversionRate(rates: Rates, fromCurrency?: string, toCurrency?: string): number {
+export function getConversionRate(
+	rates: Rates,
+	fromCurrency?: string,
+	toCurrency?: string
+): number {
 	const baseCurrency = 'usd';
 	fromCurrency = fromCurrency?.toLowerCase();
 	toCurrency = toCurrency?.toLowerCase();
@@ -68,14 +76,16 @@ export function useConverter(
 	rates: Rates
 ): (value: number) => number {
 	return useCallback(
-		(value: number) => convertToCurrency(value, rates, fromCurrency, toCurrency),
+		(value: number) =>
+			convertToCurrency(value, rates, fromCurrency, toCurrency),
 		[fromCurrency, rates, toCurrency]
 	);
 }
 
 type Rates = { [key: string]: number };
 
-export function sortObject<T>(unordered: T): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function sortObject<T>(unordered: any): T {
 	return (
 		Object.keys(unordered)
 			.sort()

@@ -3,7 +3,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { User } from 'utils/githubAuth';
 import LoginButton from './LoginButton';
 import LoginMenu from './LoginMenuProps';
-import UserAvatar from './UserAvatarProps';
+import UserAvatar from './UserAvatar';
 
 interface LoginStateProps {
 	user: User | null;
@@ -11,7 +11,11 @@ interface LoginStateProps {
 	logoutUrl: string;
 }
 
-const LoginState: React.FC<LoginStateProps> = ({ user, authorizeUrl, logoutUrl }) =>
+const LoginState: React.FC<LoginStateProps> = ({
+	user,
+	authorizeUrl,
+	logoutUrl,
+}) =>
 	user === null ? (
 		<LoginButton authorizeUrl={authorizeUrl} />
 	) : (
@@ -25,7 +29,10 @@ interface LoginDropDownMenuProps {
 	logoutUrl: string;
 }
 
-const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user, logoutUrl }) => {
+const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({
+	user,
+	logoutUrl,
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const ref = useRef<HTMLDivElement>(null);

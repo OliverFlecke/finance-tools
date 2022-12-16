@@ -1,8 +1,15 @@
 import { User } from 'utils/githubAuth';
-import { apiVersion, baseUri } from 'features/apiBase';
+import { apiUrlWithPath } from 'features/apiBase';
 
 export function getMyUser(): Promise<User> {
-	return fetch(`${baseUri}/${apiVersion}/user/me`, {
+	if (process.env.NODE_ENV === 'development') {
+		return Promise.resolve({
+			id: 1,
+			avatar_url: 'https://avatars.githubusercontent.com/u/7227658?v=4',
+		});
+	}
+
+	return fetch(`${apiUrlWithPath}/user/me`, {
 		credentials: 'include',
 	})
 		.then(res => res.json())

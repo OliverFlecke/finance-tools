@@ -1,5 +1,8 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { IoEllipsisHorizontalCircleOutline, IoTrashOutline } from 'react-icons/io5';
+import {
+	IoEllipsisHorizontalCircleOutline,
+	IoTrashOutline,
+} from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
 import SettingsContext from 'features/Settings/context';
@@ -34,9 +37,14 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 		<>
 			<tr className="relative w-full bg-gray-200 text-right dark:bg-gray-800">
 				<td className="px-2 text-left">{stock.symbol}</td>
-				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
+				<td className="px-2">
+					{formatCurrency(stock.regularMarketPrice, stock.currency)}
+				</td>
 				<td className="px-0">
-					{formatCurrency(currencyConverter(marketValue), preferredDisplayCurrency)}
+					{formatCurrency(
+						currencyConverter(marketValue),
+						preferredDisplayCurrency
+					)}
 				</td>
 				<td>{totalShares}</td>
 				<td className={`px-2 ${getValueColorIndicator(avgPrice)}`}>
@@ -78,7 +86,10 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 
 	return (
 		<td className="flex h-full flex-row justify-end space-x-2 px-4">
-			<button onClick={() => setShowLots(x => !x)} className="hover:cursor-pointer">
+			<button
+				onClick={() => setShowLots(x => !x)}
+				className="hover:cursor-pointer"
+			>
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
 			<button onClick={deleteStock} className="hover:cursor-pointer">

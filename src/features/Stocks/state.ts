@@ -3,7 +3,6 @@ import { getDataFromStorage, storedReducer } from '../../utils/storage';
 import { Stock, StockList, StockLot } from './models';
 import { v4 as uuidv4 } from 'uuid';
 import { QuoteResponse } from './API/yahoo';
-import { CurrencyRates } from '../Currency/api';
 
 const storageKey = 'stocks_state';
 
@@ -13,7 +12,10 @@ export const StockContext = createContext({
 	dispatch: (_: StockAction) => {},
 });
 
-export function stockReducer(state: StockState, action: StockAction): StockState {
+export function stockReducer(
+	state: StockState,
+	action: StockAction
+): StockState {
 	return storedReducer(storageKey, reducer)(state, action);
 }
 
@@ -29,7 +31,9 @@ export function getDefaultStockState(): StockState {
 	for (const symbol of Object.keys(state.stocks)) {
 		for (const lot of state.stocks[symbol].lots) {
 			lot.buyDate = new Date(Date.parse(lot.buyDate));
-			lot.soldDate = lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined;
+			lot.soldDate = lot.soldDate
+				? new Date(Date.parse(lot.soldDate))
+				: undefined;
 		}
 	}
 
@@ -56,7 +60,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 
 	switch (action.type) {
 		case 'ADD STOCK':
-			if (state.stocks.find((x) => x.symbol === action.stock.symbol)) {
+			if (state.stocks.find(x => x.symbol === action.stock.symbol)) {
 				return state;
 			}
 
@@ -68,14 +72,14 @@ function reducer(state: StockState, action: StockAction): StockState {
 		case 'DELETE STOCK':
 			return {
 				...state,
-				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
+				stocks: state.stocks.filter(x => x.symbol !== action.symbol),
 			};
 		case 'UPDATE STOCKS':
 			console.log(action.stocks);
 			return {
 				...state,
-				stocks: state.stocks.map((old) => {
-					const stock = action.stocks.find((x) => x.symbol === old.symbol);
+				stocks: state.stocks.map(old => {
+					const stock = action.stocks.find(x => x.symbol === old.symbol);
 
 					return {
 						...old,
@@ -88,7 +92,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 		case 'SET STOCKS':
 			return {
 				...state,
-				stocks: action.stocks.map((stock) => ({
+				stocks: action.stocks.map(stock => ({
 					...stock,
 					lots: stock.lots ?? [],
 				})),
@@ -99,13 +103,15 @@ function reducer(state: StockState, action: StockAction): StockState {
 				id: action.lotId ?? uuidv4(),
 				shares: 0,
 				buyDate: new Date(),
-				buyPrice: state.stocks.find((x) => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
+				buyPrice:
+					state.stocks.find(x => x.symbol === action.symbol)
+						?.regularMarketPrice ?? 0,
 				buyBrokerage: 0,
 			};
 
 			return {
 				...state,
-				stocks: state.stocks.map((stock) =>
+				stocks: state.stocks.map(stock =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
@@ -118,12 +124,12 @@ function reducer(state: StockState, action: StockAction): StockState {
 		case 'DELETE LOT':
 			return {
 				...state,
-				stocks: state.stocks.map((stock) =>
+				stocks: state.stocks.map(stock =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
 								...stock,
-								lots: stock.lots.filter((x) => x.id !== action.id),
+								lots: stock.lots.filter(x => x.id !== action.id),
 						  }
 				),
 			};
@@ -131,12 +137,14 @@ function reducer(state: StockState, action: StockAction): StockState {
 		case 'EDIT LOT':
 			return {
 				...state,
-				stocks: state.stocks.map((stock) =>
+				stocks: state.stocks.map(stock =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
 								...stock,
-								lots: stock.lots.filter((x) => x.id !== action.lot.id).concat(action.lot),
+								lots: stock.lots
+									.filter(x => x.id !== action.lot.id)
+									.concat(action.lot),
 						  }
 				),
 			};

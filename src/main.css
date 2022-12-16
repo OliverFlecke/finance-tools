@@ -23,6 +23,12 @@ input[type='number'] {
 	@apply flex flex-col items-center justify-center;
 }
 
+@layer components {
+	.page-header {
+		@apply px-4 py-4 text-xl;
+	}
+}
+
 @layer utilities {
 	.modal-form-label {
 		@apply text-sm font-medium text-gray-700 dark:text-gray-300;
@@ -47,5 +53,14 @@ input[type='number'] {
 		th {
 			@apply whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500;
 		}
+	}
+
+	th.currency,
+	td.currency {
+		@apply px-2 text-right;
+	}
+
+	input.budget {
+		@apply w-24 rounded py-2 px-2;
 	}
 }

@@ -5,10 +5,14 @@ interface SEOProps {
 	title: string;
 }
 
-const SEO: React.FC<SEOProps> = ({ title }: SEOProps) => (
-	<Head>
-		<title>{title} | Finance</title>
-	</Head>
-);
+const SEO: React.FC<SEOProps> = ({ title }: SEOProps) => {
+	const text = `${title} | Finance`;
+
+	return (
+		<Head>
+			<title>{text}</title>
+		</Head>
+	);
+};
 
 export default SEO;

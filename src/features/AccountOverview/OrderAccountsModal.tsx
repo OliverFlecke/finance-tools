@@ -20,12 +20,19 @@ const OrderAccountsModal: FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [state, setState] = useState<'NONE' | 'SAVING' | 'SAVED'>('NONE');
 	const [items, setItems] = useState(useMemo(() => accounts, [accounts]));
-	const renderCard = useCallback((account: Account) => <AccountCard account={account} />, []);
+	const renderCard = useCallback(
+		(account: Account) => <AccountCard account={account} />,
+		[]
+	);
 
 	const saveOrder = useCallback(async () => {
 		try {
 			setState('SAVING');
-			const order = items.map((a, i) => ({ id: a.id, sortKey: i, name: a.name }));
+			const order = items.map((a, i) => ({
+				id: a.id,
+				sortKey: i,
+				name: a.name,
+			}));
 			await updateAccounts(order);
 			dispatch({ type: 'SORT ACCOUNTS', order });
 			setState('SAVED');
@@ -38,7 +45,10 @@ const OrderAccountsModal: FC = () => {
 
 	return (
 		<>
-			<Button onClick={() => setIsOpen(true)} className="btn btn-primary flex items-center gap-x-2">
+			<Button
+				onClick={() => setIsOpen(true)}
+				className="btn btn-primary flex items-center gap-x-2"
+			>
 				<IoShuffleOutline className="inline" />
 				<span className="align-middle">Order accounts</span>
 			</Button>
@@ -63,7 +73,9 @@ const OrderAccountsModal: FC = () => {
 				{state !== 'NONE' && (
 					<div className="absolute top-0 left-0 z-10 flex h-full w-full flex-row items-center justify-center bg-black opacity-75">
 						{state === 'SAVING' && <Spinner />}
-						{state === 'SAVED' && <div className="text-xl font-bold">Order saved!</div>}
+						{state === 'SAVED' && (
+							<div className="text-xl font-bold">Order saved!</div>
+						)}
 					</div>
 				)}
 			</Modal>

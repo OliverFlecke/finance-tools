@@ -1,6 +1,10 @@
 import SettingsContext from 'features/Settings/context';
 import React, { useCallback, useContext } from 'react';
-import { convertToCurrency, formatCurrency, useConverter } from 'utils/converters';
+import {
+	convertToCurrency,
+	formatCurrency,
+	useConverter,
+} from 'utils/converters';
 import { CurrencyRates } from '../Currency/api';
 import { TaxCalculatorContext, TaxCalculatorOptions } from './state';
 import taxCalculator, { TaxSystem } from './taxRates';
@@ -16,7 +20,8 @@ const TaxTable: React.FC = () => {
 	const countries = Object.keys(taxCalculator).sort();
 
 	const calculator = useCallback(
-		(a: number, s: TaxSystem) => getCalculator(currency, currencyRates, workOptions)(a, s),
+		(a: number, s: TaxSystem) =>
+			getCalculator(currency, currencyRates, workOptions)(a, s),
 		[currency, currencyRates, workOptions]
 	);
 
@@ -53,7 +58,12 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 		<tbody>
 			{countries.map(country => {
 				const localCurrency = taxCalculator[country].currency;
-				const localSalary = convertToCurrency(salary, currencyRates.usd, currency, localCurrency);
+				const localSalary = convertToCurrency(
+					salary,
+					currencyRates.usd,
+					currency,
+					localCurrency
+				);
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				const result = calculator(localSalary, taxCalculator[country]);
 
@@ -136,7 +146,12 @@ function getCalculator(
 		return {
 			country: system.country,
 			baseSalary: amount,
-			baseSalaryLocal: convertToCurrency(amount, rates.usd, defaultCurrency, system.currency),
+			baseSalaryLocal: convertToCurrency(
+				amount,
+				rates.usd,
+				defaultCurrency,
+				system.currency
+			),
 			taxes: result.taxes,
 			afterTax: result.after_tax,
 			hourlyRate: salary_per_hour_after_tax,

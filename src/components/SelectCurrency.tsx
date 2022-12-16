@@ -13,7 +13,9 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
-	const [currency, setCurrency] = useState(defaultCurrency ?? preferredDisplayCurrency);
+	const [currency, setCurrency] = useState(
+		defaultCurrency ?? preferredDisplayCurrency
+	);
 
 	const onSelection = useCallback(
 		(x: React.ChangeEvent<HTMLSelectElement>) => {

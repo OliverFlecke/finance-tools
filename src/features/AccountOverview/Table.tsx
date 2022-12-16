@@ -1,5 +1,8 @@
 import { AccountContext } from 'features/AccountOverview/AccountService';
-import { Account, AccountEntries } from 'features/AccountOverview/models/Account';
+import {
+	Account,
+	AccountEntries,
+} from 'features/AccountOverview/models/Account';
 import SettingsContext from 'features/Settings/context';
 import React, { FC, useContext } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
@@ -28,7 +31,12 @@ const Table: FC = () => {
 								<td className="pr-6 text-center">{date}</td>
 								<RowSummary date={date} index={i} totals={totals} />
 								{accounts.map(account => (
-									<Cell key={account.name} account={account} entry={entries[date]} date={date} />
+									<Cell
+										key={account.name}
+										account={account}
+										entry={entries[date]}
+										date={date}
+									/>
 								))}
 								<RowActions date={date} />
 							</tr>
@@ -49,7 +57,9 @@ const TableHeader = ({ accounts }: { accounts: Account[] }) => (
 			<th className="px-4 text-green-700 dark:text-green-500">Gain</th>
 			<th className="px-4 text-blue-700 dark:text-blue-500">Total</th>
 			<th className="px-4 text-yellow-700 dark:text-yellow-500">Total cash</th>
-			<th className="px-4 text-purple-700 dark:text-purple-500">Total investments</th>
+			<th className="px-4 text-purple-700 dark:text-purple-500">
+				Total investments
+			</th>
 			{accounts.map(account => (
 				<th key={account.name} className="px-4">
 					<span>{account.name}</span>
@@ -74,7 +84,12 @@ const RowSummary: FC<{
 
 	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
 	const total = totals[index];
-	const totalCash = useSummarizedAccounts(accounts, entries, date, x => x.type === 'Cash');
+	const totalCash = useSummarizedAccounts(
+		accounts,
+		entries,
+		date,
+		x => x.type === 'Cash'
+	);
 	const totalInvested = useSummarizedAccounts(
 		accounts,
 		entries,
@@ -115,8 +130,13 @@ const RowActions: FC<{ date: string }> = ({ date }) => {
 	);
 };
 
-function calculateTotals(accounts: Account[], entries: AccountEntries): number[] {
-	return Object.keys(entries).map(date => useSummarizedAccounts(accounts, entries, date));
+function calculateTotals(
+	accounts: Account[],
+	entries: AccountEntries
+): number[] {
+	return Object.keys(entries).map(date =>
+		useSummarizedAccounts(accounts, entries, date)
+	);
 }
 
 function useSummarizedAccounts(

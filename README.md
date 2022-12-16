@@ -64,6 +64,8 @@ yarn run deploy
   - [x] Persist data to cloud
 - [x] Compound interest calculator
 - [ ] Offline only mode (data is currently cached on device, but only in a read-only mode. Any changes will be overwritten on next refresh.)
+- [ ] Budget
+  - [ ] Enter percentage to save
 
 All features should work on both mobile and desktop platforms, however some components displays some larger tables with data, which are best viewed on desktop.
 They still work well, but can require some horizontal scrolling for now.

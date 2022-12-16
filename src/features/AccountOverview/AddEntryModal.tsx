@@ -1,4 +1,9 @@
-import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react';
+import {
+	Button,
+	ButtonContainer,
+	Input,
+	Modal,
+} from '@oliverflecke/components-react';
 import React, { FC, memo, useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AccountContext } from './AccountService';
@@ -22,7 +27,9 @@ const AddEntryModal: FC = memo(() => {
 			<Modal isOpen={isOpen} onDismiss={dismiss}>
 				<form onSubmit={onSubmit}>
 					<div className="p-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
+						<h2 className="text-lg text-gray-700 dark:text-gray-400">
+							Add new entry on date
+						</h2>
 						<Input type="date" className="m-4" {...register('date')} />
 					</div>
 

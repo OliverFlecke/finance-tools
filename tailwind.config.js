@@ -1,5 +1,8 @@
 module.exports = {
-	content: ['{src,pages}/**/*.{html,tsx}', 'node_modules/@oliverflecke/**/*.tsx'],
+	content: [
+		'{src,pages}/**/*.{html,tsx}',
+		'node_modules/@oliverflecke/**/*.tsx',
+	],
 	darkMode: 'class',
 	variants: {
 		extend: {

@@ -1,13 +1,16 @@
 import React from 'react';
 import { User } from 'utils/githubAuth';
+import Image from 'next/image';
 
 interface UserAvatarProps {
 	user: User;
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ user }) => (
-	<img
+	<Image
 		src={`${user.avatar_url}&s=80`}
+		width={40}
+		height={40}
 		alt="Avatar of the logged in user"
 		className="max-h-10 rounded-full"
 		loading="lazy"

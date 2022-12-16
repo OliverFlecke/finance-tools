@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { baseUri } from '../features/apiBase';
 dotenv.config();
 
 const authorizeUrl = 'https://github.com/login/oauth/authorize';
@@ -12,12 +11,12 @@ const sessionStorageGithubAuthStateKey = 'github_auth_state';
 export interface User {
 	id: number;
 	avatar_url: string;
-	bio: string | null;
-	blog: string | null;
-	email: string | null;
-	html_url: string | null;
-	name: string | null;
-	login: string | null;
+	bio?: string;
+	blog?: string;
+	email?: string;
+	html_url?: string;
+	name?: string;
+	login?: string;
 }
 
 export interface AuthorizeResponse {
@@ -90,7 +89,11 @@ export function getUser(state: string): Promise<User | null> {
 				}
 
 				// Remove query parameters from navigation bar
-				window.history.replaceState({}, document.title, window.location.pathname);
+				window.history.replaceState(
+					{},
+					document.title,
+					window.location.pathname
+				);
 			})
 			.catch(err => console.debug(err));
 	});
@@ -112,7 +115,8 @@ function getUserFromLocalStorage(): User | null {
 }
 
 function randomString(length: number): string {
-	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const chars =
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 	return new Array(length)
 		.fill(null)

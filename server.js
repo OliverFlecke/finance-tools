@@ -19,7 +19,7 @@ app.prepare().then(() => {
 		.createServer(options, async (req, res) => {
 			await handle(req, res);
 		})
-		.listen(port, (err) => {
+		.listen(port, err => {
 			if (err) throw err;
 			console.log(`> Ready on localhost:${port}`);
 		});

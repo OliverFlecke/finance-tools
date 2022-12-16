@@ -8,7 +8,9 @@ interface StockSummaryRowProps {
 	stocks: StockList;
 }
 
-const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummaryRowProps) => {
+const StockSummaryRow: React.FC<StockSummaryRowProps> = ({
+	stocks,
+}: StockSummaryRowProps) => {
 	const {
 		values: { preferredDisplayCurrency, currencyRates },
 	} = useContext(SettingsContext);
