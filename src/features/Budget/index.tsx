@@ -72,8 +72,12 @@ const Budget: React.FC = () => {
 						type="number"
 						min="0"
 						max="100"
-						onKeyPress={event => {
-							if (!/\d|\./.test(event.key)) {
+						onKeyDown={event => {
+							if (
+								!/[0-9\.,\b]/.test(event.key) &&
+								event.key !== 'Backspace' &&
+								event.key !== 'Delete'
+							) {
 								event.preventDefault();
 								return;
 							}
