@@ -16,6 +16,7 @@ describe('Navigation bar', () => {
 			{ text: 'Stocks', path: '/stocks' },
 			{ text: 'Interest', path: '/interest' },
 			{ text: 'Tax calculator', path: '/tax' },
+			{ text: 'Budget', path: '/budget' },
 		];
 		cy.get('nav > ul > li > a').each((link, i) => {
 			cy.wrap(link)

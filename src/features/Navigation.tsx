@@ -10,7 +10,7 @@ const links = [
 	},
 	{ path: '/interest', text: 'Interest' },
 	{ path: '/tax', text: 'Tax calculator' },
-	// { path: '/budget', text: 'Budget' },
+	{ path: '/budget', text: 'Budget' },
 ];
 
 const Navigation: React.FC = () => {
@@ -36,7 +36,7 @@ const Navigation: React.FC = () => {
 			<ul
 				className={`${
 					isOpen ? 'flex' : 'hidden'
-				} flex-col md:flex md:flex-row md:items-center md:space-x-4 md:pl-8`}
+				} flex-col md:flex md:flex-row md:items-center md:space-x-6 md:pl-8`}
 			>
 				{links.map(x => (
 					<li key={x.path}>
