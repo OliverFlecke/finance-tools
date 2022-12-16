@@ -96,15 +96,17 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 const TableHeader: React.FC = () => {
 	return (
 		<thead className="tax-header">
-			<th>Country</th>
-			<th>Local base salary</th>
-			<th>Net salary</th>
-			<th>Taxes</th>
-			<th>Tax percent</th>
-			<th>Local gross salary</th>
-			<th>Local net salary</th>
-			<th>Net salary (monthly)</th>
-			<th>Hourly net salary</th>
+			<tr>
+				<th>Country</th>
+				<th>Local base salary</th>
+				<th>Net salary</th>
+				<th>Taxes</th>
+				<th>Tax percent</th>
+				<th>Local gross salary</th>
+				<th>Local net salary</th>
+				<th>Net salary (monthly)</th>
+				<th>Hourly net salary</th>
+			</tr>
 		</thead>
 	);
 };

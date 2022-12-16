@@ -1,6 +1,7 @@
 import { CurrencySymbol } from 'features/Currency/api';
 import SettingsContext from 'features/Settings/context';
 import React, { FC, useCallback, useContext, useId, useState } from 'react';
+import ClientOnly from './ClientOnly';
 
 interface Props {
 	label: string;
@@ -31,24 +32,25 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 	if (!currencyRates) return null;
 
 	return (
-		<>
+		<ClientOnly>
 			<label htmlFor={id} className="space-y-2">
 				<span className="input-label">{label}</span>
 				<select
 					id={id}
 					onChange={onSelection}
 					className="block rounded bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
+					value={currency}
 				>
 					{Object.keys(currencyRates.usd)
 						.map(x => x.toUpperCase())
 						.map(key => (
-							<option key={key} value={key} selected={key === currency}>
+							<option key={key} value={key}>
 								{key}
 							</option>
 						))}
 				</select>
 			</label>
-		</>
+		</ClientOnly>
 	);
 };
 
