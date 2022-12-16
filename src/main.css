@@ -27,6 +27,28 @@ input[type='number'] {
 	.page-header {
 		@apply px-4 py-4 text-xl;
 	}
+
+	.text-page {
+		h2,
+		h3 {
+			@apply text-emerald-900 dark:text-emerald-500;
+			@apply pt-4;
+		}
+		h2 {
+			@apply text-center text-2xl;
+		}
+		h3 {
+			@apply text-xl;
+		}
+
+		p {
+			@apply max-w-prose py-2 text-justify;
+		}
+
+		ul li a {
+			@apply text-blue-900 underline dark:text-blue-500;
+		}
+	}
 }
 
 @layer utilities {
