@@ -1,5 +1,6 @@
-const isDevelopment = process.env.NODE_ENV === 'development';
-export const useSampleData = isDevelopment && false;
+import { isDevelopment } from 'utils/general';
+
+export const useSampleData = isDevelopment;
 
 const apiVersion = 'api/v1';
 export const baseUri = isDevelopment
