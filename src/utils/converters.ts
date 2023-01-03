@@ -50,18 +50,24 @@ export function getConversionRate(
 	toCurrency?: string
 ): number {
 	const baseCurrency = 'usd';
-	fromCurrency = fromCurrency?.toLowerCase();
-	toCurrency = toCurrency?.toLowerCase();
+	const fromLowered = fromCurrency?.toLowerCase();
+	const toLowered = toCurrency?.toLowerCase();
 	rates = rates;
 
-	if (!fromCurrency || !toCurrency || fromCurrency === toCurrency) {
+	if (!fromLowered || !toLowered || fromLowered === toLowered) {
 		return 1;
 	}
 
-	if (fromCurrency === baseCurrency) {
-		return toCurrency in rates ? rates[toCurrency] : 1;
-	} else if (toCurrency === baseCurrency) {
-		return fromCurrency in rates ? 1 / rates[fromCurrency] : 1;
+	if (fromLowered === baseCurrency) {
+		if (toCurrency === 'GBp') {
+			return rates['gbp'] * 100;
+		}
+		return toLowered in rates ? rates[toLowered] : 1;
+	} else if (toLowered === baseCurrency) {
+		if (fromCurrency === 'GBp') {
+			return 1 / (rates['gbp'] * 100);
+		}
+		return fromLowered in rates ? 1 / rates[fromLowered] : 1;
 	} else {
 		return (
 			getConversionRate(rates, fromCurrency, baseCurrency) *

@@ -1,8 +1,9 @@
 import { User } from 'utils/githubAuth';
 import { apiUrlWithPath } from 'features/apiBase';
+import { isDevelopment } from 'utils/general';
 
 export function getMyUser(): Promise<User> {
-	if (process.env.NODE_ENV === 'development') {
+	if (isDevelopment) {
 		return Promise.resolve({
 			id: 1,
 			avatar_url: 'https://avatars.githubusercontent.com/u/7227658?v=4',
