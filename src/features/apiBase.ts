@@ -9,6 +9,10 @@ export const baseUri = isDevelopment
 
 export const apiUrlWithPath = `${baseUri}/${apiVersion}`;
 
+export function get(uri: RequestInfo): Promise<Response> {
+	return helper('GET', uri);
+}
+
 export function post(uri: RequestInfo, body: unknown): Promise<Response> {
 	return helper('POST', uri, body);
 }
@@ -20,14 +24,14 @@ export function put(uri: RequestInfo, body: unknown): Promise<Response> {
 function helper(
 	method: string,
 	uri: RequestInfo,
-	body: unknown
+	body?: unknown
 ): Promise<Response> {
 	return fetch(uri, {
 		method,
-		credentials: 'include',
+		mode: isDevelopment ? 'cors' : 'no-cors',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify(body),
+		body: body !== undefined ? JSON.stringify(body) : undefined,
 	});
 }

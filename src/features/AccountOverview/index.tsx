@@ -7,46 +7,51 @@ import {
 	initAccountState,
 } from './AccountService';
 import AddEntryModal from './AddEntryModal';
-import { addAccount, getAccountsWithEntries } from './api/accountApi';
+import { addAccount, getAccounts, useAccessToken } from './api/accountApi';
 import OverviewChart from './OverviewChart';
 import { Account, AccountEntries } from './models/Account';
 import OrderAccountsModal from './OrderAccountsModal';
 import Table from './Table';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
+	const token = useAccessToken();
 
 	useEffect(() => {
-		getAccountsWithEntries().then(accounts => {
-			const entries: AccountEntries = {};
+		(async () => {
+			if (token) {
+				const accounts = await getAccounts(token);
+				const entries: AccountEntries = {};
 
-			for (const account of accounts) {
-				for (const entry of account.entries) {
-					const key = formatDate(entry.date);
+				for (const account of accounts) {
+					for (const entry of account.entries) {
+						const key = formatDate(entry.date);
 
-					if (!(key in entries)) {
-						entries[key] = {};
+						if (!(key in entries)) {
+							entries[key] = {};
+						}
+
+						entries[key][account.name] = entry.amount;
 					}
-
-					entries[key][account.name] = entry.amount;
 				}
-			}
 
-			dispatch({
-				type: 'LOAD STATE',
-				state: {
-					accounts: accounts,
-					entries: Object.keys(entries)
-						.sort()
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						.reduce((obj: any, key) => {
-							obj[key] = entries[key];
-							return obj;
-						}, {}),
-				},
-			});
-		});
-	}, []);
+				dispatch({
+					type: 'LOAD STATE',
+					state: {
+						accounts: accounts,
+						entries: Object.keys(entries)
+							.sort()
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							.reduce((obj: any, key) => {
+								obj[key] = entries[key];
+								return obj;
+							}, {}),
+					},
+				});
+			}
+		})();
+	}, [token]);
 
 	const add = useCallback(
 		async (account: Account) => {
@@ -70,4 +75,6 @@ const AccountOverview = memo(() => {
 });
 AccountOverview.displayName = 'AccountOverview';
 
-export default AccountOverview;
+export default withAuthenticationRequired(AccountOverview, {
+	onRedirecting: () => <div>Redirecting you to the login page</div>,
+});
