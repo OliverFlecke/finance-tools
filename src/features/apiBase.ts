@@ -1,3 +1,5 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect, useState } from 'react';
 import { isDevelopment } from 'utils/general';
 
 export const useSampleData = isDevelopment;
@@ -8,6 +10,56 @@ export const baseUri = isDevelopment
 	: 'https://finance.oliverflecke.me';
 
 export const apiUrlWithPath = `${baseUri}/${apiVersion}`;
+
+export interface ApiResponse<T> {
+	loading: boolean;
+	error?: unknown;
+	data?: T;
+}
+
+export function useApi<T>(
+	url: RequestInfo,
+	options?: RequestInit,
+	mapper?: (data: unknown) => T
+): ApiResponse<T> {
+	const { getAccessTokenSilently } = useAuth0();
+	const [state, setState] = useState<ApiResponse<T>>({
+		loading: true,
+	});
+
+	useEffect(() => {
+		(async () => {
+			try {
+				// const { audience, scope, ...fetchOptions } = options;
+				const accessToken = await getAccessTokenSilently({
+					// authorizationParams: { audience, scope },
+				});
+				const res = await fetch(url, {
+					...options,
+					headers: {
+						...options?.headers,
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+				const json = await res.json();
+				setState({
+					...state,
+					data: mapper ? mapper(json) : json,
+					error: undefined,
+					loading: false,
+				});
+			} catch (error: unknown) {
+				setState({
+					...state,
+					error,
+					loading: false,
+				});
+			}
+		})();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	return state;
+}
 
 export function get(uri: RequestInfo): Promise<Response> {
 	return helper('GET', uri);

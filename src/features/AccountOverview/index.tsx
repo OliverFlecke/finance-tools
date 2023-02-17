@@ -41,8 +41,8 @@ function createAccountEntries(accounts: AccountResponse[]): AccountEntries {
 
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
-	const accountState = useAccounts();
 
+	const accountState = useAccounts();
 	useEffect(() => {
 		if (!accountState.loading && accountState.data) {
 			const accounts = accountState.data;
@@ -56,22 +56,6 @@ const AccountOverview = memo(() => {
 		}
 	}, [accountState]);
 
-	// const token = useAccessToken();
-	// useEffect(() => {
-	// 	(async () => {
-	// 		if (token) {
-	// 			const accounts = await getAccounts(token);
-	// 			dispatch({
-	// 				type: 'LOAD STATE',
-	// 				state: {
-	// 					accounts: accounts,
-	// 					entries: createAccountEntries(accounts),
-	// 				},
-	// 			});
-	// 		}
-	// 	})();
-	// }, [token]);
-
 	const add = useCallback(
 		async (account: Account) => {
 			await addAccount(account);
@@ -81,6 +65,7 @@ const AccountOverview = memo(() => {
 	);
 
 	if (accountState.loading) {
+		// TODO: Spinner
 		return <div>Loading data</div>;
 	}
 
