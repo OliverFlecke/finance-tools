@@ -30,10 +30,7 @@ export function useApi<T>(
 	useEffect(() => {
 		(async () => {
 			try {
-				// const { audience, scope, ...fetchOptions } = options;
-				const accessToken = await getAccessTokenSilently({
-					// authorizationParams: { audience, scope },
-				});
+				const accessToken = await getAccessTokenSilently();
 				const res = await fetch(url, {
 					...options,
 					headers: {
@@ -89,10 +86,6 @@ export function useApiCall(
 		},
 		[getAccessTokenSilently, options, url]
 	);
-}
-
-export function get(uri: RequestInfo): Promise<Response> {
-	return helper('GET', uri);
 }
 
 export function post(uri: RequestInfo, body: unknown): Promise<Response> {

@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useContext, useRef } from 'react';
 import { formatCurrency, parseNumber } from 'utils/converters';
 import { AccountContext } from './AccountService';
-import { updateEntry } from './api/accountApi';
+import { useUpdateEntryCallback } from './api/accountApi';
 import { Account, DateEntry } from './models/Account';
 
 interface CellProps {
@@ -13,10 +13,12 @@ interface CellProps {
 const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const { dispatch } = useContext(AccountContext);
 	const entryRef = useRef<HTMLTableCellElement>(null);
+
+	const updateEntryCallback = useUpdateEntryCallback();
 	const onBlur = useCallback(
 		async (element: React.FormEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
-			await updateEntry({
+			await updateEntryCallback({
 				date,
 				amount,
 				accountId: account.id,
@@ -28,7 +30,7 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 				value: amount,
 			});
 		},
-		[account.id, account.name, date, dispatch]
+		[account.id, account.name, date, dispatch, updateEntryCallback]
 	);
 
 	const value = formatCurrency(entry[account.name], account.currency);

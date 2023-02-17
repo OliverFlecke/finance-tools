@@ -1,8 +1,6 @@
 import {
 	ApiResponse,
 	apiUrlWithPath,
-	post,
-	put,
 	useApi,
 	useApiCall,
 } from 'features/apiBase';
@@ -20,19 +18,6 @@ export function useAccounts(): ApiResponse<AccountResponse[]> {
 	);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function fixDates(response: any): AccountResponse[] {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return response.map((x: any) => ({
-		...x,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		entries: x.entries.map((entry: any) => ({
-			...entry,
-			date: new Date(Date.parse(entry.date)),
-		})),
-	}));
-}
-
 export function useAddAccountCallback(): (
 	account: Account
 ) => Promise<Response | undefined> {
@@ -41,16 +26,20 @@ export function useAddAccountCallback(): (
 	});
 }
 
-export async function updateEntry(
+export function useUpdateEntryCallback(): (
 	entry: AddAccountEntryRequest
-): Promise<void> {
-	await post(`${apiUrlWithPath}/account/entry`, entry);
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account/entry`, {
+		method: 'POST',
+	});
 }
 
-export async function updateAccounts(
+export function useUpdateAccountsCallback(): (
 	accounts: UpdateAccount[]
-): Promise<Response> {
-	return put(`${apiUrlWithPath}/account`, accounts);
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account`, {
+		method: 'PUT',
+	});
 }
 
 export interface AccountResponse {
@@ -79,4 +68,17 @@ interface UpdateAccount {
 	type?: AccountType;
 	currency?: string;
 	sortKey?: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fixDates(response: any): AccountResponse[] {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	return response.map((x: any) => ({
+		...x,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		entries: x.entries.map((entry: any) => ({
+			...entry,
+			date: new Date(Date.parse(entry.date)),
+		})),
+	}));
 }
