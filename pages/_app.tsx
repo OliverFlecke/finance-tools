@@ -8,6 +8,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onRedirectCallback = (appState: any) => {
 	// Use Next.js's Router.replace method to replace the url
 	Router.replace(appState?.returnTo || '/');

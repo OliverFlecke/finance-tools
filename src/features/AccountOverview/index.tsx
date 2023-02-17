@@ -7,51 +7,70 @@ import {
 	initAccountState,
 } from './AccountService';
 import AddEntryModal from './AddEntryModal';
-import { addAccount, getAccounts, useAccessToken } from './api/accountApi';
+import { AccountResponse, addAccount, useAccounts } from './api/accountApi';
 import OverviewChart from './OverviewChart';
 import { Account, AccountEntries } from './models/Account';
 import OrderAccountsModal from './OrderAccountsModal';
 import Table from './Table';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+function createAccountEntries(accounts: AccountResponse[]): AccountEntries {
+	const entries: AccountEntries = {};
+
+	for (const account of accounts) {
+		for (const entry of account.entries) {
+			const key = formatDate(entry.date);
+
+			if (!(key in entries)) {
+				entries[key] = {};
+			}
+
+			entries[key][account.name] = entry.amount;
+		}
+	}
+	return (
+		Object.keys(entries)
+			.sort()
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			.reduce((obj: any, key) => {
+				obj[key] = entries[key];
+				return obj;
+			}, {})
+	);
+}
+
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
-	const token = useAccessToken();
+	const accountState = useAccounts();
 
 	useEffect(() => {
-		(async () => {
-			if (token) {
-				const accounts = await getAccounts(token);
-				const entries: AccountEntries = {};
+		if (!accountState.loading && accountState.data) {
+			const accounts = accountState.data;
+			dispatch({
+				type: 'LOAD STATE',
+				state: {
+					accounts,
+					entries: createAccountEntries(accounts),
+				},
+			});
+		}
+	}, [accountState]);
 
-				for (const account of accounts) {
-					for (const entry of account.entries) {
-						const key = formatDate(entry.date);
-
-						if (!(key in entries)) {
-							entries[key] = {};
-						}
-
-						entries[key][account.name] = entry.amount;
-					}
-				}
-
-				dispatch({
-					type: 'LOAD STATE',
-					state: {
-						accounts: accounts,
-						entries: Object.keys(entries)
-							.sort()
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							.reduce((obj: any, key) => {
-								obj[key] = entries[key];
-								return obj;
-							}, {}),
-					},
-				});
-			}
-		})();
-	}, [token]);
+	// const token = useAccessToken();
+	// useEffect(() => {
+	// 	(async () => {
+	// 		if (token) {
+	// 			const accounts = await getAccounts(token);
+	// 			dispatch({
+	// 				type: 'LOAD STATE',
+	// 				state: {
+	// 					accounts: accounts,
+	// 					entries: createAccountEntries(accounts),
+	// 				},
+	// 			});
+	// 		}
+	// 	})();
+	// }, [token]);
 
 	const add = useCallback(
 		async (account: Account) => {
@@ -60,6 +79,10 @@ const AccountOverview = memo(() => {
 		},
 		[dispatch]
 	);
+
+	if (accountState.loading) {
+		return <div>Loading data</div>;
+	}
 
 	return (
 		<AccountContext.Provider value={{ state, dispatch }}>

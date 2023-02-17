@@ -4,12 +4,31 @@ import { CurrencySymbol } from 'features/Currency/api';
 import { useEffect, useState } from 'react';
 import { Account, AccountType } from '../models/Account';
 
-export const useApi = (url: RequestInfo, options?: RequestInit) => {
+export function useAccounts(): ApiResponse<AccountResponse[]> {
+	return useApi<AccountResponse[]>(
+		`${apiUrlWithPath}/account`,
+		{
+			method: 'GET',
+			mode: 'cors',
+		},
+		fixDates
+	);
+}
+
+interface ApiResponse<T> {
+	loading: boolean;
+	error?: unknown;
+	data?: T;
+}
+
+export function useApi<T>(
+	url: RequestInfo,
+	options?: RequestInit,
+	mapper?: (data: unknown) => T
+): ApiResponse<T> {
 	const { getAccessTokenSilently } = useAuth0();
-	const [state, setState] = useState({
-		error: null,
+	const [state, setState] = useState<ApiResponse<T>>({
 		loading: true,
-		data: null,
 	});
 
 	useEffect(() => {
@@ -23,20 +42,20 @@ export const useApi = (url: RequestInfo, options?: RequestInit) => {
 					...options,
 					headers: {
 						...options?.headers,
-						// Add the Authorization header to the existing headers
 						Authorization: `Bearer ${accessToken}`,
 					},
 				});
+				const json = await res.json();
 				setState({
 					...state,
-					data: await res.json(),
-					error: null,
+					data: mapper ? mapper(json) : json,
+					error: undefined,
 					loading: false,
 				});
-			} catch (error) {
+			} catch (error: unknown) {
 				setState({
 					...state,
-					// error,
+					error,
 					loading: false,
 				});
 			}
@@ -44,7 +63,7 @@ export const useApi = (url: RequestInfo, options?: RequestInit) => {
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return state;
-};
+}
 
 export function useAccessToken(): string | undefined {
 	const [token, setToken] = useState<string | undefined>();
@@ -134,6 +153,19 @@ export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
 		console.warn("Failed to get user's accounts");
 		return [];
 	}
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fixDates(response: any): AccountResponse[] {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	return response.map((x: any) => ({
+		...x,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		entries: x.entries.map((entry: any) => ({
+			...entry,
+			date: new Date(Date.parse(entry.date)),
+		})),
+	}));
 }
 
 export async function addAccount(account: Account): Promise<string> {
