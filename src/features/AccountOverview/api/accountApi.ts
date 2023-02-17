@@ -4,6 +4,7 @@ import {
 	post,
 	put,
 	useApi,
+	useApiCall,
 } from 'features/apiBase';
 import { CurrencySymbol } from 'features/Currency/api';
 import { Account, AccountType } from '../models/Account';
@@ -32,10 +33,12 @@ function fixDates(response: any): AccountResponse[] {
 	}));
 }
 
-export async function addAccount(account: Account): Promise<string> {
-	return await post(`${apiUrlWithPath}/account`, account).then(res =>
-		res.json()
-	);
+export function useAddAccountCallback(): (
+	account: Account
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account`, {
+		method: 'POST',
+	});
 }
 
 export async function updateEntry(

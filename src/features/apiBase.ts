@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { isDevelopment } from 'utils/general';
 
 export const useSampleData = isDevelopment;
@@ -59,6 +59,36 @@ export function useApi<T>(
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return state;
+}
+
+export function useApiCall(
+	url: RequestInfo,
+	options?: RequestInit
+): (body?: unknown) => Promise<Response | undefined> {
+	const { getAccessTokenSilently } = useAuth0();
+
+	return useCallback(
+		async (body?: unknown) => {
+			try {
+				const accessToken = await getAccessTokenSilently();
+				return await fetch(url, {
+					...options,
+
+					mode: isDevelopment ? 'cors' : 'no-cors',
+					body: body ? JSON.stringify(body) : undefined,
+					headers: {
+						'Content-Type': 'application/json',
+						...options?.headers,
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+			} catch (error: unknown) {
+				console.error(error);
+				return undefined;
+			}
+		},
+		[getAccessTokenSilently, options, url]
+	);
 }
 
 export function get(uri: RequestInfo): Promise<Response> {
