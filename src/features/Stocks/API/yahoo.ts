@@ -1,22 +1,26 @@
-import { apiUrlWithPath, useSampleData } from 'features/apiBase';
+import {
+	apiUrlWithPath,
+	useApiWithUrlCall,
+	useSampleData,
+} from 'features/apiBase';
+import { useCallback } from 'react';
 import stocksForUserSampleData from './sampleData/stocksForUser';
 
-export async function getShares(
+export function useSharesCallback(): (
 	...symbols: string[]
-): Promise<QuoteResponse[]> {
-	if (useSampleData) return Promise.resolve(stocksForUserSampleData);
+) => Promise<QuoteResponse[]> {
+	const handler = useApiWithUrlCall();
 
-	const apiUrl = `${apiUrlWithPath}/stock`;
-	const response = await fetch(`${apiUrl}?symbols=${symbols.join(',')}`, {
-		method: 'GET',
-	});
+	return useCallback(
+		(...symbols: string[]) => {
+			if (useSampleData) return Promise.resolve(stocksForUserSampleData);
 
-	const json = await response.json();
-	if (json.error) {
-		throw new Error(json.error);
-	} else {
-		return json ?? [];
-	}
+			return handler(`${apiUrlWithPath}/stock?symbols=${symbols.join(',')}`, {
+				method: 'GET',
+			}).then(async res => (res ? await res.json() : []));
+		},
+		[handler]
+	);
 }
 
 export interface QuoteResponse {

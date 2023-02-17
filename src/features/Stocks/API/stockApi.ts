@@ -1,28 +1,28 @@
-import { apiUrlWithPath, useSampleData } from 'features/apiBase';
+import { ApiResponse, apiUrlWithPath, useApi } from 'features/apiBase';
 import { StockList } from '../models';
-import stocksForUserSampleData from './sampleData/stocksForUser';
 
-export function getStocksForUser(): Promise<StockList> {
-	if (useSampleData) return Promise.resolve(stocksForUserSampleData);
+export function useFetchStocks(): ApiResponse<StockList> {
+	return useApi<StockList>(
+		`${apiUrlWithPath}/stock/tracked`,
+		{
+			method: 'GET',
+		},
+		fixDates
+	);
 
-	return fetch(`${apiUrlWithPath}/stock/tracked`, {
-		credentials: 'include',
-	})
-		.then(async res => await res.json())
-		.then(stocks =>
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function fixDates(stocks: any): StockList {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return stocks.map((stock: any) => ({
+			...stock,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			stocks.map((stock: any) => ({
-				...stock,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				lots: stock.lots.map((lot: any) => ({
-					...lot,
-					buyDate: new Date(Date.parse(lot.buyDate)),
-					soldDate: lot.soldDate
-						? new Date(Date.parse(lot.soldDate))
-						: undefined,
-				})),
-			}))
-		);
+			lots: stock.lots.map((lot: any) => ({
+				...lot,
+				buyDate: new Date(Date.parse(lot.buyDate)),
+				soldDate: lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined,
+			})),
+		}));
+	}
 }
 
 export async function trackStock(symbol: string): Promise<void> {

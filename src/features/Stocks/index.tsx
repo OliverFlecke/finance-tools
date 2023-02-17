@@ -11,8 +11,8 @@ import React, {
 import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import { convertToCurrency } from '../../utils/converters';
 import AddStock from './AddStock';
-import { getStocksForUser } from './API/stockApi';
-import { getShares } from './API/yahoo';
+import { useFetchStocks } from './API/stockApi';
+import { useSharesCallback } from './API/yahoo';
 import {
 	Stock,
 	stockAvgPrice,
@@ -27,22 +27,27 @@ import StockSummaryRow from './StockSummaryRow';
 
 const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
+	const stocks = useFetchStocks();
+	const fetchShares = useSharesCallback();
 
+	// Set the stocks to the state
 	useEffect(() => {
-		getStocksForUser()
-			.then(stocks =>
-				dispatch({
-					type: 'SET STOCKS',
-					stocks: stocks,
-				})
-			)
-			// TODO: This code is replicated from the RefreshStockButton component.
-			.then(async () => {
-				const quotes = await getShares(...state.stocks.map(x => x.symbol));
-				dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
+		if (!stocks.loading && stocks.data) {
+			// const stocks = stocks.data;
+			dispatch({
+				type: 'SET STOCKS',
+				stocks: stocks.data,
 			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
+			// Fetch stocks rates from Yahoo when new stocks come in
+			(async () => {
+				if (stocks.data) {
+					const quotes = await fetchShares(...stocks.data.map(x => x.symbol));
+					dispatch({ type: 'UPDATE STOCKS', stocks: quotes });
+				}
+			})();
+		}
+	}, [stocks.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>

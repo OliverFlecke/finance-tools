@@ -8,12 +8,13 @@ import React, { useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { trackStock } from './API/stockApi';
-import { getShares } from './API/yahoo';
+import { useSharesCallback } from './API/yahoo';
 import { Stock } from './models';
 import { StockContext } from './state';
 
 const AddStock: React.FC = () => {
 	const { dispatch } = useContext(StockContext);
+	const fetchShares = useSharesCallback();
 	const [isOpen, setIsOpen] = useState(false);
 	const {
 		register,
@@ -24,7 +25,7 @@ const AddStock: React.FC = () => {
 
 	const addSymbol = useCallback(
 		async (stock: Stock) => {
-			const quotes = await getShares(stock.symbol);
+			const quotes = await fetchShares(stock.symbol);
 
 			if (quotes.length === 0) {
 				// TODO: Better error dialog to inform user that stock quote was not found
@@ -42,7 +43,7 @@ const AddStock: React.FC = () => {
 				reset();
 			}
 		},
-		[dispatch, reset]
+		[dispatch, fetchShares, reset]
 	);
 
 	return (

@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useCallback, useEffect, useState } from 'react';
 import { isDevelopment } from 'utils/general';
 
-export const useSampleData = isDevelopment;
+export const useSampleData = false; //isDevelopment;
 
 const apiVersion = 'api/v1';
 export const baseUri = isDevelopment
@@ -33,6 +33,7 @@ export function useApi<T>(
 				const accessToken = await getAccessTokenSilently();
 				const res = await fetch(url, {
 					...options,
+					mode: isDevelopment ? 'cors' : 'no-cors',
 					headers: {
 						...options?.headers,
 						Authorization: `Bearer ${accessToken}`,
@@ -88,25 +89,33 @@ export function useApiCall(
 	);
 }
 
-export function post(uri: RequestInfo, body: unknown): Promise<Response> {
-	return helper('POST', uri, body);
-}
-
-export function put(uri: RequestInfo, body: unknown): Promise<Response> {
-	return helper('PUT', uri, body);
-}
-
-function helper(
-	method: string,
-	uri: RequestInfo,
+export function useApiWithUrlCall(): (
+	url: RequestInfo,
+	options?: RequestInit,
 	body?: unknown
-): Promise<Response> {
-	return fetch(uri, {
-		method,
-		mode: isDevelopment ? 'cors' : 'no-cors',
-		headers: {
-			'Content-Type': 'application/json',
+) => Promise<Response | undefined> {
+	const { getAccessTokenSilently } = useAuth0();
+
+	return useCallback(
+		async (url: RequestInfo, options?: RequestInit, body?: unknown) => {
+			try {
+				const accessToken = await getAccessTokenSilently();
+				return await fetch(url, {
+					...options,
+
+					mode: isDevelopment ? 'cors' : 'no-cors',
+					body: body ? JSON.stringify(body) : undefined,
+					headers: {
+						'Content-Type': 'application/json',
+						...options?.headers,
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+			} catch (error: unknown) {
+				console.error(error);
+				return undefined;
+			}
 		},
-		body: body !== undefined ? JSON.stringify(body) : undefined,
-	});
+		[getAccessTokenSilently]
+	);
 }
