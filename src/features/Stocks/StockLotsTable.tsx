@@ -1,7 +1,7 @@
 import { Button } from '@oliverflecke/components-react';
 import React, { useCallback, useContext } from 'react';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { addStockLot } from './API/stockApi';
+import { useAddStockLotCallback } from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 import StockLotRow from './StockLotRow';
@@ -16,6 +16,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 	stock,
 }: StockLotsTableProps) => {
 	const { dispatch } = useContext(StockContext);
+	const addStockLot = useAddStockLotCallback();
 
 	const addLot = useCallback(async () => {
 		const lotId = await addStockLot({
@@ -26,7 +27,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 			buyBrokerage: 0,
 		});
 		dispatch({ type: 'ADD LOT', symbol: stock.symbol, lotId: lotId });
-	}, [dispatch, stock]);
+	}, [addStockLot, dispatch, stock.symbol]);
 
 	return (
 		<>

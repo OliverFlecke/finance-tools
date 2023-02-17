@@ -1,4 +1,11 @@
-import { ApiResponse, apiUrlWithPath, useApi } from 'features/apiBase';
+import {
+	ApiResponse,
+	apiUrlWithPath,
+	useApi,
+	useApiCall,
+	useApiWithUrlCall,
+} from 'features/apiBase';
+import { useCallback } from 'react';
 import { StockList } from '../models';
 
 export function useFetchStocks(): ApiResponse<StockList> {
@@ -25,52 +32,53 @@ export function useFetchStocks(): ApiResponse<StockList> {
 	}
 }
 
-export async function trackStock(symbol: string): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/tracked`, {
+export function useTrackStockCallback(): (
+	symbol: string
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/stock/tracked`, {
 		method: 'POST',
-		credentials: 'include',
-		body: symbol,
-	})
-		.then(() => console.log(`Stock tracked: ${symbol}`))
-		.catch(err => console.log(err));
+	});
 }
 
-export function addStockLot(lot: AddStockLotRequest): Promise<string> {
-	return fetch(`${apiUrlWithPath}/stock/lot`, {
+export function useAddStockLotCallback(): (
+	lot: AddStockLotRequest
+) => Promise<string> {
+	const handler = useApiCall(`${apiUrlWithPath}/stock/lot`, {
 		method: 'POST',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
+	});
+
+	return useCallback(
+		async (lot: AddStockLotRequest) => {
+			const res = await handler(lot);
+			return await res?.json();
 		},
-		body: JSON.stringify(lot),
-	}).then(res => res.json());
+		[handler]
+	);
 }
 
-export async function updateStockLot(
+export function useUpdateStockLotCallback(): (
 	id: string,
 	lot: UpdateStockLotRequest
-): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/lot/${id}`, {
-		method: 'PUT',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(lot),
-	});
+) => Promise<Response | undefined> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		(id: string, lot: UpdateStockLotRequest) =>
+			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'PUT' }, lot),
+		[handler]
+	);
 }
 
-export async function deleteStockLot(id: string): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/lot/${id}`, {
-		method: 'DELETE',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+export function useDeleteStockLotCallback(): (
+	id: string
+) => Promise<Response | undefined> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		(id: string) =>
+			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'DELETE' }),
+		[handler]
+	);
 }
 
 interface AddStockLotRequest extends UpdateStockLotRequest {

@@ -7,7 +7,7 @@ import {
 import React, { useCallback, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { trackStock } from './API/stockApi';
+import { useTrackStockCallback } from './API/stockApi';
 import { useSharesCallback } from './API/yahoo';
 import { Stock } from './models';
 import { StockContext } from './state';
@@ -15,6 +15,8 @@ import { StockContext } from './state';
 const AddStock: React.FC = () => {
 	const { dispatch } = useContext(StockContext);
 	const fetchShares = useSharesCallback();
+	const trackStock = useTrackStockCallback();
+
 	const [isOpen, setIsOpen] = useState(false);
 	const {
 		register,
@@ -43,7 +45,7 @@ const AddStock: React.FC = () => {
 				reset();
 			}
 		},
-		[dispatch, fetchShares, reset]
+		[dispatch, fetchShares, reset, trackStock]
 	);
 
 	return (
