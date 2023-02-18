@@ -4,7 +4,7 @@ import Spinner from 'components/Spinner';
 import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { IoShuffleOutline } from 'react-icons/io5';
 import { AccountContext } from './AccountService';
-import { updateAccounts } from './api/accountApi';
+import { useUpdateAccountsCallback } from './api/accountApi';
 import { Account } from './models/Account';
 
 const AccountCard: FC<{ account: Account }> = ({ account }) => {
@@ -25,6 +25,7 @@ const OrderAccountsModal: FC = () => {
 		[]
 	);
 
+	const updateAccountCallback = useUpdateAccountsCallback();
 	const saveOrder = useCallback(async () => {
 		try {
 			setState('SAVING');
@@ -33,7 +34,7 @@ const OrderAccountsModal: FC = () => {
 				sortKey: i,
 				name: a.name,
 			}));
-			await updateAccounts(order);
+			await updateAccountCallback(order);
 			dispatch({ type: 'SORT ACCOUNTS', order });
 			setState('SAVED');
 			setTimeout(() => setState('NONE'), 1000);
@@ -41,7 +42,7 @@ const OrderAccountsModal: FC = () => {
 			console.warn('Unable to save order of accounts');
 			setState('NONE');
 		}
-	}, [dispatch, items]);
+	}, [dispatch, items, updateAccountCallback]);
 
 	return (
 		<>

@@ -5,7 +5,10 @@ import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
 import { formatDate } from 'utils/date';
 import SettingsContext from 'features/Settings/context';
-import { deleteStockLot, updateStockLot } from './API/stockApi';
+import {
+	useDeleteStockLotCallback,
+	useUpdateStockLotCallback,
+} from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
 
@@ -26,6 +29,8 @@ const StockLotRow: React.FC<StockLotRowProps> = ({
 	lot,
 }: StockLotRowProps) => {
 	const { dispatch } = useContext(StockContext);
+	const updateStockLot = useUpdateStockLotCallback();
+	const deleteStockLot = useDeleteStockLotCallback();
 
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
@@ -60,12 +65,12 @@ const StockLotRow: React.FC<StockLotRowProps> = ({
 				},
 			});
 		},
-		[dispatch, stock.symbol]
+		[dispatch, stock.symbol, updateStockLot]
 	);
 	const deleteLot = useCallback(async () => {
 		await deleteStockLot(lot.id);
 		dispatch({ type: 'DELETE LOT', symbol: stock.symbol, id: lot.id });
-	}, [dispatch, lot.id, stock.symbol]);
+	}, [deleteStockLot, dispatch, lot.id, stock.symbol]);
 
 	const convert = useConverter(
 		stock.currency,

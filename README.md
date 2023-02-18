@@ -15,6 +15,17 @@ Tailwindcss is running in JIT mode, see [tailwindcss.com](https://tailwindcss.co
 
 Both the build of JS and CSS along with serving the website can be run concurrently with `yarn run dev`.
 
+## Configuration
+
+Environment variables are required to run the app. These can be stored in `.env`:
+
+```sh
+NEXT_PUBLIC_CLIENT_ID='<auth0 app client id>'
+NEXT_PUBLIC_DOMAIN='<auth0 domain>'
+NEXT_PUBLIC_AUDIENCE='<audience to run against>'
+NEXT_PUBLIC_REDIRECT_URI='<origin of where the app is running>'
+```
+
 ### Running with HTTPS
 
 In order to be able to authenticate against the API, the app MUST be run over HTTPS.

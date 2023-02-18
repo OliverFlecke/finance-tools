@@ -1,13 +1,14 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
-interface LoginButtonProps {
-	authorizeUrl: string;
-}
+const LoginButton: React.FC = () => {
+	const { loginWithRedirect } = useAuth0();
 
-const LoginButton: React.FC<LoginButtonProps> = ({ authorizeUrl }) => (
-	<a className="btn btn-primary" href={authorizeUrl}>
-		Login
-	</a>
-);
+	return (
+		<button className="btn btn-primary" onClick={() => loginWithRedirect()}>
+			Login
+		</button>
+	);
+};
 
 export default LoginButton;

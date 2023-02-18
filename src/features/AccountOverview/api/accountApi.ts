@@ -1,50 +1,45 @@
-import { apiUrlWithPath, post, put, useSampleData } from 'features/apiBase';
+import {
+	ApiResponse,
+	apiUrlWithPath,
+	useApi,
+	useApiCall,
+} from 'features/apiBase';
 import { CurrencySymbol } from 'features/Currency/api';
 import { Account, AccountType } from '../models/Account';
-import sampleData from './sampleData';
 
-export async function getAccountsWithEntries(): Promise<AccountResponse[]> {
-	if (useSampleData) return Promise.resolve(sampleData);
-
-	try {
-		const response = await fetch(`${apiUrlWithPath}/account`, {
-			method: 'get',
-			credentials: 'include',
-		});
-
-		const content = await response.json();
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return content.map((x: any) => ({
-			...x,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			entries: x.entries.map((entry: any) => ({
-				...entry,
-				date: new Date(Date.parse(entry.date)),
-			})),
-		}));
-	} catch (error) {
-		console.warn("Failed to get user's accounts");
-		return [];
-	}
-}
-
-export async function addAccount(account: Account): Promise<string> {
-	return await post(`${apiUrlWithPath}/account`, account).then(res =>
-		res.json()
+export function useAccounts(): ApiResponse<AccountResponse[]> {
+	return useApi<AccountResponse[]>(
+		`${apiUrlWithPath}/account`,
+		{
+			method: 'GET',
+			mode: 'cors',
+		},
+		fixDates
 	);
 }
 
-export async function updateEntry(
-	entry: AddAccountEntryRequest
-): Promise<void> {
-	await post(`${apiUrlWithPath}/account/entry`, entry);
+export function useAddAccountCallback(): (
+	account: Account
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account`, {
+		method: 'POST',
+	});
 }
 
-export async function updateAccounts(
+export function useUpdateEntryCallback(): (
+	entry: AddAccountEntryRequest
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account/entry`, {
+		method: 'POST',
+	});
+}
+
+export function useUpdateAccountsCallback(): (
 	accounts: UpdateAccount[]
-): Promise<Response> {
-	return put(`${apiUrlWithPath}/account`, accounts);
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/account`, {
+		method: 'PUT',
+	});
 }
 
 export interface AccountResponse {
@@ -73,4 +68,17 @@ interface UpdateAccount {
 	type?: AccountType;
 	currency?: string;
 	sortKey?: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fixDates(response: any): AccountResponse[] {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	return response.map((x: any) => ({
+		...x,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		entries: x.entries.map((entry: any) => ({
+			...entry,
+			date: new Date(Date.parse(entry.date)),
+		})),
+	}));
 }

@@ -1,76 +1,84 @@
-import { apiUrlWithPath, useSampleData } from 'features/apiBase';
+import {
+	ApiResponse,
+	apiUrlWithPath,
+	useApi,
+	useApiCall,
+	useApiWithUrlCall,
+} from 'features/apiBase';
+import { useCallback } from 'react';
 import { StockList } from '../models';
-import stocksForUserSampleData from './sampleData/stocksForUser';
 
-export function getStocksForUser(): Promise<StockList> {
-	if (useSampleData) return Promise.resolve(stocksForUserSampleData);
-
-	return fetch(`${apiUrlWithPath}/stock/tracked`, {
-		credentials: 'include',
-	})
-		.then(async res => await res.json())
-		.then(stocks =>
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			stocks.map((stock: any) => ({
-				...stock,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				lots: stock.lots.map((lot: any) => ({
-					...lot,
-					buyDate: new Date(Date.parse(lot.buyDate)),
-					soldDate: lot.soldDate
-						? new Date(Date.parse(lot.soldDate))
-						: undefined,
-				})),
-			}))
-		);
-}
-
-export async function trackStock(symbol: string): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/tracked`, {
-		method: 'POST',
-		credentials: 'include',
-		body: symbol,
-	})
-		.then(() => console.log(`Stock tracked: ${symbol}`))
-		.catch(err => console.log(err));
-}
-
-export function addStockLot(lot: AddStockLotRequest): Promise<string> {
-	return fetch(`${apiUrlWithPath}/stock/lot`, {
-		method: 'POST',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
+export function useFetchStocks(): ApiResponse<StockList> {
+	return useApi<StockList>(
+		`${apiUrlWithPath}/stock/tracked`,
+		{
+			method: 'GET',
 		},
-		body: JSON.stringify(lot),
-	}).then(res => res.json());
+		fixDates
+	);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function fixDates(stocks: any): StockList {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return stocks.map((stock: any) => ({
+			...stock,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			lots: stock.lots.map((lot: any) => ({
+				...lot,
+				buyDate: new Date(Date.parse(lot.buyDate)),
+				soldDate: lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined,
+			})),
+		}));
+	}
 }
 
-export async function updateStockLot(
+export function useTrackStockCallback(): (
+	symbol: string
+) => Promise<Response | undefined> {
+	return useApiCall(`${apiUrlWithPath}/stock/tracked`, {
+		method: 'POST',
+	});
+}
+
+export function useAddStockLotCallback(): (
+	lot: AddStockLotRequest
+) => Promise<string> {
+	const handler = useApiCall(`${apiUrlWithPath}/stock/lot`, {
+		method: 'POST',
+	});
+
+	return useCallback(
+		async (lot: AddStockLotRequest) => {
+			const res = await handler(lot);
+			return await res?.json();
+		},
+		[handler]
+	);
+}
+
+export function useUpdateStockLotCallback(): (
 	id: string,
 	lot: UpdateStockLotRequest
-): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/lot/${id}`, {
-		method: 'PUT',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(lot),
-	});
+) => Promise<Response | undefined> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		(id: string, lot: UpdateStockLotRequest) =>
+			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'PUT' }, lot),
+		[handler]
+	);
 }
 
-export async function deleteStockLot(id: string): Promise<void> {
-	await fetch(`${apiUrlWithPath}/stock/lot/${id}`, {
-		method: 'DELETE',
-		credentials: 'include',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+export function useDeleteStockLotCallback(): (
+	id: string
+) => Promise<Response | undefined> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		(id: string) =>
+			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'DELETE' }),
+		[handler]
+	);
 }
 
 interface AddStockLotRequest extends UpdateStockLotRequest {

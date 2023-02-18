@@ -18,7 +18,7 @@ const Table: FC = () => {
 	const totals = calculateTotals(accounts, entries);
 
 	return (
-		<div className="h-full overflow-x-auto pb-4">
+		<div className="h-full overflow-x-auto pb-4 md:px-4">
 			<table className="w-full">
 				<TableHeader accounts={accounts} />
 				<tbody>
