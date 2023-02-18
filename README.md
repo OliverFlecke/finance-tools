@@ -1,5 +1,7 @@
 # Finance tools
 
+[![Deploy page](https://github.com/OliverFlecke/finance-tools/actions/workflows/main.yml/badge.svg)](https://github.com/OliverFlecke/finance-tools/actions/workflows/main.yml)
+
 Website to help perform different finance calculations.
 
 ## Development
