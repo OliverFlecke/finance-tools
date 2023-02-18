@@ -84,7 +84,9 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 						</td>
 						<td>{formatCurrency(result.localSalaryGross, localCurrency)}</td>
 						<td>{formatCurrency(result.localSalaryNet, localCurrency)}</td>
-						<td>{formatCurrency(result.localMonthlySalaryNet, localCurrency)}</td>
+						<td>
+							{formatCurrency(result.localMonthlySalaryNet, localCurrency)}
+						</td>
 						<td>{formatCurrency(result.hourlyRateNet, currency)}</td>
 					</tr>
 				);
