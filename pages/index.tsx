@@ -1,6 +1,7 @@
 import React from 'react';
 import SEO from 'components/SEO';
 import TextPage from 'components/TextPage';
+import Link from 'next/link';
 
 const Index: React.FC = () => {
 	return (
@@ -21,23 +22,23 @@ const Index: React.FC = () => {
 				<h3>Features</h3>
 				<ul className="list-disc pl-4">
 					<li>
-						Overview of your money across <a href="/accounts">accounts</a>
+						Overview of your money across <Link href="/accounts">accounts</Link>
 					</li>
 					<li>
-						Track your <a href="/stocks">stock</a> portfolio, with live price
-						updates
+						Track your <Link href="/stocks">stock</Link> portfolio, with live
+						price updates
 					</li>
 					<li>
-						A rolling <a href="/interest">interest</a> calculator, to help
+						A rolling <Link href="/interest">interest</Link> calculator, to help
 						savings calculations over time
 					</li>
 					<li>
-						Calculate post-<a href="/tax">tax</a> income across different
+						Calculate post-<Link href="/tax">tax</Link> income across different
 						countries with different rates and systems
 					</li>
 					<li>
-						Simple <a href="/budget">budget</a> app, with options like setting a
-						certain percentage for savings
+						Simple <Link href="/budget">budget</Link> app, with options like
+						setting a certain percentage for savings
 					</li>
 				</ul>
 			</TextPage>
