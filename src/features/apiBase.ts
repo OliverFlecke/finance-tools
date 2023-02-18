@@ -33,7 +33,7 @@ export function useApi<T>(
 				const accessToken = await getAccessTokenSilently();
 				const res = await fetch(url, {
 					...options,
-					mode: isDevelopment ? 'cors' : 'no-cors',
+					mode: isDevelopment ? 'cors' : undefined,
 					headers: {
 						...options?.headers,
 						Authorization: `Bearer ${accessToken}`,
@@ -103,7 +103,7 @@ export function useApiWithUrlCall(): (
 				return await fetch(url, {
 					...options,
 
-					mode: isDevelopment ? 'cors' : 'no-cors',
+					mode: isDevelopment ? 'cors' : undefined,
 					body: body ? JSON.stringify(body) : undefined,
 					headers: {
 						'Content-Type': 'application/json',
