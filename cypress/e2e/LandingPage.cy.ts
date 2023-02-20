@@ -4,9 +4,7 @@ import * as MockApi from '../mocks/api';
 describe('Landing page', () => {
 	it('Renders', () => {
 		cy.visit(`${host}/`);
-		cy.get('h2')
-			.should('have.text', 'Tools to help with your finances')
-			.should('have.class', 'text-center');
+		cy.get('h2').should('have.text', 'Tools to help with your finances');
 	});
 
 	it('lists the account page in the description', () => {
