@@ -13,15 +13,22 @@ const BudgetList = () => {
 	}
 
 	return (
-		<ul className="bg-cyan-900  p-4">
-			{budgets.data?.map(b => (
-				<BudgetListItem
-					key={`${b.title}-${b.created_at.toISOString()}`}
-					budget={b}
-					deleteCallback={deleteCallback}
-				/>
-			))}
-		</ul>
+		<div className="bg-cyan-900  p-4">
+			<div className="flex w-full flex-row justify-between space-x-4 px-4 font-bold">
+				<span>Title</span>
+				<span>Created at</span>
+				<span></span>
+			</div>
+			<ul>
+				{budgets.data?.map(b => (
+					<BudgetListItem
+						key={`${b.title}-${b.created_at.toISOString()}`}
+						budget={b}
+						deleteCallback={deleteCallback}
+					/>
+				))}
+			</ul>
+		</div>
 	);
 };
 
@@ -31,7 +38,7 @@ const BudgetListItem: FC<{
 	budget: Budget;
 	deleteCallback: (id: string) => void;
 }> = ({ budget, deleteCallback }) => (
-	<li className="flex w-full flex-grow flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
+	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
 		<span>{budget.title}</span>
 		<span>{budget.created_at.toDateString()}</span>
 		<span>
