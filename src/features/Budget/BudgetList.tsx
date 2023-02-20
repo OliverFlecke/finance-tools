@@ -1,10 +1,24 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import DeleteButton from '../../components/DeleteButton';
-import { Budget, useBudgets, useDeleteBudgetCallback } from './api';
+import {
+	Budget,
+	useFetchAllBudgets,
+	useDeleteBudgetCallback,
+	useFetchBudgetWithItemsCallback,
+} from './api';
 
 const BudgetList = () => {
-	const budgets = useBudgets();
+	const budgets = useFetchAllBudgets();
 	const deleteCallback = useDeleteBudgetCallback();
+	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback();
+	const onSelectBudget = useCallback(
+		async (budget: Budget) => {
+			const b = await fetchBudgetWithItems(budget.id);
+			console.log(b);
+			// TODO: Set the currently selected budget
+		},
+		[fetchBudgetWithItems]
+	);
 
 	console.log(budgets);
 
@@ -25,6 +39,7 @@ const BudgetList = () => {
 						key={`${b.title}-${b.created_at.toISOString()}`}
 						budget={b}
 						deleteCallback={deleteCallback}
+						onSelect={onSelectBudget}
 					/>
 				))}
 			</ul>
@@ -36,10 +51,13 @@ export default BudgetList;
 
 const BudgetListItem: FC<{
 	budget: Budget;
+	onSelect: (budget: Budget) => void;
 	deleteCallback: (id: string) => void;
-}> = ({ budget, deleteCallback }) => (
+}> = ({ budget, deleteCallback, onSelect }) => (
 	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
-		<span>{budget.title}</span>
+		<span onClick={() => onSelect(budget)} className="hover:cursor-pointer">
+			{budget.title}
+		</span>
 		<span>{budget.created_at.toDateString()}</span>
 		<span>
 			<DeleteButton onClick={() => deleteCallback(budget.id)} />
