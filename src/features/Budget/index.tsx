@@ -3,6 +3,7 @@ import useAsyncReducer from 'hooks/useAsyncReducer';
 import React, { useState } from 'react';
 import { getDataFromStorage } from 'utils/storage';
 import AddLine from './AddLine';
+import BudgetList from './BudgetList';
 import LineOverview from './LineOverview';
 import MonthAndYearCells from './MonthAndYearCells';
 import { useComputation } from './useComputation';
@@ -60,6 +61,8 @@ const Budget: React.FC = () => {
 	return (
 		<>
 			<h2 className="page-header">Budget</h2>
+
+			<BudgetList />
 
 			<div className="mx-4">
 				<h3 className="pt-4 text-xl">Configuration</h3>

@@ -19,8 +19,7 @@ export interface ApiResponse<T> {
 
 export function useApi<T>(
 	url: RequestInfo,
-	options?: RequestInit,
-	mapper?: (data: unknown) => T
+	options?: RequestInit
 ): ApiResponse<T> {
 	const { getAccessTokenSilently } = useAuth0();
 	const [state, setState] = useState<ApiResponse<T>>({
@@ -39,10 +38,10 @@ export function useApi<T>(
 						Authorization: `Bearer ${accessToken}`,
 					},
 				});
-				const json = await res.json();
+				const data = parseWithDate(await res.text());
 				setState({
 					...state,
-					data: mapper ? mapper(json) : json,
+					data,
 					error: undefined,
 					loading: false,
 				});
@@ -118,4 +117,15 @@ export function useApiWithUrlCall(): (
 		},
 		[getAccessTokenSilently]
 	);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function parseWithDate(data: string): any {
+	const reDateDetect = /(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?/;
+	return JSON.parse(data, (_: string, value: unknown) => {
+		if (typeof value == 'string' && reDateDetect.exec(value)) {
+			return new Date(value);
+		}
+		return value;
+	});
 }
