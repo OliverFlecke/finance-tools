@@ -4,6 +4,7 @@ import {
 	ApiResponse,
 	parseWithDate,
 	useApi,
+	useApiCall,
 	useApiWithUrlCall,
 } from '../apiBase';
 
@@ -13,6 +14,11 @@ const budgetHost = isDevelopment
 
 export function useFetchAllBudgets(): ApiResponse<Budget[]> {
 	return useApi<Budget[]>(`${budgetHost}/budget`, { method: 'GET' });
+}
+
+// TODO: The type should not expose the `Response`
+export function useCreateBudgetCallback(): () => Promise<Response | undefined> {
+	return useApiCall(`${budgetHost}/budget`, { method: 'POST' });
 }
 
 export function useDeleteBudgetCallback() {
@@ -64,4 +70,108 @@ export interface Item {
 	amount: number;
 	created_at: Date;
 	modified_at: Date;
+}
+
+// Item API
+
+interface AddItemToBudgetRequest {
+	category: string;
+	name: string;
+	amount: number;
+}
+
+/**
+ * Create a callback function to add an item to a budget and persist in server side.
+ *
+ * @param budget_id Id of the budget to delete the item from.
+ * @param request Body of the request that is send to the API with the item info.
+ * @returns A promise that resolves to void or throws an error.
+ */
+export function useAddItemToBudgetCallback(): (
+	budget_id: string,
+	request: AddItemToBudgetRequest
+) => Promise<void> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		async (budget_id: string, request: AddItemToBudgetRequest) => {
+			const res = await handler(
+				`${budgetHost}/budget/${budget_id}/item`,
+				{
+					method: 'POST',
+				},
+				request
+			);
+
+			if (!res?.ok) {
+				throw Error(await res?.text());
+			}
+		},
+		[handler]
+	);
+}
+
+/**
+ * Create a callback function to update a item on a budget.
+ *
+ * @param budget_id Id of the budget to delete the item from.
+ * @param item_id Id of the item to remove from the budget.
+ * @param request Body of the request that is send to the API with the updated item info.
+ * @returns A promise that resolves to void or throws an error.
+ */
+export function useUpdateItemCallback(): (
+	budget_id: string,
+	item_id: string,
+	request: AddItemToBudgetRequest
+) => Promise<void> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		async (
+			budget_id: string,
+			item_id: string,
+			request: AddItemToBudgetRequest
+		) => {
+			const res = await handler(
+				`${budgetHost}/budget/${budget_id}/item/${item_id}`,
+				{
+					method: 'PUT',
+				},
+				request
+			);
+
+			if (!res?.ok) {
+				throw Error(await res?.text());
+			}
+		},
+		[handler]
+	);
+}
+
+/**
+ * Create a callback function to delete a item from a budget.
+ *
+ * @param budget_id Id of the budget to delete the item from.
+ * @param item_id Id of the item to remove from the budget.
+ *
+ * @returns A promise that will resolve to void or throw an error.
+ */
+export function useDeleteItemCallback(): (
+	budget_id: string,
+	item_id: string
+) => Promise<void> {
+	const handler = useApiWithUrlCall();
+
+	return useCallback(
+		async (budget_id: string, item_id: string) => {
+			const res = await handler(
+				`${budgetHost}/budget/${budget_id}/item/${item_id}`
+			);
+
+			if (!res?.ok) {
+				throw Error(await res?.text());
+			}
+		},
+		[handler]
+	);
 }
