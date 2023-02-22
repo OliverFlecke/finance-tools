@@ -16,9 +16,17 @@ export function useFetchAllBudgets(): ApiResponse<Budget[]> {
 	return useApi<Budget[]>(`${budgetHost}/budget`, { method: 'GET' });
 }
 
+export interface CreateBudgetDto {
+	title: string;
+}
+
 // TODO: The type should not expose the `Response`
-export function useCreateBudgetCallback(): () => Promise<Response | undefined> {
-	return useApiCall(`${budgetHost}/budget`, { method: 'POST' });
+export function useCreateBudgetCallback(): (
+	request: CreateBudgetDto
+) => Promise<Response | undefined> {
+	return useApiCall<CreateBudgetDto>(`${budgetHost}/budget`, {
+		method: 'POST',
+	});
 }
 
 export function useDeleteBudgetCallback() {

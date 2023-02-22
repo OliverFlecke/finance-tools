@@ -58,10 +58,10 @@ export function useApi<T>(
 	return state;
 }
 
-export function useApiCall(
+export function useApiCall<T>(
 	url: RequestInfo,
 	options?: RequestInit
-): (body?: unknown) => Promise<Response | undefined> {
+): (body?: T) => Promise<Response | undefined> {
 	const { getAccessTokenSilently } = useAuth0();
 
 	return useCallback(
