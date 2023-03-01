@@ -3,84 +3,30 @@ import useAsyncReducer from 'hooks/useAsyncReducer';
 import React, { useCallback, useMemo, useState } from 'react';
 import { getDataFromStorage } from 'utils/storage';
 import {
-	AddItemToBudgetRequest,
 	BudgetWithItems,
-	Item,
 	useAddItemToBudgetCallback,
+	useDeleteItemCallback,
 } from './api';
 import Configuration from './BudgetConfiguration';
 import BudgetDetails from './BudgetDetails';
 import BudgetList from './BudgetList';
-
-export interface State {
-	budgets: BudgetWithItems[];
-	budget?: BudgetWithItems;
-}
-
-export type Action =
-	| { type: 'SET BUDGET'; budget: BudgetWithItems }
-	| { type: 'ADD INCOME'; budget_id: string; item: AddItemToBudgetRequest }
-	| { type: 'ADD EXPENSE'; budget_id: string; item: AddItemToBudgetRequest };
-
-function createReducer(options: {
-	addItemToBudgetCallback: (
-		budget_id: string,
-		request: AddItemToBudgetRequest
-	) => Promise<string>;
-}): (state: State, action: Action) => Promise<State> {
-	return async (state: State, action: Action) => {
-		switch (action.type) {
-			case 'ADD EXPENSE':
-			case 'ADD INCOME':
-				if (!state.budget) {
-					throw new Error('No budget has been selected');
-				}
-
-				const item_id = await options.addItemToBudgetCallback(
-					action.budget_id,
-					action.item
-				);
-				const now = new Date(Date.now());
-				const item: Item = {
-					...action.item,
-					created_at: now,
-					modified_at: now,
-					id: item_id,
-					budget_id: action.budget_id,
-				};
-
-				return {
-					...state,
-					budget: {
-						...state.budget,
-						items: state.budget.items.concat(item),
-					},
-				};
-			case 'SET BUDGET':
-				return {
-					...state,
-					budget: action.budget,
-				};
-
-			default:
-				console.warn(`Unhandled action: ${action}`);
-				return Promise.resolve(state);
-		}
-	};
-}
+import { State, createReducer, Action } from './state';
 
 function fetchInitialData(): State {
-	return getDataFromStorage('budget', { budgets: [] });
+	return getDataFromStorage('budget', {});
 }
 
+// TODO: This should be part of the settings for a budget
 export const currency = 'GBP';
 
 const Wrapper: React.FC = () => {
 	const addItemToBudgetCallback = useAddItemToBudgetCallback();
+	const deleteItemFromBudgetCallback = useDeleteItemCallback();
 
 	const reducer = useMemo(
-		() => createReducer({ addItemToBudgetCallback }),
-		[addItemToBudgetCallback]
+		() =>
+			createReducer({ addItemToBudgetCallback, deleteItemFromBudgetCallback }),
+		[addItemToBudgetCallback, deleteItemFromBudgetCallback]
 	);
 
 	return <Budget reducer={reducer} />;

@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useComputation } from './useComputation';
-import { Action } from '.';
-import LineOverview from './LineOverview';
+import ItemList from './ItemList';
 import AddLine from './AddLine';
 import MonthAndYearCells from './MonthAndYearCells';
 import { AddItemToBudgetRequest, BudgetWithItems } from './api';
+import { Action } from './state';
 
 const BudgetDetails: FC<{
 	budget: BudgetWithItems;
@@ -21,6 +21,13 @@ const BudgetDetails: FC<{
 		remaining,
 	} = useComputation(budget, { savePercent });
 
+	const deleteItem = useCallback(
+		(item_id: string) => {
+			dispatch({ type: 'REMOVE ITEM', budget_id: budget.id, item_id });
+		},
+		[budget.id, dispatch]
+	);
+
 	return (
 		<div className="mx-4 pb-8">
 			<table className="w-full border-separate border-spacing-0 overflow-hidden rounded">
@@ -32,7 +39,12 @@ const BudgetDetails: FC<{
 					</tr>
 				</thead>
 
-				<LineOverview title="Income" items={income} total={totalIncome} />
+				<ItemList
+					title="Income"
+					items={income}
+					total={totalIncome}
+					deleteItem={deleteItem}
+				/>
 				<AddLine
 					add={(item: AddItemToBudgetRequest) =>
 						dispatch({
@@ -43,7 +55,12 @@ const BudgetDetails: FC<{
 					}
 				/>
 
-				<LineOverview title="Expenses" items={expenses} total={totalExpenses} />
+				<ItemList
+					title="Expenses"
+					items={expenses}
+					total={totalExpenses}
+					deleteItem={deleteItem}
+				/>
 				<AddLine
 					add={(item: AddItemToBudgetRequest) =>
 						dispatch({

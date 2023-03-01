@@ -136,7 +136,7 @@ export function useAddItemToBudgetCallback(): (
  * Create a callback function to update a item on a budget.
  *
  * @param budget_id Id of the budget to delete the item from.
- * @param item_id Id of the item to remove from the budget.
+ * @param item_id Id of the item to update on the budget.
  * @param request Body of the request that is send to the API with the updated item info.
  * @returns A promise that resolves to void or throws an error.
  */
@@ -186,7 +186,10 @@ export function useDeleteItemCallback(): (
 	return useCallback(
 		async (budget_id: string, item_id: string) => {
 			const res = await handler(
-				`${budgetHost}/budget/${budget_id}/item/${item_id}`
+				`${budgetHost}/budget/${budget_id}/item/${item_id}`,
+				{
+					method: 'DELETE',
+				}
 			);
 
 			if (!res?.ok) {
