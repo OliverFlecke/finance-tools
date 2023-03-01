@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { isDevelopment } from '../../utils/general';
 import {
-	ApiResponse,
+	ApiResponseWithActions,
 	parseJsonWithDate,
 	useApi,
 	useApiCall,
@@ -12,8 +12,19 @@ const budgetHost = isDevelopment
 	? 'http://localhost:4000'
 	: 'https://finance.oliverflecke.me';
 
-export function useFetchAllBudgets(): ApiResponse<Budget[]> {
+export function useFetchAllBudgets(): ApiResponseWithActions<Budget[]> {
 	return useApi<Budget[]>(`${budgetHost}/budget`, { method: 'GET' });
+}
+
+export function useFetchAllBudgetsCallback(): () => Promise<Budget[]> {
+	const handler = useApiCall(`${budgetHost}/budget`, {
+		method: 'GET',
+	});
+
+	return useCallback(
+		() => handler().then(async res => await res?.json()),
+		[handler]
+	);
 }
 
 export interface CreateBudgetDto {

@@ -1,24 +1,25 @@
 import React from 'react';
 import { formatCurrency } from '../../utils/converters';
-import { Line, currency } from './index';
+import { Item } from './api';
+import { currency } from './index';
 import MonthAndYearCells from './MonthAndYearCells';
 
 interface Props {
 	title: string;
-	data: Line[];
+	items: Item[];
 	total: number;
 }
 
-const LineOverview: React.FC<Props> = ({ title, data, total }) => {
+const LineOverview: React.FC<Props> = ({ title, items, total }) => {
 	return (
 		<tbody>
 			<tr>
 				<th className="text-left">{title}</th>
 			</tr>
-			{data.map(line => (
-				<tr key={line.name} className="px-8 odd:bg-slate-700">
-					<td>{line.name}</td>
-					<MonthAndYearCells value={line.amount} />
+			{items.map(item => (
+				<tr key={item.name} className="px-8 odd:bg-slate-700">
+					<td>{item.name}</td>
+					<MonthAndYearCells value={item.amount} />
 				</tr>
 			))}
 			<tr>

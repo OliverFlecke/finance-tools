@@ -3,15 +3,19 @@ import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateBudgetDto, useCreateBudgetCallback } from './api';
 
-const BudgetCreate = () => {
+const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({
+	onBudgetCreated,
+}) => {
 	const createBudget = useCreateBudgetCallback();
 	const { register, handleSubmit } = useForm<CreateBudgetDto>();
+
 	const onSubmit = useCallback(
 		async (data: CreateBudgetDto) => {
 			console.log(`Creating budget with name: ${data.title}`);
 			await createBudget(data);
+			onBudgetCreated();
 		},
-		[createBudget]
+		[createBudget, onBudgetCreated]
 	);
 
 	return (

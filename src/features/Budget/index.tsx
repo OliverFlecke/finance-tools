@@ -9,18 +9,12 @@ import {
 	useAddItemToBudgetCallback,
 } from './api';
 import Configuration from './BudgetConfiguration';
-import BudgetCreate from './BudgetCreate';
 import BudgetDetails from './BudgetDetails';
 import BudgetList from './BudgetList';
 
 export interface State {
+	budgets: BudgetWithItems[];
 	budget?: BudgetWithItems;
-}
-
-export interface Line {
-	name: string;
-	category: string;
-	amount: number;
 }
 
 export type Action =
@@ -76,7 +70,7 @@ function createReducer(options: {
 }
 
 function fetchInitialData(): State {
-	return getDataFromStorage('budget', {});
+	return getDataFromStorage('budget', { budgets: [] });
 }
 
 export const currency = 'GBP';
@@ -113,12 +107,14 @@ const Budget: React.FC<{
 		<>
 			<h2 className="page-header">Budget</h2>
 
-			<BudgetCreate />
 			<BudgetList setBudget={setBudget} />
 
 			<ClientOnly>
 				{state.budget && (
 					<>
+						<h3 className="px-4 pt-6 text-3xl text-orange-500">
+							{state.budget.title}
+						</h3>
 						<Configuration setSavePercent={setSavePercent} />
 						<BudgetDetails
 							budget={state.budget}

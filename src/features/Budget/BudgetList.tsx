@@ -7,6 +7,7 @@ import {
 	useFetchBudgetWithItemsCallback,
 	BudgetWithItems,
 } from './api';
+import BudgetCreate from './BudgetCreate';
 
 const BudgetList: React.FC<{
 	setBudget: (budget: BudgetWithItems) => Promise<void>;
@@ -14,6 +15,7 @@ const BudgetList: React.FC<{
 	const budgets = useFetchAllBudgets();
 	const deleteCallback = useDeleteBudgetCallback();
 	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback();
+
 	const onSelectBudget = useCallback(
 		async (budget: Budget) => {
 			const b = await fetchBudgetWithItems(budget.id);
@@ -24,31 +26,38 @@ const BudgetList: React.FC<{
 		},
 		[fetchBudgetWithItems, setBudget]
 	);
-
-	console.log(budgets);
-
-	if (budgets.loading) {
-		return <div>Loading budgets...</div>;
-	}
+	const onDelete = useCallback(
+		async (id: string) => {
+			await deleteCallback(id);
+			budgets.refresh();
+		},
+		[budgets, deleteCallback]
+	);
 
 	return (
-		<div className="bg-cyan-900  p-4">
-			<div className="flex w-full flex-row justify-between space-x-4 px-4 font-bold">
-				<span>Title</span>
-				<span>Created at</span>
-				<span></span>
+		<>
+			<BudgetCreate onBudgetCreated={budgets.refresh} />
+
+			<div className="bg-cyan-900 p-4">
+				<div className="flex w-full flex-row justify-between space-x-4 px-4 font-bold">
+					<span>Title</span>
+					<span>Created at</span>
+					<span></span>
+				</div>
+				{budgets.data && (
+					<ul>
+						{budgets.data?.map(b => (
+							<BudgetListItem
+								key={`${b.title}-${b.created_at.toISOString()}`}
+								budget={b}
+								deleteCallback={onDelete}
+								onSelect={onSelectBudget}
+							/>
+						))}
+					</ul>
+				)}
 			</div>
-			<ul>
-				{budgets.data?.map(b => (
-					<BudgetListItem
-						key={`${b.title}-${b.created_at.toISOString()}`}
-						budget={b}
-						deleteCallback={deleteCallback}
-						onSelect={onSelectBudget}
-					/>
-				))}
-			</ul>
-		</div>
+		</>
 	);
 };
 
