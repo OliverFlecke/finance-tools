@@ -29,8 +29,8 @@ const AddLine: React.FC<{ add: (line: AddItemToBudgetRequest) => void }> = ({
 						<input
 							placeholder="Amount"
 							className="budget"
-							onKeyPress={event => {
-								if (!/\d|\./.test(event.key)) {
+							onKeyDown={event => {
+								if (!/\d|\.|Enter/.test(event.key)) {
 									event.preventDefault();
 									return;
 								}
