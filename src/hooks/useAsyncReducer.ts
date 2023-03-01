@@ -26,18 +26,23 @@ export default function useAsyncReducer<State, Action>(
 		[cacheKey]
 	);
 
-	const dispatch = async (action: Action) => {
-		const result = reducer(state, action);
+	const dispatch = useCallback(
+		async (action: Action) => {
+			const result = reducer(state, action);
 
-		if (result instanceof Promise<State>) {
-			setState({ ...state, loading: true, error: null });
-			result
-				.then(state => cacheState({ ...state, loading: false, error: null }))
-				.catch(error => setState({ ...state, loading: false, error }));
-		} else {
-			cacheState({ ...result, loading: false, error: null });
-		}
-	};
+			if (result instanceof Promise<State>) {
+				setState({ ...state, loading: true, error: null });
+				result
+					.then(state => cacheState({ ...state, loading: false, error: null }))
+					.catch(error => setState({ ...state, loading: false, error }));
+			} else {
+				cacheState({ ...result, loading: false, error: null });
+			}
+		},
+		// Should be disabled here to ignore changes to the state
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[cacheState, reducer]
+	);
 
 	return [state, dispatch];
 }

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { isDevelopment } from '../../utils/general';
 import {
 	ApiResponse,
-	parseWithDate,
+	parseJsonWithDate,
 	useApi,
 	useApiCall,
 	useApiWithUrlCall,
@@ -53,7 +53,7 @@ export function useFetchBudgetWithItemsCallback(): (
 				return null;
 			}
 
-			return parseWithDate(text) as BudgetWithItems;
+			return parseJsonWithDate(text) as BudgetWithItems;
 		},
 		[handler]
 	);
@@ -82,7 +82,7 @@ export interface Item {
 
 // Item API
 
-interface AddItemToBudgetRequest {
+export interface AddItemToBudgetRequest {
 	category: string;
 	name: string;
 	amount: number;
@@ -98,7 +98,7 @@ interface AddItemToBudgetRequest {
 export function useAddItemToBudgetCallback(): (
 	budget_id: string,
 	request: AddItemToBudgetRequest
-) => Promise<void> {
+) => Promise<string> {
 	const handler = useApiWithUrlCall();
 
 	return useCallback(
@@ -114,6 +114,8 @@ export function useAddItemToBudgetCallback(): (
 			if (!res?.ok) {
 				throw Error(await res?.text());
 			}
+
+			return await res.text();
 		},
 		[handler]
 	);

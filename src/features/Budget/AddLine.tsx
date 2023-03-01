@@ -1,10 +1,12 @@
 import React from 'react';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
-import { Line } from './index';
+import { AddItemToBudgetRequest } from './api';
 
-const AddLine: React.FC<{ add: (line: Line) => void }> = ({ add }) => {
-	const { register, handleSubmit } = useForm<Line>();
+const AddLine: React.FC<{ add: (line: AddItemToBudgetRequest) => void }> = ({
+	add,
+}) => {
+	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>();
 
 	return (
 		<tbody>

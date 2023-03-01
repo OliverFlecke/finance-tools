@@ -5,19 +5,24 @@ import {
 	useFetchAllBudgets,
 	useDeleteBudgetCallback,
 	useFetchBudgetWithItemsCallback,
+	BudgetWithItems,
 } from './api';
 
-const BudgetList = () => {
+const BudgetList: React.FC<{
+	setBudget: (budget: BudgetWithItems) => Promise<void>;
+}> = ({ setBudget }) => {
 	const budgets = useFetchAllBudgets();
 	const deleteCallback = useDeleteBudgetCallback();
 	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback();
 	const onSelectBudget = useCallback(
 		async (budget: Budget) => {
 			const b = await fetchBudgetWithItems(budget.id);
-			console.log(b);
-			// TODO: Set the currently selected budget
+			if (b) {
+				await setBudget(b);
+			}
+			// TODO: Handle error
 		},
-		[fetchBudgetWithItems]
+		[fetchBudgetWithItems, setBudget]
 	);
 
 	console.log(budgets);

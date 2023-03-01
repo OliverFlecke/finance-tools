@@ -20,7 +20,7 @@ export function stockReducer(
 }
 
 export function getDefaultStockState(): StockState {
-	const state = getDataFromStorage(storageKey, {
+	const state = getDataFromStorage<StockState>(storageKey, {
 		stocks: [],
 		preferredCurrency: 'usd',
 		currencyRates: {
@@ -28,20 +28,23 @@ export function getDefaultStockState(): StockState {
 		},
 	});
 
-	for (const symbol of Object.keys(state.stocks)) {
-		for (const lot of state.stocks[symbol].lots) {
-			lot.buyDate = new Date(Date.parse(lot.buyDate));
-			lot.soldDate = lot.soldDate
-				? new Date(Date.parse(lot.soldDate))
-				: undefined;
-		}
-	}
+	// for (const symbol of Object.keys(state.stocks)) {
+	// 	for (const lot of state.stocks[symbol].lots) {
+	// 		lot.buyDate = new Date(Date.parse(lot.buyDate));
+	// 		lot.soldDate = lot.soldDate
+	// 			? new Date(Date.parse(lot.soldDate))
+	// 			: undefined;
+	// 	}
+	// }
 
 	return state;
 }
 
 export interface StockState {
 	stocks: StockList;
+	preferredCurrency: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	currencyRates: { usd: any };
 }
 
 export type StockAction =

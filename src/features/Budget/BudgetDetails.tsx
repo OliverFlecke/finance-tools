@@ -1,18 +1,26 @@
 import React, { FC } from 'react';
 import ClientOnly from 'components/ClientOnly';
 import { useComputation } from './useComputation';
-import { Action, Line, State } from '.';
+import { Action } from '.';
 import LineOverview from './LineOverview';
 import AddLine from './AddLine';
 import MonthAndYearCells from './MonthAndYearCells';
+import { AddItemToBudgetRequest, BudgetWithItems } from './api';
 
 const BudgetDetails: FC<{
-	state: State;
+	budget: BudgetWithItems;
 	dispatch: (action: Action) => Promise<void>;
 	savePercent: number;
-}> = ({ state, savePercent, dispatch }) => {
-	const { total, totalIncome, totalExpenses, savings, remaining } =
-		useComputation(state, { savePercent });
+}> = ({ budget, savePercent, dispatch }) => {
+	const {
+		income,
+		expenses,
+		total,
+		totalIncome,
+		totalExpenses,
+		savings,
+		remaining,
+	} = useComputation(budget, { savePercent });
 
 	return (
 		<ClientOnly>
@@ -26,22 +34,30 @@ const BudgetDetails: FC<{
 						</tr>
 					</thead>
 
-					<LineOverview
-						title="Income"
-						data={state.income}
-						total={totalIncome}
-					/>
+					<LineOverview title="Income" data={income} total={totalIncome} />
 					<AddLine
-						add={(line: Line) => dispatch({ type: 'ADD INCOME', line })}
+						add={(item: AddItemToBudgetRequest) =>
+							dispatch({
+								type: 'ADD INCOME',
+								budget_id: budget.id,
+								item,
+							})
+						}
 					/>
 
 					<LineOverview
 						title="Expenses"
-						data={state.expenses}
+						data={expenses}
 						total={totalExpenses}
 					/>
 					<AddLine
-						add={(line: Line) => dispatch({ type: 'ADD EXPENSE', line })}
+						add={(item: AddItemToBudgetRequest) =>
+							dispatch({
+								type: 'ADD EXPENSE',
+								budget_id: budget.id,
+								item,
+							})
+						}
 					/>
 
 					<tfoot>
