@@ -5,6 +5,7 @@ import AddLine from './AddLine';
 import MonthAndYearCells from './MonthAndYearCells';
 import { AddItemToBudgetRequest, BudgetWithItems } from './api';
 import { Action } from './state';
+import { getBackgroundColorValueIndicator } from 'utils/colors';
 
 const BudgetDetails: FC<{
 	budget: BudgetWithItems;
@@ -73,17 +74,20 @@ const BudgetDetails: FC<{
 				/>
 
 				<tfoot>
-					<tr className="bg-green-400 dark:bg-green-700">
+					<tr className={getBackgroundColorValueIndicator(total)}>
 						<th>After monthley expenses</th>
 						<MonthAndYearCells value={total} />
+						<td></td>
 					</tr>
 					<tr>
 						<td>Savings</td>
 						<MonthAndYearCells value={savings} />
+						<td></td>
 					</tr>
-					<tr className="bg-green-400 dark:bg-green-700">
+					<tr className={getBackgroundColorValueIndicator(remaining)}>
 						<th>Remaining</th>
 						<MonthAndYearCells value={remaining} />
+						<td></td>
 					</tr>
 				</tfoot>
 			</table>

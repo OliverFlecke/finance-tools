@@ -23,7 +23,7 @@ export function useComputation(
 		[income]
 	);
 	const totalExpenses = useMemo(
-		() => sum(...expenses.map(x => x.amount)),
+		() => -sum(...expenses.map(x => x.amount)),
 		[expenses]
 	);
 	const total = useMemo(
@@ -31,7 +31,6 @@ export function useComputation(
 		[totalIncome, totalExpenses]
 	);
 	const savings = totalIncome * (savePercent / 100);
-
 	const remaining = total - savings;
 
 	return {
