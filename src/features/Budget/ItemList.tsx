@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import DeleteButton from 'components/DeleteButton';
 import { formatCurrency } from 'utils/converters';
 import { AddItemToBudgetRequest, Item } from './api';
@@ -8,6 +8,7 @@ import { sum } from 'utils/math';
 import { IoCreateOutline } from 'react-icons/io5';
 import EditItem from './EditItem';
 import { Modal } from '@oliverflecke/components-react';
+import { BudgetContext } from './state';
 
 interface Props {
 	title: string;
@@ -24,6 +25,9 @@ const ItemList: React.FC<Props> = ({
 	deleteItem,
 	updateItem,
 }) => {
+	const {
+		state: { hideItems },
+	} = useContext(BudgetContext);
 	const groups = useMemo(() => Array.from(groupByCategory(items)), [items]);
 
 	return (
@@ -40,17 +44,18 @@ const ItemList: React.FC<Props> = ({
 								value={Math.abs(sum(...group.items.map(x => x.amount)))}
 							/>
 						</tr>
-						{group.items.map(item => (
-							<tr key={item.name} className="px-8 odd:bg-slate-700">
-								<td>{item.name}</td>
-								<MonthAndYearCells value={Math.abs(item.amount)} />
-								<Actions
-									item={item}
-									deleteItem={deleteItem}
-									updateItem={updateItem}
-								/>
-							</tr>
-						))}
+						{!hideItems &&
+							group.items.map(item => (
+								<tr key={item.name} className="px-8 odd:bg-slate-700">
+									<td>{item.name}</td>
+									<MonthAndYearCells value={Math.abs(item.amount)} />
+									<Actions
+										item={item}
+										deleteItem={deleteItem}
+										updateItem={updateItem}
+									/>
+								</tr>
+							))}
 					</>
 				);
 			})}

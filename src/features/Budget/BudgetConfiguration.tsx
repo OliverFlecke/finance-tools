@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { BudgetContext } from './state';
 
 const Configuration: React.FC<{
 	setSavePercent: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ setSavePercent }) => {
+	const {
+		state: { hideItems },
+		dispatch,
+	} = useContext(BudgetContext);
+
 	return (
-		<div className="mx-4">
-			<h3 className="pt-4 text-xl">Configuration</h3>
+		<div className="mx-4 mt-2 rounded bg-cyan-400 p-4 dark:bg-cyan-800">
+			{/* <h3 className="pt-4 text-xl">Configuration</h3> */}
 			<label htmlFor="desired-savings">Desired savings</label>
 			<span className="mx-4 rounded bg-gray-800 py-1 px-2 focus-within:ring-2">
 				<input
@@ -31,6 +37,16 @@ const Configuration: React.FC<{
 				/>
 				%
 			</span>
+			<label className="space-x-4">
+				<span>Hide items</span>
+				<input
+					type="checkbox"
+					checked={hideItems}
+					onChange={e =>
+						dispatch({ type: 'HIDE ITEMS', value: e.target.checked })
+					}
+				/>
+			</label>
 		</div>
 	);
 };

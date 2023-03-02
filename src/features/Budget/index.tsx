@@ -1,7 +1,6 @@
 import ClientOnly from 'components/ClientOnly';
 import useAsyncReducer from 'hooks/useAsyncReducer';
 import React, { useCallback, useMemo, useState } from 'react';
-import { getDataFromStorage } from 'utils/storage';
 import {
 	BudgetWithItems,
 	useAddItemToBudgetCallback,
@@ -11,11 +10,13 @@ import {
 import Configuration from './BudgetConfiguration';
 import BudgetDetails from './BudgetDetails';
 import BudgetList from './BudgetList';
-import { State, createReducer, Action } from './state';
-
-function fetchInitialData(): State {
-	return getDataFromStorage('budget', {});
-}
+import {
+	State,
+	createReducer,
+	Action,
+	fetchInitialData,
+	BudgetContext,
+} from './state';
 
 // TODO: This should be part of the settings for a budget
 export const currency = 'GBP';
@@ -47,6 +48,7 @@ const Budget: React.FC<{
 		fetchInitialData(),
 		'budget'
 	);
+	// TODO: This should be a per budget setting
 	const [savePercent, setSavePercent] = useState<number>(0);
 	const setBudget = useCallback(
 		async (budget: BudgetWithItems) => {
@@ -59,23 +61,25 @@ const Budget: React.FC<{
 		<>
 			<h2 className="page-header">Budget</h2>
 
-			<BudgetList setBudget={setBudget} />
+			<BudgetContext.Provider value={{ state, dispatch }}>
+				<BudgetList setBudget={setBudget} />
 
-			<ClientOnly>
-				{state.budget && (
-					<>
-						<h3 className="px-4 pt-6 text-3xl text-orange-500">
-							{state.budget.title}
-						</h3>
-						<Configuration setSavePercent={setSavePercent} />
-						<BudgetDetails
-							budget={state.budget}
-							dispatch={dispatch}
-							savePercent={savePercent}
-						/>
-					</>
-				)}
-			</ClientOnly>
+				<ClientOnly>
+					{state.budget && (
+						<>
+							<h3 className="px-4 pt-6 text-3xl text-orange-500">
+								{state.budget.title}
+							</h3>
+							<Configuration setSavePercent={setSavePercent} />
+							<BudgetDetails
+								budget={state.budget}
+								dispatch={dispatch}
+								savePercent={savePercent}
+							/>
+						</>
+					)}
+				</ClientOnly>
+			</BudgetContext.Provider>
 		</>
 	);
 };

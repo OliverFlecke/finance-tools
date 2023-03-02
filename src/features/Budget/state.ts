@@ -1,10 +1,24 @@
+import React from 'react';
+import { getDataFromStorage } from 'utils/storage';
 import { AddItemToBudgetRequest, BudgetWithItems, Item } from './api';
+
+export const BudgetContext = React.createContext({
+	state: fetchInitialData(),
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+	dispatch: (_: Action) => {},
+});
 
 export interface State {
 	budget?: BudgetWithItems;
+	hideItems: boolean;
+}
+
+export function fetchInitialData(): State {
+	return getDataFromStorage('budget', { hideItems: false });
 }
 
 export type Action =
+	| { type: 'HIDE ITEMS'; value: boolean }
 	| { type: 'SET BUDGET'; budget: BudgetWithItems }
 	| { type: 'REMOVE ITEM'; budget_id: string; item_id: string }
 	| { type: 'EDIT ITEM'; item_id: string; item: AddItemToBudgetRequest }
@@ -32,6 +46,12 @@ export function createReducer(
 ): (state: State, action: Action) => Promise<State> {
 	return async (state: State, action: Action) => {
 		switch (action.type) {
+			case 'HIDE ITEMS':
+				return {
+					...state,
+					hideItems: action.value,
+				};
+
 			case 'ADD EXPENSE':
 			case 'ADD INCOME':
 				if (!state.budget) {
