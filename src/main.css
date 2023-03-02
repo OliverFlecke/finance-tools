@@ -83,6 +83,21 @@ input[type='number'] {
 	}
 
 	input.budget {
-		@apply w-24 rounded py-2 px-2;
+		@apply rounded py-2 px-2;
+	}
+
+	input.add-item {
+		@apply w-24 max-w-xs flex-grow;
+	}
+
+	input.edit-item {
+		@apply w-full rounded;
+	}
+
+	label.edit-item {
+		@apply space-y-2;
+		span {
+			@apply text-sm;
+		}
 	}
 }

@@ -5,9 +5,9 @@ import {
 } from 'features/AccountOverview/models/Account';
 import SettingsContext from 'features/Settings/context';
 import React, { FC, useContext } from 'react';
-import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { convertToCurrency, formatCurrency } from 'utils/converters';
+import DeleteButton from '../../components/DeleteButton';
 import Cell from './Cell';
 
 const Table: FC = () => {
@@ -120,12 +120,9 @@ const RowActions: FC<{ date: string }> = ({ date }) => {
 
 	return (
 		<td className="pl-4">
-			<button
+			<DeleteButton
 				onClick={() => dispatch({ type: 'DELETE ENTRY', date: date })}
-				className="flex focus:outline-none"
-			>
-				<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />
-			</button>
+			/>
 		</td>
 	);
 };

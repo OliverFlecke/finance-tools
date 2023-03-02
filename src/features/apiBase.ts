@@ -17,52 +17,68 @@ export interface ApiResponse<T> {
 	data?: T;
 }
 
+export interface ApiResponseWithActions<T> extends ApiResponse<T> {
+	refresh: () => void;
+}
+
 export function useApi<T>(
 	url: RequestInfo,
-	options?: RequestInit,
-	mapper?: (data: unknown) => T
-): ApiResponse<T> {
+	options?: RequestInit
+): ApiResponseWithActions<T> {
 	const { getAccessTokenSilently } = useAuth0();
 	const [state, setState] = useState<ApiResponse<T>>({
 		loading: true,
 	});
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const accessToken = await getAccessTokenSilently();
-				const res = await fetch(url, {
-					...options,
-					mode: isDevelopment ? 'cors' : undefined,
-					headers: {
-						...options?.headers,
-						Authorization: `Bearer ${accessToken}`,
-					},
-				});
-				const json = await res.json();
-				setState({
-					...state,
-					data: mapper ? mapper(json) : json,
-					error: undefined,
-					loading: false,
-				});
-			} catch (error: unknown) {
-				setState({
-					...state,
-					error,
-					loading: false,
-				});
-			}
-		})();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	const execute = useCallback(async () => {
+		try {
+			setState({
+				...state,
+				data: undefined,
+				error: undefined,
+				loading: true,
+			});
+			const accessToken = await getAccessTokenSilently();
+			const res = await fetch(url, {
+				...options,
+				mode: isDevelopment ? 'cors' : undefined,
+				headers: {
+					...options?.headers,
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+			const data = parseJsonWithDate(await res.text());
+			setState({
+				...state,
+				data,
+				error: undefined,
+				loading: false,
+			});
+		} catch (error: unknown) {
+			setState({
+				...state,
+				error,
+				loading: false,
+			});
+		}
+		// Ignore changes to state
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	return state;
+	useEffect(() => {
+		(async () => await execute())();
+	}, [execute]);
+
+	return {
+		...state,
+		refresh: execute,
+	};
 }
 
-export function useApiCall(
+export function useApiCall<T>(
 	url: RequestInfo,
 	options?: RequestInit
-): (body?: unknown) => Promise<Response | undefined> {
+): (body?: T) => Promise<Response | undefined> {
 	const { getAccessTokenSilently } = useAuth0();
 
 	return useCallback(
@@ -118,4 +134,15 @@ export function useApiWithUrlCall(): (
 		},
 		[getAccessTokenSilently]
 	);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function parseJsonWithDate(data: string): any {
+	const reDateDetect = /(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?/;
+	return JSON.parse(data, (_: string, value: unknown) => {
+		if (typeof value == 'string' && reDateDetect.exec(value)) {
+			return new Date(value);
+		}
+		return value;
+	});
 }

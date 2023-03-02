@@ -9,27 +9,9 @@ import { useCallback } from 'react';
 import { StockList } from '../models';
 
 export function useFetchStocks(): ApiResponse<StockList> {
-	return useApi<StockList>(
-		`${apiUrlWithPath}/stock/tracked`,
-		{
-			method: 'GET',
-		},
-		fixDates
-	);
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	function fixDates(stocks: any): StockList {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		return stocks.map((stock: any) => ({
-			...stock,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			lots: stock.lots.map((lot: any) => ({
-				...lot,
-				buyDate: new Date(Date.parse(lot.buyDate)),
-				soldDate: lot.soldDate ? new Date(Date.parse(lot.soldDate)) : undefined,
-			})),
-		}));
-	}
+	return useApi<StockList>(`${apiUrlWithPath}/stock/tracked`, {
+		method: 'GET',
+	});
 }
 
 export function useTrackStockCallback(): (

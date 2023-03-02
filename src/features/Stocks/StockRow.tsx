@@ -1,14 +1,12 @@
 import React, { useCallback, useContext, useState } from 'react';
-import {
-	IoEllipsisHorizontalCircleOutline,
-	IoTrashOutline,
-} from 'react-icons/io5';
+import { IoEllipsisHorizontalCircleOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
 import SettingsContext from 'features/Settings/context';
 import { Stock, stockAvgPrice, stockGain, stockTotalShares } from './models';
 import { StockContext } from './state';
 import StockLotsTable from './StockLotsTable';
+import DeleteButton from '../../components/DeleteButton';
 
 interface StockRowProps {
 	stock: Stock;
@@ -92,9 +90,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 			>
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
-			<button onClick={deleteStock} className="hover:cursor-pointer">
-				<IoTrashOutline className="text-red-500" size={24} />
-			</button>
+			<DeleteButton onClick={deleteStock} />
 		</td>
 	);
 };

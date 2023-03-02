@@ -8,14 +8,9 @@ import { CurrencySymbol } from 'features/Currency/api';
 import { Account, AccountType } from '../models/Account';
 
 export function useAccounts(): ApiResponse<AccountResponse[]> {
-	return useApi<AccountResponse[]>(
-		`${apiUrlWithPath}/account`,
-		{
-			method: 'GET',
-			mode: 'cors',
-		},
-		fixDates
-	);
+	return useApi<AccountResponse[]>(`${apiUrlWithPath}/account`, {
+		method: 'GET',
+	});
 }
 
 export function useAddAccountCallback(): (
@@ -68,17 +63,4 @@ interface UpdateAccount {
 	type?: AccountType;
 	currency?: string;
 	sortKey?: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function fixDates(response: any): AccountResponse[] {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return response.map((x: any) => ({
-		...x,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		entries: x.entries.map((entry: any) => ({
-			...entry,
-			date: new Date(Date.parse(entry.date)),
-		})),
-	}));
 }

@@ -23,21 +23,24 @@ export default function useAsyncReducer<State, Action>(
 			}
 			setState(newState);
 		},
-		[cacheKey]
+		[cacheKey, setState]
 	);
 
-	const dispatch = async (action: Action) => {
-		const result = reducer(state, action);
+	const dispatch = useCallback(
+		async (action: Action) => {
+			const result = reducer(state, action);
 
-		if (result instanceof Promise<State>) {
-			setState({ ...state, loading: true, error: null });
-			result
-				.then(state => cacheState({ ...state, loading: false, error: null }))
-				.catch(error => setState({ ...state, loading: false, error }));
-		} else {
-			cacheState({ ...result, loading: false, error: null });
-		}
-	};
+			if (result instanceof Promise<State>) {
+				setState({ ...state, loading: true, error: null });
+				result
+					.then(state => cacheState({ ...state, loading: false, error: null }))
+					.catch(error => setState({ ...state, loading: false, error }));
+			} else {
+				cacheState({ ...result, loading: false, error: null });
+			}
+		},
+		[cacheState, reducer, state]
+	);
 
 	return [state, dispatch];
 }

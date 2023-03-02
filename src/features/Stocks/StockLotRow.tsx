@@ -1,6 +1,5 @@
 import React, { useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { IoTrashOutline } from 'react-icons/io5';
 import { getValueColorIndicator } from 'utils/colors';
 import { formatCurrency, useConverter } from 'utils/converters';
 import { formatDate } from 'utils/date';
@@ -11,6 +10,7 @@ import {
 } from './API/stockApi';
 import { Stock, StockLot } from './models';
 import { StockContext } from './state';
+import DeleteButton from '../../components/DeleteButton';
 
 interface StockLotRowProps {
 	stock: Stock;
@@ -116,12 +116,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({
 				<span>{((marketValue / buyMarketValue - 1) * 100).toFixed(2)} %</span>
 			</td>
 			<td className="pl-4">
-				<button onClick={deleteLot}>
-					<IoTrashOutline
-						className="text-red-700 dark:text-red-500"
-						size={24}
-					/>
-				</button>
+				<DeleteButton onClick={deleteLot} />
 			</td>
 		</tr>
 	);
