@@ -30,9 +30,8 @@ const AddLine: React.FC<{ add: (line: AddItemToBudgetRequest) => void }> = ({
 							placeholder="Amount"
 							className="budget"
 							onKeyDown={event => {
-								if (!/\d|\.|Enter/.test(event.key)) {
+								if (!/\d|\.|Enter|Shift|Tab/.test(event.key)) {
 									event.preventDefault();
-									return;
 								}
 							}}
 							{...register('amount', { required: true, valueAsNumber: true })}

@@ -62,13 +62,14 @@ const BudgetDetails: FC<{
 					deleteItem={deleteItem}
 				/>
 				<AddLine
-					add={(item: AddItemToBudgetRequest) =>
+					add={(item: AddItemToBudgetRequest) => {
+						item.amount = -item.amount;
 						dispatch({
 							type: 'ADD EXPENSE',
 							budget_id: budget.id,
 							item,
-						})
-					}
+						});
+					}}
 				/>
 
 				<tfoot>

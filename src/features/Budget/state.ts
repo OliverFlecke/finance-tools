@@ -25,6 +25,8 @@ export function createReducer(
 	options: ReducerOptions
 ): (state: State, action: Action) => Promise<State> {
 	return async (state: State, action: Action) => {
+		console.log(`Executing action: ${action.type}`);
+		console.log(state.budget?.items);
 		switch (action.type) {
 			case 'ADD EXPENSE':
 			case 'ADD INCOME':
@@ -44,6 +46,9 @@ export function createReducer(
 					id: item_id,
 					budget_id: action.budget_id,
 				};
+
+				console.log(state.budget.items);
+				console.log(state.budget.items.concat(item));
 
 				return {
 					...state,
@@ -71,6 +76,7 @@ export function createReducer(
 				};
 
 			case 'SET BUDGET':
+				console.log(action.budget);
 				return {
 					...state,
 					budget: action.budget,

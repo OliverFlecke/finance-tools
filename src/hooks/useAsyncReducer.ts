@@ -23,7 +23,7 @@ export default function useAsyncReducer<State, Action>(
 			}
 			setState(newState);
 		},
-		[cacheKey]
+		[cacheKey, setState]
 	);
 
 	const dispatch = useCallback(
@@ -39,9 +39,7 @@ export default function useAsyncReducer<State, Action>(
 				cacheState({ ...result, loading: false, error: null });
 			}
 		},
-		// Should be disabled here to ignore changes to the state
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[cacheState, reducer]
+		[cacheState, reducer, state]
 	);
 
 	return [state, dispatch];
