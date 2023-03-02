@@ -1,17 +1,17 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useContext } from 'react';
 import DeleteButton from '../../components/DeleteButton';
 import {
 	Budget,
-	useFetchAllBudgets,
 	useDeleteBudgetCallback,
+	useFetchAllBudgets,
 	useFetchBudgetWithItemsCallback,
-	BudgetWithItems,
 } from './api';
 import BudgetCreate from './BudgetCreate';
+import { BudgetContext } from './state';
 
-const BudgetList: React.FC<{
-	setBudget: (budget: BudgetWithItems) => Promise<void>;
-}> = ({ setBudget }) => {
+const BudgetList: React.FC = () => {
+	const { dispatch } = useContext(BudgetContext);
+
 	const budgets = useFetchAllBudgets();
 	const deleteCallback = useDeleteBudgetCallback();
 	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback();
@@ -20,11 +20,10 @@ const BudgetList: React.FC<{
 		async (budget: Budget) => {
 			const b = await fetchBudgetWithItems(budget.id);
 			if (b) {
-				await setBudget(b);
+				dispatch({ type: 'SET BUDGET', budget: b });
 			}
-			// TODO: Handle error
 		},
-		[fetchBudgetWithItems, setBudget]
+		[dispatch, fetchBudgetWithItems]
 	);
 	const onDelete = useCallback(
 		async (id: string) => {

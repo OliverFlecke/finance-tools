@@ -31,23 +31,29 @@ const ItemList: React.FC<Props> = ({
 	const groups = useMemo(() => Array.from(groupByCategory(items)), [items]);
 
 	return (
-		<tbody>
+		<tbody className="">
 			<tr>
 				<th className="text-left">{title}</th>
 			</tr>
 			{groups.map(group => {
 				return (
-					<>
-						<tr key={group.category} className="font-bold text-yellow-600">
-							<th className="text-left">{group.category}</th>
+					<React.Fragment key={group.category}>
+						<tr
+							key={group.category}
+							className={`font-bold text-yellow-600 ${
+								hideItems ? 'odd:bg-slate-700' : ''
+							}`}
+						>
+							<th className="px-4 text-left">{group.category}</th>
 							<MonthAndYearCells
 								value={Math.abs(sum(...group.items.map(x => x.amount)))}
 							/>
+							<td></td>
 						</tr>
 						{!hideItems &&
 							group.items.map(item => (
 								<tr key={item.name} className="px-8 odd:bg-slate-700">
-									<td>{item.name}</td>
+									<td className="pl-8">{item.name}</td>
 									<MonthAndYearCells value={Math.abs(item.amount)} />
 									<Actions
 										item={item}
@@ -56,7 +62,7 @@ const ItemList: React.FC<Props> = ({
 									/>
 								</tr>
 							))}
-					</>
+					</React.Fragment>
 				);
 			})}
 			<tr>
@@ -85,7 +91,7 @@ const Actions: React.FC<{
 	);
 
 	return (
-		<td className="flex flex-row justify-end space-x-2">
+		<td className="flex flex-row justify-end space-x-2 pr-4">
 			<DeleteButton onClick={() => deleteItem(item.id)} />
 			<button
 				onClick={() => setEdit(true)}

@@ -1,17 +1,17 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useContext } from 'react';
 import { useComputation } from './useComputation';
 import ItemList from './ItemList';
 import AddLine from './AddLine';
 import MonthAndYearCells from './MonthAndYearCells';
 import { AddItemToBudgetRequest, BudgetWithItems } from './api';
-import { Action } from './state';
+import { BudgetContext } from './state';
 import { getBackgroundColorValueIndicator } from 'utils/colors';
 
 const BudgetDetails: FC<{
 	budget: BudgetWithItems;
-	dispatch: (action: Action) => Promise<void>;
 	savePercent: number;
-}> = ({ budget, savePercent, dispatch }) => {
+}> = ({ budget, savePercent }) => {
+	const { dispatch } = useContext(BudgetContext);
 	const {
 		income,
 		expenses,
