@@ -10,7 +10,7 @@ import {
 
 const budgetHost = isDevelopment
 	? 'http://localhost:4000'
-	: 'https://finance.oliverflecke.me';
+	: 'https://finance.oliverflecke.me/api/v1';
 
 export function useFetchAllBudgets(): ApiResponseWithActions<Budget[]> {
 	return useApi<Budget[]>(`${budgetHost}/budget`, { method: 'GET' });
