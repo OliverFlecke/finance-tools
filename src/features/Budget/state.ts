@@ -7,6 +7,7 @@ export interface State {
 export type Action =
 	| { type: 'SET BUDGET'; budget: BudgetWithItems }
 	| { type: 'REMOVE ITEM'; budget_id: string; item_id: string }
+	| { type: 'EDIT ITEM'; item_id: string; item: AddItemToBudgetRequest }
 	| { type: 'ADD INCOME'; budget_id: string; item: AddItemToBudgetRequest }
 	| { type: 'ADD EXPENSE'; budget_id: string; item: AddItemToBudgetRequest };
 
@@ -19,14 +20,17 @@ interface ReducerOptions {
 		budget_id: string,
 		item_id: string
 	) => Promise<void>;
+	updateItemCallback: (
+		budget_id: string,
+		item_id: string,
+		request: AddItemToBudgetRequest
+	) => Promise<void>;
 }
 
 export function createReducer(
 	options: ReducerOptions
 ): (state: State, action: Action) => Promise<State> {
 	return async (state: State, action: Action) => {
-		console.log(`Executing action: ${action.type}`);
-		console.log(state.budget?.items);
 		switch (action.type) {
 			case 'ADD EXPENSE':
 			case 'ADD INCOME':
@@ -74,9 +78,33 @@ export function createReducer(
 						items: state.budget.items.filter(x => x.id !== action.item_id),
 					},
 				};
+			case 'EDIT ITEM':
+				if (!state.budget) {
+					throw new Error('No budget has been selected');
+				}
+
+				await options.updateItemCallback(
+					state.budget.id,
+					action.item_id,
+					action.item
+				);
+
+				return {
+					...state,
+					budget: {
+						...state.budget,
+						items: state.budget.items.map(x =>
+							x.id === action.item_id
+								? {
+										...x,
+										...action.item,
+								  }
+								: x
+						),
+					},
+				};
 
 			case 'SET BUDGET':
-				console.log(action.budget);
 				return {
 					...state,
 					budget: action.budget,

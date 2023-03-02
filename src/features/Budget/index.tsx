@@ -6,6 +6,7 @@ import {
 	BudgetWithItems,
 	useAddItemToBudgetCallback,
 	useDeleteItemCallback,
+	useUpdateItemCallback,
 } from './api';
 import Configuration from './BudgetConfiguration';
 import BudgetDetails from './BudgetDetails';
@@ -22,11 +23,16 @@ export const currency = 'GBP';
 const Wrapper: React.FC = () => {
 	const addItemToBudgetCallback = useAddItemToBudgetCallback();
 	const deleteItemFromBudgetCallback = useDeleteItemCallback();
+	const updateItemCallback = useUpdateItemCallback();
 
 	const reducer = useMemo(
 		() =>
-			createReducer({ addItemToBudgetCallback, deleteItemFromBudgetCallback }),
-		[addItemToBudgetCallback, deleteItemFromBudgetCallback]
+			createReducer({
+				addItemToBudgetCallback,
+				deleteItemFromBudgetCallback,
+				updateItemCallback,
+			}),
+		[addItemToBudgetCallback, deleteItemFromBudgetCallback, updateItemCallback]
 	);
 
 	return <Budget reducer={reducer} />;

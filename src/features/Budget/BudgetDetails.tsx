@@ -28,6 +28,12 @@ const BudgetDetails: FC<{
 		},
 		[budget.id, dispatch]
 	);
+	const updateItem = useCallback(
+		(item_id: string, item: AddItemToBudgetRequest) => {
+			dispatch({ type: 'EDIT ITEM', item_id, item });
+		},
+		[dispatch]
+	);
 
 	return (
 		<div className="mx-4 pb-8">
@@ -45,6 +51,7 @@ const BudgetDetails: FC<{
 					items={income}
 					total={totalIncome}
 					deleteItem={deleteItem}
+					updateItem={updateItem}
 				/>
 				<AddLine
 					add={(item: AddItemToBudgetRequest) =>
@@ -61,6 +68,7 @@ const BudgetDetails: FC<{
 					items={expenses}
 					total={totalExpenses}
 					deleteItem={deleteItem}
+					updateItem={updateItem}
 				/>
 				<AddLine
 					add={(item: AddItemToBudgetRequest) => {
