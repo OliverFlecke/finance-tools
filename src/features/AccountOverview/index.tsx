@@ -33,6 +33,7 @@ const AccountOverview = memo(() => {
 				},
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [accountState.loading]);
 
 	const addAccountCallback = useAddAccountCallback();

@@ -6,7 +6,8 @@ export function getDataFromStorage<T>(key: string, defaultValue: T): T {
 	if (typeof window === 'undefined') return defaultValue;
 
 	const data = localStorage.getItem(key) ?? undefined;
-	const parsed = data === undefined || data === '' ? {} : parseJsonWithDate(data);
+	const parsed =
+		data === undefined || data === '' ? {} : parseJsonWithDate(data);
 
 	return {
 		...defaultValue,
