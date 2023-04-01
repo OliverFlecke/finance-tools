@@ -33,7 +33,7 @@ const AccountOverview = memo(() => {
 				},
 			});
 		}
-	}, [accountState]);
+	}, [accountState.loading]);
 
 	const addAccountCallback = useAddAccountCallback();
 	const add = useCallback(
