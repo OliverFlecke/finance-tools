@@ -84,11 +84,13 @@ export function useApiCall<T>(
 	return useCallback(
 		async (body?: unknown) => {
 			try {
+				console.debug(`Fetching: ${url}. Dev? ${isDevelopment}`);
+				console.debug(options);
 				const accessToken = await getAccessTokenSilently();
 				return await fetch(url, {
 					...options,
 
-					mode: isDevelopment ? 'cors' : 'no-cors',
+					mode: isDevelopment ? 'cors' : undefined,
 					body: body ? JSON.stringify(body) : undefined,
 					headers: {
 						'Content-Type': 'application/json',
