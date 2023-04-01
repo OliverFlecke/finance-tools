@@ -90,11 +90,11 @@ export function useApiCall<T>(
 				return await fetch(url, {
 					...options,
 
-					mode: isDevelopment ? 'cors' : 'no-cors',
+					// mode: isDevelopment ? 'cors' : 'no-cors',
 					body: body ? JSON.stringify(body) : undefined,
 					headers: {
 						'Content-Type': 'application/json',
-						...options?.headers,
+						// ...options?.headers,
 						Authorization: `Bearer ${accessToken}`,
 					},
 				});
