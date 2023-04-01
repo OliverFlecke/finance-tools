@@ -38,7 +38,8 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	return (
 		<td
 			key={account.name}
-			contentEditable
+			contentEditable={true}
+			suppressContentEditableWarning={true}
 			ref={entryRef}
 			onBlur={onBlur}
 			className="px-4 text-right"
