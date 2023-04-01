@@ -84,6 +84,8 @@ export function useApiCall<T>(
 	return useCallback(
 		async (body?: unknown) => {
 			try {
+				console.debug(`Fetching: ${url}. Dev? ${isDevelopment}`);
+				console.debug(options);
 				const accessToken = await getAccessTokenSilently();
 				return await fetch(url, {
 					...options,
