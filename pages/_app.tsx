@@ -34,6 +34,13 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<link rel="apple-touch-icon" href="/logo192.png" />
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="color-scheme" content="dark light" />
+			<script
+				async
+				defer
+				data-api="https://plausible.oliverflecke.me/api/event"
+				data-domain="finance.oliverflecke.me"
+				src="https://plausible.oliverflecke.me/js/script.js"
+			></script>
 		</Head>
 		<Auth0Provider
 			domain={process.env.NEXT_PUBLIC_DOMAIN ?? ''}
