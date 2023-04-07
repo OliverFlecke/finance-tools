@@ -7,6 +7,7 @@ import Settings from 'features/Settings';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
+import Script from 'next/script';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onRedirectCallback = (appState: any) => {
@@ -34,20 +35,21 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			<link rel="apple-touch-icon" href="/logo192.png" />
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="color-scheme" content="dark light" />
-			<script
-				async
-				defer
-				data-api="https://plausible.oliverflecke.me/api/event"
-				data-domain="finance.oliverflecke.me"
-				src="https://plausible.oliverflecke.me/js/script.js"
-			></script>
 		</Head>
+		<Script
+			async
+			defer
+			data-api="https://plausible.oliverflecke.me/api/event"
+			data-domain="finance.oliverflecke.me"
+			src="https://plausible.oliverflecke.me/js/script.js"
+		/>
 		<Auth0Provider
 			domain={process.env.NEXT_PUBLIC_DOMAIN ?? ''}
 			clientId={process.env.NEXT_PUBLIC_CLIENT_ID ?? ''}
 			onRedirectCallback={onRedirectCallback}
 			cacheLocation="localstorage"
 			useRefreshTokens={true}
+			useRefreshTokensFallback={true}
 			authorizationParams={{
 				redirect_uri:
 					typeof window !== 'undefined'
