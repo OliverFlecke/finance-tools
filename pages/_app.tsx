@@ -48,6 +48,7 @@ const Layout: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => (
 			onRedirectCallback={onRedirectCallback}
 			cacheLocation="localstorage"
 			useRefreshTokens={true}
+			useRefreshTokensFallback={true}
 			authorizationParams={{
 				redirect_uri:
 					typeof window !== 'undefined'

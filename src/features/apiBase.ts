@@ -55,6 +55,7 @@ export function useApi<T>(
 				loading: false,
 			});
 		} catch (error: unknown) {
+			console.error(error);
 			setState({
 				...state,
 				error,
