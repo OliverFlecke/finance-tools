@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export function parseNumber(value: any): number {
-	return Number.parseFloat(value.toString().replace(/[,a-zA-Z]/g, ''));
+	return Number.parseFloat(value.toString().replace(/[^.\d]/g, ''));
 }
 
 export const currencyFormatter = Intl.NumberFormat(undefined, {

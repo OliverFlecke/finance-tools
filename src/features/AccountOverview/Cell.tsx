@@ -18,6 +18,10 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const onBlur = useCallback(
 		async (element: React.FormEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
+			if (!amount) {
+				return;
+			}
+
 			await updateEntryCallback({
 				date,
 				amount,
