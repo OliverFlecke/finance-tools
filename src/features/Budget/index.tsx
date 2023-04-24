@@ -52,8 +52,6 @@ const Budget: React.FC<{
 
 	return (
 		<>
-			<h2 className="page-header">Budget</h2>
-
 			<BudgetContext.Provider value={{ state, dispatch }}>
 				<BudgetList />
 

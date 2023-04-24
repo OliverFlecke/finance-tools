@@ -15,8 +15,6 @@ const TaxCalculator: React.FC = () => {
 
 	return (
 		<div className="h-full bg-white dark:bg-gray-800">
-			<h2 className="px-4 pt-4 text-2xl">Tax calculator</h2>
-
 			<TaxCalculatorContext.Provider value={{ state, dispatch }}>
 				<TaxCalculatorInput />
 				<TaxTable />
