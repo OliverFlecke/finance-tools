@@ -42,7 +42,10 @@ const AddLine: React.FC<{ add: (item: AddItemToBudgetRequest) => void }> = ({
 							className="btn btn-primary flex items-center space-x-2 align-middle"
 						>
 							<span>Add</span>
-							<IoAddCircleOutline />
+							<IoAddCircleOutline
+								size={24}
+								className="text-green-400 dark:text-green-500"
+							/>
 						</button>
 					</form>
 				</td>
