@@ -40,7 +40,7 @@ const ItemList: React.FC<Props> = ({
 		<>
 			<tbody>
 				<tr>
-					<th className="text-left text-xl">{title}</th>
+					<th className="text-left text-xl underline">{title}</th>
 				</tr>
 				{groups.map(group => (
 					<React.Fragment key={group.category}>
