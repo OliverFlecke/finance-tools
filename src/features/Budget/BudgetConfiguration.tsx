@@ -10,12 +10,11 @@ const Configuration: React.FC<{
 	} = useContext(BudgetContext);
 
 	return (
-		<div className="mx-4 mt-2 rounded bg-cyan-400 p-4 dark:bg-cyan-800">
-			{/* <h3 className="pt-4 text-xl">Configuration</h3> */}
+		<div className="mx-4 mt-2 rounded bg-sky-300 p-4 dark:bg-sky-900">
 			<label htmlFor="desired-savings">Desired savings</label>
-			<span className="mx-4 rounded bg-gray-800 py-1 px-2 focus-within:ring-2">
+			<span className="mx-4 rounded bg-slate-200 py-1 px-2 shadow-md focus-within:ring-2 dark:bg-slate-800">
 				<input
-					className="w-12 bg-transparent pr-2 text-right outline-none"
+					className="w-12 bg-transparent pr-2 text-right outline-none dark:placeholder-slate-600"
 					placeholder="15"
 					name="desired-savings"
 					type="number"

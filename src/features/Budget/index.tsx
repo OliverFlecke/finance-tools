@@ -52,15 +52,13 @@ const Budget: React.FC<{
 
 	return (
 		<>
-			<h2 className="page-header">Budget</h2>
-
 			<BudgetContext.Provider value={{ state, dispatch }}>
 				<BudgetList />
 
 				<ClientOnly>
 					{state.budget && (
 						<>
-							<h3 className="px-4 pt-6 text-3xl text-orange-700 dark:text-orange-500">
+							<h3 className=" px-4 pt-6 text-3xl text-fuchsia-700 dark:text-fuchsia-600">
 								{state.budget.title}
 							</h3>
 							<Configuration setSavePercent={setSavePercent} />

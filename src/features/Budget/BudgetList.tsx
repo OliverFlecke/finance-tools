@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useContext } from 'react';
+import React, { FC, useCallback, useContext, useState } from 'react';
 import DeleteButton from '../../components/DeleteButton';
 import {
 	Budget,
@@ -8,6 +8,8 @@ import {
 } from './api';
 import BudgetCreate from './BudgetCreate';
 import { BudgetContext } from './state';
+import { Modal } from '@oliverflecke/components-react';
+import AddButton from '../../components/button/AddButton';
 
 const BudgetList: React.FC = () => {
 	const { dispatch } = useContext(BudgetContext);
@@ -33,12 +35,12 @@ const BudgetList: React.FC = () => {
 		[budgets, deleteCallback]
 	);
 
+	const [isCreateOpen, setIsCreateOpen] = useState(false);
+
 	return (
 		<>
-			<BudgetCreate onBudgetCreated={budgets.refresh} />
-
-			<div className="bg-cyan-900 p-4">
-				<div className="flex w-full flex-row justify-between space-x-4 px-4 font-bold">
+			<div className="bg-sky-300 p-4 dark:bg-sky-900">
+				<div className="flex w-full flex-row justify-between space-x-4 font-bold text-gray-800 dark:text-gray-300">
 					<span>Title</span>
 					<span>Created at</span>
 					<span></span>
@@ -55,6 +57,12 @@ const BudgetList: React.FC = () => {
 						))}
 					</ul>
 				)}
+				<div className="flex-end flex w-full">
+					<AddButton onClick={() => setIsCreateOpen(true)} />
+				</div>
+				<Modal isOpen={isCreateOpen} onDismiss={() => setIsCreateOpen(false)}>
+					<BudgetCreate onBudgetCreated={budgets.refresh} />
+				</Modal>
 			</div>
 		</>
 	);

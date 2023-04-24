@@ -9,11 +9,15 @@ import { IoCreateOutline } from 'react-icons/io5';
 import EditItem from './EditItem';
 import { Modal } from '@oliverflecke/components-react';
 import { BudgetContext } from './state';
+import AddButton from '../../components/button/AddButton';
+import AddLine from './AddLine';
+import RemoveButton from '../../components/button/RemoveButton';
 
 interface Props {
 	title: string;
 	items: Item[];
 	total: number;
+	addItem: (item: AddItemToBudgetRequest) => void;
 	deleteItem: (id: string) => void;
 	updateItem: (id: string, item: AddItemToBudgetRequest) => void;
 }
@@ -22,6 +26,7 @@ const ItemList: React.FC<Props> = ({
 	title,
 	items,
 	total,
+	addItem,
 	deleteItem,
 	updateItem,
 }) => {
@@ -29,19 +34,20 @@ const ItemList: React.FC<Props> = ({
 		state: { hideItems },
 	} = useContext(BudgetContext);
 	const groups = useMemo(() => Array.from(groupByCategory(items)), [items]);
+	const [addVisible, setAddVisible] = useState(false);
 
 	return (
-		<tbody className="">
-			<tr>
-				<th className="text-left">{title}</th>
-			</tr>
-			{groups.map(group => {
-				return (
+		<>
+			<tbody>
+				<tr>
+					<th className="text-left text-xl underline">{title}</th>
+				</tr>
+				{groups.map(group => (
 					<React.Fragment key={group.category}>
 						<tr
 							key={group.category}
-							className={`font-bold text-yellow-600 ${
-								hideItems ? 'odd:bg-slate-700' : ''
+							className={`font-bold text-fuchsia-700 dark:text-fuchsia-500 ${
+								hideItems ? 'odd:bg-slate-200 dark:odd:bg-slate-700' : ''
 							}`}
 						>
 							<th className="px-4 text-left">{group.category}</th>
@@ -52,7 +58,10 @@ const ItemList: React.FC<Props> = ({
 						</tr>
 						{!hideItems &&
 							group.items.map(item => (
-								<tr key={item.name} className="px-8 odd:bg-slate-700">
+								<tr
+									key={item.name}
+									className="px-8 odd:bg-slate-200 dark:odd:bg-slate-700"
+								>
 									<td className="pl-8">{item.name}</td>
 									<MonthAndYearCells value={Math.abs(item.amount)} />
 									<Actions
@@ -63,14 +72,22 @@ const ItemList: React.FC<Props> = ({
 								</tr>
 							))}
 					</React.Fragment>
-				);
-			})}
-			<tr>
-				<th>Total</th>
-				<th className="currency">{formatCurrency(total, currency)}</th>
-				<th className="currency">{formatCurrency(12 * total, currency)}</th>
-			</tr>
-		</tbody>
+				))}
+				<tr>
+					<th className="text-left">Total</th>
+					<th className="currency">{formatCurrency(total, currency)}</th>
+					<th className="currency">{formatCurrency(12 * total, currency)}</th>
+					<th className="flex flex-row justify-end pr-4">
+						{addVisible ? (
+							<RemoveButton onClick={() => setAddVisible(false)} />
+						) : (
+							<AddButton onClick={() => setAddVisible(true)} />
+						)}
+					</th>
+				</tr>
+			</tbody>
+			{addVisible && <AddLine add={addItem} />}
+		</>
 	);
 };
 

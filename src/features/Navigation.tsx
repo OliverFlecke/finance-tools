@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
 import Link from 'next/link';
 
@@ -15,6 +15,13 @@ const links = [
 
 const Navigation: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [path, setPath] = useState('');
+
+	useLayoutEffect(() => {
+		if (typeof window !== 'undefined') {
+			setPath(window.location.pathname);
+		}
+	}, []);
 
 	return (
 		<nav className="flex flex-col justify-center md:flex-row">
@@ -27,22 +34,28 @@ const Navigation: React.FC = () => {
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
 				<Link href="/">
-					<h1 className="px-4 font-sans text-xl font-light uppercase md:px-0">
+					<h1 className="pl-4 pr-3 font-sans text-xl font-extralight uppercase md:px-0">
 						Finance tracker
 					</h1>
 				</Link>
+				<span className="text-md hidden font-sans font-extralight uppercase sm:inline md:hidden">
+					<span className="text-lg">/</span>
+					<span className="px-2">{links.find(x => x.path === path)?.text}</span>
+				</span>
 			</div>
 
 			<ul
 				className={`${
 					isOpen ? 'flex' : 'hidden'
-				} flex-col md:flex md:flex-row md:items-center md:space-x-6 md:pl-8`}
+				} flex-col font-extralight md:flex md:flex-row md:items-center md:space-x-6 md:pl-8`}
 			>
 				{links.map(x => (
 					<li key={x.path}>
 						<a
 							href={x.path}
-							className="h-full align-middle font-light hover:underline"
+							className={`h-full align-middle font-light hover:underline ${
+								x.path === path ? 'underline' : ''
+							}`}
 						>
 							{x.text}
 						</a>
