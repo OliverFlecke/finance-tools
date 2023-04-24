@@ -19,17 +19,23 @@ const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({
 	);
 
 	return (
-		<div className="flex flex-col space-y-4 rounded bg-purple-900 p-4">
-			<h3 className="text-xl">Create new budget</h3>
+		<div className="flex max-w-lg flex-col space-y-2 rounded bg-sky-300 p-4 dark:bg-sky-900">
+			<h3 className="text-lg">New budget</h3>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-row justify-between"
+				className="flex flex-col space-y-4"
 			>
-				<label className="flex flex-row items-baseline space-x-4">
-					<span className="py-2">Title</span>
+				<label className="flex flex-col items-baseline">
+					<span className="text-md text-gray-700 dark:text-gray-100">
+						Title
+					</span>
 					<Input {...register('title')} placeholder="My budget" />
 				</label>
-				<input type="submit" value="Create" className="btn btn-success w-fit" />
+				<input
+					type="submit"
+					value="Create"
+					className="btn btn-success w-full"
+				/>
 			</form>
 		</div>
 	);

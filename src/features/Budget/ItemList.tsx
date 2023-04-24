@@ -40,8 +40,8 @@ const ItemList: React.FC<Props> = ({
 					<React.Fragment key={group.category}>
 						<tr
 							key={group.category}
-							className={`font-bold text-yellow-600 ${
-								hideItems ? 'odd:bg-slate-700' : ''
+							className={`font-bold text-fuchsia-700 dark:text-fuchsia-500 ${
+								hideItems ? 'odd:bg-slate-200 dark:odd:bg-slate-700' : ''
 							}`}
 						>
 							<th className="px-4 text-left">{group.category}</th>
@@ -52,7 +52,10 @@ const ItemList: React.FC<Props> = ({
 						</tr>
 						{!hideItems &&
 							group.items.map(item => (
-								<tr key={item.name} className="px-8 odd:bg-slate-700">
+								<tr
+									key={item.name}
+									className="px-8 odd:bg-slate-200 dark:odd:bg-slate-700"
+								>
 									<td className="pl-8">{item.name}</td>
 									<MonthAndYearCells value={Math.abs(item.amount)} />
 									<Actions
@@ -66,7 +69,7 @@ const ItemList: React.FC<Props> = ({
 				);
 			})}
 			<tr>
-				<th>Total</th>
+				<th className="text-left">Total</th>
 				<th className="currency">{formatCurrency(total, currency)}</th>
 				<th className="currency">{formatCurrency(12 * total, currency)}</th>
 			</tr>

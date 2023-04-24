@@ -83,17 +83,17 @@ const BudgetDetails: FC<{
 
 				<tfoot>
 					<tr className={getBackgroundColorValueIndicator(total)}>
-						<th>After monthley expenses</th>
+						<th className="text-left">After monthley expenses</th>
 						<MonthAndYearCells value={total} />
 						<td></td>
 					</tr>
 					<tr>
-						<td>Savings</td>
+						<td className="text-left">Savings</td>
 						<MonthAndYearCells value={savings} />
 						<td></td>
 					</tr>
 					<tr className={getBackgroundColorValueIndicator(remaining)}>
-						<th>Remaining</th>
+						<th className="text-left">Remaining</th>
 						<MonthAndYearCells value={remaining} />
 						<td></td>
 					</tr>

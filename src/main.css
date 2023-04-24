@@ -84,6 +84,7 @@ input[type='number'] {
 
 	input.budget {
 		@apply rounded py-2 px-2;
+		@apply shadow-md bg-slate-100 dark:bg-slate-700;
 	}
 
 	input.add-item {
