@@ -46,9 +46,11 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({
 						</tr>
 					</thead>
 					<tbody>
-						{lots.map(lot => (
-							<StockLotRow key={lot.id} lot={lot} stock={stock} />
-						))}
+						{lots
+							.sort((a, z) => a.buyDate.getTime() - z.buyDate.getTime())
+							.map(lot => (
+								<StockLotRow key={lot.id} lot={lot} stock={stock} />
+							))}
 					</tbody>
 				</table>
 
