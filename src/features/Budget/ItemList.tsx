@@ -49,28 +49,33 @@ const ItemList: React.FC<Props> = ({
 					<React.Fragment key={group.category}>
 						<tr
 							key={group.category}
-							className={`text-fuchsia-700 dark:text-fuchsia-500 ${
+							className={`text-fuchsia-700 dark:text-fuchsia-300 ${
 								hideItems ? oddRowBackgroundColor : ''
 							}`}
 						>
-							<th className="px-8 text-left">{group.category}</th>
+							<th className="px-8 text-left font-normal">{group.category}</th>
 							<MonthAndYearCells
 								value={Math.abs(sum(...group.items.map(x => x.amount)))}
 							/>
 							<td></td>
 						</tr>
 						{!hideItems &&
-							group.items.map(item => (
-								<tr key={item.name} className={`px-8 ${oddRowBackgroundColor}`}>
-									<td className="pl-12">{item.name}</td>
-									<MonthAndYearCells value={Math.abs(item.amount)} />
-									<BudgetLineActions
-										item={item}
-										deleteItem={deleteItem}
-										updateItem={updateItem}
-									/>
-								</tr>
-							))}
+							group.items
+								.sort((a, z) => a.amount - z.amount)
+								.map(item => (
+									<tr
+										key={item.name}
+										className={`px-8 ${oddRowBackgroundColor}`}
+									>
+										<td className="pl-12">{item.name}</td>
+										<MonthAndYearCells value={Math.abs(item.amount)} />
+										<BudgetLineActions
+											item={item}
+											deleteItem={deleteItem}
+											updateItem={updateItem}
+										/>
+									</tr>
+								))}
 					</React.Fragment>
 				))}
 				<tr>
