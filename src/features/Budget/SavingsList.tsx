@@ -51,7 +51,7 @@ const SavingsList: React.FC<{
 				</tr>
 			</tbody>
 
-			{addVisible && <AddLine add={addItem} />}
+			{addVisible && <AddLine add={addItem} category="Savings" />}
 		</>
 	);
 };
