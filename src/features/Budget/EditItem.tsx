@@ -46,7 +46,9 @@ const EditItem: React.FC<{
 					placeholder="Amount"
 					className="budget edit-item"
 					onKeyDown={event => {
-						if (!/\d|\.|Enter|Shift|Tab|Arrow*|-|Backspace/.test(event.key)) {
+						if (
+							!/-|\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)
+						) {
 							event.preventDefault();
 						}
 					}}

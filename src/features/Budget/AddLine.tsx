@@ -39,7 +39,11 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							placeholder="Amount"
 							className="budget add-item"
 							onKeyDown={event => {
-								if (!/\d|\.|Enter|Shift|Tab/.test(event.key)) {
+								if (
+									!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(
+										event.key
+									)
+								) {
 									event.preventDefault();
 								}
 							}}
