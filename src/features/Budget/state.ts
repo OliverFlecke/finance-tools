@@ -23,6 +23,7 @@ export type Action =
 	| { type: 'REMOVE ITEM'; budget_id: string; item_id: string }
 	| { type: 'EDIT ITEM'; item_id: string; item: AddItemToBudgetRequest }
 	| { type: 'ADD INCOME'; budget_id: string; item: AddItemToBudgetRequest }
+	| { type: 'ADD SAVINGS'; budget_id: string; item: AddItemToBudgetRequest }
 	| { type: 'ADD EXPENSE'; budget_id: string; item: AddItemToBudgetRequest };
 
 interface ReducerOptions {
@@ -52,6 +53,7 @@ export function createReducer(
 					hideItems: action.value,
 				};
 
+			case 'ADD SAVINGS':
 			case 'ADD EXPENSE':
 			case 'ADD INCOME':
 				if (!state.budget) {
@@ -71,8 +73,8 @@ export function createReducer(
 					budget_id: action.budget_id,
 				};
 
-				console.log(state.budget.items);
-				console.log(state.budget.items.concat(item));
+				// console.log(state.budget.items);
+				// console.log(state.budget.items.concat(item));
 
 				return {
 					...state,
