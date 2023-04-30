@@ -20,7 +20,7 @@ const SavingsList: React.FC<{
 		<>
 			<tbody className="bg-blue-100 dark:bg-blue-900">
 				<tr>
-					<td className="px-4 text-left text-xl underline" colSpan={4}>
+					<td className="px-4 pt-2 text-left text-xl underline" colSpan={4}>
 						Savings
 					</td>
 				</tr>
@@ -39,7 +39,7 @@ const SavingsList: React.FC<{
 				))}
 
 				<tr className="font-bold">
-					<td className="px-4">Total</td>
+					<td className="px-4 pb-2">Total</td>
 					<MonthAndYearCells value={total} />
 					<th className="flex flex-row justify-end pr-4">
 						{addVisible ? (

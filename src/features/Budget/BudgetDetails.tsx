@@ -1,16 +1,15 @@
-import React, { FC, useCallback, useContext } from 'react';
+import React, { FC, useCallback, useContext, useMemo } from 'react';
 import { getBackgroundColorValueIndicator } from 'utils/colors';
 import ItemList from './ItemList';
 import MonthAndYearCells from './MonthAndYearCells';
 import SavingsList from './SavingsList';
 import { AddItemToBudgetRequest, BudgetWithItems } from './api';
 import { BudgetContext } from './state';
-import { useComputation } from './useComputation';
+import { sum } from '../../utils/math';
 
 const BudgetDetails: FC<{
 	budget: BudgetWithItems;
-	savePercent: number;
-}> = ({ budget, savePercent }) => {
+}> = ({ budget }) => {
 	const {
 		income,
 		expenses,
@@ -20,13 +19,13 @@ const BudgetDetails: FC<{
 		savings,
 		totalSavings,
 		remaining,
-	} = useComputation(budget, { savePercent });
+	} = useComputation(budget);
 
 	const { deleteItem, updateItem, addItem, addExpense, addSavings } =
 		useHandlers(budget.id);
 
 	return (
-		<div className="mx-4 pb-8">
+		<div className="mx-4 pt-4 pb-8">
 			<table className="w-full border-separate border-spacing-0 overflow-hidden rounded">
 				<Header />
 
@@ -80,12 +79,12 @@ const Footer: React.FC<{
 }> = ({ totalIncome, total, savings, remaining }) => (
 	<tfoot className="bg-sky-300 dark:bg-sky-900">
 		<tr className={getBackgroundColorValueIndicator(total)}>
-			<th className="px-4 py-1 text-left">After monthley expenses</th>
+			<th className="px-4 pt-2 text-left">After monthley expenses</th>
 			<MonthAndYearCells value={total} />
 			<td></td>
 		</tr>
 		<tr>
-			<td className="px-4 py-1 text-left">Savings</td>
+			<td className="px-4 py-2 text-left">Savings</td>
 			<MonthAndYearCells value={savings} />
 			<td className="pr-4 text-right">
 				{(100 * (savings / totalIncome)).toFixed(2)} %
@@ -96,7 +95,7 @@ const Footer: React.FC<{
 				remaining
 			)}`}
 		>
-			<th className="px-4 py-1 text-left">Remaining</th>
+			<th className="px-4 pb-2 text-left">Remaining</th>
 			<MonthAndYearCells value={remaining} />
 			<td></td>
 		</tr>
@@ -104,11 +103,12 @@ const Footer: React.FC<{
 );
 
 const Header = () => (
-	<thead>
+	<thead className="bg-sky-300 dark:bg-sky-900">
 		<tr className="text-right">
 			<th className="px-2"></th>
 			<th className="px-2">Per month</th>
 			<th className="px-2">Per year</th>
+			<th></th>
 		</tr>
 	</thead>
 );
@@ -166,5 +166,53 @@ function useHandlers(budgetId: string) {
 		addItem,
 		addExpense,
 		addSavings,
+	};
+}
+
+function useComputation(budget: BudgetWithItems) {
+	const income = useMemo(
+		() =>
+			budget.items
+				.filter(x => x.amount >= 0)
+				.filter(x => x.category !== 'Savings'),
+		[budget.items]
+	);
+	const expenses = useMemo(
+		() => budget.items.filter(x => x.amount < 0),
+		[budget.items]
+	);
+	const savings = useMemo(
+		() => budget.items.filter(x => x.category === 'Savings'),
+		[budget.items]
+	);
+
+	const totalIncome = useMemo(
+		() => sum(...income.map(x => x.amount)),
+		[income]
+	);
+	const totalExpenses = useMemo(
+		() => -sum(...expenses.map(x => x.amount)),
+		[expenses]
+	);
+	const total = useMemo(
+		() => totalIncome - totalExpenses,
+		[totalIncome, totalExpenses]
+	);
+
+	const totalSavings = useMemo(
+		() => savings.reduce((acc, item) => acc + item.amount, 0),
+		[savings]
+	);
+	const remaining = total - totalSavings;
+
+	return {
+		income,
+		expenses,
+		savings,
+		total,
+		totalIncome,
+		totalExpenses,
+		totalSavings,
+		remaining,
 	};
 }
