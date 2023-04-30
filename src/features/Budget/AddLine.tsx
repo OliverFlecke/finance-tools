@@ -3,10 +3,17 @@ import { IoAddCircleOutline } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
 import { AddItemToBudgetRequest } from './api';
 
-const AddLine: React.FC<{ add: (item: AddItemToBudgetRequest) => void }> = ({
-	add,
-}) => {
-	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>();
+interface Props {
+	add: (item: AddItemToBudgetRequest) => void;
+	category?: string;
+}
+
+const AddLine: React.FC<Props> = ({ add, category }) => {
+	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>({
+		defaultValues: {
+			category,
+		},
+	});
 
 	return (
 		<tbody>
@@ -16,11 +23,13 @@ const AddLine: React.FC<{ add: (item: AddItemToBudgetRequest) => void }> = ({
 						onSubmit={handleSubmit(add)}
 						className="flex flex-wrap justify-end space-x-2 pb-4 pt-2"
 					>
-						<input
-							placeholder="Category"
-							className="budget add-item"
-							{...register('category', { required: true })}
-						/>
+						{!category && (
+							<input
+								placeholder="Category"
+								className="budget add-item"
+								{...register('category', { required: true })}
+							/>
+						)}
 						<input
 							placeholder="Name"
 							className="budget add-item"
@@ -30,7 +39,11 @@ const AddLine: React.FC<{ add: (item: AddItemToBudgetRequest) => void }> = ({
 							placeholder="Amount"
 							className="budget add-item"
 							onKeyDown={event => {
-								if (!/\d|\.|Enter|Shift|Tab/.test(event.key)) {
+								if (
+									!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(
+										event.key
+									)
+								) {
 									event.preventDefault();
 								}
 							}}

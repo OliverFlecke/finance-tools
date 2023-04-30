@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
 
 const links = [
 	{ path: '/accounts', text: 'Accounts' },
@@ -17,7 +17,7 @@ const Navigation: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [path, setPath] = useState('');
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setPath(window.location.pathname);
 		}

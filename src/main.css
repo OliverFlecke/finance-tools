@@ -23,6 +23,10 @@ input[type='number'] {
 	@apply flex flex-col items-center justify-center;
 }
 
+tbody {
+	/* display: block; */
+}
+
 @layer components {
 	.page-header {
 		@apply px-4 py-4 text-xl;

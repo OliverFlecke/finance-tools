@@ -1,20 +1,20 @@
 import ClientOnly from 'components/ClientOnly';
 import useAsyncReducer from 'hooks/useAsyncReducer';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import Configuration from './BudgetConfiguration';
+import BudgetDetails from './BudgetDetails';
+import BudgetList from './BudgetList';
 import {
 	useAddItemToBudgetCallback,
 	useDeleteItemCallback,
 	useUpdateItemCallback,
 } from './api';
-import Configuration from './BudgetConfiguration';
-import BudgetDetails from './BudgetDetails';
-import BudgetList from './BudgetList';
 import {
 	Action,
 	BudgetContext,
+	State,
 	createReducer,
 	fetchInitialData,
-	State,
 } from './state';
 
 // TODO: This should be part of the settings for a budget
@@ -47,8 +47,6 @@ const Budget: React.FC<{
 		fetchInitialData(),
 		'budget'
 	);
-	// TODO: This should be a per budget setting
-	const [savePercent, setSavePercent] = useState<number>(0);
 
 	return (
 		<>
@@ -61,8 +59,8 @@ const Budget: React.FC<{
 							<h3 className=" px-4 pt-6 text-3xl text-fuchsia-700 dark:text-fuchsia-600">
 								{state.budget.title}
 							</h3>
-							<Configuration setSavePercent={setSavePercent} />
-							<BudgetDetails budget={state.budget} savePercent={savePercent} />
+							<Configuration />
+							<BudgetDetails budget={state.budget} />
 						</>
 					)}
 				</ClientOnly>
