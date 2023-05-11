@@ -29,7 +29,7 @@ const AddStock: React.FC = () => {
 		async (stock: Stock) => {
 			const quotes = await fetchShares(stock.symbol);
 
-			if (quotes.length === 0) {
+			if (quotes === null || quotes.length === 0) {
 				// TODO: Better error dialog to inform user that stock quote was not found
 				alert(`Stock with symbol '${stock.symbol}' was not found`);
 			} else {
