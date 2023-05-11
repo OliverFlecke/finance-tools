@@ -8,16 +8,25 @@ import stocksForUserSampleData from './sampleData/stocksForUser';
 
 export function useSharesCallback(): (
 	...symbols: string[]
-) => Promise<QuoteResponse[]> {
+) => Promise<QuoteResponse[] | null> {
 	const handler = useApiWithUrlCall();
 
 	return useCallback(
-		(...symbols: string[]) => {
-			if (useSampleData) return Promise.resolve(stocksForUserSampleData);
+		async (...symbols: string[]) => {
+			if (useSampleData) return stocksForUserSampleData;
 
-			return handler(`${apiUrlWithPath}/stock?symbols=${symbols.join(',')}`, {
-				method: 'GET',
-			}).then(async res => (res ? await res.json() : []));
+			const res = await handler(
+				`${apiUrlWithPath}/stock?symbols=${symbols.join(',')}`,
+				{
+					method: 'GET',
+				}
+			);
+
+			if (res?.status === 200) {
+				return res ? await res.json() : null;
+			} else {
+				return null;
+			}
 		},
 		[handler]
 	);

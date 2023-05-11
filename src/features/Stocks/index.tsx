@@ -24,6 +24,7 @@ import RefreshStocksButton from './RefreshStocksButton';
 import { getDefaultStockState, StockContext, stockReducer } from './state';
 import StockRow from './StockRow';
 import StockSummaryRow from './StockSummaryRow';
+import StockErrorDisplay from './StockErrorDisplay';
 
 const Stocks: React.FC = () => {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
@@ -51,6 +52,7 @@ const Stocks: React.FC = () => {
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>
+			<StockErrorDisplay error={state.error} />
 			<StocksTable stocks={state.stocks} />
 			<StockActionBar />
 		</StockContext.Provider>
