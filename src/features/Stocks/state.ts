@@ -26,18 +26,15 @@ export function getDefaultStockState(): StockState {
 		currencyRates: {
 			usd: {},
 		},
+		error: null,
 	});
 
-	// for (const symbol of Object.keys(state.stocks)) {
-	// 	for (const lot of state.stocks[symbol].lots) {
-	// 		lot.buyDate = new Date(Date.parse(lot.buyDate));
-	// 		lot.soldDate = lot.soldDate
-	// 			? new Date(Date.parse(lot.soldDate))
-	// 			: undefined;
-	// 	}
-	// }
-
 	return state;
+}
+
+export interface StockError {
+	type: 'MISSING STOCKS';
+	message: string;
 }
 
 export interface StockState {
@@ -45,12 +42,13 @@ export interface StockState {
 	preferredCurrency: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	currencyRates: { usd: any };
+	error: StockError | null;
 }
 
 export type StockAction =
 	| { type: 'ADD STOCK'; stock: Stock }
 	| { type: 'DELETE STOCK'; symbol: string }
-	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] }
+	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] | null }
 	| { type: 'SET STOCKS'; stocks: StockList }
 	| { type: 'ADD LOT'; symbol: string; lotId?: string }
 	| { type: 'DELETE LOT'; symbol: string; id: string }
@@ -78,19 +76,33 @@ function reducer(state: StockState, action: StockAction): StockState {
 				stocks: state.stocks.filter(x => x.symbol !== action.symbol),
 			};
 		case 'UPDATE STOCKS':
+			console.log('Updating stocks');
 			console.log(action.stocks);
-			return {
-				...state,
-				stocks: state.stocks.map(old => {
-					const stock = action.stocks.find(x => x.symbol === old.symbol);
+			if (action.stocks !== null) {
+				const stocks = action.stocks;
 
-					return {
-						...old,
-						...stock,
-						lots: old.lots,
-					};
-				}),
-			};
+				return {
+					...state,
+					error: null,
+					stocks: state.stocks.map(old => {
+						const stock = stocks.find(x => x.symbol === old.symbol);
+
+						return {
+							...old,
+							...stock,
+							lots: old.lots,
+						};
+					}),
+				};
+			} else {
+				return {
+					...state,
+					error: {
+						type: 'MISSING STOCKS',
+						message: 'Unable to retrieve stock prices',
+					},
+				};
+			}
 
 		case 'SET STOCKS':
 			return {
