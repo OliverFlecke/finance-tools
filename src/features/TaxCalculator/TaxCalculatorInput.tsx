@@ -11,7 +11,7 @@ export default function TaxCalculatorInput() {
 
 	const onCurrencyChanged = useCallback(
 		(currency: string) => dispatch({ type: 'SET CURRENCY', currency }),
-		[dispatch]
+		[dispatch],
 	);
 
 	return (
@@ -59,7 +59,7 @@ function SalaryInPreferredCurrency({
 		salary,
 		currencyRates.usd,
 		currency,
-		preferredDisplayCurrency
+		preferredDisplayCurrency,
 	);
 
 	return (

@@ -92,7 +92,7 @@ const Footer: React.FC<{
 		</tr>
 		<tr
 			className={`text-fuchsia-700 underline dark:text-fuchsia-500 ${getBackgroundColorValueIndicator(
-				remaining
+				remaining,
 			)}`}
 		>
 			<th className="px-4 pb-2 text-left">Remaining</th>
@@ -120,13 +120,13 @@ function useHandlers(budgetId: string) {
 		(item_id: string) => {
 			dispatch({ type: 'REMOVE ITEM', budget_id: budgetId, item_id });
 		},
-		[budgetId, dispatch]
+		[budgetId, dispatch],
 	);
 	const updateItem = useCallback(
 		(item_id: string, item: AddItemToBudgetRequest) => {
 			dispatch({ type: 'EDIT ITEM', item_id, item });
 		},
-		[dispatch]
+		[dispatch],
 	);
 	const addItem = useCallback(
 		(item: AddItemToBudgetRequest) =>
@@ -135,7 +135,7 @@ function useHandlers(budgetId: string) {
 				budget_id: budgetId,
 				item,
 			}),
-		[budgetId, dispatch]
+		[budgetId, dispatch],
 	);
 	const addExpense = useCallback(
 		(item: AddItemToBudgetRequest) => {
@@ -146,7 +146,7 @@ function useHandlers(budgetId: string) {
 				item,
 			});
 		},
-		[budgetId, dispatch]
+		[budgetId, dispatch],
 	);
 
 	const addSavings = useCallback(
@@ -157,7 +157,7 @@ function useHandlers(budgetId: string) {
 				item,
 			});
 		},
-		[budgetId, dispatch]
+		[budgetId, dispatch],
 	);
 
 	return {
@@ -175,33 +175,33 @@ function useComputation(budget: BudgetWithItems) {
 			budget.items
 				.filter(x => x.amount >= 0)
 				.filter(x => x.category !== 'Savings'),
-		[budget.items]
+		[budget.items],
 	);
 	const expenses = useMemo(
 		() => budget.items.filter(x => x.amount < 0),
-		[budget.items]
+		[budget.items],
 	);
 	const savings = useMemo(
 		() => budget.items.filter(x => x.category === 'Savings'),
-		[budget.items]
+		[budget.items],
 	);
 
 	const totalIncome = useMemo(
 		() => sum(...income.map(x => x.amount)),
-		[income]
+		[income],
 	);
 	const totalExpenses = useMemo(
 		() => -sum(...expenses.map(x => x.amount)),
-		[expenses]
+		[expenses],
 	);
 	const total = useMemo(
 		() => totalIncome - totalExpenses,
-		[totalIncome, totalExpenses]
+		[totalIncome, totalExpenses],
 	);
 
 	const totalSavings = useMemo(
 		() => savings.reduce((acc, item) => acc + item.amount, 0),
-		[savings]
+		[savings],
 	);
 	const remaining = total - totalSavings;
 

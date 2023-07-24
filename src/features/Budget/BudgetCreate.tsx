@@ -15,7 +15,7 @@ const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({
 			await createBudget(data);
 			onBudgetCreated();
 		},
-		[createBudget, onBudgetCreated]
+		[createBudget, onBudgetCreated],
 	);
 
 	return (

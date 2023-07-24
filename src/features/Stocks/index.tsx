@@ -101,8 +101,8 @@ const StocksTable: React.FC<StocksTableProps> = ({
 								currencyRates,
 								sortKey,
 								ascending,
-								preferredDisplayCurrency
-							)
+								preferredDisplayCurrency,
+							),
 						)
 						.map(stock => (
 							<StockRow key={stock.symbol} stock={stock} />
@@ -136,7 +136,7 @@ const StockTableHeader = ({
 				setSortKey(key);
 			}
 		},
-		[setSortKey, setAscending, sortKey]
+		[setSortKey, setAscending, sortKey],
 	);
 
 	return (
@@ -249,7 +249,7 @@ function stocksComparer(
 	currencyRates: CurrencyRates,
 	key?: StockColumn,
 	ascending?: boolean,
-	preferredCurrency?: string
+	preferredCurrency?: string,
 ): (a: Stock, b: Stock) => number {
 	if (!key) return () => 0;
 
@@ -258,7 +258,7 @@ function stocksComparer(
 			stock.regularMarketPrice,
 			currencyRates?.usd,
 			stock.currency,
-			preferredCurrency
+			preferredCurrency,
 		);
 
 	return (a, b) => {
@@ -290,13 +290,13 @@ function stocksComparer(
 						stockAvgPrice(a),
 						currencyRates.usd,
 						a.currency,
-						preferredCurrency
+						preferredCurrency,
 					) -
 					convertToCurrency(
 						stockAvgPrice(b),
 						currencyRates.usd,
 						b.currency,
-						preferredCurrency
+						preferredCurrency,
 					);
 				break;
 			case 'Current price':

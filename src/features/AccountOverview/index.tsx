@@ -42,7 +42,7 @@ const AccountOverview = memo(() => {
 			await addAccountCallback(account);
 			dispatch({ type: 'ADD ACCOUNT', account });
 		},
-		[addAccountCallback]
+		[addAccountCallback],
 	);
 
 	if (accountState.loading) {

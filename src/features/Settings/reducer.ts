@@ -6,7 +6,7 @@ export default storedReducer('settings', reducer);
 
 function reducer(
 	state: SettingsValues,
-	action: SettingsAction
+	action: SettingsAction,
 ): SettingsValues {
 	switch (action.type) {
 		case 'SET CURRENCY RATES':

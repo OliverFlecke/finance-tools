@@ -5,7 +5,7 @@ export function FV(
 	A: number,
 	r: number,
 	year: number,
-	n = 12
+	n = 12,
 ): number {
 	const rate = ratePerPaymentPeriod(r, 1, n);
 	const nper = n * year;
@@ -18,7 +18,7 @@ export function compoundInterest(
 	principal: number,
 	interestRate: number,
 	time: number,
-	interestAccrual: InterestAccrual
+	interestAccrual: InterestAccrual,
 ): number {
 	const n = getInterestAccrualPerYear(interestAccrual);
 	return principal * Math.pow(1 + interestRate / n, n * time);
@@ -30,7 +30,7 @@ export function futureValue(
 	time: number,
 	interestAccrual: InterestAccrual,
 	numberOfDeposits: number,
-	depositsMadeAt: 'beginning' | 'end' = 'end'
+	depositsMadeAt: 'beginning' | 'end' = 'end',
 ): number {
 	const n = getInterestAccrualPerYear(interestAccrual);
 

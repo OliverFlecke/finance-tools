@@ -71,7 +71,7 @@ const SortableDragAndDropItem: FC<{
 				item.index = hoverIndex;
 			},
 		},
-		[index]
+		[index],
 	);
 
 	const [{ isDragging }, drag] = useDrag(
@@ -82,7 +82,7 @@ const SortableDragAndDropItem: FC<{
 				isDragging: !!monitor.isDragging(),
 			}),
 		}),
-		[index]
+		[index],
 	);
 
 	drag(drop(ref));

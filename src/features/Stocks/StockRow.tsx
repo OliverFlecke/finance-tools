@@ -19,7 +19,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const currencyConverter = useConverter(
 		stock.currency,
 		preferredDisplayCurrency,
-		currencyRates.usd
+		currencyRates.usd,
 	);
 
 	const totalShares = stockTotalShares(stock);
@@ -41,7 +41,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<td className="px-0">
 					{formatCurrency(
 						currencyConverter(marketValue),
-						preferredDisplayCurrency
+						preferredDisplayCurrency,
 					)}
 				</td>
 				<td>{totalShares}</td>

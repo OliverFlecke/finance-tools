@@ -19,7 +19,7 @@ export function useSharesCallback(): (
 				`${apiUrlWithPath}/stock?symbols=${symbols.join(',')}`,
 				{
 					method: 'GET',
-				}
+				},
 			);
 
 			if (res?.status === 200) {
@@ -28,7 +28,7 @@ export function useSharesCallback(): (
 				return null;
 			}
 		},
-		[handler]
+		[handler],
 	);
 }
 

@@ -19,8 +19,8 @@ describe('Calculate tax rates for country', () => {
 		'Calculate Singapore tax rates',
 		(income: number, expected_tax: number) => {
 			expect(taxCalculator['sg'].calculate(income).taxes).toBeCloseTo(
-				expected_tax
+				expected_tax,
 			);
-		}
+		},
 	);
 });

@@ -22,7 +22,7 @@ const OrderAccountsModal: FC = () => {
 	const [items, setItems] = useState(useMemo(() => accounts, [accounts]));
 	const renderCard = useCallback(
 		(account: Account) => <AccountCard account={account} />,
-		[]
+		[],
 	);
 
 	const updateAccountCallback = useUpdateAccountsCallback();

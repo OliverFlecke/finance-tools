@@ -24,12 +24,12 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({
 							stock.regularMarketPrice * lot.shares,
 							currencyRates.usd,
 							stock.currency,
-							preferredDisplayCurrency
-						)
-					)
-				)
+							preferredDisplayCurrency,
+						),
+					),
+				),
 			),
-		[currencyRates.usd, preferredDisplayCurrency, stocks]
+		[currencyRates.usd, preferredDisplayCurrency, stocks],
 	);
 	const totalGain = useMemo(
 		() =>
@@ -40,12 +40,12 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({
 							stock.regularMarketPrice * lot.shares - lot.buyPrice * lot.shares,
 							currencyRates.usd,
 							stock.currency,
-							preferredDisplayCurrency
-						)
-					)
-				)
+							preferredDisplayCurrency,
+						),
+					),
+				),
 			),
-		[currencyRates.usd, preferredDisplayCurrency, stocks]
+		[currencyRates.usd, preferredDisplayCurrency, stocks],
 	);
 
 	const gainPercentage = (totalValue / (totalValue - totalGain) - 1) * 100;

@@ -7,14 +7,14 @@ const CalculationSummary: React.FC<FormData> = props => {
 	const rate = useMemo(() => props.interestRate / 100, [props.interestRate]);
 	const isWithDeposits = useMemo(
 		() => props.monthlyDeposit !== 0,
-		[props.monthlyDeposit]
+		[props.monthlyDeposit],
 	);
 
 	const balance = FV(
 		props.existingAmount,
 		props.monthlyDeposit,
 		rate,
-		props.investmentPeriod
+		props.investmentPeriod,
 	);
 	const totalDeposits =
 		12 * props.monthlyDeposit * props.investmentPeriod + props.existingAmount;
@@ -112,7 +112,7 @@ const TableRow: React.FC<TableRowProps> = props => {
 		props.existingAmount,
 		props.monthlyDeposit,
 		rate,
-		year
+		year,
 	);
 	const lastYear = year - 1;
 
@@ -122,7 +122,7 @@ const TableRow: React.FC<TableRowProps> = props => {
 		props.existingAmount,
 		props.monthlyDeposit,
 		rate,
-		lastYear
+		lastYear,
 	);
 
 	const totalInterest = totalBalance - totalDeposit;

@@ -31,7 +31,7 @@ export function stockAvgPrice(stock: Stock): number {
 export function stockGain(
 	stock: Stock,
 	currencyRates: CurrencyRates,
-	preferredCurrency?: string
+	preferredCurrency?: string,
 ): number {
 	const totalShares = stockTotalShares(stock);
 	const avgPrice = stockAvgPrice(stock);
@@ -40,6 +40,6 @@ export function stockGain(
 		totalShares * stock.regularMarketPrice - totalShares * avgPrice,
 		currencyRates?.usd,
 		stock.currency,
-		preferredCurrency
+		preferredCurrency,
 	);
 }

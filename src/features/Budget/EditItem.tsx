@@ -15,7 +15,7 @@ const EditItem: React.FC<{
 		(data: AddItemToBudgetRequest) => {
 			update(item.id, data);
 		},
-		[item.id, update]
+		[item.id, update],
 	);
 
 	return (

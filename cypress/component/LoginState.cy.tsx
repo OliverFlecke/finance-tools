@@ -23,7 +23,7 @@ describe('LoginState', () => {
 		const url = 'url to login';
 		const logoutUrl = 'url to logout';
 		cy.mount(
-			<LoginState user={null} authorizeUrl={url} logoutUrl={logoutUrl} />
+			<LoginState user={null} authorizeUrl={url} logoutUrl={logoutUrl} />,
 		);
 		cy.get('a')
 			.should('have.attr', 'href', url)
@@ -42,7 +42,7 @@ describe('LoginState', () => {
 			avatar_url: 'https://avatars.githubusercontent.com/u/7227658?v=4',
 		};
 		cy.mount(
-			<LoginState user={user} authorizeUrl={url} logoutUrl={logoutUrl} />
+			<LoginState user={user} authorizeUrl={url} logoutUrl={logoutUrl} />,
 		);
 
 		cy.get('img')

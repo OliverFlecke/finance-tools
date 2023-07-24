@@ -15,7 +15,7 @@ export function useFetchStocks(): ApiResponse<StockList> {
 }
 
 export function useTrackStockCallback(): (
-	symbol: string
+	symbol: string,
 ) => Promise<Response | undefined> {
 	return useApiCall(`${apiUrlWithPath}/stock/tracked`, {
 		method: 'POST',
@@ -23,7 +23,7 @@ export function useTrackStockCallback(): (
 }
 
 export function useAddStockLotCallback(): (
-	lot: AddStockLotRequest
+	lot: AddStockLotRequest,
 ) => Promise<string> {
 	const handler = useApiCall(`${apiUrlWithPath}/stock/lot`, {
 		method: 'POST',
@@ -34,32 +34,32 @@ export function useAddStockLotCallback(): (
 			const res = await handler(lot);
 			return await res?.json();
 		},
-		[handler]
+		[handler],
 	);
 }
 
 export function useUpdateStockLotCallback(): (
 	id: string,
-	lot: UpdateStockLotRequest
+	lot: UpdateStockLotRequest,
 ) => Promise<Response | undefined> {
 	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		(id: string, lot: UpdateStockLotRequest) =>
 			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'PUT' }, lot),
-		[handler]
+		[handler],
 	);
 }
 
 export function useDeleteStockLotCallback(): (
-	id: string
+	id: string,
 ) => Promise<Response | undefined> {
 	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		(id: string) =>
 			handler(`${apiUrlWithPath}/stock/lot/${id}`, { method: 'DELETE' }),
-		[handler]
+		[handler],
 	);
 }
 

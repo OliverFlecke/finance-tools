@@ -27,10 +27,10 @@ function SortableDragAndDropList<T extends { id: string }>({
 						[dragIndex, 1],
 						[hoverIndex, 0, prevItems[dragIndex]],
 					],
-				})
+				}),
 			);
 		},
-		[setItems]
+		[setItems],
 	);
 
 	return (
