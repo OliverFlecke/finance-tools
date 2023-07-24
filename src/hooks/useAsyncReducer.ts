@@ -30,7 +30,7 @@ export default function useAsyncReducer<State, Action>(
 		async (action: Action) => {
 			const result = reducer(state, action);
 
-			if (result instanceof Promise<State>) {
+			if (result instanceof Promise) {
 				setState({ ...state, loading: true, error: null });
 				result
 					.then(state => cacheState({ ...state, loading: false, error: null }))
