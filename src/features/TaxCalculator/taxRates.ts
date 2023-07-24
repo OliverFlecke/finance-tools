@@ -69,7 +69,7 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			];
 			return addTaxResults(
 				calculateTaxes(income, this),
-				calculateTaxes(income, { ...this, brackets: national_insurance })
+				calculateTaxes(income, { ...this, brackets: national_insurance }),
 			);
 		},
 	},

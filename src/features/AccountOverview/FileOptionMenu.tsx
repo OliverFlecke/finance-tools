@@ -29,7 +29,7 @@ const FileOptionMenu: React.FC = () => {
 				console.warn(`Unable to parse file ${file.name}`);
 			}
 		},
-		[dispatch]
+		[dispatch],
 	);
 
 	return (

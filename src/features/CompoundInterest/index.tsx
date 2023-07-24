@@ -47,7 +47,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 		const url = new URL(window.location.href);
 		console.log(data);
 		Object.keys(data).forEach(key =>
-			url.searchParams.set(key, data[key as keyof FormData].toString())
+			url.searchParams.set(key, data[key as keyof FormData].toString()),
 		);
 		window.history.replaceState(null, '', url.toString());
 

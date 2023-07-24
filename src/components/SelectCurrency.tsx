@@ -15,7 +15,7 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
 	const [currency, setCurrency] = useState(
-		defaultCurrency ?? preferredDisplayCurrency
+		defaultCurrency ?? preferredDisplayCurrency,
 	);
 
 	const onSelection = useCallback(
@@ -26,7 +26,7 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 			setCurrency(currency);
 			onChange(currency);
 		},
-		[onChange]
+		[onChange],
 	);
 
 	if (!currencyRates) return null;

@@ -32,7 +32,7 @@ const Wrapper: React.FC = () => {
 				deleteItemFromBudgetCallback,
 				updateItemCallback,
 			}),
-		[addItemToBudgetCallback, deleteItemFromBudgetCallback, updateItemCallback]
+		[addItemToBudgetCallback, deleteItemFromBudgetCallback, updateItemCallback],
 	);
 
 	return <Budget reducer={reducer} />;
@@ -45,7 +45,7 @@ const Budget: React.FC<{
 	const [state, dispatch] = useAsyncReducer(
 		reducer,
 		fetchInitialData(),
-		'budget'
+		'budget',
 	);
 
 	return (

@@ -41,7 +41,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							onKeyDown={event => {
 								if (
 									!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(
-										event.key
+										event.key,
 									)
 								) {
 									event.preventDefault();

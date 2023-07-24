@@ -25,14 +25,14 @@ const BudgetList: React.FC = () => {
 				dispatch({ type: 'SET BUDGET', budget: b });
 			}
 		},
-		[dispatch, fetchBudgetWithItems]
+		[dispatch, fetchBudgetWithItems],
 	);
 	const onDelete = useCallback(
 		async (id: string) => {
 			await deleteCallback(id);
 			budgets.refresh();
 		},
-		[budgets, deleteCallback]
+		[budgets, deleteCallback],
 	);
 
 	const [isCreateOpen, setIsCreateOpen] = useState(false);

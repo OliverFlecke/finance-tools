@@ -14,7 +14,7 @@ export const currencyFormatter = Intl.NumberFormat(undefined, {
 export function formatCurrency(
 	value?: number,
 	currency?: string,
-	options?: Intl.NumberFormatOptions
+	options?: Intl.NumberFormatOptions,
 ): string {
 	if (!value || Number.isNaN(value)) return '0';
 	const format = (currency: string) =>
@@ -44,7 +44,7 @@ export function convertToCurrency(
 	value: number,
 	rates: Rates,
 	fromCurrency?: string,
-	toCurrency?: string
+	toCurrency?: string,
 ): number {
 	return value * getConversionRate(rates, fromCurrency, toCurrency);
 }
@@ -52,7 +52,7 @@ export function convertToCurrency(
 export function getConversionRate(
 	rates: Rates,
 	fromCurrency?: string,
-	toCurrency?: string
+	toCurrency?: string,
 ): number {
 	const baseCurrency = 'usd';
 	const fromLowered = fromCurrency?.toLowerCase();
@@ -84,12 +84,12 @@ export function getConversionRate(
 export function useConverter(
 	fromCurrency: string,
 	toCurrency: string,
-	rates: Rates
+	rates: Rates,
 ): (value: number) => number {
 	return useCallback(
 		(value: number) =>
 			convertToCurrency(value, rates, fromCurrency, toCurrency),
-		[fromCurrency, rates, toCurrency]
+		[fromCurrency, rates, toCurrency],
 	);
 }
 

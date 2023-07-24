@@ -45,7 +45,7 @@ const AddStock: React.FC = () => {
 				reset();
 			}
 		},
-		[dispatch, fetchShares, reset, trackStock]
+		[dispatch, fetchShares, reset, trackStock],
 	);
 
 	return (

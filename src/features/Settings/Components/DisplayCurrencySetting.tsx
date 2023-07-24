@@ -11,7 +11,7 @@ const DisplayCurrencySetting: FC = () => {
 
 	const onChange = useCallback(
 		(currency: string) => dispatch({ type: 'SET DISPLAY CURRENCY', currency }),
-		[dispatch]
+		[dispatch],
 	);
 
 	return (

@@ -16,7 +16,7 @@ const BudgetLineActions: React.FC<{
 			updateItem(id, item);
 			setEdit(false);
 		},
-		[updateItem, setEdit]
+		[updateItem, setEdit],
 	);
 
 	return (

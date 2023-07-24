@@ -26,7 +26,7 @@ function getDefaultAccountState(): AccountState {
 
 export function accountReducer(
 	state: AccountState,
-	action: AccountAction
+	action: AccountAction,
 ): AccountState {
 	return storedReducer('account_state', reducer)(state, action);
 }

@@ -52,7 +52,8 @@ const IndividualGrowthGraph: FC = () => {
 				});
 
 				const yMaxValue = max(
-					data.map(x => max(state.accounts.map(a => x.value[a.name])) ?? 0) ?? 0
+					data.map(x => max(state.accounts.map(a => x.value[a.name])) ?? 0) ??
+						0,
 				);
 				const yScale = scaleLinear({
 					range: [yMax, 0],

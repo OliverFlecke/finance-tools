@@ -8,7 +8,7 @@ interface ErrorState {
 export default function useAsyncReducer<State, Action>(
 	reducer: (state: State, action: Action) => Promise<State> | State,
 	initialState: State,
-	cacheKey?: string
+	cacheKey?: string,
 ): [State & ErrorState, (action: Action) => Promise<void>] {
 	const [state, setState] = useState<State & ErrorState>({
 		...initialState,
@@ -23,14 +23,14 @@ export default function useAsyncReducer<State, Action>(
 			}
 			setState(newState);
 		},
-		[cacheKey, setState]
+		[cacheKey, setState],
 	);
 
 	const dispatch = useCallback(
 		async (action: Action) => {
 			const result = reducer(state, action);
 
-			if (result instanceof Promise<State>) {
+			if (result instanceof Promise) {
 				setState({ ...state, loading: true, error: null });
 				result
 					.then(state => cacheState({ ...state, loading: false, error: null }))
@@ -39,7 +39,7 @@ export default function useAsyncReducer<State, Action>(
 				cacheState({ ...result, loading: false, error: null });
 			}
 		},
-		[cacheState, reducer, state]
+		[cacheState, reducer, state],
 	);
 
 	return [state, dispatch];

@@ -34,7 +34,7 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 				value: amount,
 			});
 		},
-		[account.id, account.name, date, dispatch, updateEntryCallback]
+		[account.id, account.name, date, dispatch, updateEntryCallback],
 	);
 
 	const value = formatCurrency(entry[account.name], account.currency);

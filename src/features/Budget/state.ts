@@ -29,21 +29,21 @@ export type Action =
 interface ReducerOptions {
 	addItemToBudgetCallback: (
 		budget_id: string,
-		request: AddItemToBudgetRequest
+		request: AddItemToBudgetRequest,
 	) => Promise<string>;
 	deleteItemFromBudgetCallback: (
 		budget_id: string,
-		item_id: string
+		item_id: string,
 	) => Promise<void>;
 	updateItemCallback: (
 		budget_id: string,
 		item_id: string,
-		request: AddItemToBudgetRequest
+		request: AddItemToBudgetRequest,
 	) => Promise<void>;
 }
 
 export function createReducer(
-	options: ReducerOptions
+	options: ReducerOptions,
 ): (state: State, action: Action) => Promise<State> {
 	return async (state: State, action: Action) => {
 		switch (action.type) {
@@ -62,7 +62,7 @@ export function createReducer(
 
 				const item_id = await options.addItemToBudgetCallback(
 					action.budget_id,
-					action.item
+					action.item,
 				);
 				const now = new Date(Date.now());
 				const item: Item = {
@@ -90,7 +90,7 @@ export function createReducer(
 
 				await options.deleteItemFromBudgetCallback(
 					action.budget_id,
-					action.item_id
+					action.item_id,
 				);
 
 				return {
@@ -108,7 +108,7 @@ export function createReducer(
 				await options.updateItemCallback(
 					state.budget.id,
 					action.item_id,
-					action.item
+					action.item,
 				);
 
 				return {
@@ -121,7 +121,7 @@ export function createReducer(
 										...x,
 										...action.item,
 								  }
-								: x
+								: x,
 						),
 					},
 				};

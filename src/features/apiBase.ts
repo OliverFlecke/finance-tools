@@ -23,7 +23,7 @@ export interface ApiResponseWithActions<T> extends ApiResponse<T> {
 
 export function useApi<T>(
 	url: RequestInfo,
-	options?: RequestInit
+	options?: RequestInit,
 ): ApiResponseWithActions<T> {
 	const { getAccessTokenSilently } = useAuth0();
 	const [state, setState] = useState<ApiResponse<T>>({
@@ -78,7 +78,7 @@ export function useApi<T>(
 
 export function useApiCall<T>(
 	url: RequestInfo,
-	options?: RequestInit
+	options?: RequestInit,
 ): (body?: T) => Promise<Response | undefined> {
 	const { getAccessTokenSilently } = useAuth0();
 
@@ -102,14 +102,14 @@ export function useApiCall<T>(
 				return undefined;
 			}
 		},
-		[getAccessTokenSilently, options, url]
+		[getAccessTokenSilently, options, url],
 	);
 }
 
 export function useApiWithUrlCall(): (
 	url: RequestInfo,
 	options?: RequestInit,
-	body?: unknown
+	body?: unknown,
 ) => Promise<Response | undefined> {
 	const { getAccessTokenSilently } = useAuth0();
 
@@ -133,7 +133,7 @@ export function useApiWithUrlCall(): (
 				return undefined;
 			}
 		},
-		[getAccessTokenSilently]
+		[getAccessTokenSilently],
 	);
 }
 

@@ -38,7 +38,7 @@ const OverviewChart = () => {
 								value,
 								settings.currencyRates.usd,
 								account.currency,
-								settings.preferredDisplayCurrency
+								settings.preferredDisplayCurrency,
 						  );
 				return { x: date, y };
 			});
@@ -47,7 +47,7 @@ const OverviewChart = () => {
 			settings.currencyRates.usd,
 			settings.preferredDisplayCurrency,
 			state.entries,
-		]
+		],
 	);
 
 	const data = state.accounts.map(account => ({
@@ -66,7 +66,7 @@ const OverviewChart = () => {
 				})),
 			};
 		},
-		[data, state.entries]
+		[data, state.entries],
 	);
 
 	const types = ['Cash', 'Investment']
@@ -136,7 +136,7 @@ const OverviewChart = () => {
 								<span className="text-green-700 dark:text-green-500">
 									{formatCurrency(
 										accessors.yAccessor(tooltipData.nearestDatum.datum),
-										settings.preferredDisplayCurrency
+										settings.preferredDisplayCurrency,
 									)}
 								</span>
 							</div>

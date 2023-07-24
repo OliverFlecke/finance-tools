@@ -17,7 +17,7 @@ export function getDataFromStorage<T>(key: string, defaultValue: T): T {
 
 export function storedReducer<S, A>(
 	key: string,
-	reducer: Reducer<S, A>
+	reducer: Reducer<S, A>,
 ): Reducer<S, A> {
 	return (state, action) => {
 		const newState = reducer(state, action);

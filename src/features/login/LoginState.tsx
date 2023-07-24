@@ -23,7 +23,7 @@ const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	useOnOutsideMouseDown(
 		ref,
-		useCallback(() => setIsOpen(false), [])
+		useCallback(() => setIsOpen(false), []),
 	);
 
 	return (

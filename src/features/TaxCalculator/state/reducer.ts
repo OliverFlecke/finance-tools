@@ -4,7 +4,7 @@ import { storageKey, TaxCalculatorState } from './index';
 
 function reducer(
 	state: TaxCalculatorState,
-	action: TaxCalculatorAction
+	action: TaxCalculatorAction,
 ): TaxCalculatorState {
 	switch (action.type) {
 		case 'SET SALARY':

@@ -22,7 +22,7 @@ describe('Conversion rate tests', () => {
 	])('Simple conversion rate to USD', (fromCurrency, expectedRate) => {
 		expect(getConversionRate(rates, fromCurrency, 'USD')).toBeCloseTo(
 			expectedRate,
-			1
+			1,
 		);
 	});
 
@@ -36,8 +36,8 @@ describe('Conversion rate tests', () => {
 		(fromCurrency, toCurrency, expectedRate) => {
 			expect(getConversionRate(rates, fromCurrency, toCurrency)).toBeCloseTo(
 				expectedRate,
-				1
+				1,
 			);
-		}
+		},
 	);
 });

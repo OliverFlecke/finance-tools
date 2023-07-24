@@ -65,7 +65,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({
 				},
 			});
 		},
-		[dispatch, stock.symbol, updateStockLot]
+		[dispatch, stock.symbol, updateStockLot],
 	);
 	const deleteLot = useCallback(async () => {
 		await deleteStockLot(lot.id);
@@ -75,7 +75,7 @@ const StockLotRow: React.FC<StockLotRowProps> = ({
 	const convert = useConverter(
 		stock.currency,
 		preferredDisplayCurrency,
-		currencyRates.usd
+		currencyRates.usd,
 	);
 
 	const marketValue = watch('shares') * stock.regularMarketPrice;

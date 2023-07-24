@@ -29,7 +29,7 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 			reset();
 			close();
 		},
-		[addAccount, close, reset]
+		[addAccount, close, reset],
 	);
 
 	const currencyId = useId();

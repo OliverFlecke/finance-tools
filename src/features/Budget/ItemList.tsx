@@ -102,7 +102,7 @@ export default ItemList;
  * Helper function to group items by their category.
  */
 function* groupByCategory(
-	items: Item[]
+	items: Item[],
 ): Generator<{ category: string; items: Item[] }> {
 	const groups = new Map();
 	for (const item of items) {

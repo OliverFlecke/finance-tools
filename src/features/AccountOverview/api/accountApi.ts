@@ -14,7 +14,7 @@ export function useAccounts(): ApiResponse<AccountResponse[]> {
 }
 
 export function useAddAccountCallback(): (
-	account: Account
+	account: Account,
 ) => Promise<Response | undefined> {
 	return useApiCall(`${apiUrlWithPath}/account`, {
 		method: 'POST',
@@ -22,7 +22,7 @@ export function useAddAccountCallback(): (
 }
 
 export function useUpdateEntryCallback(): (
-	entry: AddAccountEntryRequest
+	entry: AddAccountEntryRequest,
 ) => Promise<Response | undefined> {
 	return useApiCall(`${apiUrlWithPath}/account/entry`, {
 		method: 'POST',
@@ -30,7 +30,7 @@ export function useUpdateEntryCallback(): (
 }
 
 export function useUpdateAccountsCallback(): (
-	accounts: UpdateAccount[]
+	accounts: UpdateAccount[],
 ) => Promise<Response | undefined> {
 	return useApiCall(`${apiUrlWithPath}/account`, {
 		method: 'PUT',

@@ -23,7 +23,7 @@ export function useFetchAllBudgetsCallback(): () => Promise<Budget[]> {
 
 	return useCallback(
 		() => handler().then(async res => await res?.json()),
-		[handler]
+		[handler],
 	);
 }
 
@@ -33,7 +33,7 @@ export interface CreateBudgetDto {
 
 // TODO: The type should not expose the `Response`
 export function useCreateBudgetCallback(): (
-	request: CreateBudgetDto
+	request: CreateBudgetDto,
 ) => Promise<Response | undefined> {
 	return useApiCall<CreateBudgetDto>(`${budgetHost}/budget`, {
 		method: 'POST',
@@ -45,12 +45,12 @@ export function useDeleteBudgetCallback() {
 
 	return useCallback(
 		(id: string) => handler(`${budgetHost}/budget/${id}`, { method: 'DELETE' }),
-		[handler]
+		[handler],
 	);
 }
 
 export function useFetchBudgetWithItemsCallback(): (
-	id: string
+	id: string,
 ) => Promise<BudgetWithItems | null> {
 	const handler = useApiWithUrlCall();
 
@@ -66,7 +66,7 @@ export function useFetchBudgetWithItemsCallback(): (
 
 			return parseJsonWithDate(text) as BudgetWithItems;
 		},
-		[handler]
+		[handler],
 	);
 }
 
@@ -108,7 +108,7 @@ export interface AddItemToBudgetRequest {
  */
 export function useAddItemToBudgetCallback(): (
 	budget_id: string,
-	request: AddItemToBudgetRequest
+	request: AddItemToBudgetRequest,
 ) => Promise<string> {
 	const handler = useApiWithUrlCall();
 
@@ -119,7 +119,7 @@ export function useAddItemToBudgetCallback(): (
 				{
 					method: 'POST',
 				},
-				request
+				request,
 			);
 
 			if (!res?.ok) {
@@ -128,7 +128,7 @@ export function useAddItemToBudgetCallback(): (
 
 			return await res.text();
 		},
-		[handler]
+		[handler],
 	);
 }
 
@@ -143,7 +143,7 @@ export function useAddItemToBudgetCallback(): (
 export function useUpdateItemCallback(): (
 	budget_id: string,
 	item_id: string,
-	request: AddItemToBudgetRequest
+	request: AddItemToBudgetRequest,
 ) => Promise<void> {
 	const handler = useApiWithUrlCall();
 
@@ -151,21 +151,21 @@ export function useUpdateItemCallback(): (
 		async (
 			budget_id: string,
 			item_id: string,
-			request: AddItemToBudgetRequest
+			request: AddItemToBudgetRequest,
 		) => {
 			const res = await handler(
 				`${budgetHost}/budget/${budget_id}/item/${item_id}`,
 				{
 					method: 'PUT',
 				},
-				request
+				request,
 			);
 
 			if (!res?.ok) {
 				throw Error(await res?.text());
 			}
 		},
-		[handler]
+		[handler],
 	);
 }
 
@@ -179,7 +179,7 @@ export function useUpdateItemCallback(): (
  */
 export function useDeleteItemCallback(): (
 	budget_id: string,
-	item_id: string
+	item_id: string,
 ) => Promise<void> {
 	const handler = useApiWithUrlCall();
 
@@ -189,13 +189,13 @@ export function useDeleteItemCallback(): (
 				`${budgetHost}/budget/${budget_id}/item/${item_id}`,
 				{
 					method: 'DELETE',
-				}
+				},
 			);
 
 			if (!res?.ok) {
 				throw Error(await res?.text());
 			}
 		},
-		[handler]
+		[handler],
 	);
 }

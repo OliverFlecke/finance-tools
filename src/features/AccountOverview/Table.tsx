@@ -88,13 +88,13 @@ const RowSummary: FC<{
 		accounts,
 		entries,
 		date,
-		x => x.type === 'Cash'
+		x => x.type === 'Cash',
 	);
 	const totalInvested = useSummarizedAccounts(
 		accounts,
 		entries,
 		date,
-		x => x.type === 'Investment'
+		x => x.type === 'Investment',
 	);
 
 	return (
@@ -129,10 +129,10 @@ const RowActions: FC<{ date: string }> = ({ date }) => {
 
 function calculateTotals(
 	accounts: Account[],
-	entries: AccountEntries
+	entries: AccountEntries,
 ): number[] {
 	return Object.keys(entries).map(date =>
-		useSummarizedAccounts(accounts, entries, date)
+		useSummarizedAccounts(accounts, entries, date),
 	);
 }
 
@@ -140,7 +140,7 @@ function useSummarizedAccounts(
 	accounts: Account[],
 	entries: AccountEntries,
 	date: string,
-	filter: (account: Account) => boolean = () => true
+	filter: (account: Account) => boolean = () => true,
 ): number {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
@@ -153,8 +153,8 @@ function useSummarizedAccounts(
 				entries[date][account.name] ?? 0,
 				currencyRates.usd,
 				account.currency,
-				preferredDisplayCurrency
-			)
+				preferredDisplayCurrency,
+			),
 		)
 		.reduce((sum, value) => sum + value, 0);
 }

@@ -29,9 +29,9 @@ export default function TaxTable() {
 				currency,
 				preferredDisplayCurrency,
 				currencyRates,
-				workOptions
+				workOptions,
 			)(a, s),
-		[currency, preferredDisplayCurrency, currencyRates, workOptions]
+		[currency, preferredDisplayCurrency, currencyRates, workOptions],
 	);
 
 	if (!salary) return null;
@@ -89,17 +89,17 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 		salary,
 		currencyRates.usd,
 		currency,
-		localCurrency
+		localCurrency,
 	);
 	const result = calculator(localSalary, taxCalculator[country]);
 
 	const formatLocal = useCallback(
 		(v: number) => formatCurrency(v, localCurrency, formatOptions),
-		[localCurrency]
+		[localCurrency],
 	);
 	const formatPreferred = useCallback(
 		(v: number) => formatCurrency(v, preferredDisplayCurrency, formatOptions),
-		[preferredDisplayCurrency]
+		[preferredDisplayCurrency],
 	);
 
 	return (
@@ -148,7 +148,7 @@ function getCalculator(
 	defaultCurrency: string,
 	displayCurrency: string,
 	rates: CurrencyRates,
-	options: TaxCalculatorOptions
+	options: TaxCalculatorOptions,
 ) {
 	return function (amount: number, system: TaxSystem): CalculationResult {
 		let result = system.calculate(amount);
@@ -182,13 +182,13 @@ function getCalculator(
 				base,
 				defaultCurrency,
 				system.currency,
-				rates
+				rates,
 			),
 			preferred: convertCalculationResultInCurrency(
 				base,
 				defaultCurrency,
 				displayCurrency,
-				rates
+				rates,
 			),
 		};
 	};
@@ -205,7 +205,7 @@ function convertCalculationResultInCurrency(
 	result: CalculationResultInCurrency,
 	from_currency: string,
 	to_currency: string,
-	rates: CurrencyRates
+	rates: CurrencyRates,
 ): CalculationResultInCurrency {
 	const converter = (value: number) =>
 		convertToCurrency(value, rates.usd, from_currency, to_currency);
