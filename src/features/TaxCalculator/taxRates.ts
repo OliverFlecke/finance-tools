@@ -162,6 +162,29 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: Infinity, rate: 0.33 },
 		],
 	},
+	sg: {
+		country: 'Singapore',
+		currency: 'SGD',
+		taxFreeAllowance: 0,
+		brackets: [
+			{ limit: 20_000, rate: 0 },
+			{ limit: 30_000, rate: 0.02 },
+			{ limit: 40_000, rate: 0.035 },
+			{ limit: 80_000, rate: 0.07 },
+			{ limit: 120_000, rate: 0.115 },
+			{ limit: 160_000, rate: 0.15 },
+			{ limit: 200_000, rate: 0.18 },
+			{ limit: 240_000, rate: 0.19 },
+			{ limit: 280_000, rate: 0.195 },
+			{ limit: 320_000, rate: 0.2 },
+			{ limit: 500_000, rate: 0.22 },
+			{ limit: 1_000_000, rate: 0.23 },
+			{ limit: Infinity, rate: 0.24 },
+		],
+		calculate: function (income: number): TaxResult {
+			return calculateTaxes(income, this);
+		},
+	},
 };
 
 export default taxCalculator;
