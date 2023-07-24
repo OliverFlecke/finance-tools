@@ -11,7 +11,7 @@ import taxCalculator, { TaxSystem } from './taxRates';
 
 const TaxTable: React.FC = () => {
 	const {
-		values: { currencyRates },
+		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
 	const {
 		state: { salary, currency, workOptions },
@@ -21,8 +21,13 @@ const TaxTable: React.FC = () => {
 
 	const calculator = useCallback(
 		(a: number, s: TaxSystem) =>
-			getCalculator(currency, currencyRates, workOptions)(a, s),
-		[currency, currencyRates, workOptions]
+			getCalculator(
+				currency,
+				preferredDisplayCurrency,
+				currencyRates,
+				workOptions
+			)(a, s),
+		[currency, preferredDisplayCurrency, currencyRates, workOptions]
 	);
 
 	if (!salary) return null;
@@ -44,9 +49,13 @@ interface TableBodyProps {
 	calculator: (amount: number, system: TaxSystem) => CalculationResult;
 }
 
+const formatOptions = {
+	maximumFractionDigits: 0,
+};
+
 const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 	const {
-		values: { currencyRates },
+		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
 	const {
 		state: { salary, currency },
@@ -70,24 +79,60 @@ const TableBody: React.FC<TableBodyProps> = ({ countries, calculator }) => {
 				return (
 					<tr key={country} className="tax-row">
 						<td>{result.country}</td>
-						<td>{formatCurrency(result.localSalaryGross, localCurrency)}</td>
+						<td>
+							{formatCurrency(
+								result.local.salaryGross,
+								localCurrency,
+								formatOptions
+							)}
+						</td>
 						<td className="text-green-700 dark:text-green-400">
-							{formatCurrency(result.salaryNet, currency)}
+							{formatCurrency(
+								result.preferred.salaryNet,
+								preferredDisplayCurrency,
+								formatOptions
+							)}
 						</td>
 						<td className="text-red-700 dark:text-red-400">
-							{formatCurrency(result.taxes, currency)}
+							{formatCurrency(
+								result.preferred.taxes,
+								preferredDisplayCurrency,
+								formatOptions
+							)}
 						</td>
 						<td>
 							{result.taxPercent.toLocaleString(undefined, {
 								style: 'percent',
 							})}
 						</td>
-						<td>{formatCurrency(result.localSalaryGross, localCurrency)}</td>
-						<td>{formatCurrency(result.localSalaryNet, localCurrency)}</td>
 						<td>
-							{formatCurrency(result.localMonthlySalaryNet, localCurrency)}
+							{formatCurrency(
+								result.local.salaryNet,
+								localCurrency,
+								formatOptions
+							)}
 						</td>
-						<td>{formatCurrency(result.hourlyRateNet, currency)}</td>
+						<td>
+							{formatCurrency(
+								result.local.salaryGross / 12,
+								localCurrency,
+								formatOptions
+							)}
+						</td>
+						<td>
+							{formatCurrency(
+								result.local.salaryNet / 12,
+								localCurrency,
+								formatOptions
+							)}
+						</td>
+						<td>
+							{formatCurrency(
+								result.base.hourlyRateNet,
+								currency,
+								formatOptions
+							)}
+						</td>
 					</tr>
 				);
 			})}
@@ -99,12 +144,11 @@ const TableHeader: React.FC = () => {
 	return (
 		<thead className="tax-header">
 			<tr>
-				<th>Country</th>
+				<th className="text-left">Country</th>
 				<th>Local gross salary</th>
 				<th>Net salary</th>
 				<th>Taxes</th>
 				<th>Tax percent</th>
-				<th>Local gross salary</th>
 				<th>Local net salary</th>
 				<th>Local net salary (monthly)</th>
 				<th>Hourly net salary</th>
@@ -115,6 +159,7 @@ const TableHeader: React.FC = () => {
 
 function getCalculator(
 	defaultCurrency: string,
+	displayCurrency: string,
 	rates: CurrencyRates,
 	options: TaxCalculatorOptions
 ) {
@@ -131,52 +176,65 @@ function getCalculator(
 			amount = converter(amount);
 		}
 
-		const local_salary_gross = convertToCurrency(
-			amount,
-			rates.usd,
-			defaultCurrency,
-			system.currency
-		);
-		const local_salary = convertToCurrency(
-			result.after_tax,
-			rates.usd,
-			defaultCurrency,
-			system.currency
-		);
-
 		const tax_percentage = result.taxes / amount;
 		const salary_per_hour_after_tax =
 			result.after_tax / (options.workdaysPerYear * options.hoursPerDay);
 
-		return {
-			country: system.country,
-			taxes: result.taxes,
-			taxPercent: tax_percentage,
+		const base: CalculationResultInCurrency = {
 			salaryGross: amount,
 			salaryNet: result.after_tax,
+			taxes: result.taxes,
 			hourlyRateNet: salary_per_hour_after_tax,
-			localSalaryGross: local_salary_gross,
-			localSalaryNet: local_salary,
-			localMonthlySalaryNet: local_salary / 12,
-			localHourlyRateNet: convertToCurrency(
-				salary_per_hour_after_tax,
-				rates.usd,
+		};
+
+		return {
+			country: system.country,
+			taxPercent: tax_percentage,
+			base,
+			local: convertCalculationResultInCurrency(
+				base,
 				defaultCurrency,
-				system.currency
+				system.currency,
+				rates
+			),
+			preferred: convertCalculationResultInCurrency(
+				base,
+				defaultCurrency,
+				displayCurrency,
+				rates
 			),
 		};
 	};
 }
 
+interface CalculationResultInCurrency {
+	salaryGross: number;
+	salaryNet: number;
+	taxes: number;
+	hourlyRateNet: number;
+}
+
+function convertCalculationResultInCurrency(
+	result: CalculationResultInCurrency,
+	from_currency: string,
+	to_currency: string,
+	rates: CurrencyRates
+): CalculationResultInCurrency {
+	const converter = (value: number) =>
+		convertToCurrency(value, rates.usd, from_currency, to_currency);
+
+	return {
+		salaryGross: converter(result.salaryGross),
+		salaryNet: converter(result.salaryNet),
+		taxes: converter(result.taxes),
+		hourlyRateNet: converter(result.hourlyRateNet),
+	};
+}
+
 interface CalculationResult {
 	country: string;
-	salaryGross: number;
-	taxes: number;
-	salaryNet: number;
-	hourlyRateNet: number;
 	taxPercent: number;
-	localSalaryGross: number;
-	localSalaryNet: number;
-	localMonthlySalaryNet: number;
-	localHourlyRateNet: number;
+	base: CalculationResultInCurrency;
+	local: CalculationResultInCurrency;
+	preferred: CalculationResultInCurrency;
 }
