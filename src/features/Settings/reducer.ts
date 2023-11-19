@@ -21,6 +21,23 @@ function reducer(
 				preferredDisplayCurrency: action.currency,
 			};
 
+		case 'ADD PREFERRED CURRENCY':
+			return {
+				...state,
+				preferredCurrencies: state.preferredCurrencies.concat(
+					state.preferredCurrencies.find(code => code === action.code)
+						? []
+						: [action.code],
+				),
+			};
+		case 'REMOVE PREFERRED CURRENCY':
+			return {
+				...state,
+				preferredCurrencies: state.preferredCurrencies.filter(
+					code => code === action.code,
+				),
+			};
+
 		case 'SET THEME':
 			return {
 				...state,

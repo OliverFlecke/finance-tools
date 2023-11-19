@@ -5,6 +5,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import DisplayCurrencySetting from './Components/DisplayCurrencySetting';
 import ThemeSetting from './Components/ThemeSetting';
 import SettingsContext from './context';
+import PreferredCurrenciesSetting from './Components/PreferredCurrenciesSetting';
 
 const SettingsMenu: FC = () => {
 	const { dispatch } = useContext(SettingsContext);
@@ -42,9 +43,12 @@ const SettingsMenu: FC = () => {
 export default SettingsMenu;
 
 const SettingsList: FC = () => (
-	<div className="grid grid-cols-2 gap-y-4 gap-x-12">
+	<div className="settings-list">
 		<div className="col-span-2">
 			<DisplayCurrencySetting />
+		</div>
+		<div className="col-span-2">
+			<PreferredCurrenciesSetting />
 		</div>
 		<ThemeSetting />
 	</div>

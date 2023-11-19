@@ -12,7 +12,7 @@ interface Props {
 const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 	const id = useId();
 	const {
-		values: { currencyRates, preferredDisplayCurrency },
+		values: { currencyRates, preferredDisplayCurrency, preferredCurrencies },
 	} = useContext(SettingsContext);
 	const [currency, setCurrency] = useState(
 		defaultCurrency ?? preferredDisplayCurrency,
@@ -38,16 +38,28 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 				<select
 					id={id}
 					onChange={onSelection}
-					className="block rounded bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
+					className="block rounded w-full bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
 					value={currency}
 				>
-					{Object.keys(currencyRates.usd)
-						.map(x => x.toUpperCase())
-						.map(key => (
-							<option key={key} value={key}>
-								{key}
+					<optgroup label="Preferred currencies">
+						{preferredCurrencies.map(code => (
+							<option key={code} value={code}>
+								{code}
 							</option>
 						))}
+					</optgroup>
+					<optgroup label="Others">
+						{Object.keys(currencyRates.usd)
+							.map(x => x.toUpperCase())
+							.filter(
+								x => preferredCurrencies.find(code => code === x) === undefined,
+							)
+							.map(key => (
+								<option key={key} value={key}>
+									{key}
+								</option>
+							))}
+					</optgroup>
 				</select>
 			</label>
 		</ClientOnly>

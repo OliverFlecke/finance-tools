@@ -3,6 +3,10 @@
 @import 'tailwindcss/utilities';
 @import '@oliverflecke/components-react/dist/main';
 
+body {
+	--secondary-color: rgb(156 163 175);
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -51,6 +55,27 @@ tbody {
 
 		ul li a {
 			@apply text-blue-900 underline dark:text-blue-500;
+		}
+	}
+
+	.settings-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 1rem;
+		column-gap: 3rem;
+
+		input.preferred-currency {
+			border-radius: 0.25rem;
+		}
+
+		.currency-list {
+			@apply space-x-4;
+			display: flex;
+			width: 100%;
+
+			span {
+				color: var(--secondary-color);
+			}
 		}
 	}
 }
