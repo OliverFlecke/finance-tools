@@ -18,7 +18,7 @@ const Table: FC = () => {
 	const totals = calculateTotals(accounts, entries);
 
 	return (
-		<div className="h-full overflow-x-auto pb-4 md:px-4">
+		<div className="account-table">
 			<table className="w-full">
 				<TableHeader accounts={accounts} />
 				<tbody>
@@ -99,19 +99,53 @@ const RowSummary: FC<{
 
 	return (
 		<>
-			<td className={getValueColorIndicator(gain)}>
+			<td className={`${getValueColorIndicator(gain)} cell-summary`}>
 				{formatCurrency(gain, preferredDisplayCurrency)}
+				<SummaryInOtherCurrencies value={gain} index={index} />
 			</td>
-			<td className="px-4 text-blue-700 dark:text-blue-500">
+			<td className="text-blue-700 dark:text-blue-500 cell-summary">
 				{formatCurrency(total, preferredDisplayCurrency)}
+				<SummaryInOtherCurrencies value={total} index={index} />
 			</td>
-			<td className="px-4 text-yellow-700 dark:text-yellow-500">
+			<td className="text-yellow-700 dark:text-yellow-500 cell-summary">
 				{formatCurrency(totalCash, preferredDisplayCurrency)}
+				<SummaryInOtherCurrencies value={totalCash} index={index} />
 			</td>
-			<td className="px-4 text-purple-700 dark:text-purple-500">
+			<td className="text-purple-700 dark:text-purple-500 cell-summary">
 				{formatCurrency(totalInvested, preferredDisplayCurrency)}
+				<SummaryInOtherCurrencies value={totalInvested} index={index} />
 			</td>
 		</>
+	);
+};
+
+/**
+ * Displays the value in a list with the value converted to all preferred currencies.
+ */
+const SummaryInOtherCurrencies: FC<{ value: number; index: number }> = ({
+	value,
+	index,
+}) => {
+	const {
+		values: { preferredDisplayCurrency, preferredCurrencies, currencyRates },
+	} = useContext(SettingsContext);
+
+	return (
+		<ol style={{ top: -index * preferredCurrencies.length }}>
+			{preferredCurrencies.map(code => (
+				<li key={code}>
+					{formatCurrency(
+						convertToCurrency(
+							value,
+							currencyRates.usd,
+							preferredDisplayCurrency,
+							code,
+						),
+						code,
+					)}
+				</li>
+			))}
+		</ol>
 	);
 };
 
