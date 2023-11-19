@@ -40,16 +40,18 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const value = formatCurrency(entry[account.name], account.currency);
 
 	return (
-		<td
-			key={account.name}
-			contentEditable={true}
-			suppressContentEditableWarning={true}
-			ref={entryRef}
-			onBlur={onBlur}
-			className="px-4 text-right"
-		>
-			{value}
-		</td>
+		<>
+			<td
+				key={account.name}
+				contentEditable={true}
+				suppressContentEditableWarning={true}
+				ref={entryRef}
+				onBlur={onBlur}
+				className="table-cell"
+			>
+				{value}
+			</td>
+		</>
 	);
 };
 
