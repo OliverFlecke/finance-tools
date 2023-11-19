@@ -38,7 +38,7 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 				<select
 					id={id}
 					onChange={onSelection}
-					className="block rounded bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
+					className="block rounded w-full bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
 					value={currency}
 				>
 					{Object.keys(currencyRates.usd)
