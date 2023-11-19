@@ -163,6 +163,7 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 		],
 	},
 	sg: {
+		// https://www.iras.gov.sg/taxes/individual-income-tax/basics-of-individual-income-tax/tax-residency-and-tax-rates/individual-income-tax-rates
 		country: 'Singapore',
 		currency: 'SGD',
 		taxFreeAllowance: 0,
@@ -180,6 +181,22 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: 500_000, rate: 0.22 },
 			{ limit: 1_000_000, rate: 0.23 },
 			{ limit: Infinity, rate: 0.24 },
+		],
+		calculate: function (income: number): TaxResult {
+			return calculateTaxes(income, this);
+		},
+	},
+	tw: {
+		// https://www.ntbt.gov.tw/English/multiplehtml/3f18d2625aea4187b0d90e9b929afe4c
+		country: 'Taiwan',
+		currency: 'TWD',
+		taxFreeAllowance: 0,
+		brackets: [
+			{ limit: 560_000, rate: 0.05 },
+			{ limit: 1_260_000, rate: 0.12 },
+			{ limit: 2_520_000, rate: 0.2 },
+			{ limit: 4_720_000, rate: 0.3 },
+			{ limit: Infinity, rate: 0.4 },
 		],
 		calculate: function (income: number): TaxResult {
 			return calculateTaxes(income, this);
