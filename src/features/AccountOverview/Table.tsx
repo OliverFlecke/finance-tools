@@ -12,37 +12,22 @@ import Cell from './Cell';
 
 const Table: FC = () => {
 	const {
-		state: { accounts, entries },
+		state: { accounts },
 	} = useContext(AccountContext);
-
-	const totals = calculateTotals(accounts, entries);
 
 	return (
 		<div className="account-table">
 			<table className="w-full">
-				<TableHeader accounts={accounts} />
+				<thead>
+					<TableHeader accounts={accounts} />
+				</thead>
 				<tbody>
-					{Object.keys(entries).map((date, i) => {
-						return (
-							<tr
-								key={date}
-								className="whitespace-nowrap text-right font-mono odd:bg-gray-300 dark:odd:bg-gray-800"
-							>
-								<td className="pr-6 text-center">{date}</td>
-								<RowSummary date={date} index={i} totals={totals} />
-								{accounts.map(account => (
-									<Cell
-										key={account.name}
-										account={account}
-										entry={entries[date]}
-										date={date}
-									/>
-								))}
-								<RowActions date={date} />
-							</tr>
-						);
-					})}
+					<TableBody />
+					<TableBody />
 				</tbody>
+				<tfoot>
+					<TableHeader accounts={accounts} />
+				</tfoot>
 			</table>
 		</div>
 	);
@@ -50,8 +35,8 @@ const Table: FC = () => {
 
 export default Table;
 
-const TableHeader = ({ accounts }: { accounts: Account[] }) => (
-	<thead>
+const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
+	<>
 		<tr className="whitespace-nowrap text-right">
 			<th className="pr-6 text-center">Date</th>
 			<th className="px-4 text-green-700 dark:text-green-500">Gain</th>
@@ -67,8 +52,42 @@ const TableHeader = ({ accounts }: { accounts: Account[] }) => (
 			))}
 			<th></th>
 		</tr>
-	</thead>
+	</>
 );
+
+const TableBody: React.FC = () => {
+	const {
+		state: { accounts, entries },
+	} = useContext(AccountContext);
+
+	const totals = calculateTotals(accounts, entries);
+
+	return (
+		<>
+			{Object.keys(entries).map((date, i) => {
+				return (
+					<tr
+						key={date}
+						style={{ height: 26 }}
+						className="whitespace-nowrap text-right font-mono odd:bg-gray-300 dark:odd:bg-gray-800"
+					>
+						<td className="pr-6 text-center">{date}</td>
+						<RowSummary date={date} index={i} totals={totals} />
+						{accounts.map(account => (
+							<Cell
+								key={account.name}
+								account={account}
+								entry={entries[date]}
+								date={date}
+							/>
+						))}
+						<RowActions date={date} />
+					</tr>
+				);
+			})}
+		</>
+	);
+};
 
 const RowSummary: FC<{
 	index: number;

@@ -80,10 +80,18 @@ tbody {
 	}
 
 	.account-table {
-		position: relative;
-		height: 100%;
-		overflow-x: scroll;
 		padding-bottom: 1rem;
+		position: relative;
+		overflow-x: scroll;
+		overflow-y: hidden;
+
+		thead,
+		tfoot {
+			position: sticky;
+			top: 0px;
+			background: black;
+			z-index: 1;
+		}
 
 		@media (min-width: 768px) {
 			padding-left: 1rem;
