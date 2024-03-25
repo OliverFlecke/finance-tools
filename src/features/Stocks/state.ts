@@ -132,7 +132,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 						: {
 								...stock,
 								lots: stock.lots.concat(lot),
-						  },
+							},
 				),
 			};
 		}
@@ -145,7 +145,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 						: {
 								...stock,
 								lots: stock.lots.filter(x => x.id !== action.id),
-						  },
+							},
 				),
 			};
 
@@ -160,7 +160,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 								lots: stock.lots
 									.filter(x => x.id !== action.lot.id)
 									.concat(action.lot),
-						  },
+							},
 				),
 			};
 
