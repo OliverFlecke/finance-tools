@@ -23,7 +23,6 @@ const Table: FC = () => {
 				</thead>
 				<tbody>
 					<TableBody />
-					<TableBody />
 				</tbody>
 				<tfoot>
 					<TableHeader accounts={accounts} />
