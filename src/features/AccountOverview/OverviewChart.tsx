@@ -39,7 +39,7 @@ const OverviewChart = () => {
 								settings.currencyRates.usd,
 								account.currency,
 								settings.preferredDisplayCurrency,
-						  );
+							);
 				return { x: date, y };
 			});
 		},
@@ -105,7 +105,7 @@ const OverviewChart = () => {
 								data={d.data}
 								{...accessors}
 							/>
-					  ))
+						))
 					: data.map(d => (
 							<AnimatedLineSeries
 								key={d.account.id}
@@ -113,7 +113,7 @@ const OverviewChart = () => {
 								data={d.data}
 								{...accessors}
 							/>
-					  ))}
+						))}
 
 				<Tooltip
 					snapTooltipToDatumX
