@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile && pnpm -r install
 
+      - name: Build
+        run: pnpm build
+
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.7.3
         with:
