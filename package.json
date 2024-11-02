@@ -12,17 +12,17 @@
 		"cy:open": "cypress open",
 		"cy:test": "cypress run",
 		"cy:ci": "start-server-and-test start-server http://localhost:3000 cy:test",
-		"start-server": "yarn build && yarn start",
-		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"yarn dev:js\" \"yarn css\"",
-		"css": "cross-env TAILWIND_MODE=watch yarn postcss src/main.css -o src/compiled.css -v --watch",
+		"start-server": "pnpm build && pnpm start",
+		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
+		"css": "cross-env TAILWIND_MODE=watch pnpm postcss src/main.css -o src/compiled.css -v --watch",
 		"dev:js": "next dev",
 		"dev:https": "node server.js",
 		"lint": "prettier --loglevel silent --write . && next lint",
 		"start": "next start",
-		"prebuild": "yarn postcss src/main.css -o src/compiled.css -v",
+		"prebuild": "pnpm postcss src/main.css -o src/compiled.css -v",
 		"build": "next build",
 		"test": "jest --watch",
-		"deploy": "yarn build && gh-pages -t true -d out"
+		"deploy": "pnpm build && gh-pages -t true -d out"
 	},
 	"dependencies": {
 		"@auth0/auth0-react": "^2.2.0",
