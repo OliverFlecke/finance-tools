@@ -1,6 +1,6 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import AddAccount from 'features/AccountOverview/AddAccountModal'
-import { memo, useCallback, useEffect, useReducer } from 'react'
+import React, { memo, useCallback, useEffect, useReducer } from 'react'
 import { sortObject } from 'utils/converters'
 import { formatDate } from 'utils/date'
 import { AccountContext, accountReducer, initAccountState } from './AccountService'

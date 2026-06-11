@@ -7,6 +7,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Router from 'next/router'
 import Script from 'next/script'
+import React from 'react'
 
 // biome-ignore lint/suspicious/noExplicitAny: unknown type
 const onRedirectCallback = (appState: any) => {
