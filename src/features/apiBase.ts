@@ -2,10 +2,12 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useCallback, useEffect, useState } from 'react'
 import { isDevelopment } from 'utils/general'
 
+// TODO: Consider using react-query to handle data fetching and state.
+
 export const useSampleData = false //isDevelopment;
 
 const apiVersion = 'api/v1'
-export const baseUri = isDevelopment ? 'https://localhost:5001' : 'https://finance.oliverflecke.me'
+export const baseUri = process.env.NEXT_PUBLIC_API_HOST // isDevelopment ? 'https://localhost:5001' : 'https://finance.oliverflecke.me'
 
 export const apiUrlWithPath = `${baseUri}/${apiVersion}`
 
@@ -25,6 +27,7 @@ export function useApi<T>(url: RequestInfo, options?: RequestInit): ApiResponseW
 		loading: true,
 	})
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: we do not want to refresh when state changes, as that causes an infinite loop.
 	const execute = useCallback(async () => {
 		try {
 			setState({
@@ -57,9 +60,7 @@ export function useApi<T>(url: RequestInfo, options?: RequestInit): ApiResponseW
 				loading: false,
 			})
 		}
-		// Ignore changes to state
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [options, url, state, getAccessTokenSilently])
+	}, [options, url, getAccessTokenSilently])
 
 	useEffect(() => {
 		;(async () => await execute())()
