@@ -1,59 +1,59 @@
-import { host } from './constants';
-import * as MockApi from '../mocks/api';
+import * as MockApi from '../mocks/api'
+import { host } from './constants'
 
 describe('Landing page', () => {
 	it('Renders', () => {
-		cy.visit(`${host}/`);
-		cy.get('h2').should('have.text', 'Tools to help with your finances');
-	});
+		cy.visit(`${host}/`)
+		cy.get('h2').should('have.text', 'Tools to help with your finances')
+	})
 
 	it('lists the account page in the description', () => {
-		MockApi.account();
+		MockApi.account()
 
-		cy.visit(host);
+		cy.visit(host)
 		cy.get('main ul').within(() => {
-			cy.get('a[href*="accounts"]').click();
-		});
+			cy.get('a[href*="accounts"]').click()
+		})
 
-		cy.url().should('include', '/accounts');
-	});
+		cy.url().should('include', '/accounts')
+	})
 
 	it('lists the stocks page in the description', () => {
-		MockApi.stock();
-		MockApi.stockTracked();
+		MockApi.stock()
+		MockApi.stockTracked()
 
-		cy.visit(host);
+		cy.visit(host)
 		cy.get('main ul').within(() => {
-			cy.get('a[href*="stocks"]').click();
-		});
+			cy.get('a[href*="stocks"]').click()
+		})
 
-		cy.url().should('include', '/stocks');
-	});
+		cy.url().should('include', '/stocks')
+	})
 
 	it('lists the interest calculator page in the description', () => {
-		cy.visit(host);
+		cy.visit(host)
 		cy.get('main ul').within(() => {
-			cy.get('a[href*="interest"]').click();
-		});
+			cy.get('a[href*="interest"]').click()
+		})
 
-		cy.url().should('include', '/interest');
-	});
+		cy.url().should('include', '/interest')
+	})
 
 	it('list the tax calculator page in the description', () => {
-		cy.visit(host);
+		cy.visit(host)
 		cy.get('main ul').within(() => {
-			cy.get('a[href*="tax"]').click();
-		});
+			cy.get('a[href*="tax"]').click()
+		})
 
-		cy.url().should('include', '/tax');
-	});
+		cy.url().should('include', '/tax')
+	})
 
 	it('list the budget feature in the description', () => {
-		cy.visit(host);
+		cy.visit(host)
 		cy.get('main ul').within(() => {
-			cy.get('a[href*="budget"]').click();
-		});
+			cy.get('a[href*="budget"]').click()
+		})
 
-		cy.url().should('include', '/budget');
-	});
-});
+		cy.url().should('include', '/budget')
+	})
+})

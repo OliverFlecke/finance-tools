@@ -1,22 +1,22 @@
-import React, { useCallback } from 'react';
-import { IoSaveOutline } from 'react-icons/io5';
-import { useForm } from 'react-hook-form';
-import { AddItemToBudgetRequest, Item } from './api';
-import { Button, ButtonContainer } from '@oliverflecke/components-react';
+import { Button, ButtonContainer } from '@oliverflecke/components-react'
+import React, { useCallback } from 'react'
+import { useForm } from 'react-hook-form'
+import { IoSaveOutline } from 'react-icons/io5'
+import { AddItemToBudgetRequest, Item } from './api'
 
 const EditItem: React.FC<{
-	item: Item;
-	update: (id: string, item: AddItemToBudgetRequest) => void;
+	item: Item
+	update: (id: string, item: AddItemToBudgetRequest) => void
 }> = ({ update, item }) => {
 	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>({
 		defaultValues: item,
-	});
+	})
 	const handleUpdate = useCallback(
 		(data: AddItemToBudgetRequest) => {
-			update(item.id, data);
+			update(item.id, data)
 		},
 		[item.id, update],
-	);
+	)
 
 	return (
 		<form
@@ -46,10 +46,8 @@ const EditItem: React.FC<{
 					placeholder="Amount"
 					className="budget edit-item"
 					onKeyDown={event => {
-						if (
-							!/-|\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)
-						) {
-							event.preventDefault();
+						if (!/-|\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
+							event.preventDefault()
 						}
 					}}
 					{...register('amount', { required: true, valueAsNumber: true })}
@@ -68,7 +66,7 @@ const EditItem: React.FC<{
 				</Button>
 			</ButtonContainer>
 		</form>
-	);
-};
+	)
+}
 
-export default EditItem;
+export default EditItem

@@ -1,4 +1,4 @@
-import { AccountResponse } from './accountApi';
+import { AccountResponse } from './accountApi'
 
 const accounts: AccountResponse[] = [
 	{
@@ -115,6 +115,6 @@ const accounts: AccountResponse[] = [
 		currency: 'USD',
 		sortKey: 1,
 	},
-];
+]
 
-export default accounts;
+export default accounts

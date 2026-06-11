@@ -1,8 +1,8 @@
-import React from 'react';
-import Image from 'next/image';
+import Image from 'next/image'
+import React from 'react'
 
 interface UserAvatarProps {
-	pictureUrl?: string;
+	pictureUrl?: string
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ pictureUrl }) => (
@@ -14,6 +14,6 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ pictureUrl }) => (
 		className="max-h-10 rounded-full"
 		loading="lazy"
 	/>
-);
+)
 
-export default UserAvatar;
+export default UserAvatar

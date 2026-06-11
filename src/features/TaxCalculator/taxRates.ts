@@ -1,44 +1,43 @@
 export type TaxBracket = {
-	limit: number;
-	rate: number;
-};
+	limit: number
+	rate: number
+}
 
 export type TaxResult = {
-	taxes: number;
-	after_tax: number;
-	pre_tax: number;
-};
+	taxes: number
+	after_tax: number
+	pre_tax: number
+}
 
 export type TaxSystem = {
-	country: string;
-	currency: string;
-	taxFreeAllowance: number;
-	brackets: TaxBracket[];
-	calculate: (income: number) => TaxResult;
-};
+	country: string
+	currency: string
+	taxFreeAllowance: number
+	brackets: TaxBracket[]
+	calculate: (income: number) => TaxResult
+}
 
 function addTaxResults(a: TaxResult, b: TaxResult): TaxResult {
-	const taxes = a.taxes + b.taxes;
+	const taxes = a.taxes + b.taxes
 	return {
 		taxes,
 		pre_tax: a.pre_tax,
 		after_tax: a.pre_tax - taxes,
-	};
+	}
 }
 
 function calculateTaxes(amount: number, system: TaxSystem): TaxResult {
-	let taxes = 0;
-	let after_tax = system.taxFreeAllowance;
+	let taxes = 0
+	let after_tax = system.taxFreeAllowance
 
 	for (let i = 0; i < system.brackets.length; i++) {
-		const prev =
-			i === 0 ? system.taxFreeAllowance : system.brackets[i - 1].limit;
-		const bracket = system.brackets[i];
+		const prev = i === 0 ? system.taxFreeAllowance : system.brackets[i - 1].limit
+		const bracket = system.brackets[i]
 
-		const a = Math.min(amount, bracket.limit) - prev;
+		const a = Math.min(amount, bracket.limit) - prev
 		if (a > 0) {
-			taxes += a * bracket.rate;
-			after_tax += a * (1 - bracket.rate);
+			taxes += a * bracket.rate
+			after_tax += a * (1 - bracket.rate)
 		}
 	}
 
@@ -46,7 +45,7 @@ function calculateTaxes(amount: number, system: TaxSystem): TaxResult {
 		pre_tax: amount,
 		taxes,
 		after_tax,
-	};
+	}
 }
 
 // TODO: These should be editable outside of a new deployment. Preferably stored somewhere in a database and possible made editable to the user
@@ -66,11 +65,11 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 				{ limit: 9568, rate: 0 },
 				{ limit: 50_270, rate: 0.135 },
 				{ limit: Infinity, rate: 0.02 },
-			];
+			]
 			return addTaxResults(
 				calculateTaxes(income, this),
 				calculateTaxes(income, { ...this, brackets: national_insurance }),
-			);
+			)
 		},
 	},
 	dk: {
@@ -83,13 +82,13 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: Infinity, rate: 0.511 },
 		],
 		calculate: function (income: number) {
-			const AM_rate = 0.08;
-			const afterAM = income * (1 - AM_rate);
-			const result = calculateTaxes(afterAM, this);
+			const AM_rate = 0.08
+			const afterAM = income * (1 - AM_rate)
+			const result = calculateTaxes(afterAM, this)
 			return {
 				...result,
 				taxes: result.taxes + income * AM_rate,
-			};
+			}
 		},
 	},
 	dk_capital: {
@@ -101,14 +100,14 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: Infinity, rate: 0.42 },
 		],
 		calculate: function (income: number) {
-			return calculateTaxes(income, this);
+			return calculateTaxes(income, this)
 		},
 	},
 	us: {
 		country: 'United States',
 		currency: 'USD',
 		calculate: function (income: number) {
-			return calculateTaxes(income, this);
+			return calculateTaxes(income, this)
 		},
 		taxFreeAllowance: 0,
 		brackets: [
@@ -131,7 +130,7 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 				currency: 'CAD',
 				taxFreeAllowance: 0,
 				calculate: function (income: number) {
-					return calculateTaxes(income, this);
+					return calculateTaxes(income, this)
 				},
 				brackets: [
 					{ limit: 43_070, rate: 0.0506 },
@@ -142,12 +141,12 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 					{ limit: 227_091, rate: 0.168 },
 					{ limit: Infinity, rate: 0.205 },
 				],
-			};
+			}
 
-			const country = calculateTaxes(income, this);
-			const provincial = ba_system.calculate(income);
+			const country = calculateTaxes(income, this)
+			const provincial = ba_system.calculate(income)
 
-			return addTaxResults(country, provincial);
+			return addTaxResults(country, provincial)
 			// return {
 			// 	pre_tax: income,
 			// 	taxes: country.taxes + provincial.taxes,
@@ -183,7 +182,7 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: Infinity, rate: 0.24 },
 		],
 		calculate: function (income: number): TaxResult {
-			return calculateTaxes(income, this);
+			return calculateTaxes(income, this)
 		},
 	},
 	tw: {
@@ -199,9 +198,9 @@ const taxCalculator: { [key: string]: TaxSystem } = {
 			{ limit: Infinity, rate: 0.4 },
 		],
 		calculate: function (income: number): TaxResult {
-			return calculateTaxes(income, this);
+			return calculateTaxes(income, this)
 		},
 	},
-};
+}
 
-export default taxCalculator;
+export default taxCalculator

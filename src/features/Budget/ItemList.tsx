@@ -1,24 +1,24 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { formatCurrency } from 'utils/converters';
-import { AddItemToBudgetRequest, Item } from './api';
-import { currency } from './index';
-import MonthAndYearCells from './MonthAndYearCells';
-import { sum } from 'utils/math';
-import { BudgetContext } from './state';
-import AddButton from '../../components/button/AddButton';
-import AddLine from './AddLine';
-import RemoveButton from '../../components/button/RemoveButton';
-import BudgetLineActions from './BudgetLineActions';
+import React, { useContext, useMemo, useState } from 'react'
+import { formatCurrency } from 'utils/converters'
+import { sum } from 'utils/math'
+import AddButton from '../../components/button/AddButton'
+import RemoveButton from '../../components/button/RemoveButton'
+import AddLine from './AddLine'
+import { AddItemToBudgetRequest, Item } from './api'
+import BudgetLineActions from './BudgetLineActions'
+import { currency } from './index'
+import MonthAndYearCells from './MonthAndYearCells'
+import { BudgetContext } from './state'
 
 interface Props {
-	title: string;
-	items: Item[];
-	total: number;
-	addItem: (item: AddItemToBudgetRequest) => void;
-	deleteItem: (id: string) => void;
-	updateItem: (id: string, item: AddItemToBudgetRequest) => void;
-	primaryBackgroundColor?: string;
-	oddRowBackgroundColor?: string;
+	title: string
+	items: Item[]
+	total: number
+	addItem: (item: AddItemToBudgetRequest) => void
+	deleteItem: (id: string) => void
+	updateItem: (id: string, item: AddItemToBudgetRequest) => void
+	primaryBackgroundColor?: string
+	oddRowBackgroundColor?: string
 }
 
 const ItemList: React.FC<Props> = ({
@@ -33,9 +33,9 @@ const ItemList: React.FC<Props> = ({
 }) => {
 	const {
 		state: { hideItems },
-	} = useContext(BudgetContext);
-	const groups = useMemo(() => Array.from(groupByCategory(items)), [items]);
-	const [addVisible, setAddVisible] = useState(false);
+	} = useContext(BudgetContext)
+	const groups = useMemo(() => Array.from(groupByCategory(items)), [items])
+	const [addVisible, setAddVisible] = useState(false)
 
 	return (
 		<>
@@ -54,19 +54,14 @@ const ItemList: React.FC<Props> = ({
 							}`}
 						>
 							<th className="px-8 text-left font-normal">{group.category}</th>
-							<MonthAndYearCells
-								value={Math.abs(sum(...group.items.map(x => x.amount)))}
-							/>
+							<MonthAndYearCells value={Math.abs(sum(...group.items.map(x => x.amount)))} />
 							<td></td>
 						</tr>
 						{!hideItems &&
 							group.items
 								.sort((a, z) => a.amount - z.amount)
 								.map(item => (
-									<tr
-										key={item.name}
-										className={`px-8 ${oddRowBackgroundColor}`}
-									>
+									<tr key={item.name} className={`px-8 ${oddRowBackgroundColor}`}>
 										<td className="pl-12">{item.name}</td>
 										<MonthAndYearCells value={Math.abs(item.amount)} />
 										<BudgetLineActions
@@ -93,24 +88,22 @@ const ItemList: React.FC<Props> = ({
 			</tbody>
 			{addVisible && <AddLine add={addItem} />}
 		</>
-	);
-};
+	)
+}
 
-export default ItemList;
+export default ItemList
 
 /**
  * Helper function to group items by their category.
  */
-function* groupByCategory(
-	items: Item[],
-): Generator<{ category: string; items: Item[] }> {
-	const groups = new Map();
+function* groupByCategory(items: Item[]): Generator<{ category: string; items: Item[] }> {
+	const groups = new Map()
 	for (const item of items) {
-		const group = groups.get(item.category) ?? [];
-		group.push(item);
-		groups.set(item.category, group);
+		const group = groups.get(item.category) ?? []
+		group.push(item)
+		groups.set(item.category, group)
 	}
 	for (const [category, items] of groups) {
-		yield { category, items };
+		yield { category, items }
 	}
 }

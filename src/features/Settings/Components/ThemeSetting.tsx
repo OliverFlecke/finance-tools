@@ -1,9 +1,9 @@
-import { DarkModeToggle, Toggle } from '@oliverflecke/components-react';
-import React, { useContext } from 'react';
-import SettingsContext from '../context';
+import { DarkModeToggle, Toggle } from '@oliverflecke/components-react'
+import React, { useContext } from 'react'
+import SettingsContext from '../context'
 
 const ThemeSetting = () => {
-	const { values, dispatch } = useContext(SettingsContext);
+	const { values, dispatch } = useContext(SettingsContext)
 
 	return (
 		<>
@@ -37,7 +37,7 @@ const ThemeSetting = () => {
 				</>
 			)}
 		</>
-	);
-};
+	)
+}
 
-export default ThemeSetting;
+export default ThemeSetting

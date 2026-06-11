@@ -1,40 +1,31 @@
-import SettingsContext from 'features/Settings/context';
-import React, { useCallback, useContext } from 'react';
-import {
-	convertToCurrency,
-	formatCurrency,
-	useConverter,
-} from 'utils/converters';
-import { CurrencyRates } from '../Currency/api';
-import { TaxCalculatorContext, TaxCalculatorOptions } from './state';
-import taxCalculator, { TaxSystem } from './taxRates';
+import SettingsContext from 'features/Settings/context'
+import React, { useCallback, useContext } from 'react'
+import { convertToCurrency, formatCurrency, useConverter } from 'utils/converters'
+import { CurrencyRates } from '../Currency/api'
+import { TaxCalculatorContext, TaxCalculatorOptions } from './state'
+import taxCalculator, { TaxSystem } from './taxRates'
 
 const formatOptions = {
 	maximumFractionDigits: 0,
-};
+}
 
 export default function TaxTable() {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
-	} = useContext(SettingsContext);
+	} = useContext(SettingsContext)
 	const {
 		state: { salary, currency, workOptions },
-	} = useContext(TaxCalculatorContext);
+	} = useContext(TaxCalculatorContext)
 
-	const countries = Object.keys(taxCalculator).sort();
+	const countries = Object.keys(taxCalculator).sort()
 
 	const calculator = useCallback(
 		(a: number, s: TaxSystem) =>
-			getCalculator(
-				currency,
-				preferredDisplayCurrency,
-				currencyRates,
-				workOptions,
-			)(a, s),
+			getCalculator(currency, preferredDisplayCurrency, currencyRates, workOptions)(a, s),
 		[currency, preferredDisplayCurrency, currencyRates, workOptions],
-	);
+	)
 
-	if (!salary) return null;
+	if (!salary) return null
 
 	return (
 		<div className="overflow-x-auto">
@@ -43,20 +34,20 @@ export default function TaxTable() {
 				<TableBody countries={countries} calculator={calculator} />
 			</table>
 		</div>
-	);
+	)
 }
 
 interface TableBodyProps {
-	countries: string[];
-	calculator: (amount: number, system: TaxSystem) => CalculationResult;
+	countries: string[]
+	calculator: (amount: number, system: TaxSystem) => CalculationResult
 }
 
 function TableBody({ countries, calculator }: TableBodyProps) {
 	const {
 		state: { salary, currency },
-	} = useContext(TaxCalculatorContext);
+	} = useContext(TaxCalculatorContext)
 
-	if (!salary) return null;
+	if (!salary) return null
 
 	return (
 		<tbody>
@@ -70,37 +61,32 @@ function TableBody({ countries, calculator }: TableBodyProps) {
 				/>
 			))}
 		</tbody>
-	);
+	)
 }
 
 interface TableRowProps {
-	country: string;
-	salary: number;
-	currency: string;
-	calculator: (amount: number, system: TaxSystem) => CalculationResult;
+	country: string
+	salary: number
+	currency: string
+	calculator: (amount: number, system: TaxSystem) => CalculationResult
 }
 
 function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
-	} = useContext(SettingsContext);
-	const localCurrency = taxCalculator[country].currency;
-	const localSalary = convertToCurrency(
-		salary,
-		currencyRates.usd,
-		currency,
-		localCurrency,
-	);
-	const result = calculator(localSalary, taxCalculator[country]);
+	} = useContext(SettingsContext)
+	const localCurrency = taxCalculator[country].currency
+	const localSalary = convertToCurrency(salary, currencyRates.usd, currency, localCurrency)
+	const result = calculator(localSalary, taxCalculator[country])
 
 	const formatLocal = useCallback(
 		(v: number) => formatCurrency(v, localCurrency, formatOptions),
 		[localCurrency],
-	);
+	)
 	const formatPreferred = useCallback(
 		(v: number) => formatCurrency(v, preferredDisplayCurrency, formatOptions),
 		[preferredDisplayCurrency],
-	);
+	)
 
 	return (
 		<tr key={country} className="tax-row">
@@ -108,9 +94,7 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 			<td className="text-green-700 dark:text-green-400">
 				{formatPreferred(result.preferred.salaryNet)}
 			</td>
-			<td className="text-red-700 dark:text-red-400">
-				{formatPreferred(result.preferred.taxes)}
-			</td>
+			<td className="text-red-700 dark:text-red-400">{formatPreferred(result.preferred.taxes)}</td>
 			<td>
 				{result.taxPercent.toLocaleString(undefined, {
 					style: 'percent',
@@ -122,7 +106,7 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 			<td>{formatLocal(result.local.salaryNet / 12)}</td>
 			<td>{formatPreferred(result.preferred.hourlyRateNet)}</td>
 		</tr>
-	);
+	)
 }
 
 function TableHeader() {
@@ -140,7 +124,7 @@ function TableHeader() {
 				<th>Hourly net salary</th>
 			</tr>
 		</thead>
-	);
+	)
 }
 
 // Calculation functions
@@ -151,54 +135,44 @@ function getCalculator(
 	options: TaxCalculatorOptions,
 ) {
 	return function (amount: number, system: TaxSystem): CalculationResult {
-		let result = system.calculate(amount);
-		const converter = useConverter(system.currency, defaultCurrency, rates.usd);
+		let result = system.calculate(amount)
+		const converter = useConverter(system.currency, defaultCurrency, rates.usd)
 
 		if (defaultCurrency !== system.currency) {
 			result = {
 				pre_tax: converter(amount),
 				taxes: converter(result.taxes),
 				after_tax: converter(result.after_tax),
-			};
-			amount = converter(amount);
+			}
+			amount = converter(amount)
 		}
 
-		const tax_percentage = result.taxes / amount;
+		const tax_percentage = result.taxes / amount
 		const salary_per_hour_after_tax =
-			result.after_tax / (options.workdaysPerYear * options.hoursPerDay);
+			result.after_tax / (options.workdaysPerYear * options.hoursPerDay)
 
 		const base: CalculationResultInCurrency = {
 			salaryGross: amount,
 			salaryNet: result.after_tax,
 			taxes: result.taxes,
 			hourlyRateNet: salary_per_hour_after_tax,
-		};
+		}
 
 		return {
 			country: system.country,
 			taxPercent: tax_percentage,
 			base,
-			local: convertCalculationResultInCurrency(
-				base,
-				defaultCurrency,
-				system.currency,
-				rates,
-			),
-			preferred: convertCalculationResultInCurrency(
-				base,
-				defaultCurrency,
-				displayCurrency,
-				rates,
-			),
-		};
-	};
+			local: convertCalculationResultInCurrency(base, defaultCurrency, system.currency, rates),
+			preferred: convertCalculationResultInCurrency(base, defaultCurrency, displayCurrency, rates),
+		}
+	}
 }
 
 interface CalculationResultInCurrency {
-	salaryGross: number;
-	salaryNet: number;
-	taxes: number;
-	hourlyRateNet: number;
+	salaryGross: number
+	salaryNet: number
+	taxes: number
+	hourlyRateNet: number
 }
 
 function convertCalculationResultInCurrency(
@@ -208,20 +182,20 @@ function convertCalculationResultInCurrency(
 	rates: CurrencyRates,
 ): CalculationResultInCurrency {
 	const converter = (value: number) =>
-		convertToCurrency(value, rates.usd, from_currency, to_currency);
+		convertToCurrency(value, rates.usd, from_currency, to_currency)
 
 	return {
 		salaryGross: converter(result.salaryGross),
 		salaryNet: converter(result.salaryNet),
 		taxes: converter(result.taxes),
 		hourlyRateNet: converter(result.hourlyRateNet),
-	};
+	}
 }
 
 interface CalculationResult {
-	country: string;
-	taxPercent: number;
-	base: CalculationResultInCurrency;
-	local: CalculationResultInCurrency;
-	preferred: CalculationResultInCurrency;
+	country: string
+	taxPercent: number
+	base: CalculationResultInCurrency
+	local: CalculationResultInCurrency
+	preferred: CalculationResultInCurrency
 }

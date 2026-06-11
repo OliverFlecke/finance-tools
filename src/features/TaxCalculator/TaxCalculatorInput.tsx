@@ -1,18 +1,18 @@
-import SelectCurrency from 'components/SelectCurrency';
-import SettingsContext from 'features/Settings/context';
-import React, { useCallback, useContext } from 'react';
-import { NumericFormat } from 'react-number-format';
-import { TaxCalculatorContext } from './state';
-import { convertToCurrency, formatCurrency } from '../../utils/converters';
+import SelectCurrency from 'components/SelectCurrency'
+import SettingsContext from 'features/Settings/context'
+import React, { useCallback, useContext } from 'react'
+import { NumericFormat } from 'react-number-format'
+import { convertToCurrency, formatCurrency } from '../../utils/converters'
+import { TaxCalculatorContext } from './state'
 
 export default function TaxCalculatorInput() {
-	const { values } = useContext(SettingsContext);
-	const { state, dispatch } = useContext(TaxCalculatorContext);
+	const { values } = useContext(SettingsContext)
+	const { state, dispatch } = useContext(TaxCalculatorContext)
 
 	const onCurrencyChanged = useCallback(
 		(currency: string) => dispatch({ type: 'SET CURRENCY', currency }),
 		[dispatch],
-	);
+	)
 
 	return (
 		<div className="flex space-x-4 p-4">
@@ -24,9 +24,7 @@ export default function TaxCalculatorInput() {
 					className="rounded-md bg-white py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100"
 					defaultValue={state.salary}
 					thousandSeparator={true}
-					onValueChange={e =>
-						dispatch({ type: 'SET SALARY', salary: e.floatValue ?? 0 })
-					}
+					onValueChange={e => dispatch({ type: 'SET SALARY', salary: e.floatValue ?? 0 })}
 				/>
 			</label>
 			<SelectCurrency
@@ -34,33 +32,22 @@ export default function TaxCalculatorInput() {
 				onChange={onCurrencyChanged}
 				defaultCurrency={values.preferredDisplayCurrency}
 			/>
-			<SalaryInPreferredCurrency
-				salary={state.salary}
-				currency={state.currency}
-			/>
+			<SalaryInPreferredCurrency salary={state.salary} currency={state.currency} />
 		</div>
-	);
+	)
 }
 interface SalaryInPreferredCurrencyProps {
-	salary?: number;
-	currency: string;
+	salary?: number
+	currency: string
 }
 
-function SalaryInPreferredCurrency({
-	salary,
-	currency,
-}: SalaryInPreferredCurrencyProps) {
+function SalaryInPreferredCurrency({ salary, currency }: SalaryInPreferredCurrencyProps) {
 	const {
 		values: { preferredDisplayCurrency, currencyRates },
-	} = useContext(SettingsContext);
-	if (!salary) return null;
+	} = useContext(SettingsContext)
+	if (!salary) return null
 
-	const value = convertToCurrency(
-		salary,
-		currencyRates.usd,
-		currency,
-		preferredDisplayCurrency,
-	);
+	const value = convertToCurrency(salary, currencyRates.usd, currency, preferredDisplayCurrency)
 
 	return (
 		<div className="flex h-full flex-col space-y-2">
@@ -71,5 +58,5 @@ function SalaryInPreferredCurrency({
 				})}
 			</span>
 		</div>
-	);
+	)
 }

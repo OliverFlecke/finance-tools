@@ -1,4 +1,4 @@
-import { StockList } from '../../models';
+import { StockList } from '../../models'
 
 const stocks: StockList = [
 	{
@@ -377,6 +377,6 @@ const stocks: StockList = [
 		tradeable: false,
 		displayName: '',
 	},
-];
+]
 
-export default stocks;
+export default stocks

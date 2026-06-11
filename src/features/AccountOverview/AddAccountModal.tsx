@@ -1,48 +1,40 @@
-import {
-	Button,
-	ButtonContainer,
-	Input,
-	Modal,
-} from '@oliverflecke/components-react';
-import SettingsContext from 'features/Settings/context';
-import React, { FC, useCallback, useContext, useId, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { IoAddCircleOutline } from 'react-icons/io5';
-import { Account } from './models/Account';
+import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react'
+import SettingsContext from 'features/Settings/context'
+import React, { FC, useCallback, useContext, useId, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { IoAddCircleOutline } from 'react-icons/io5'
+import { Account } from './models/Account'
 
 interface AddAccountProps {
-	addAccount: (account: Account) => void;
+	addAccount: (account: Account) => void
 }
 
 const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
-	const [showPrompt, setShowPrompt] = useState(false);
+	const [showPrompt, setShowPrompt] = useState(false)
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<Account>();
-	const close = useCallback(() => setShowPrompt(false), [setShowPrompt]);
+	} = useForm<Account>()
+	const close = useCallback(() => setShowPrompt(false), [])
 	const onSubmit = useCallback(
 		(account: Account) => {
-			addAccount(account);
-			reset();
-			close();
+			addAccount(account)
+			reset()
+			close()
 		},
 		[addAccount, close, reset],
-	);
+	)
 
-	const currencyId = useId();
+	const currencyId = useId()
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
-	} = useContext(SettingsContext);
+	} = useContext(SettingsContext)
 
 	return (
 		<>
-			<button
-				onClick={() => setShowPrompt(x => !x)}
-				className="btn btn-primary space-x-2"
-			>
+			<button onClick={() => setShowPrompt(x => !x)} className="btn btn-primary space-x-2">
 				<IoAddCircleOutline className="inline" />
 				<span className="align-middle">Add account</span>
 			</button>
@@ -52,25 +44,18 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 					className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
 				>
 					<div className="pb-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-200">
-							Add new account
-						</h2>
+						<h2 className="text-lg text-gray-700 dark:text-gray-200">Add new account</h2>
 
 						<fieldset className="space-y-2">
 							<Input
 								placeholder="Savings, Investments..."
 								label="Name"
 								{...register('name', { required: true })}
-								errorMessage={
-									errors.name && 'Please provide a name for your account'
-								}
+								errorMessage={errors.name && 'Please provide a name for your account'}
 							/>
 							<label className="flex flex-col space-y-2">
 								<span className="modal-form-label">Account type</span>
-								<select
-									className="modal-select"
-									{...register('type', { required: true })}
-								>
+								<select className="modal-select" {...register('type', { required: true })}>
 									<option value={'Cash'}>Cash</option>
 									<option value={'Investment'}>Investment</option>
 								</select>
@@ -104,7 +89,7 @@ const AddAccount: FC<AddAccountProps> = ({ addAccount }: AddAccountProps) => {
 				</form>
 			</Modal>
 		</>
-	);
-};
+	)
+}
 
-export default AddAccount;
+export default AddAccount

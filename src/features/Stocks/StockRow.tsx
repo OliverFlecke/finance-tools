@@ -1,48 +1,43 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { IoEllipsisHorizontalCircleOutline } from 'react-icons/io5';
-import { getValueColorIndicator } from 'utils/colors';
-import { formatCurrency, useConverter } from 'utils/converters';
-import SettingsContext from 'features/Settings/context';
-import { Stock, stockAvgPrice, stockGain, stockTotalShares } from './models';
-import { StockContext } from './state';
-import StockLotsTable from './StockLotsTable';
-import DeleteButton from '../../components/DeleteButton';
+import SettingsContext from 'features/Settings/context'
+import React, { useCallback, useContext, useState } from 'react'
+import { IoEllipsisHorizontalCircleOutline } from 'react-icons/io5'
+import { getValueColorIndicator } from 'utils/colors'
+import { formatCurrency, useConverter } from 'utils/converters'
+import DeleteButton from '../../components/DeleteButton'
+import { Stock, stockAvgPrice, stockGain, stockTotalShares } from './models'
+import StockLotsTable from './StockLotsTable'
+import { StockContext } from './state'
 
 interface StockRowProps {
-	stock: Stock;
+	stock: Stock
 }
 
 const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 	const {
 		values: { preferredDisplayCurrency, currencyRates },
-	} = useContext(SettingsContext);
+	} = useContext(SettingsContext)
 	const currencyConverter = useConverter(
 		stock.currency,
 		preferredDisplayCurrency,
 		currencyRates.usd,
-	);
+	)
 
-	const totalShares = stockTotalShares(stock);
-	const avgPrice = stockAvgPrice(stock);
-	const buyMarketPrice = avgPrice * totalShares;
-	const marketValue = stock.regularMarketPrice * totalShares;
-	const gain = stockGain(stock, currencyRates, preferredDisplayCurrency);
-	const gainPercentage = (marketValue / buyMarketPrice - 1) * 100;
+	const totalShares = stockTotalShares(stock)
+	const avgPrice = stockAvgPrice(stock)
+	const buyMarketPrice = avgPrice * totalShares
+	const marketValue = stock.regularMarketPrice * totalShares
+	const gain = stockGain(stock, currencyRates, preferredDisplayCurrency)
+	const gainPercentage = (marketValue / buyMarketPrice - 1) * 100
 
-	const [showLots, setShowLots] = useState(false);
+	const [showLots, setShowLots] = useState(false)
 
 	return (
 		<>
 			<tr className="relative w-full bg-gray-200 text-right dark:bg-gray-800">
 				<td className="px-2 text-left">{stock.symbol}</td>
-				<td className="px-2">
-					{formatCurrency(stock.regularMarketPrice, stock.currency)}
-				</td>
+				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
 				<td className="px-0">
-					{formatCurrency(
-						currencyConverter(marketValue),
-						preferredDisplayCurrency,
-					)}
+					{formatCurrency(currencyConverter(marketValue), preferredDisplayCurrency)}
 				</td>
 				<td>{totalShares}</td>
 				<td className={`px-2 ${getValueColorIndicator(avgPrice)}`}>
@@ -65,32 +60,29 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				</td>
 			</tr>
 		</>
-	);
-};
+	)
+}
 
-export default StockRow;
+export default StockRow
 
 interface StockRowActionProps {
-	stock: Stock;
-	setShowLots: React.Dispatch<React.SetStateAction<boolean>>;
+	stock: Stock
+	setShowLots: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
-	const { dispatch } = useContext(StockContext);
+	const { dispatch } = useContext(StockContext)
 
 	const deleteStock = useCallback(() => {
-		dispatch({ type: 'DELETE STOCK', symbol: stock.symbol });
-	}, [dispatch, stock.symbol]);
+		dispatch({ type: 'DELETE STOCK', symbol: stock.symbol })
+	}, [dispatch, stock.symbol])
 
 	return (
 		<td className="flex h-full flex-row justify-end space-x-2 px-4">
-			<button
-				onClick={() => setShowLots(x => !x)}
-				className="hover:cursor-pointer"
-			>
+			<button onClick={() => setShowLots(x => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
 			<DeleteButton onClick={deleteStock} />
 		</td>
-	);
-};
+	)
+}

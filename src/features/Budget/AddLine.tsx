@@ -1,11 +1,11 @@
-import React from 'react';
-import { IoAddCircleOutline } from 'react-icons/io5';
-import { useForm } from 'react-hook-form';
-import { AddItemToBudgetRequest } from './api';
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { IoAddCircleOutline } from 'react-icons/io5'
+import { AddItemToBudgetRequest } from './api'
 
 interface Props {
-	add: (item: AddItemToBudgetRequest) => void;
-	category?: string;
+	add: (item: AddItemToBudgetRequest) => void
+	category?: string
 }
 
 const AddLine: React.FC<Props> = ({ add, category }) => {
@@ -13,7 +13,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 		defaultValues: {
 			category,
 		},
-	});
+	})
 
 	return (
 		<tbody>
@@ -39,12 +39,8 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							placeholder="Amount"
 							className="budget add-item"
 							onKeyDown={event => {
-								if (
-									!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(
-										event.key,
-									)
-								) {
-									event.preventDefault();
+								if (!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
+									event.preventDefault()
 								}
 							}}
 							{...register('amount', { required: true, valueAsNumber: true })}
@@ -55,16 +51,13 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							className="btn btn-primary flex items-center space-x-2 align-middle"
 						>
 							<span>Add</span>
-							<IoAddCircleOutline
-								size={24}
-								className="text-green-400 dark:text-green-500"
-							/>
+							<IoAddCircleOutline size={24} className="text-green-400 dark:text-green-500" />
 						</button>
 					</form>
 				</td>
 			</tr>
 		</tbody>
-	);
-};
+	)
+}
 
-export default AddLine;
+export default AddLine

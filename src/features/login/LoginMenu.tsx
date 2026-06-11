@@ -1,9 +1,9 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
-import { IoLogOutOutline } from 'react-icons/io5';
+import { useAuth0 } from '@auth0/auth0-react'
+import React from 'react'
+import { IoLogOutOutline } from 'react-icons/io5'
 
 interface LoginMenuProps {
-	isOpen: boolean;
+	isOpen: boolean
 }
 
 const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen }) => (
@@ -14,12 +14,12 @@ const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen }) => (
 	>
 		<LogoutButton />
 	</div>
-);
+)
 
-export default LoginMenu;
+export default LoginMenu
 
 const LogoutButton = () => {
-	const { logout } = useAuth0();
+	const { logout } = useAuth0()
 
 	return (
 		<button
@@ -29,11 +29,11 @@ const LogoutButton = () => {
 					logoutParams: {
 						returnTo: window.location.origin,
 					},
-				});
+				})
 			}}
 		>
 			<IoLogOutOutline className="inline" />
 			<span className="align-middle">Logout</span>
 		</button>
-	);
-};
+	)
+}

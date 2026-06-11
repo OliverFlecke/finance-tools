@@ -1,41 +1,41 @@
-import React, { FC, useCallback, useContext, useState } from 'react';
-import DeleteButton from '../../components/DeleteButton';
+import { Modal } from '@oliverflecke/components-react'
+import React, { FC, useCallback, useContext, useState } from 'react'
+import AddButton from '../../components/button/AddButton'
+import DeleteButton from '../../components/DeleteButton'
 import {
 	Budget,
 	useDeleteBudgetCallback,
 	useFetchAllBudgets,
 	useFetchBudgetWithItemsCallback,
-} from './api';
-import BudgetCreate from './BudgetCreate';
-import { BudgetContext } from './state';
-import { Modal } from '@oliverflecke/components-react';
-import AddButton from '../../components/button/AddButton';
+} from './api'
+import BudgetCreate from './BudgetCreate'
+import { BudgetContext } from './state'
 
 const BudgetList: React.FC = () => {
-	const { dispatch } = useContext(BudgetContext);
+	const { dispatch } = useContext(BudgetContext)
 
-	const budgets = useFetchAllBudgets();
-	const deleteCallback = useDeleteBudgetCallback();
-	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback();
+	const budgets = useFetchAllBudgets()
+	const deleteCallback = useDeleteBudgetCallback()
+	const fetchBudgetWithItems = useFetchBudgetWithItemsCallback()
 
 	const onSelectBudget = useCallback(
 		async (budget: Budget) => {
-			const b = await fetchBudgetWithItems(budget.id);
+			const b = await fetchBudgetWithItems(budget.id)
 			if (b) {
-				dispatch({ type: 'SET BUDGET', budget: b });
+				dispatch({ type: 'SET BUDGET', budget: b })
 			}
 		},
 		[dispatch, fetchBudgetWithItems],
-	);
+	)
 	const onDelete = useCallback(
 		async (id: string) => {
-			await deleteCallback(id);
-			budgets.refresh();
+			await deleteCallback(id)
+			budgets.refresh()
 		},
 		[budgets, deleteCallback],
-	);
+	)
 
-	const [isCreateOpen, setIsCreateOpen] = useState(false);
+	const [isCreateOpen, setIsCreateOpen] = useState(false)
 
 	return (
 		<>
@@ -65,15 +65,15 @@ const BudgetList: React.FC = () => {
 				</Modal>
 			</div>
 		</>
-	);
-};
+	)
+}
 
-export default BudgetList;
+export default BudgetList
 
 const BudgetListItem: FC<{
-	budget: Budget;
-	onSelect: (budget: Budget) => void;
-	deleteCallback: (id: string) => void;
+	budget: Budget
+	onSelect: (budget: Budget) => void
+	deleteCallback: (id: string) => void
 }> = ({ budget, deleteCallback, onSelect }) => (
 	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
 		<span onClick={() => onSelect(budget)} className="hover:cursor-pointer">
@@ -84,4 +84,4 @@ const BudgetListItem: FC<{
 			<DeleteButton onClick={() => deleteCallback(budget.id)} />
 		</span>
 	</li>
-);
+)

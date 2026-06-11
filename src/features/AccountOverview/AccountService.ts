@@ -1,38 +1,35 @@
-import { createContext } from 'react';
-import { sortObject } from 'utils/converters';
-import { getDataFromStorage, storedReducer } from 'utils/storage';
-import { Account, AccountEntries } from './models/Account';
+import { createContext } from 'react'
+import { sortObject } from 'utils/converters'
+import { getDataFromStorage, storedReducer } from 'utils/storage'
+import { Account, AccountEntries } from './models/Account'
 
 export const AccountContext = createContext({
 	state: {
 		accounts: [] as Account[],
 		entries: {} as AccountEntries,
 	},
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: AccountAction) => {},
-});
+})
 
 export interface AccountState {
-	accounts: Account[];
-	entries: AccountEntries;
+	accounts: Account[]
+	entries: AccountEntries
 }
 
 function getDefaultAccountState(): AccountState {
 	return {
 		accounts: [],
 		entries: {},
-	};
+	}
 }
 
-export function accountReducer(
-	state: AccountState,
-	action: AccountAction,
-): AccountState {
-	return storedReducer('account_state', reducer)(state, action);
+export function accountReducer(state: AccountState, action: AccountAction): AccountState {
+	return storedReducer('account_state', reducer)(state, action)
 }
 
 export function initAccountState(): AccountState {
-	return getDataFromStorage('account_state', getDefaultAccountState());
+	return getDataFromStorage('account_state', getDefaultAccountState())
 }
 
 export type AccountAction =
@@ -43,43 +40,43 @@ export type AccountAction =
 	| { type: 'RESET' }
 	| { type: 'LOAD STATE'; state: AccountState }
 	| {
-			type: 'EDIT ENTRY FOR ACCOUNT';
-			name: string;
-			value: number;
-			key: string;
-	  };
+			type: 'EDIT ENTRY FOR ACCOUNT'
+			name: string
+			value: number
+			key: string
+	  }
 
 function reducer(state: AccountState, action: AccountAction): AccountState {
 	switch (action.type) {
 		case 'RESET':
-			return getDefaultAccountState();
+			return getDefaultAccountState()
 		case 'LOAD STATE':
 			return {
 				...action.state,
 				accounts: action.state.accounts.sort((a, z) => a.sortKey - z.sortKey),
-			};
+			}
 		case 'ADD ACCOUNT':
 			return {
 				...state,
 				accounts: state.accounts.concat(action.account),
-			};
+			}
 		case 'ADD ENTRY':
-			state.entries[action.date] = {};
+			state.entries[action.date] = {}
 			return {
 				...state,
-			};
+			}
 		case 'EDIT ENTRY FOR ACCOUNT':
-			state.entries[action.key][action.name] = action.value;
-			state.entries = sortObject(state.entries);
+			state.entries[action.key][action.name] = action.value
+			state.entries = sortObject(state.entries)
 			return {
 				...state,
-			};
+			}
 		case 'DELETE ENTRY':
-			delete state.entries[action.date];
+			delete state.entries[action.date]
 			return {
 				...state,
 				entries: state.entries,
-			};
+			}
 		case 'SORT ACCOUNTS':
 			return {
 				...state,
@@ -89,10 +86,10 @@ function reducer(state: AccountState, action: AccountAction): AccountState {
 						sortKey: action.order.find(x => x.id === a.id)?.sortKey ?? 0,
 					}))
 					.sort((a, z) => a.sortKey - z.sortKey),
-			};
+			}
 
 		default:
-			console.warn(`action type not handled: ${JSON.stringify(action)}`);
-			return state;
+			console.warn(`action type not handled: ${JSON.stringify(action)}`)
+			return state
 	}
 }

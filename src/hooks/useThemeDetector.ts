@@ -1,25 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react'
 
-const useThemeDetector = () => {
-	const [isDarkTheme, setIsDarkTheme] = useState(
-		getCurrentThemeQuery()?.matches ?? false,
-	);
-	const listener = (e: MediaQueryListEvent) => setIsDarkTheme(e.matches);
+export default function useThemeDetector() {
+	const [isDarkTheme, setIsDarkTheme] = useState(getCurrentThemeQuery()?.matches ?? false)
 
 	useEffect(() => {
-		const darkThemeMediaQuery = getCurrentThemeQuery();
-		darkThemeMediaQuery?.addEventListener('change', listener);
+		const listener = (e: MediaQueryListEvent) => setIsDarkTheme(e.matches)
+		const darkThemeMediaQuery = getCurrentThemeQuery()
+		darkThemeMediaQuery?.addEventListener('change', listener)
 
-		return () => darkThemeMediaQuery?.removeEventListener('change', listener);
-	}, []);
+		return () => darkThemeMediaQuery?.removeEventListener('change', listener)
+	}, [])
 
-	return isDarkTheme;
-};
-
-export default useThemeDetector;
+	return isDarkTheme
+}
 
 function getCurrentThemeQuery(): MediaQueryList | null {
-	if (typeof window === 'undefined') return null;
+	if (typeof window === 'undefined') return null
 
-	return window.matchMedia('(prefers-color-scheme: dark)');
+	return window.matchMedia('(prefers-color-scheme: dark)')
 }

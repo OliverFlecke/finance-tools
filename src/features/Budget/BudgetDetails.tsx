@@ -1,28 +1,19 @@
-import React, { FC, useCallback, useContext, useMemo } from 'react';
-import { getBackgroundColorValueIndicator } from 'utils/colors';
-import ItemList from './ItemList';
-import MonthAndYearCells from './MonthAndYearCells';
-import SavingsList from './SavingsList';
-import { AddItemToBudgetRequest, BudgetWithItems } from './api';
-import { BudgetContext } from './state';
-import { sum } from '../../utils/math';
+import React, { FC, useCallback, useContext, useMemo } from 'react'
+import { getBackgroundColorValueIndicator } from 'utils/colors'
+import { sum } from '../../utils/math'
+import { AddItemToBudgetRequest, BudgetWithItems } from './api'
+import ItemList from './ItemList'
+import MonthAndYearCells from './MonthAndYearCells'
+import SavingsList from './SavingsList'
+import { BudgetContext } from './state'
 
 const BudgetDetails: FC<{
-	budget: BudgetWithItems;
+	budget: BudgetWithItems
 }> = ({ budget }) => {
-	const {
-		income,
-		expenses,
-		total,
-		totalIncome,
-		totalExpenses,
-		savings,
-		totalSavings,
-		remaining,
-	} = useComputation(budget);
+	const { income, expenses, total, totalIncome, totalExpenses, savings, totalSavings, remaining } =
+		useComputation(budget)
 
-	const { deleteItem, updateItem, addItem, addExpense, addSavings } =
-		useHandlers(budget.id);
+	const { deleteItem, updateItem, addItem, addExpense, addSavings } = useHandlers(budget.id)
 
 	return (
 		<div className="mx-4 pt-4 pb-8">
@@ -66,16 +57,16 @@ const BudgetDetails: FC<{
 				/>
 			</table>
 		</div>
-	);
-};
+	)
+}
 
-export default BudgetDetails;
+export default BudgetDetails
 
 const Footer: React.FC<{
-	totalIncome: number;
-	total: number;
-	savings: number;
-	remaining: number;
+	totalIncome: number
+	total: number
+	savings: number
+	remaining: number
 }> = ({ totalIncome, total, savings, remaining }) => (
 	<tfoot className="bg-sky-300 dark:bg-sky-900">
 		<tr className={getBackgroundColorValueIndicator(total)}>
@@ -86,9 +77,7 @@ const Footer: React.FC<{
 		<tr>
 			<td className="px-4 py-2 text-left">Savings</td>
 			<MonthAndYearCells value={savings} />
-			<td className="pr-4 text-right">
-				{(100 * (savings / totalIncome)).toFixed(2)} %
-			</td>
+			<td className="pr-4 text-right">{(100 * (savings / totalIncome)).toFixed(2)} %</td>
 		</tr>
 		<tr
 			className={`text-fuchsia-700 underline dark:text-fuchsia-500 ${getBackgroundColorValueIndicator(
@@ -100,7 +89,7 @@ const Footer: React.FC<{
 			<td></td>
 		</tr>
 	</tfoot>
-);
+)
 
 const Header = () => (
 	<thead className="bg-sky-300 dark:bg-sky-900">
@@ -111,23 +100,23 @@ const Header = () => (
 			<th></th>
 		</tr>
 	</thead>
-);
+)
 
 function useHandlers(budgetId: string) {
-	const { dispatch } = useContext(BudgetContext);
+	const { dispatch } = useContext(BudgetContext)
 
 	const deleteItem = useCallback(
 		(item_id: string) => {
-			dispatch({ type: 'REMOVE ITEM', budget_id: budgetId, item_id });
+			dispatch({ type: 'REMOVE ITEM', budget_id: budgetId, item_id })
 		},
 		[budgetId, dispatch],
-	);
+	)
 	const updateItem = useCallback(
 		(item_id: string, item: AddItemToBudgetRequest) => {
-			dispatch({ type: 'EDIT ITEM', item_id, item });
+			dispatch({ type: 'EDIT ITEM', item_id, item })
 		},
 		[dispatch],
-	);
+	)
 	const addItem = useCallback(
 		(item: AddItemToBudgetRequest) =>
 			dispatch({
@@ -136,18 +125,18 @@ function useHandlers(budgetId: string) {
 				item,
 			}),
 		[budgetId, dispatch],
-	);
+	)
 	const addExpense = useCallback(
 		(item: AddItemToBudgetRequest) => {
-			item.amount = -item.amount;
+			item.amount = -item.amount
 			dispatch({
 				type: 'ADD EXPENSE',
 				budget_id: budgetId,
 				item,
-			});
+			})
 		},
 		[budgetId, dispatch],
-	);
+	)
 
 	const addSavings = useCallback(
 		(item: AddItemToBudgetRequest) => {
@@ -155,10 +144,10 @@ function useHandlers(budgetId: string) {
 				type: 'ADD SAVINGS',
 				budget_id: budgetId,
 				item,
-			});
+			})
 		},
 		[budgetId, dispatch],
-	);
+	)
 
 	return {
 		deleteItem,
@@ -166,44 +155,23 @@ function useHandlers(budgetId: string) {
 		addItem,
 		addExpense,
 		addSavings,
-	};
+	}
 }
 
 function useComputation(budget: BudgetWithItems) {
 	const income = useMemo(
-		() =>
-			budget.items
-				.filter(x => x.amount >= 0)
-				.filter(x => x.category !== 'Savings'),
+		() => budget.items.filter(x => x.amount >= 0).filter(x => x.category !== 'Savings'),
 		[budget.items],
-	);
-	const expenses = useMemo(
-		() => budget.items.filter(x => x.amount < 0),
-		[budget.items],
-	);
-	const savings = useMemo(
-		() => budget.items.filter(x => x.category === 'Savings'),
-		[budget.items],
-	);
+	)
+	const expenses = useMemo(() => budget.items.filter(x => x.amount < 0), [budget.items])
+	const savings = useMemo(() => budget.items.filter(x => x.category === 'Savings'), [budget.items])
 
-	const totalIncome = useMemo(
-		() => sum(...income.map(x => x.amount)),
-		[income],
-	);
-	const totalExpenses = useMemo(
-		() => -sum(...expenses.map(x => x.amount)),
-		[expenses],
-	);
-	const total = useMemo(
-		() => totalIncome - totalExpenses,
-		[totalIncome, totalExpenses],
-	);
+	const totalIncome = useMemo(() => sum(...income.map(x => x.amount)), [income])
+	const totalExpenses = useMemo(() => -sum(...expenses.map(x => x.amount)), [expenses])
+	const total = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses])
 
-	const totalSavings = useMemo(
-		() => savings.reduce((acc, item) => acc + item.amount, 0),
-		[savings],
-	);
-	const remaining = total - totalSavings;
+	const totalSavings = useMemo(() => savings.reduce((acc, item) => acc + item.amount, 0), [savings])
+	const remaining = total - totalSavings
 
 	return {
 		income,
@@ -214,5 +182,5 @@ function useComputation(budget: BudgetWithItems) {
 		totalExpenses,
 		totalSavings,
 		remaining,
-	};
+	}
 }

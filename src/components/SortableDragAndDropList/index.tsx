@@ -1,15 +1,15 @@
-import update from 'immutability-helper';
-import React, { useCallback } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import SortableDragAndDropItem from './SortableDragAndDropItem';
+import update from 'immutability-helper'
+import React, { useCallback } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import SortableDragAndDropItem from './SortableDragAndDropItem'
 
 interface SortableDragAndDropListProps<T> {
-	items: T[];
-	setItems: React.Dispatch<React.SetStateAction<T[]>>;
-	children: (item: T) => React.ReactNode;
-	typeIdentifier: string;
-	className?: string;
+	items: T[]
+	setItems: React.Dispatch<React.SetStateAction<T[]>>
+	children: (item: T) => React.ReactNode
+	typeIdentifier: string
+	className?: string
 }
 
 function SortableDragAndDropList<T extends { id: string }>({
@@ -28,10 +28,10 @@ function SortableDragAndDropList<T extends { id: string }>({
 						[hoverIndex, 0, prevItems[dragIndex]],
 					],
 				}),
-			);
+			)
 		},
 		[setItems],
-	);
+	)
 
 	return (
 		<DndProvider backend={HTML5Backend}>
@@ -50,7 +50,7 @@ function SortableDragAndDropList<T extends { id: string }>({
 				))}
 			</ol>
 		</DndProvider>
-	);
+	)
 }
 
-export default SortableDragAndDropList;
+export default SortableDragAndDropList

@@ -1,15 +1,15 @@
-import React, { useCallback, useContext, useState } from 'react';
-import SelectCurrency from '../../../components/SelectCurrency';
-import SettingsContext from '../context';
+import React, { useCallback, useContext, useState } from 'react'
+import SelectCurrency from '../../../components/SelectCurrency'
+import SettingsContext from '../context'
 
 export default function PreferredCurrenciesSetting() {
-	const { values, dispatch } = useContext(SettingsContext);
+	const { values, dispatch } = useContext(SettingsContext)
 
-	const [code, setCode] = useState<string>(values.preferredDisplayCurrency);
+	const [code, setCode] = useState<string>(values.preferredDisplayCurrency)
 	const addCode = useCallback(
 		() => dispatch({ type: 'ADD PREFERRED CURRENCY', code }),
 		[code, dispatch],
-	);
+	)
 
 	return (
 		<div>
@@ -29,5 +29,5 @@ export default function PreferredCurrenciesSetting() {
 				))}
 			</span>
 		</div>
-	);
+	)
 }

@@ -1,21 +1,21 @@
-import { Button, Modal } from '@oliverflecke/components-react';
-import { getCurrencies } from 'features/Currency/api';
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { IoSettingsOutline } from 'react-icons/io5';
-import DisplayCurrencySetting from './Components/DisplayCurrencySetting';
-import ThemeSetting from './Components/ThemeSetting';
-import SettingsContext from './context';
-import PreferredCurrenciesSetting from './Components/PreferredCurrenciesSetting';
+import { Button, Modal } from '@oliverflecke/components-react'
+import { getCurrencies } from 'features/Currency/api'
+import React, { FC, useContext, useEffect, useState } from 'react'
+import { IoSettingsOutline } from 'react-icons/io5'
+import DisplayCurrencySetting from './Components/DisplayCurrencySetting'
+import PreferredCurrenciesSetting from './Components/PreferredCurrenciesSetting'
+import ThemeSetting from './Components/ThemeSetting'
+import SettingsContext from './context'
 
 const SettingsMenu: FC = () => {
-	const { dispatch } = useContext(SettingsContext);
-	const [isOpen, setIsOpen] = useState(false);
+	const { dispatch } = useContext(SettingsContext)
+	const [isOpen, setIsOpen] = useState(false)
 
 	useEffect(() => {
 		getCurrencies()
 			.then(rates => dispatch({ type: 'SET CURRENCY RATES', rates }))
-			.catch(() => console.warn('Unable to load currency rates'));
-	}, [dispatch]);
+			.catch(() => console.warn('Unable to load currency rates'))
+	}, [dispatch])
 
 	return (
 		<div className="z-50">
@@ -37,10 +37,10 @@ const SettingsMenu: FC = () => {
 				</div>
 			</Modal>
 		</div>
-	);
-};
+	)
+}
 
-export default SettingsMenu;
+export default SettingsMenu
 
 const SettingsList: FC = () => (
 	<div className="settings-list">
@@ -52,4 +52,4 @@ const SettingsList: FC = () => (
 		</div>
 		<ThemeSetting />
 	</div>
-);
+)

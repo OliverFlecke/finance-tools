@@ -1,8 +1,8 @@
-import ClientOnly from 'components/ClientOnly';
-import SettingsMenu from 'features/Settings/SettingsMenu';
-import React from 'react';
-import LoginState from './login/LoginState';
-import Navigation from './Navigation';
+import ClientOnly from 'components/ClientOnly'
+import SettingsMenu from 'features/Settings/SettingsMenu'
+import React from 'react'
+import LoginState from './login/LoginState'
+import Navigation from './Navigation'
 
 const Header: React.FC = () => {
 	return (
@@ -17,7 +17,7 @@ const Header: React.FC = () => {
 				</div>
 			</div>
 		</header>
-	);
-};
+	)
+}
 
-export default Header;
+export default Header

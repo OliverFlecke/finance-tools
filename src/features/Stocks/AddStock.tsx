@@ -1,39 +1,34 @@
-import {
-	Button,
-	ButtonContainer,
-	Input,
-	Modal,
-} from '@oliverflecke/components-react';
-import React, { useCallback, useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { IoAddCircleOutline } from 'react-icons/io5';
-import { useTrackStockCallback } from './API/stockApi';
-import { useSharesCallback } from './API/yahoo';
-import { Stock } from './models';
-import { StockContext } from './state';
+import { Button, ButtonContainer, Input, Modal } from '@oliverflecke/components-react'
+import React, { useCallback, useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { IoAddCircleOutline } from 'react-icons/io5'
+import { useTrackStockCallback } from './API/stockApi'
+import { useSharesCallback } from './API/yahoo'
+import { Stock } from './models'
+import { StockContext } from './state'
 
 const AddStock: React.FC = () => {
-	const { dispatch } = useContext(StockContext);
-	const fetchShares = useSharesCallback();
-	const trackStock = useTrackStockCallback();
+	const { dispatch } = useContext(StockContext)
+	const fetchShares = useSharesCallback()
+	const trackStock = useTrackStockCallback()
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false)
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset,
-	} = useForm<Stock>();
+	} = useForm<Stock>()
 
 	const addSymbol = useCallback(
 		async (stock: Stock) => {
-			const quotes = await fetchShares(stock.symbol);
+			const quotes = await fetchShares(stock.symbol)
 
 			if (quotes === null || quotes.length === 0) {
 				// TODO: Better error dialog to inform user that stock quote was not found
-				alert(`Stock with symbol '${stock.symbol}' was not found`);
+				alert(`Stock with symbol '${stock.symbol}' was not found`)
 			} else {
-				await trackStock(stock.symbol);
+				await trackStock(stock.symbol)
 				dispatch({
 					type: 'ADD STOCK',
 					stock: {
@@ -41,19 +36,16 @@ const AddStock: React.FC = () => {
 						symbol: stock.symbol,
 						lots: [],
 					},
-				});
-				reset();
+				})
+				reset()
 			}
 		},
 		[dispatch, fetchShares, reset, trackStock],
-	);
+	)
 
 	return (
 		<>
-			<button
-				className="btn btn-primary space-x-2"
-				onClick={() => setIsOpen(true)}
-			>
+			<button className="btn btn-primary space-x-2" onClick={() => setIsOpen(true)}>
 				<IoAddCircleOutline className="inline" />
 				<span className="align-middle">Add symbol</span>
 			</button>
@@ -84,7 +76,7 @@ const AddStock: React.FC = () => {
 				</div>
 			</Modal>
 		</>
-	);
-};
+	)
+}
 
-export default AddStock;
+export default AddStock

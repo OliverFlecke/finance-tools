@@ -1,7 +1,7 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import '@oliverflecke/components-react/dist/main';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "@oliverflecke/components-react/dist/main";
 
 body {
 	--secondary-color: rgb(156 163 175);
@@ -15,7 +15,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type='number'] {
+input[type="number"] {
 	-moz-appearance: textfield;
 }
 

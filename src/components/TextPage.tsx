@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const TextPage: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 	<div className="flex justify-center">
@@ -6,6 +6,6 @@ const TextPage: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 			{children}
 		</div>
 	</div>
-);
+)
 
-export default TextPage;
+export default TextPage

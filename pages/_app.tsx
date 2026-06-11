@@ -1,19 +1,18 @@
-import { Auth0Provider } from '@auth0/auth0-react';
-import 'compiled.css';
-import Router from 'next/router';
-import Footer from 'features/Footer';
-import Header from 'features/Header';
-import Settings from 'features/Settings';
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import React from 'react';
-import Script from 'next/script';
+import { Auth0Provider } from '@auth0/auth0-react'
+import 'compiled.css'
+import Footer from 'features/Footer'
+import Header from 'features/Header'
+import Settings from 'features/Settings'
+import type { AppProps } from 'next/app'
+import Head from 'next/head'
+import Router from 'next/router'
+import Script from 'next/script'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: unknown type
 const onRedirectCallback = (appState: any) => {
 	// Use Next.js's Router.replace method to replace the url
-	Router.replace(appState?.returnTo || '/');
-};
+	Router.replace(appState?.returnTo || '/')
+}
 
 export default function Layout({ Component, pageProps }: AppProps) {
 	return (
@@ -22,16 +21,8 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				<meta charSet="utf-8" />
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<meta
-					name="theme-color"
-					media="(prefers-color-scheme: light)"
-					content="#064e3b"
-				/>
-				<meta
-					name="theme-color"
-					media="(prefers-color-scheme: dark)"
-					content="#064e3b"
-				/>
+				<meta name="theme-color" media="(prefers-color-scheme: light)" content="#064e3b" />
+				<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#064e3b" />
 				<meta name="description" content="Finance tracker" />
 				<link rel="apple-touch-icon" href="/logo192.png" />
 				<link rel="manifest" href="/manifest.json" />
@@ -53,9 +44,7 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				useRefreshTokensFallback={true}
 				authorizationParams={{
 					redirect_uri:
-						typeof window !== 'undefined'
-							? process.env.NEXT_PUBLIC_REDIRECT_URI
-							: undefined,
+						typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_REDIRECT_URI : undefined,
 					audience: process.env.NEXT_PUBLIC_AUDIENCE,
 					scope: 'account:read profile',
 				}}
@@ -71,5 +60,5 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				</Settings>
 			</Auth0Provider>
 		</>
-	);
+	)
 }

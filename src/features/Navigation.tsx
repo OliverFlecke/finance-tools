@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { IoCloseOutline, IoMenuOutline } from 'react-icons/io5'
 
 const links = [
 	{ path: '/accounts', text: 'Accounts' },
@@ -11,26 +11,22 @@ const links = [
 	{ path: '/interest', text: 'Interest' },
 	{ path: '/tax', text: 'Tax calculator' },
 	{ path: '/budget', text: 'Budget' },
-];
+]
 
 const Navigation: React.FC = () => {
-	const [isOpen, setIsOpen] = useState(false);
-	const [path, setPath] = useState('');
+	const [isOpen, setIsOpen] = useState(false)
+	const [path, setPath] = useState('')
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
-			setPath(window.location.pathname);
+			setPath(window.location.pathname)
 		}
-	}, []);
+	}, [])
 
 	return (
 		<nav className="flex flex-col justify-center md:flex-row">
 			<div className="flex items-center">
-				<button
-					className="md:hidden"
-					title="Menu"
-					onClick={() => setIsOpen(x => !x)}
-				>
+				<button className="md:hidden" title="Menu" onClick={() => setIsOpen(x => !x)}>
 					{isOpen ? <IoCloseOutline size={32} /> : <IoMenuOutline size={32} />}
 				</button>
 				<Link href="/">
@@ -63,7 +59,7 @@ const Navigation: React.FC = () => {
 				))}
 			</ul>
 		</nav>
-	);
-};
+	)
+}
 
-export default Navigation;
+export default Navigation

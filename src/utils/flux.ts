@@ -1,9 +1,9 @@
-import { createContext } from 'react';
+import { createContext } from 'react'
 
 export function makeContext<TState, TAction>(getDefaultState: () => TState) {
 	return createContext({
 		state: getDefaultState(),
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+		// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 		dispatch: (_: TAction) => {},
-	});
+	})
 }

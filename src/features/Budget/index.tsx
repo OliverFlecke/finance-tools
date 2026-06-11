@@ -1,29 +1,19 @@
-import ClientOnly from 'components/ClientOnly';
-import useAsyncReducer from 'hooks/useAsyncReducer';
-import React, { useMemo } from 'react';
-import Configuration from './BudgetConfiguration';
-import BudgetDetails from './BudgetDetails';
-import BudgetList from './BudgetList';
-import {
-	useAddItemToBudgetCallback,
-	useDeleteItemCallback,
-	useUpdateItemCallback,
-} from './api';
-import {
-	Action,
-	BudgetContext,
-	State,
-	createReducer,
-	fetchInitialData,
-} from './state';
+import ClientOnly from 'components/ClientOnly'
+import useAsyncReducer from 'hooks/useAsyncReducer'
+import React, { useMemo } from 'react'
+import { useAddItemToBudgetCallback, useDeleteItemCallback, useUpdateItemCallback } from './api'
+import Configuration from './BudgetConfiguration'
+import BudgetDetails from './BudgetDetails'
+import BudgetList from './BudgetList'
+import { Action, BudgetContext, createReducer, fetchInitialData, State } from './state'
 
 // TODO: This should be part of the settings for a budget
-export const currency = 'GBP';
+export const currency = 'GBP'
 
 const Wrapper: React.FC = () => {
-	const addItemToBudgetCallback = useAddItemToBudgetCallback();
-	const deleteItemFromBudgetCallback = useDeleteItemCallback();
-	const updateItemCallback = useUpdateItemCallback();
+	const addItemToBudgetCallback = useAddItemToBudgetCallback()
+	const deleteItemFromBudgetCallback = useDeleteItemCallback()
+	const updateItemCallback = useUpdateItemCallback()
 
 	const reducer = useMemo(
 		() =>
@@ -33,20 +23,16 @@ const Wrapper: React.FC = () => {
 				updateItemCallback,
 			}),
 		[addItemToBudgetCallback, deleteItemFromBudgetCallback, updateItemCallback],
-	);
+	)
 
-	return <Budget reducer={reducer} />;
-};
+	return <Budget reducer={reducer} />
+}
 
 const Budget: React.FC<{
-	reducer: (state: State, action: Action) => Promise<State>;
+	reducer: (state: State, action: Action) => Promise<State>
 }> = ({ reducer }) => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const [state, dispatch] = useAsyncReducer(
-		reducer,
-		fetchInitialData(),
-		'budget',
-	);
+	const [state, dispatch] = useAsyncReducer(reducer, fetchInitialData(), 'budget')
 
 	return (
 		<>
@@ -66,7 +52,7 @@ const Budget: React.FC<{
 				</ClientOnly>
 			</BudgetContext.Provider>
 		</>
-	);
-};
+	)
+}
 
-export default Wrapper;
+export default Wrapper
