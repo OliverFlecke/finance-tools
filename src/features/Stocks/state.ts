@@ -1,5 +1,4 @@
 import { createContext } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import { getDataFromStorage, storedReducer } from '../../utils/storage'
 import { QuoteResponse } from './API/yahoo'
 import { Stock, StockList, StockLot } from './models'
@@ -112,7 +111,7 @@ function reducer(state: StockState, action: StockAction): StockState {
 
 		case 'ADD LOT': {
 			const lot: StockLot = {
-				id: action.lotId ?? uuidv4(),
+				id: action.lotId ?? crypto.randomUUID(),
 				shares: 0,
 				buyDate: new Date(),
 				buyPrice: state.stocks.find(x => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
