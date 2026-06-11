@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { useAccountContext } from "features/AccountOverview/AccountService";
 import { useSettingsContext } from "features/Settings/context";
-import React from "react";
 import { getValueColorIndicator } from "utils/colors";
 import { convertToCurrency, formatCurrency } from "utils/converters";
 import styles from "./RowSummary.module.css";
