@@ -1,30 +1,25 @@
 import { User, useAuth0 } from "@auth0/auth0-react";
 import { useOnOutsideMouseDown } from "@oliverflecke/components-react";
-import React, { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import LoginButton from "./LoginButton";
 import LoginMenu from "./LoginMenu";
 import UserAvatar from "./UserAvatar";
 
-const LoginState: React.FC = () => {
+export default function LoginState() {
 	const { user } = useAuth0();
 
 	return user ? <LoginDropDownMenu user={user} /> : <LoginButton />;
-};
-
-export default LoginState;
+}
 
 interface LoginDropDownMenuProps {
 	user: User;
 }
 
-const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user }) => {
+function LoginDropDownMenu({ user }: Readonly<LoginDropDownMenuProps>) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const ref = useRef<HTMLDivElement>(null);
-	useOnOutsideMouseDown(
-		ref,
-		useCallback(() => setIsOpen(false), []),
-	);
+	const ref = useRef<HTMLDivElement>(null!);
+	useOnOutsideMouseDown(ref, () => setIsOpen(false));
 
 	return (
 		<div ref={ref} className="relative flex items-center space-x-4">
@@ -36,4 +31,4 @@ const LoginDropDownMenu: React.FC<LoginDropDownMenuProps> = ({ user }) => {
 			<LoginMenu isOpen={isOpen} />
 		</div>
 	);
-};
+}

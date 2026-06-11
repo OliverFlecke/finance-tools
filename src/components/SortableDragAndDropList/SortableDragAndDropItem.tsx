@@ -1,4 +1,3 @@
-import type { Identifier } from "dnd-core";
 import React, { FC, useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 
@@ -18,7 +17,8 @@ const SortableDragAndDropItem: FC<{
 }> = ({ id, type, index, move, children, className }) => {
 	const ref = useRef<HTMLLIElement>(null);
 
-	const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>(
+	// biome-ignore lint/suspicious/noExplicitAny: unknown type
+	const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any | null }>(
 		{
 			accept: type,
 			collect(monitor) {

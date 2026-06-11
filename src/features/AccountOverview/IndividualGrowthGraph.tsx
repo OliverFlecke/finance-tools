@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: we allow it here frorthe graph  */
+/** biome-ignore-all lint/suspicious/noExplicitAny: we allow it here for the graph  */
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveLinear } from "@visx/curve";
 import { Group } from "@visx/group";
@@ -9,7 +9,7 @@ import { LinePath } from "@visx/shape";
 import { extent, max } from "d3-array";
 import { ScaleLinear, ScaleTime, tickFormat } from "d3-scale";
 import { Account, DateEntry } from "features/AccountOverview/models/Account";
-import React, { FC, useContext } from "react";
+import { FC, useContext } from "react";
 import colors from "tailwindcss/colors";
 import { AccountContext } from "./AccountService";
 
