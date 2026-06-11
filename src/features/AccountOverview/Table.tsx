@@ -4,7 +4,7 @@ import SettingsContext from 'features/Settings/context'
 import React, { FC, useContext } from 'react'
 import { getValueColorIndicator } from 'utils/colors'
 import { convertToCurrency, formatCurrency } from 'utils/converters'
-import DeleteButton from '../../components/DeleteButton'
+import DeleteButton from '@/components/DeleteButton'
 import Cell from './Cell'
 
 const Table: FC = () => {
