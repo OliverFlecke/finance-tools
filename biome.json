@@ -4,12 +4,10 @@
 	"files": { "ignoreUnknown": false },
 	"formatter": {
 		"enabled": true,
-		"formatWithErrors": false,
 		"indentStyle": "tab",
 		"indentWidth": 2,
 		"lineEnding": "lf",
 		"lineWidth": 100,
-		"attributePosition": "auto",
 		"bracketSameLine": false,
 		"bracketSpacing": true,
 		"expand": "auto",
@@ -24,51 +22,7 @@
 		]
 	},
 	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": false,
-			"complexity": {
-				"noBannedTypes": "error",
-				"noUselessTypeConstraint": "error"
-			},
-			"correctness": {
-				"noChildrenProp": "error",
-				"noNextAsyncClientComponent": "warn",
-				"noPrecisionLoss": "error",
-				"noUnusedVariables": "error",
-				"useExhaustiveDependencies": "error",
-				"useHookAtTopLevel": "error",
-				"useJsxKeyInIterable": "error"
-			},
-			"performance": {
-				"noImgElement": "warn",
-				"noUnwantedPolyfillio": "warn",
-				"useGoogleFontPreconnect": "warn"
-			},
-			"security": { "noDangerouslySetInnerHtmlWithChildren": "error" },
-			"style": {
-				"noCommonJs": "error",
-				"noHeadElement": "warn",
-				"noNamespace": "error",
-				"useArrayLiterals": "error",
-				"useAsConstAssertion": "error",
-				"useBlockStatements": "off",
-				"useConsistentArrowReturn": "off"
-			},
-			"suspicious": {
-				"noCommentText": "error",
-				"noDocumentImportInPage": "error",
-				"noDuplicateJsxProps": "error",
-				"noEmptyBlockStatements": "warn",
-				"noExplicitAny": "error",
-				"noExtraNonNullAssertion": "error",
-				"noHeadImportInDocument": "error",
-				"noMisleadingInstantiator": "error",
-				"noNonNullAssertedOptionalChain": "error",
-				"noUnsafeDeclarationMerging": "error",
-				"useGoogleFontDisplay": "warn"
-			}
-		}
+		"enabled": true
 	},
 	"javascript": {
 		"formatter": {
@@ -81,37 +35,6 @@
 			"selfCloseVoidElements": "always"
 		}
 	},
-	"overrides": [
-		{
-			"includes": ["*.ts", "*.tsx", "*.mts", "*.cts"],
-			"linter": {
-				"rules": {
-					"complexity": { "noArguments": "error" },
-					"correctness": {
-						"noConstAssign": "off",
-						"noGlobalObjectCalls": "off",
-						"noInvalidConstructorSuper": "off",
-						"noSetterReturn": "off",
-						"noUndeclaredVariables": "off",
-						"noUnreachable": "off",
-						"noUnreachableSuper": "off"
-					},
-					"style": { "useConst": "error" },
-					"suspicious": {
-						"noDuplicateClassMembers": "off",
-						"noDuplicateObjectKeys": "off",
-						"noDuplicateParameters": "off",
-						"noFunctionAssign": "off",
-						"noImportAssign": "off",
-						"noRedeclare": "off",
-						"noUnsafeNegation": "off",
-						"noVar": "error",
-						"useGetterReturn": "off"
-					}
-				}
-			}
-		}
-	],
 	"css": {
 		"parser": {
 			"tailwindDirectives": true
