@@ -6,16 +6,16 @@ Website to help perform different finance calculations.
 
 ## Development
 
-**tl;dr**: `yarn run dev`
+**tl;dr**: `pnpm run dev`
 
 This project is build with ReactJS and is using Tailwindcss for styling.
 
-First install dependencies with `yarn install`.
-The website can then be run locally with `yarn start`.
-To generate the required stylesheets run `yarn run css`.
+First install dependencies with `pnpm install`.
+The website can then be run locally with `pnpm start`.
+To generate the required stylesheets run `pnpm run css`.
 Tailwindcss is running in JIT mode, see [tailwindcss.com](https://tailwindcss.com/) for documentation.
 
-Both the build of JS and CSS along with serving the website can be run concurrently with `yarn run dev`.
+Both the build of JS and CSS along with serving the website can be run concurrently with `pnpm run dev`.
 
 ## Configuration
 
@@ -48,7 +48,7 @@ If using Chrome or any other Chromium based browser, you can turn off the certif
 ## Build and deploy
 
 The build is generating a static site, with statically generated HTML from React using [react-snap](https://www.npmjs.com/package/react-snap).
-The build script can be executed with `yarn build`, which will output everything to the `build` directory.
+The build script can be executed with `pnpm build`, which will output everything to the `build` directory.
 
 ### Deploy
 
@@ -56,7 +56,7 @@ The site can be build to be served as static assets.
 This can be done by using the `deploy` command, which will build the site and push the files to the `gh-page` branch, which can then be cloned and served from anywhere.
 
 ```sh
-yarn run deploy
+pnpm run deploy
 ```
 
 ## Features
