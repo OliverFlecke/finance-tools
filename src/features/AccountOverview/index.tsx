@@ -9,7 +9,7 @@ import { AccountResponse, useAccounts, useAddAccountCallback } from "./api/accou
 import { Account, AccountEntries } from "./models/Account";
 import OrderAccountsModal from "./OrderAccountsModal";
 import OverviewChart from "./OverviewChart";
-import Table from "./Table";
+import Table from "./table";
 
 const AccountOverview = memo(() => {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());

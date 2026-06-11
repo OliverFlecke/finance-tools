@@ -1,0 +1,26 @@
+.cell_summary {
+	position: relative;
+	cursor: context-menu;
+	padding-inline: 1rem;
+
+	anchor-scope: all;
+	anchor-name: --summary;
+
+	& ol {
+		background: var(--bg-primary);
+		box-shadow: 3px 3px 5px var(--shadow-primary);
+		position: fixed;
+		position-anchor: --summary;
+		right: anchor(right);
+		padding: 0.5rem 1rem;
+		border-radius: 0.25rem;
+		z-index: 1;
+		top: anchor(top);
+		left: anchor(right);
+		width: fit-content;
+		visibility: hidden;
+	}
+	&:hover ol {
+		visibility: visible;
+	}
+}

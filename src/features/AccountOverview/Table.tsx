@@ -1,11 +1,13 @@
-import { AccountContext, useAccountContext } from "features/AccountOverview/AccountService";
+import clsx from "clsx";
+import { useAccountContext } from "features/AccountOverview/AccountService";
 import { Account, AccountEntries } from "features/AccountOverview/models/Account";
-import SettingsContext, { useSettingsContext } from "features/Settings/context";
+import { useSettingsContext } from "features/Settings/context";
 import React, { FC } from "react";
 import { getValueColorIndicator } from "utils/colors";
 import { convertToCurrency, formatCurrency } from "utils/converters";
 import DeleteButton from "@/components/DeleteButton";
-import Cell from "./Cell";
+import Cell from "../Cell";
+import styles from "./Table.module.css";
 
 export default function Table() {
 	const {
@@ -76,11 +78,13 @@ const TableBody: React.FC = () => {
 	);
 };
 
-const RowSummary: FC<{
+interface RowSummaryProps {
 	index: number;
 	date: string;
 	totals: number[];
-}> = ({ index, date, totals }) => {
+}
+
+function RowSummary({ index, date, totals }: Readonly<RowSummaryProps>) {
 	const {
 		state: { accounts, entries },
 	} = useAccountContext();
@@ -100,36 +104,34 @@ const RowSummary: FC<{
 
 	return (
 		<>
-			<td className={`${getValueColorIndicator(gain)} cell-summary`}>
+			<td className={clsx(getValueColorIndicator(gain), styles.cell_summary)}>
 				{formatCurrency(gain, preferredDisplayCurrency)}
 				<SummaryInOtherCurrencies value={gain} index={index} />
 			</td>
-			<td className="text-blue-700 dark:text-blue-500 cell-summary">
+			<td className={clsx("text-blue-700 dark:text-blue-500", styles.cell_summary)}>
 				{formatCurrency(total, preferredDisplayCurrency)}
 				<SummaryInOtherCurrencies value={total} index={index} />
 			</td>
-			<td className="text-yellow-700 dark:text-yellow-500 cell-summary">
+			<td className={clsx("text-yellow-700 dark:text-yellow-500", styles.cell_summary)}>
 				{formatCurrency(totalCash, preferredDisplayCurrency)}
 				<SummaryInOtherCurrencies value={totalCash} index={index} />
 			</td>
-			<td className="text-purple-700 dark:text-purple-500 cell-summary">
+			<td className={clsx("text-purple-700 dark:text-purple-500", styles.cell_summary)}>
 				{formatCurrency(totalInvested, preferredDisplayCurrency)}
 				<SummaryInOtherCurrencies value={totalInvested} index={index} />
 			</td>
 		</>
 	);
-};
+}
 
-/**
- * Displays the value in a list with the value converted to all preferred currencies.
- */
+/** Displays the value in a list with the value converted to all preferred currencies. */
 const SummaryInOtherCurrencies: FC<{ value: number; index: number }> = ({ value, index }) => {
 	const {
 		values: { preferredDisplayCurrency, preferredCurrencies, currencyRates },
 	} = useSettingsContext();
 
 	return (
-		<ol style={{ top: -index * preferredCurrencies.length }}>
+		<ol>
 			{preferredCurrencies.map((code) => (
 				<li key={code}>
 					{formatCurrency(

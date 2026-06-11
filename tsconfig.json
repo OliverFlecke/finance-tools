@@ -17,6 +17,15 @@
 		"jsx": "react-jsx",
 		"downlevelIteration": true,
 		"baseUrl": "src/",
+		"plugins": [
+			{
+				"name": "next"
+			},
+			{
+				"name": "@css-modules-kit/ts-plugin",
+				"languages": ["css"]
+			}
+		],
 		"paths": {
 			"@/components/*": ["components/*"],
 			"@/features/*": ["features/*"],
@@ -25,6 +34,6 @@
 		},
 		"incremental": true
 	},
-	"include": ["src", "pages"],
+	"include": ["src", "pages", "**/*.module.css"],
 	"exclude": ["node_modules"]
 }
