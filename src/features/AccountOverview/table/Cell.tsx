@@ -1,8 +1,9 @@
-import React, { FC, useCallback, useContext, useRef } from "react";
+import { ChangeEvent, useCallback, useContext, useRef } from "react";
 import { formatCurrency, parseNumber } from "utils/converters";
 import { AccountContext } from "../AccountService";
 import { useUpdateEntryCallback } from "../api/accountApi";
 import { Account, DateEntry } from "../models/Account";
+import styles from "./Cell.module.css";
 
 interface CellProps {
 	account: Account;
@@ -10,13 +11,13 @@ interface CellProps {
 	date: string;
 }
 
-const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
+export default function Cell({ account, entry, date }: Readonly<CellProps>) {
 	const { dispatch } = useContext(AccountContext);
 	const entryRef = useRef<HTMLTableCellElement>(null);
 
 	const updateEntryCallback = useUpdateEntryCallback();
 	const onBlur = useCallback(
-		async (element: React.FormEvent<HTMLTableCellElement>) => {
+		async (element: ChangeEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
 			if (!amount) {
 				return;
@@ -40,19 +41,15 @@ const Cell: FC<CellProps> = ({ account, entry, date }: CellProps) => {
 	const value = formatCurrency(entry[account.name], account.currency);
 
 	return (
-		<>
-			<td
-				key={account.name}
-				contentEditable={true}
-				suppressContentEditableWarning={true}
-				ref={entryRef}
-				onBlur={onBlur}
-				className="table-cell"
-			>
-				{value}
-			</td>
-		</>
+		<td
+			key={account.name}
+			contentEditable={true}
+			suppressContentEditableWarning={true}
+			ref={entryRef}
+			onBlur={onBlur}
+			className={styles.container}
+		>
+			{value}
+		</td>
 	);
-};
-
-export default Cell;
+}

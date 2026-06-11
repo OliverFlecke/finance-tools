@@ -34,10 +34,6 @@ input[type="number"] {
 	@apply flex flex-col items-center justify-center;
 }
 
-tbody {
-	/* display: block; */
-}
-
 @layer components {
 	.page-header {
 		@apply px-4 py-4 text-xl;
@@ -83,32 +79,6 @@ tbody {
 			span {
 				color: var(--secondary-color);
 			}
-		}
-	}
-
-	.account-table {
-		padding-bottom: 1rem;
-		position: relative;
-		overflow-x: scroll;
-		overflow-y: hidden;
-
-		thead,
-		tfoot {
-			position: sticky;
-			top: 0px;
-			background: black;
-			z-index: 1;
-		}
-
-		@media (min-width: 768px) {
-			padding-left: 1rem;
-			padding-right: 1rem;
-		}
-
-		.table-cell {
-			cursor: pointer;
-			padding-right: 1rem;
-			text-align: right;
 		}
 	}
 }

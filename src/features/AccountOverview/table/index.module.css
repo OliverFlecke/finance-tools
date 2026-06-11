@@ -1,0 +1,20 @@
+.container {
+	padding-bottom: 1rem;
+	position: relative;
+	overflow-x: scroll;
+	overflow-y: scroll;
+	max-height: 80vh;
+
+	thead,
+	tfoot {
+		position: sticky;
+		top: 0px;
+		background: black;
+		z-index: 1;
+	}
+
+	@media (min-width: 768px) {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+}

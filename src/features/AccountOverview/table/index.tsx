@@ -1,8 +1,8 @@
 import { useAccountContext } from "features/AccountOverview/AccountService";
 import { Account, AccountEntries } from "features/AccountOverview/models/Account";
-import React, { FC } from "react";
 import DeleteButton from "@/components/DeleteButton";
 import Cell from "./Cell";
+import styles from "./index.module.css";
 import RowSummary from "./RowSummary";
 import { useSummarizedAccounts } from "./useSummarizedAccounts";
 
@@ -12,7 +12,7 @@ export default function Table() {
 	} = useAccountContext();
 
 	return (
-		<div className="account-table">
+		<div className={styles.container}>
 			<table className="w-full">
 				<thead>
 					<TableHeader accounts={accounts} />
@@ -20,16 +20,17 @@ export default function Table() {
 				<tbody>
 					<TableBody />
 				</tbody>
-				<tfoot>
-					<TableHeader accounts={accounts} />
-				</tfoot>
 			</table>
 		</div>
 	);
 }
 
-const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
-	<>
+interface TableHeaderProps {
+	accounts: Account[];
+}
+
+function TableHeader({ accounts }: Readonly<TableHeaderProps>) {
+	return (
 		<tr className="whitespace-nowrap text-right">
 			<th className="pr-6 text-center">Date</th>
 			<th className="px-4 text-green-700 dark:text-green-500">Gain</th>
@@ -43,10 +44,10 @@ const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
 			))}
 			<th></th>
 		</tr>
-	</>
-);
+	);
+}
 
-const TableBody: React.FC = () => {
+function TableBody() {
 	const {
 		state: { accounts, entries },
 	} = useAccountContext();
@@ -73,9 +74,9 @@ const TableBody: React.FC = () => {
 			})}
 		</>
 	);
-};
+}
 
-const RowActions: FC<{ date: string }> = ({ date }) => {
+function RowActions({ date }: { date: string }) {
 	const { dispatch } = useAccountContext();
 
 	return (
@@ -83,7 +84,7 @@ const RowActions: FC<{ date: string }> = ({ date }) => {
 			<DeleteButton onClick={() => dispatch({ type: "DELETE ENTRY", date: date })} />
 		</td>
 	);
-};
+}
 
 function calculateTotals(accounts: Account[], entries: AccountEntries): number[] {
 	return Object.keys(entries).map((date) => useSummarizedAccounts(accounts, entries, date));
