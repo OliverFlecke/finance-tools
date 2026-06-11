@@ -1,7 +1,7 @@
-import SEO from 'components/SEO'
-import TextPage from 'components/TextPage'
-import Link from 'next/link'
-import React from 'react'
+import SEO from "components/SEO";
+import TextPage from "components/TextPage";
+import Link from "next/link";
+import React from "react";
 
 const Index: React.FC = () => {
 	return (
@@ -41,7 +41,7 @@ const Index: React.FC = () => {
 				</ul>
 			</TextPage>
 		</>
-	)
-}
+	);
+};
 
-export default Index
+export default Index;

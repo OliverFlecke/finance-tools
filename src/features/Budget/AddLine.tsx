@@ -1,11 +1,11 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { IoAddCircleOutline } from 'react-icons/io5'
-import { AddItemToBudgetRequest } from './api'
+import React from "react";
+import { useForm } from "react-hook-form";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { AddItemToBudgetRequest } from "./api";
 
 interface Props {
-	add: (item: AddItemToBudgetRequest) => void
-	category?: string
+	add: (item: AddItemToBudgetRequest) => void;
+	category?: string;
 }
 
 const AddLine: React.FC<Props> = ({ add, category }) => {
@@ -13,7 +13,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 		defaultValues: {
 			category,
 		},
-	})
+	});
 
 	return (
 		<tbody>
@@ -27,23 +27,23 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							<input
 								placeholder="Category"
 								className="budget add-item"
-								{...register('category', { required: true })}
+								{...register("category", { required: true })}
 							/>
 						)}
 						<input
 							placeholder="Name"
 							className="budget add-item"
-							{...register('name', { required: true })}
+							{...register("name", { required: true })}
 						/>
 						<input
 							placeholder="Amount"
 							className="budget add-item"
-							onKeyDown={event => {
+							onKeyDown={(event) => {
 								if (!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
-									event.preventDefault()
+									event.preventDefault();
 								}
 							}}
-							{...register('amount', { required: true, valueAsNumber: true })}
+							{...register("amount", { required: true, valueAsNumber: true })}
 						/>
 
 						<button
@@ -57,7 +57,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 				</td>
 			</tr>
 		</tbody>
-	)
-}
+	);
+};
 
-export default AddLine
+export default AddLine;

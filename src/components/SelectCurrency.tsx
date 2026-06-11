@@ -1,33 +1,33 @@
-import { CurrencySymbol } from 'features/Currency/api'
-import SettingsContext from 'features/Settings/context'
-import React, { FC, useCallback, useContext, useId, useState } from 'react'
-import ClientOnly from './ClientOnly'
+import { CurrencySymbol } from "features/Currency/api";
+import SettingsContext from "features/Settings/context";
+import React, { FC, useCallback, useContext, useId, useState } from "react";
+import ClientOnly from "./ClientOnly";
 
 interface Props {
-	label: string
-	defaultCurrency?: string
-	onChange: (currency: CurrencySymbol) => void
+	label: string;
+	defaultCurrency?: string;
+	onChange: (currency: CurrencySymbol) => void;
 }
 
 const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
-	const id = useId()
+	const id = useId();
 	const {
 		values: { currencyRates, preferredDisplayCurrency, preferredCurrencies },
-	} = useContext(SettingsContext)
-	const [currency, setCurrency] = useState(defaultCurrency ?? preferredDisplayCurrency)
+	} = useContext(SettingsContext);
+	const [currency, setCurrency] = useState(defaultCurrency ?? preferredDisplayCurrency);
 
 	const onSelection = useCallback(
 		(x: React.ChangeEvent<HTMLSelectElement>) => {
-			const currency = x.currentTarget.value
-			if (!currency) return
+			const currency = x.currentTarget.value;
+			if (!currency) return;
 
-			setCurrency(currency)
-			onChange(currency)
+			setCurrency(currency);
+			onChange(currency);
 		},
 		[onChange],
-	)
+	);
 
-	if (!currencyRates) return null
+	if (!currencyRates) return null;
 
 	return (
 		<ClientOnly>
@@ -40,7 +40,7 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 					value={currency}
 				>
 					<optgroup label="Preferred currencies">
-						{preferredCurrencies.map(code => (
+						{preferredCurrencies.map((code) => (
 							<option key={code} value={code}>
 								{code}
 							</option>
@@ -48,9 +48,9 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 					</optgroup>
 					<optgroup label="Others">
 						{Object.keys(currencyRates.usd)
-							.map(x => x.toUpperCase())
-							.filter(x => preferredCurrencies.find(code => code === x) === undefined)
-							.map(key => (
+							.map((x) => x.toUpperCase())
+							.filter((x) => preferredCurrencies.find((code) => code === x) === undefined)
+							.map((key) => (
 								<option key={key} value={key}>
 									{key}
 								</option>
@@ -59,7 +59,7 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 				</select>
 			</label>
 		</ClientOnly>
-	)
-}
+	);
+};
 
-export default SelectCurrency
+export default SelectCurrency;

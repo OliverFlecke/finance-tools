@@ -1,19 +1,19 @@
-import { Button } from '@oliverflecke/components-react'
-import React, { useCallback, useContext } from 'react'
-import { IoAddCircleOutline } from 'react-icons/io5'
-import { useAddStockLotCallback } from './API/stockApi'
-import { Stock, StockLot } from './models'
-import StockLotRow from './StockLotRow'
-import { StockContext } from './state'
+import { Button } from "@oliverflecke/components-react";
+import React, { useCallback, useContext } from "react";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { useAddStockLotCallback } from "./API/stockApi";
+import { Stock, StockLot } from "./models";
+import StockLotRow from "./StockLotRow";
+import { StockContext } from "./state";
 
 interface StockLotsTableProps {
-	stock: Stock
-	lots: StockLot[]
+	stock: Stock;
+	lots: StockLot[];
 }
 
 const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
-	const { dispatch } = useContext(StockContext)
-	const addStockLot = useAddStockLotCallback()
+	const { dispatch } = useContext(StockContext);
+	const addStockLot = useAddStockLotCallback();
 
 	const addLot = useCallback(async () => {
 		const lotId = await addStockLot({
@@ -22,9 +22,9 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 			buyDate: new Date(),
 			buyPrice: 0,
 			buyBrokerage: 0,
-		})
-		dispatch({ type: 'ADD LOT', symbol: stock.symbol, lotId: lotId })
-	}, [addStockLot, dispatch, stock.symbol])
+		});
+		dispatch({ type: "ADD LOT", symbol: stock.symbol, lotId: lotId });
+	}, [addStockLot, dispatch, stock.symbol]);
 
 	return (
 		<>
@@ -45,7 +45,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 					<tbody>
 						{lots
 							.sort((a, z) => a.buyDate.getTime() - z.buyDate.getTime())
-							.map(lot => (
+							.map((lot) => (
 								<StockLotRow key={lot.id} lot={lot} stock={stock} />
 							))}
 					</tbody>
@@ -59,7 +59,7 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 				</div>
 			</div>
 		</>
-	)
-}
+	);
+};
 
-export default StockLotsTable
+export default StockLotsTable;

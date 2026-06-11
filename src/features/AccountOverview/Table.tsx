@@ -1,16 +1,16 @@
-import { AccountContext } from 'features/AccountOverview/AccountService'
-import { Account, AccountEntries } from 'features/AccountOverview/models/Account'
-import SettingsContext from 'features/Settings/context'
-import React, { FC, useContext } from 'react'
-import { getValueColorIndicator } from 'utils/colors'
-import { convertToCurrency, formatCurrency } from 'utils/converters'
-import DeleteButton from '@/components/DeleteButton'
-import Cell from './Cell'
+import { AccountContext, useAccountContext } from "features/AccountOverview/AccountService";
+import { Account, AccountEntries } from "features/AccountOverview/models/Account";
+import SettingsContext, { useSettingsContext } from "features/Settings/context";
+import React, { FC } from "react";
+import { getValueColorIndicator } from "utils/colors";
+import { convertToCurrency, formatCurrency } from "utils/converters";
+import DeleteButton from "@/components/DeleteButton";
+import Cell from "./Cell";
 
-const Table: FC = () => {
+export default function Table() {
 	const {
 		state: { accounts },
-	} = useContext(AccountContext)
+	} = useAccountContext();
 
 	return (
 		<div className="account-table">
@@ -26,10 +26,8 @@ const Table: FC = () => {
 				</tfoot>
 			</table>
 		</div>
-	)
+	);
 }
-
-export default Table
 
 const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
 	<>
@@ -39,7 +37,7 @@ const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
 			<th className="px-4 text-blue-700 dark:text-blue-500">Total</th>
 			<th className="px-4 text-yellow-700 dark:text-yellow-500">Total cash</th>
 			<th className="px-4 text-purple-700 dark:text-purple-500">Total investments</th>
-			{accounts.map(account => (
+			{accounts.map((account) => (
 				<th key={account.name} className="px-4">
 					<span>{account.name}</span>
 				</th>
@@ -47,14 +45,14 @@ const TableHeader: React.FC<{ accounts: Account[] }> = ({ accounts }) => (
 			<th></th>
 		</tr>
 	</>
-)
+);
 
 const TableBody: React.FC = () => {
 	const {
 		state: { accounts, entries },
-	} = useContext(AccountContext)
+	} = useAccountContext();
 
-	const totals = calculateTotals(accounts, entries)
+	const totals = calculateTotals(accounts, entries);
 
 	return (
 		<>
@@ -67,33 +65,38 @@ const TableBody: React.FC = () => {
 					>
 						<td className="pr-6 text-center">{date}</td>
 						<RowSummary date={date} index={i} totals={totals} />
-						{accounts.map(account => (
+						{accounts.map((account) => (
 							<Cell key={account.name} account={account} entry={entries[date]} date={date} />
 						))}
 						<RowActions date={date} />
 					</tr>
-				)
+				);
 			})}
 		</>
-	)
-}
+	);
+};
 
 const RowSummary: FC<{
-	index: number
-	date: string
-	totals: number[]
+	index: number;
+	date: string;
+	totals: number[];
 }> = ({ index, date, totals }) => {
 	const {
 		state: { accounts, entries },
-	} = useContext(AccountContext)
+	} = useAccountContext();
 	const {
 		values: { preferredDisplayCurrency },
-	} = useContext(SettingsContext)
+	} = useSettingsContext();
 
-	const gain = index === 0 ? 0 : totals[index] - totals[index - 1]
-	const total = totals[index]
-	const totalCash = useSummarizedAccounts(accounts, entries, date, x => x.type === 'Cash')
-	const totalInvested = useSummarizedAccounts(accounts, entries, date, x => x.type === 'Investment')
+	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
+	const total = totals[index];
+	const totalCash = useSummarizedAccounts(accounts, entries, date, (x) => x.type === "Cash");
+	const totalInvested = useSummarizedAccounts(
+		accounts,
+		entries,
+		date,
+		(x) => x.type === "Investment",
+	);
 
 	return (
 		<>
@@ -114,8 +117,8 @@ const RowSummary: FC<{
 				<SummaryInOtherCurrencies value={totalInvested} index={index} />
 			</td>
 		</>
-	)
-}
+	);
+};
 
 /**
  * Displays the value in a list with the value converted to all preferred currencies.
@@ -123,11 +126,11 @@ const RowSummary: FC<{
 const SummaryInOtherCurrencies: FC<{ value: number; index: number }> = ({ value, index }) => {
 	const {
 		values: { preferredDisplayCurrency, preferredCurrencies, currencyRates },
-	} = useContext(SettingsContext)
+	} = useSettingsContext();
 
 	return (
 		<ol style={{ top: -index * preferredCurrencies.length }}>
-			{preferredCurrencies.map(code => (
+			{preferredCurrencies.map((code) => (
 				<li key={code}>
 					{formatCurrency(
 						convertToCurrency(value, currencyRates.usd, preferredDisplayCurrency, code),
@@ -136,21 +139,21 @@ const SummaryInOtherCurrencies: FC<{ value: number; index: number }> = ({ value,
 				</li>
 			))}
 		</ol>
-	)
-}
+	);
+};
 
 const RowActions: FC<{ date: string }> = ({ date }) => {
-	const { dispatch } = useContext(AccountContext)
+	const { dispatch } = useAccountContext();
 
 	return (
 		<td className="pl-4">
-			<DeleteButton onClick={() => dispatch({ type: 'DELETE ENTRY', date: date })} />
+			<DeleteButton onClick={() => dispatch({ type: "DELETE ENTRY", date: date })} />
 		</td>
-	)
-}
+	);
+};
 
 function calculateTotals(accounts: Account[], entries: AccountEntries): number[] {
-	return Object.keys(entries).map(date => useSummarizedAccounts(accounts, entries, date))
+	return Object.keys(entries).map((date) => useSummarizedAccounts(accounts, entries, date));
 }
 
 function useSummarizedAccounts(
@@ -161,11 +164,11 @@ function useSummarizedAccounts(
 ): number {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
-	} = useContext(SettingsContext)
+	} = useSettingsContext();
 
 	return accounts
 		.filter(filter)
-		.map(account =>
+		.map((account) =>
 			convertToCurrency(
 				entries[date][account.name] ?? 0,
 				currencyRates.usd,
@@ -173,5 +176,5 @@ function useSummarizedAccounts(
 				preferredDisplayCurrency,
 			),
 		)
-		.reduce((sum, value) => sum + value, 0)
+		.reduce((sum, value) => sum + value, 0);
 }

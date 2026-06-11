@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const SaveIcon: React.FC = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -12,6 +12,6 @@ const SaveIcon: React.FC = () => (
 			strokeWidth="32"
 		/>
 	</svg>
-)
+);
 
-export default SaveIcon
+export default SaveIcon;

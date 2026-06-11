@@ -1,6 +1,6 @@
-import SEO from 'components/SEO'
-import TextPage from 'components/TextPage'
-import React from 'react'
+import SEO from "components/SEO";
+import TextPage from "components/TextPage";
+import React from "react";
 
 const Index: React.FC = () => {
 	return (
@@ -23,7 +23,7 @@ const Index: React.FC = () => {
 				</p>
 			</TextPage>
 		</>
-	)
-}
+	);
+};
 
-export default Index
+export default Index;

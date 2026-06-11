@@ -1,24 +1,24 @@
-import { CurrencyRates } from 'features/Currency/api'
-import { getDataFromStorage } from 'utils/storage'
+import { CurrencyRates } from "features/Currency/api";
+import { getDataFromStorage } from "utils/storage";
 
 export default interface SettingsValues {
-	preferredDisplayCurrency: string
-	preferredCurrencies: string[]
-	currencyRates: CurrencyRates
-	themeFollowsOS: boolean
-	preferresDarkMode: boolean
+	preferredDisplayCurrency: string;
+	preferredCurrencies: string[];
+	currencyRates: CurrencyRates;
+	themeFollowsOS: boolean;
+	preferresDarkMode: boolean;
 }
 
 export function initSettings(): SettingsValues {
-	return getDataFromStorage('settings', getDefaultSettings())
+	return getDataFromStorage("settings", getDefaultSettings());
 }
 
 export function getDefaultSettings(): SettingsValues {
 	return {
-		preferredDisplayCurrency: 'DKK',
+		preferredDisplayCurrency: "DKK",
 		preferredCurrencies: [],
 		currencyRates: { usd: {}, date: new Date().toString() },
 		themeFollowsOS: true,
 		preferresDarkMode: false,
-	}
+	};
 }

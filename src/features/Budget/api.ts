@@ -1,31 +1,31 @@
-import { useCallback } from 'react'
-import { isDevelopment } from '../../utils/general'
+import { useCallback } from "react";
+import { isDevelopment } from "../../utils/general";
 import {
 	ApiResponseWithActions,
 	parseJsonWithDate,
 	useApi,
 	useApiCall,
 	useApiWithUrlCall,
-} from '../apiBase'
+} from "../apiBase";
 
 const budgetHost = isDevelopment
-	? 'http://localhost:4000'
-	: 'https://finance.oliverflecke.me/api/v1'
+	? "http://localhost:4000"
+	: "https://finance.oliverflecke.me/api/v1";
 
 export function useFetchAllBudgets(): ApiResponseWithActions<Budget[]> {
-	return useApi<Budget[]>(`${budgetHost}/budget`, { method: 'GET' })
+	return useApi<Budget[]>(`${budgetHost}/budget`, { method: "GET" });
 }
 
 export function useFetchAllBudgetsCallback(): () => Promise<Budget[]> {
 	const handler = useApiCall(`${budgetHost}/budget`, {
-		method: 'GET',
-	})
+		method: "GET",
+	});
 
-	return useCallback(() => handler().then(async res => await res?.json()), [handler])
+	return useCallback(() => handler().then(async (res) => await res?.json()), [handler]);
 }
 
 export interface CreateBudgetDto {
-	title: string
+	title: string;
 }
 
 // TODO: The type should not expose the `Response`
@@ -33,65 +33,65 @@ export function useCreateBudgetCallback(): (
 	request: CreateBudgetDto,
 ) => Promise<Response | undefined> {
 	return useApiCall<CreateBudgetDto>(`${budgetHost}/budget`, {
-		method: 'POST',
-	})
+		method: "POST",
+	});
 }
 
 export function useDeleteBudgetCallback() {
-	const handler = useApiWithUrlCall()
+	const handler = useApiWithUrlCall();
 
 	return useCallback(
-		(id: string) => handler(`${budgetHost}/budget/${id}`, { method: 'DELETE' }),
+		(id: string) => handler(`${budgetHost}/budget/${id}`, { method: "DELETE" }),
 		[handler],
-	)
+	);
 }
 
 export function useFetchBudgetWithItemsCallback(): (id: string) => Promise<BudgetWithItems | null> {
-	const handler = useApiWithUrlCall()
+	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		async (id: string) => {
 			const res = await handler(`${budgetHost}/budget/${id}`, {
-				method: 'GET',
-			})
-			const text = await res?.text()
+				method: "GET",
+			});
+			const text = await res?.text();
 			if (!text) {
-				return null
+				return null;
 			}
 
-			return parseJsonWithDate(text) as BudgetWithItems
+			return parseJsonWithDate(text) as BudgetWithItems;
 		},
 		[handler],
-	)
+	);
 }
 
 export interface Budget {
-	id: string
-	title: string
-	created_at: Date
-	user_id: string
+	id: string;
+	title: string;
+	created_at: Date;
+	user_id: string;
 }
 
 export interface BudgetWithItems extends Budget {
-	items: Item[]
+	items: Item[];
 }
 
 export interface Item {
-	id: string
-	budget_id: string
-	category: string
-	name: string
-	amount: number
-	created_at: Date
-	modified_at: Date
+	id: string;
+	budget_id: string;
+	category: string;
+	name: string;
+	amount: number;
+	created_at: Date;
+	modified_at: Date;
 }
 
 // Item API
 
 export interface AddItemToBudgetRequest {
-	category: string
-	name: string
-	amount: number
+	category: string;
+	name: string;
+	amount: number;
 }
 
 /**
@@ -105,26 +105,26 @@ export function useAddItemToBudgetCallback(): (
 	budget_id: string,
 	request: AddItemToBudgetRequest,
 ) => Promise<string> {
-	const handler = useApiWithUrlCall()
+	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		async (budget_id: string, request: AddItemToBudgetRequest) => {
 			const res = await handler(
 				`${budgetHost}/budget/${budget_id}/item`,
 				{
-					method: 'POST',
+					method: "POST",
 				},
 				request,
-			)
+			);
 
 			if (!res?.ok) {
-				throw Error(await res?.text())
+				throw Error(await res?.text());
 			}
 
-			return await res.text()
+			return await res.text();
 		},
 		[handler],
-	)
+	);
 }
 
 /**
@@ -140,24 +140,24 @@ export function useUpdateItemCallback(): (
 	item_id: string,
 	request: AddItemToBudgetRequest,
 ) => Promise<void> {
-	const handler = useApiWithUrlCall()
+	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		async (budget_id: string, item_id: string, request: AddItemToBudgetRequest) => {
 			const res = await handler(
 				`${budgetHost}/budget/${budget_id}/item/${item_id}`,
 				{
-					method: 'PUT',
+					method: "PUT",
 				},
 				request,
-			)
+			);
 
 			if (!res?.ok) {
-				throw Error(await res?.text())
+				throw Error(await res?.text());
 			}
 		},
 		[handler],
-	)
+	);
 }
 
 /**
@@ -169,18 +169,18 @@ export function useUpdateItemCallback(): (
  * @returns A promise that will resolve to void or throw an error.
  */
 export function useDeleteItemCallback(): (budget_id: string, item_id: string) => Promise<void> {
-	const handler = useApiWithUrlCall()
+	const handler = useApiWithUrlCall();
 
 	return useCallback(
 		async (budget_id: string, item_id: string) => {
 			const res = await handler(`${budgetHost}/budget/${budget_id}/item/${item_id}`, {
-				method: 'DELETE',
-			})
+				method: "DELETE",
+			});
 
 			if (!res?.ok) {
-				throw Error(await res?.text())
+				throw Error(await res?.text());
 			}
 		},
 		[handler],
-	)
+	);
 }

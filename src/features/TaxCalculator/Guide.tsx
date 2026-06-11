@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Guide = () => {
 	return (
@@ -9,7 +9,7 @@ const Guide = () => {
 			<p className="max-w-prose text-sm">
 				This calculator is used to give estimations for what a salary would translate to in another
 				country, and on how much tax you will have pay for a given income in that country. It is
-				designed to allow you to easily compare across countries.{' '}
+				designed to allow you to easily compare across countries.{" "}
 				<em>This should in no way be used for actual tax forms</em>.
 			</p>
 
@@ -20,7 +20,7 @@ const Guide = () => {
 				the individual countries).
 			</p>
 		</section>
-	)
-}
+	);
+};
 
-export default Guide
+export default Guide;

@@ -1,5 +1,5 @@
 type TaxCalculatorAction =
-	| { type: 'SET SALARY'; salary: number }
-	| { type: 'SET CURRENCY'; currency: string }
+	| { type: "SET SALARY"; salary: number }
+	| { type: "SET CURRENCY"; currency: string };
 
-export default TaxCalculatorAction
+export default TaxCalculatorAction;

@@ -1,45 +1,45 @@
-import { Button, ButtonContainer, Modal } from '@oliverflecke/components-react'
-import SortableDragAndDropList from 'components/SortableDragAndDropList'
-import Spinner from 'components/Spinner'
-import React, { FC, useCallback, useContext, useMemo, useState } from 'react'
-import { IoShuffleOutline } from 'react-icons/io5'
-import { AccountContext } from './AccountService'
-import { useUpdateAccountsCallback } from './api/accountApi'
-import { Account } from './models/Account'
+import { Button, ButtonContainer, Modal } from "@oliverflecke/components-react";
+import SortableDragAndDropList from "components/SortableDragAndDropList";
+import Spinner from "components/Spinner";
+import React, { FC, useCallback, useContext, useMemo, useState } from "react";
+import { IoShuffleOutline } from "react-icons/io5";
+import { AccountContext } from "./AccountService";
+import { useUpdateAccountsCallback } from "./api/accountApi";
+import { Account } from "./models/Account";
 
 const AccountCard: FC<{ account: Account }> = ({ account }) => {
-	return <div>{account.name}</div>
-}
+	return <div>{account.name}</div>;
+};
 
 const OrderAccountsModal: FC = () => {
 	const {
 		state: { accounts },
 		dispatch,
-	} = useContext(AccountContext)
+	} = useContext(AccountContext);
 
-	const [isOpen, setIsOpen] = useState(false)
-	const [state, setState] = useState<'NONE' | 'SAVING' | 'SAVED'>('NONE')
-	const [items, setItems] = useState(useMemo(() => accounts, [accounts]))
-	const renderCard = useCallback((account: Account) => <AccountCard account={account} />, [])
+	const [isOpen, setIsOpen] = useState(false);
+	const [state, setState] = useState<"NONE" | "SAVING" | "SAVED">("NONE");
+	const [items, setItems] = useState(useMemo(() => accounts, [accounts]));
+	const renderCard = useCallback((account: Account) => <AccountCard account={account} />, []);
 
-	const updateAccountCallback = useUpdateAccountsCallback()
+	const updateAccountCallback = useUpdateAccountsCallback();
 	const saveOrder = useCallback(async () => {
 		try {
-			setState('SAVING')
+			setState("SAVING");
 			const order = items.map((a, i) => ({
 				id: a.id,
 				sortKey: i,
 				name: a.name,
-			}))
-			await updateAccountCallback(order)
-			dispatch({ type: 'SORT ACCOUNTS', order })
-			setState('SAVED')
-			setTimeout(() => setState('NONE'), 1000)
+			}));
+			await updateAccountCallback(order);
+			dispatch({ type: "SORT ACCOUNTS", order });
+			setState("SAVED");
+			setTimeout(() => setState("NONE"), 1000);
 		} catch {
-			console.warn('Unable to save order of accounts')
-			setState('NONE')
+			console.warn("Unable to save order of accounts");
+			setState("NONE");
 		}
-	}, [dispatch, items, updateAccountCallback])
+	}, [dispatch, items, updateAccountCallback]);
 
 	return (
 		<>
@@ -65,15 +65,15 @@ const OrderAccountsModal: FC = () => {
 						<Button onClick={saveOrder}>Save order</Button>
 					</ButtonContainer>
 				</div>
-				{state !== 'NONE' && (
+				{state !== "NONE" && (
 					<div className="absolute top-0 left-0 z-10 flex h-full w-full flex-row items-center justify-center bg-black opacity-75">
-						{state === 'SAVING' && <Spinner />}
-						{state === 'SAVED' && <div className="text-xl font-bold">Order saved!</div>}
+						{state === "SAVING" && <Spinner />}
+						{state === "SAVED" && <div className="text-xl font-bold">Order saved!</div>}
 					</div>
 				)}
 			</Modal>
 		</>
-	)
-}
+	);
+};
 
-export default OrderAccountsModal
+export default OrderAccountsModal;

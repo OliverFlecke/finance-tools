@@ -1,6 +1,6 @@
-import taxCalculator from '../src/features/TaxCalculator/taxRates'
+import taxCalculator from "../src/features/TaxCalculator/taxRates";
 
-describe('Calculate tax rates for country', () => {
+describe("Calculate tax rates for country", () => {
 	test.each([
 		[100, 0],
 		[20_000, 0],
@@ -15,7 +15,7 @@ describe('Calculate tax rates for country', () => {
 		[320_000, 44_550],
 		[500_000, 84_150],
 		[1_000_000, 199_150],
-	])('Calculate Singapore tax rates', (income: number, expected_tax: number) => {
-		expect(taxCalculator['sg'].calculate(income).taxes).toBeCloseTo(expected_tax)
-	})
-})
+	])("Calculate Singapore tax rates", (income: number, expected_tax: number) => {
+		expect(taxCalculator["sg"].calculate(income).taxes).toBeCloseTo(expected_tax);
+	});
+});

@@ -1,7 +1,7 @@
-import Stocks from 'features/Stocks'
-import React from 'react'
-import ClientOnly from '../src/components/ClientOnly'
-import SEO from '../src/components/SEO'
+import Stocks from "features/Stocks";
+import React from "react";
+import ClientOnly from "../src/components/ClientOnly";
+import SEO from "../src/components/SEO";
 
 const StocksPage: React.FC = () => (
 	<>
@@ -10,6 +10,6 @@ const StocksPage: React.FC = () => (
 			<Stocks />
 		</ClientOnly>
 	</>
-)
+);
 
-export default StocksPage
+export default StocksPage;

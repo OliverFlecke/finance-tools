@@ -1,126 +1,126 @@
-import { createContext } from 'react'
-import { getDataFromStorage, storedReducer } from '../../utils/storage'
-import { QuoteResponse } from './API/yahoo'
-import { Stock, StockList, StockLot } from './models'
+import { createContext } from "react";
+import { getDataFromStorage, storedReducer } from "../../utils/storage";
+import { QuoteResponse } from "./API/yahoo";
+import { Stock, StockList, StockLot } from "./models";
 
-const storageKey = 'stocks_state'
+const storageKey = "stocks_state";
 
 export const StockContext = createContext({
 	state: getDefaultStockState(),
 	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: StockAction) => {},
-})
+});
 
 export function stockReducer(state: StockState, action: StockAction): StockState {
-	return storedReducer(storageKey, reducer)(state, action)
+	return storedReducer(storageKey, reducer)(state, action);
 }
 
 export function getDefaultStockState(): StockState {
 	const state = getDataFromStorage<StockState>(storageKey, {
 		stocks: [],
-		preferredCurrency: 'usd',
+		preferredCurrency: "usd",
 		currencyRates: {
 			usd: {},
 		},
 		error: null,
-	})
+	});
 
-	return state
+	return state;
 }
 
 export interface StockError {
-	type: 'MISSING STOCKS'
-	message: string
+	type: "MISSING STOCKS";
+	message: string;
 }
 
 export interface StockState {
-	stocks: StockList
-	preferredCurrency: string
+	stocks: StockList;
+	preferredCurrency: string;
 	// biome-ignore lint/suspicious/noExplicitAny: currency can be any type. It should be possible to narrow this down.
-	currencyRates: { usd: any }
-	error: StockError | null
+	currencyRates: { usd: any };
+	error: StockError | null;
 }
 
 export type StockAction =
-	| { type: 'ADD STOCK'; stock: Stock }
-	| { type: 'DELETE STOCK'; symbol: string }
-	| { type: 'UPDATE STOCKS'; stocks: QuoteResponse[] | null }
-	| { type: 'SET STOCKS'; stocks: StockList }
-	| { type: 'ADD LOT'; symbol: string; lotId?: string }
-	| { type: 'DELETE LOT'; symbol: string; id: string }
-	| { type: 'EDIT LOT'; symbol: string; lot: StockLot }
+	| { type: "ADD STOCK"; stock: Stock }
+	| { type: "DELETE STOCK"; symbol: string }
+	| { type: "UPDATE STOCKS"; stocks: QuoteResponse[] | null }
+	| { type: "SET STOCKS"; stocks: StockList }
+	| { type: "ADD LOT"; symbol: string; lotId?: string }
+	| { type: "DELETE LOT"; symbol: string; id: string }
+	| { type: "EDIT LOT"; symbol: string; lot: StockLot };
 
 function reducer(state: StockState, action: StockAction): StockState {
-	if (process.env.NODE_ENV === 'development') {
-		console.debug(`received action: ${action.type}`)
+	if (process.env.NODE_ENV === "development") {
+		console.debug(`received action: ${action.type}`);
 	}
 
 	switch (action.type) {
-		case 'ADD STOCK':
-			if (state.stocks.find(x => x.symbol === action.stock.symbol)) {
-				return state
+		case "ADD STOCK":
+			if (state.stocks.find((x) => x.symbol === action.stock.symbol)) {
+				return state;
 			}
 
 			return {
 				...state,
 				stocks: state.stocks.concat(action.stock),
-			}
+			};
 
-		case 'DELETE STOCK':
+		case "DELETE STOCK":
 			return {
 				...state,
-				stocks: state.stocks.filter(x => x.symbol !== action.symbol),
-			}
-		case 'UPDATE STOCKS':
-			console.log('Updating stocks')
-			console.log(action.stocks)
+				stocks: state.stocks.filter((x) => x.symbol !== action.symbol),
+			};
+		case "UPDATE STOCKS":
+			console.log("Updating stocks");
+			console.log(action.stocks);
 			if (action.stocks !== null) {
-				const stocks = action.stocks
+				const stocks = action.stocks;
 
 				return {
 					...state,
 					error: null,
-					stocks: state.stocks.map(old => {
-						const stock = stocks.find(x => x.symbol === old.symbol)
+					stocks: state.stocks.map((old) => {
+						const stock = stocks.find((x) => x.symbol === old.symbol);
 
 						return {
 							...old,
 							...stock,
 							lots: old.lots,
-						}
+						};
 					}),
-				}
+				};
 			} else {
 				return {
 					...state,
 					error: {
-						type: 'MISSING STOCKS',
-						message: 'Unable to retrieve stock prices',
+						type: "MISSING STOCKS",
+						message: "Unable to retrieve stock prices",
 					},
-				}
+				};
 			}
 
-		case 'SET STOCKS':
+		case "SET STOCKS":
 			return {
 				...state,
-				stocks: action.stocks.map(stock => ({
+				stocks: action.stocks.map((stock) => ({
 					...stock,
 					lots: stock.lots ?? [],
 				})),
-			}
+			};
 
-		case 'ADD LOT': {
+		case "ADD LOT": {
 			const lot: StockLot = {
 				id: action.lotId ?? crypto.randomUUID(),
 				shares: 0,
 				buyDate: new Date(),
-				buyPrice: state.stocks.find(x => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
+				buyPrice: state.stocks.find((x) => x.symbol === action.symbol)?.regularMarketPrice ?? 0,
 				buyBrokerage: 0,
-			}
+			};
 
 			return {
 				...state,
-				stocks: state.stocks.map(stock =>
+				stocks: state.stocks.map((stock) =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
@@ -128,36 +128,36 @@ function reducer(state: StockState, action: StockAction): StockState {
 								lots: stock.lots.concat(lot),
 							},
 				),
-			}
+			};
 		}
-		case 'DELETE LOT':
+		case "DELETE LOT":
 			return {
 				...state,
-				stocks: state.stocks.map(stock =>
+				stocks: state.stocks.map((stock) =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
 								...stock,
-								lots: stock.lots.filter(x => x.id !== action.id),
+								lots: stock.lots.filter((x) => x.id !== action.id),
 							},
 				),
-			}
+			};
 
-		case 'EDIT LOT':
+		case "EDIT LOT":
 			return {
 				...state,
-				stocks: state.stocks.map(stock =>
+				stocks: state.stocks.map((stock) =>
 					stock.symbol !== action.symbol
 						? stock
 						: {
 								...stock,
-								lots: stock.lots.filter(x => x.id !== action.lot.id).concat(action.lot),
+								lots: stock.lots.filter((x) => x.id !== action.lot.id).concat(action.lot),
 							},
 				),
-			}
+			};
 
 		default:
-			console.warn('action not implemented')
-			return state
+			console.warn("action not implemented");
+			return state;
 	}
 }

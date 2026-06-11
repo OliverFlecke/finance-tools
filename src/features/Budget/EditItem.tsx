@@ -1,22 +1,22 @@
-import { Button, ButtonContainer } from '@oliverflecke/components-react'
-import React, { useCallback } from 'react'
-import { useForm } from 'react-hook-form'
-import { IoSaveOutline } from 'react-icons/io5'
-import { AddItemToBudgetRequest, Item } from './api'
+import { Button, ButtonContainer } from "@oliverflecke/components-react";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { IoSaveOutline } from "react-icons/io5";
+import { AddItemToBudgetRequest, Item } from "./api";
 
 const EditItem: React.FC<{
-	item: Item
-	update: (id: string, item: AddItemToBudgetRequest) => void
+	item: Item;
+	update: (id: string, item: AddItemToBudgetRequest) => void;
 }> = ({ update, item }) => {
 	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>({
 		defaultValues: item,
-	})
+	});
 	const handleUpdate = useCallback(
 		(data: AddItemToBudgetRequest) => {
-			update(item.id, data)
+			update(item.id, data);
 		},
 		[item.id, update],
-	)
+	);
 
 	return (
 		<form
@@ -29,7 +29,7 @@ const EditItem: React.FC<{
 				<input
 					placeholder="Category"
 					className="budget edit-item"
-					{...register('category', { required: true })}
+					{...register("category", { required: true })}
 				/>
 			</label>
 			<label className="edit-item">
@@ -37,7 +37,7 @@ const EditItem: React.FC<{
 				<input
 					placeholder="Name"
 					className="budget edit-item"
-					{...register('name', { required: true })}
+					{...register("name", { required: true })}
 				/>
 			</label>
 			<label className="edit-item">
@@ -45,12 +45,12 @@ const EditItem: React.FC<{
 				<input
 					placeholder="Amount"
 					className="budget edit-item"
-					onKeyDown={event => {
+					onKeyDown={(event) => {
 						if (!/-|\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
-							event.preventDefault()
+							event.preventDefault();
 						}
 					}}
-					{...register('amount', { required: true, valueAsNumber: true })}
+					{...register("amount", { required: true, valueAsNumber: true })}
 				/>
 			</label>
 
@@ -66,7 +66,7 @@ const EditItem: React.FC<{
 				</Button>
 			</ButtonContainer>
 		</form>
-	)
-}
+	);
+};
 
-export default EditItem
+export default EditItem;

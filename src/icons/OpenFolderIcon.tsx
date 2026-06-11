@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const OpenFolderIcon: React.FC = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -20,6 +20,6 @@ const OpenFolderIcon: React.FC = () => (
 			strokeWidth="32"
 		/>
 	</svg>
-)
+);
 
-export default OpenFolderIcon
+export default OpenFolderIcon;

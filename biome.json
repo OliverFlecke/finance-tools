@@ -72,15 +72,7 @@
 	},
 	"javascript": {
 		"formatter": {
-			"jsxQuoteStyle": "double",
-			"quoteProperties": "asNeeded",
-			"trailingCommas": "all",
-			"semicolons": "asNeeded",
-			"arrowParentheses": "asNeeded",
-			"bracketSameLine": false,
-			"quoteStyle": "single",
-			"attributePosition": "auto",
-			"bracketSpacing": true
+			"trailingCommas": "all"
 		}
 	},
 	"html": {

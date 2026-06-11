@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
-import { formatter } from './index'
+import React, { FC } from "react";
+import { formatter } from "./index";
 
 interface AmountSummaryProps {
-	amount: number
-	label: string
-	color?: string
+	amount: number;
+	label: string;
+	color?: string;
 }
 
 const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }) => (
@@ -15,6 +15,6 @@ const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }) => (
 			<div className="text-2xl text-black dark:text-white">{formatter.format(amount)}</div>
 		</div>
 	</div>
-)
+);
 
-export default AmountSummary
+export default AmountSummary;

@@ -1,19 +1,19 @@
-import { Auth0Provider } from '@auth0/auth0-react'
-import 'compiled.css'
-import Footer from 'features/Footer'
-import Header from 'features/Header'
-import Settings from 'features/Settings'
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import Router from 'next/router'
-import Script from 'next/script'
-import React from 'react'
+import { Auth0Provider } from "@auth0/auth0-react";
+import "compiled.css";
+import Footer from "features/Footer";
+import Header from "features/Header";
+import Settings from "features/Settings";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import Router from "next/router";
+import Script from "next/script";
+import React from "react";
 
 // biome-ignore lint/suspicious/noExplicitAny: unknown type
 const onRedirectCallback = (appState: any) => {
 	// Use Next.js's Router.replace method to replace the url
-	Router.replace(appState?.returnTo || '/')
-}
+	Router.replace(appState?.returnTo || "/");
+};
 
 export default function Layout({ Component, pageProps }: AppProps) {
 	return (
@@ -37,17 +37,17 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				src="https://plausible.oliverflecke.me/js/script.js"
 			/>
 			<Auth0Provider
-				domain={process.env.NEXT_PUBLIC_DOMAIN ?? ''}
-				clientId={process.env.NEXT_PUBLIC_CLIENT_ID ?? ''}
+				domain={process.env.NEXT_PUBLIC_DOMAIN ?? ""}
+				clientId={process.env.NEXT_PUBLIC_CLIENT_ID ?? ""}
 				onRedirectCallback={onRedirectCallback}
 				cacheLocation="localstorage"
 				useRefreshTokens={true}
 				useRefreshTokensFallback={true}
 				authorizationParams={{
 					redirect_uri:
-						typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_REDIRECT_URI : undefined,
+						typeof window !== "undefined" ? process.env.NEXT_PUBLIC_REDIRECT_URI : undefined,
 					audience: process.env.NEXT_PUBLIC_AUDIENCE,
-					scope: 'account:read profile',
+					scope: "account:read profile",
 				}}
 			>
 				<Settings>
@@ -61,5 +61,5 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				</Settings>
 			</Auth0Provider>
 		</>
-	)
+	);
 }

@@ -1,8 +1,8 @@
-import React from 'react'
-import { IoTrashOutline } from 'react-icons/io5'
+import React from "react";
+import { IoTrashOutline } from "react-icons/io5";
 
 interface Props {
-	onClick: () => void
+	onClick: () => void;
 }
 
 export default function DeleteButton({ onClick }: Props) {
@@ -10,5 +10,5 @@ export default function DeleteButton({ onClick }: Props) {
 		<button onClick={onClick} className="flex focus:outline-none">
 			<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />
 		</button>
-	)
+	);
 }

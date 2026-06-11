@@ -1,17 +1,17 @@
-import SelectCurrency from 'components/SelectCurrency'
-import React, { FC, useCallback, useContext } from 'react'
-import SettingsContext from '../context'
+import SelectCurrency from "components/SelectCurrency";
+import React, { FC, useCallback, useContext } from "react";
+import SettingsContext from "../context";
 
 const DisplayCurrencySetting: FC = () => {
 	const {
 		values: { preferredDisplayCurrency },
 		dispatch,
-	} = useContext(SettingsContext)
+	} = useContext(SettingsContext);
 
 	const onChange = useCallback(
-		(currency: string) => dispatch({ type: 'SET DISPLAY CURRENCY', currency }),
+		(currency: string) => dispatch({ type: "SET DISPLAY CURRENCY", currency }),
 		[dispatch],
-	)
+	);
 
 	return (
 		<SelectCurrency
@@ -19,7 +19,7 @@ const DisplayCurrencySetting: FC = () => {
 			defaultCurrency={preferredDisplayCurrency}
 			onChange={onChange}
 		/>
-	)
-}
+	);
+};
 
-export default DisplayCurrencySetting
+export default DisplayCurrencySetting;

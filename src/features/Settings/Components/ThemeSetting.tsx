@@ -1,9 +1,9 @@
-import { DarkModeToggle, Toggle } from '@oliverflecke/components-react'
-import React, { useContext } from 'react'
-import SettingsContext from '../context'
+import { DarkModeToggle, Toggle } from "@oliverflecke/components-react";
+import React, { useContext } from "react";
+import SettingsContext from "../context";
 
 const ThemeSetting = () => {
-	const { values, dispatch } = useContext(SettingsContext)
+	const { values, dispatch } = useContext(SettingsContext);
 
 	return (
 		<>
@@ -11,9 +11,9 @@ const ThemeSetting = () => {
 			<div className="flex flex-row justify-end">
 				<Toggle
 					checked={values.themeFollowsOS}
-					onChange={e =>
+					onChange={(e) =>
 						dispatch({
-							type: 'SET THEME TO FOLLOW OS',
+							type: "SET THEME TO FOLLOW OS",
 							shouldFollowOS: e.target.checked,
 						})
 					}
@@ -27,7 +27,7 @@ const ThemeSetting = () => {
 						<DarkModeToggle
 							onToggle={() =>
 								dispatch({
-									type: 'SET THEME',
+									type: "SET THEME",
 									preferresDarkMode: !values.preferresDarkMode,
 								})
 							}
@@ -37,7 +37,7 @@ const ThemeSetting = () => {
 				</>
 			)}
 		</>
-	)
-}
+	);
+};
 
-export default ThemeSetting
+export default ThemeSetting;
