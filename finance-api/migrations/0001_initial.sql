@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS account (
 CREATE TABLE IF NOT EXISTS account_entry (
     date date NOT NULL,
     account_id uuid NOT NULL,
-    amount double NOT NULL,
+    amount NUMERIC(15, 2) NOT NULL,
 
 	FOREIGN KEY (account_id) REFERENCES account(id)
 );

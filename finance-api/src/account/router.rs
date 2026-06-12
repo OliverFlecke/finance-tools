@@ -48,7 +48,7 @@ async fn accounts(
 			CAST(a.id AS TEXT) as id
 			, a.name
 			, a.currency
-			, e.amount
+			, e.amount as "amount: f64"
 			, e.date as "date: NaiveDate"
 		FROM account_entry e
 		JOIN account a ON a.id = e.account_id
