@@ -6,10 +6,10 @@ self.__BUILD_MANIFEST = {
     "static/chunks/3xxzwx6j8t8rj.js"
   ],
   "/accounts": [
-    "static/chunks/0f5q5jj8h-wra.js"
+    "static/chunks/1lb_vn_-exqte.js"
   ],
   "/budget": [
-    "static/chunks/1pie05qkxsows.js"
+    "static/chunks/26l49_n11a_eu.js"
   ],
   "/interest": [
     "static/chunks/0evp23twfo5xk.js"
@@ -18,10 +18,10 @@ self.__BUILD_MANIFEST = {
     "static/chunks/3w8ip0vyrc7l3.js"
   ],
   "/stocks": [
-    "static/chunks/40afwob6_3bup.js"
+    "static/chunks/0nd0etintilxk.js"
   ],
   "/tax": [
-    "static/chunks/2qkw6oaw0-w3t.js"
+    "static/chunks/3e8mn-odhdt-t.js"
   ],
   "__rewrites": {
     "afterFiles": [],
