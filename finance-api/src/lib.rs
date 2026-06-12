@@ -33,10 +33,12 @@ fn start() {
 #[event(fetch)]
 async fn fetch(
 	req: HttpRequest,
-	_env: Env,
+	env: Env,
 	_ctx: Context,
 ) -> Result<axum::http::Response<axum::body::Body>> {
-	let state = AppState::new()
+	let db = env.d1("prod_d1_finance")?;
+
+	let state = AppState::new(db)
 		.await
 		.expect("to be able to create the state");
 
