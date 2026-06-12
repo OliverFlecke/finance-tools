@@ -26,3 +26,4 @@ yarn-error.log*
 out/
 certificates/
 tsconfig.tsbuildinfo
+next-env.d.ts
