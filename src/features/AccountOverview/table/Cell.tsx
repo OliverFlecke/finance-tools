@@ -1,8 +1,8 @@
-import { ChangeEvent, useCallback, useContext, useRef } from "react";
+import { type ChangeEvent, useCallback, useContext, useRef } from "react";
 import { formatCurrency, parseNumber } from "utils/converters";
 import { AccountContext } from "../AccountService";
 import { useUpdateEntryCallback } from "../api/accountApi";
-import { Account, DateEntry } from "../models/Account";
+import type { Account, DateEntry } from "../models/Account";
 import styles from "./Cell.module.css";
 
 interface CellProps {
@@ -19,7 +19,7 @@ export default function Cell({ account, entry, date }: Readonly<CellProps>) {
 	const onBlur = useCallback(
 		async (element: ChangeEvent<HTMLTableCellElement>) => {
 			const amount = parseNumber(element.currentTarget.innerText);
-			if (!amount) {
+			if (Number.isNaN(amount)) {
 				return;
 			}
 
