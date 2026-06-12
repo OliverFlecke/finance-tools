@@ -20,23 +20,30 @@ use axum::{extract::FromRequestParts, http::request::Parts, RequestPartsExt};
 impl FromRequestParts<AppState> for Claims {
 	type Rejection = StatusCode;
 
+	#[tracing::instrument(skip(state, parts), level = "info")]
 	async fn from_request_parts(
 		parts: &mut Parts,
 		state: &AppState,
 	) -> Result<Self, Self::Rejection> {
+		tracing::debug!("Extracting claims from request");
 		let TypedHeader(Authorization(bearer)) = parts
 			.extract::<TypedHeader<Authorization<Bearer>>>()
 			.await
 			.map_err(|_| StatusCode::UNAUTHORIZED)?;
 
 		let jwks_repository = state.jwks_repository().as_ref();
+
+		tracing::debug!("Decoding token");
 		Claims::decode(
 			bearer.token(),
 			jwks_repository,
 			jwks_repository.get_auth_config().into(),
 		)
 		.await
-		.map_err(|_| StatusCode::UNAUTHORIZED)
+		.map_err(|e| {
+			tracing::error!(?e, "Failed to decode token");
+			StatusCode::UNAUTHORIZED
+		})
 		.map(|t| t.claims)
 	}
 }

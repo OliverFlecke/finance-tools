@@ -1,4 +1,5 @@
 [tools]
 node = "26"
 pnpm = "11"
+sqlite = "latest"
 wrangler = "latest"

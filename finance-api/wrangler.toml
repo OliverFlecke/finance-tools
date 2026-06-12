@@ -5,6 +5,11 @@ compatibility_date = "2026-06-12"
 [build]
 command = "cargo install -q \"worker-build@^0.8\" && worker-build --release --panic-unwind"
 
+[[d1_databases]]
+binding = "prod_d1_finance"
+database_name = "prod-d1-finance"
+database_id = "91b36f0c-b572-4232-b6e3-dbf491bb7395"
+
 [observability.logs]
 enabled = true
 invocation_logs = true

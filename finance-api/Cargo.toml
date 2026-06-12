@@ -8,17 +8,35 @@ authors = ["Oliver Fleckenstein <oliverfl@live.dk>"]
 crate-type = ["cdylib"]
 
 [dependencies]
-axum = { version = "0.8", default-features = false }
+axum = { version = "0.8.9", default-features = false, features = [
+  "macros",
+  "json",
+] }
 axum-extra = { version = "0.12.6", features = ["typed-header"] }
+axum-macros = "0.5.1"
 chrono = { version = "0.4.45", features = ["serde"] }
 derive-getters = { version = "0.5.0" }
 duplicate = { version = "2.0.1" }
+getrandom = { version = "0.2.17", features = [
+  "js",
+] } # Required for wasm-bindgen support in jsonwebtooken
 http = { version = "1.4.2" }
 jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
 reqwest = { version = "0.13.4", features = ["json"] }
 serde = { version = "1.0.228", features = ["derive"] }
+# sqlx = { version = "0.9.0", features = ["sqlite"] }
 tokio = { version = "1.52.3", features = ["rt", "macros"] }
 tower-service = { version = "0.3.3" }
 tracing = { version = "0.1.44" }
+tracing-subscriber = { version = "0.3.23", features = ['time', 'json'] }
+tracing-wasm = "0.2.1"
+tracing-web = "0.1"
+time = { version = "0.3", features = ['wasm-bindgen'] }
+uuid = { version = "1.23.3", features = [
+  "serde",
+  "v4",
+  "v7",
+  "js",
+], default-features = false }
 worker = { version = "0.8", features = ["http", "axum"] }
 worker-macros = { version = "0.8", features = ["http"] }
