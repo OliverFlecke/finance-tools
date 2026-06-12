@@ -1,0 +1,6 @@
+name = "finance-api"
+main = "build/index.js"
+compatibility_date = "2026-06-12"
+
+[build]
+command = "cargo install -q \"worker-build@^0.8\" && worker-build --release --panic-unwind"
