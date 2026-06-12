@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod health;
 mod router;
 pub mod state;
 

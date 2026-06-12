@@ -1,15 +1,7 @@
-use axum::{http::StatusCode, routing::get, Router};
+use axum::Router;
+
+use crate::health::health_check_router;
 
 pub fn build_router() -> Router {
-	Router::new()
-		.route("/readyz", get(ready))
-		.route("/livez", get(liveness))
-}
-
-async fn ready() -> StatusCode {
-	StatusCode::OK
-}
-
-async fn liveness() -> StatusCode {
-	StatusCode::OK
+	Router::new().nest("/", health_check_router())
 }
