@@ -1,16 +1,12 @@
 use std::{convert::Infallible, sync::Arc};
 
-use axum::{extract::State, routing::get, Json, Router};
+use axum::{extract::State, Json};
 use chrono::NaiveDate;
 use rust_decimal::{prelude::FromPrimitive, Decimal};
 use sqlx_d1::D1Connection;
 use uuid::Uuid;
 
 use crate::{auth::Claims, state::AppState};
-
-pub fn account_router() -> Router<AppState> {
-	Router::new().route("/", get(accounts))
-}
 
 /// Response for accounts.
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
@@ -36,7 +32,7 @@ pub struct AccountEntry {
 }
 
 #[axum::debug_handler(state = AppState)]
-async fn accounts(
+pub async fn accounts(
 	State(db): State<Arc<D1Connection>>,
 	user: Claims,
 ) -> Result<Json<AccountResponse>, Infallible> {
