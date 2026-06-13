@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { seedD1 } from "./helpers/d1";
 import { createWorker } from "./helpers/miniflare";
+import { createTestToken } from "./helpers/token";
 
 describe("account endpoint", () => {
 	it("GET /api/v1/account without auth returns 401", async () => {
@@ -18,6 +19,19 @@ describe("account endpoint", () => {
 			headers: { Authorization: "Bearer invalid-token" },
 		});
 		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("GET /api/v1/account with valid token returns 200", async () => {
+		const { jwk, token } = await createTestToken();
+		const mf = await createWorker({ TEST_JWK: JSON.stringify(jwk) });
+		await seedD1(mf);
+		const res = await mf.dispatchFetch("http://localhost/api/v1/account", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		expect(res.status).toBe(200);
+		const body = await res.json();
+		expect(body).toHaveProperty("accounts");
 		await mf.dispose();
 	});
 });

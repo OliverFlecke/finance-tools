@@ -9,7 +9,8 @@ use http::StatusCode;
 use jsonwebtoken::{decode, TokenData, Validation};
 use serde::{Deserialize, Serialize};
 
-use crate::{auth::jwk::JwkRepository, state::AppState};
+use crate::auth::jwk::JwkValidator;
+use crate::state::AppState;
 
 use axum::{extract::FromRequestParts, http::request::Parts, RequestPartsExt};
 
@@ -37,7 +38,7 @@ impl FromRequestParts<AppState> for Claims {
 		Claims::decode(
 			bearer.token(),
 			jwks_repository,
-			jwks_repository.get_auth_config().into(),
+			jwks_repository.get_validation(),
 		)
 		.await
 		.map_err(|e| {
@@ -76,7 +77,7 @@ impl Claims {
 
 	pub async fn decode(
 		token: &str,
-		jwks_repository: &JwkRepository,
+		jwks_repository: &dyn JwkValidator,
 		validation: Validation,
 	) -> Result<TokenData<Claims>, jsonwebtoken::errors::Error> {
 		let jwk = jwks_repository.get_key().unwrap();
