@@ -1,6 +1,5 @@
 import { useAccountContext } from "features/AccountOverview/AccountService";
 import type { Account, AccountEntries } from "features/AccountOverview/models/Account";
-import { useAccounts } from "@/api/account";
 import DeleteButton from "@/components/DeleteButton";
 import Cell from "./Cell";
 import styles from "./index.module.css";
@@ -11,9 +10,6 @@ export default function Table() {
 	const {
 		state: { accounts },
 	} = useAccountContext();
-
-	const { data } = useAccounts();
-	console.debug("account data", data);
 
 	return (
 		<div className={styles.container}>

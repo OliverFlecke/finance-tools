@@ -1,17 +1,21 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import AddAccount from "features/AccountOverview/AddAccountModal";
-import React, { memo, useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { sortObject } from "utils/converters";
 import { formatDate } from "utils/date";
 import { AccountContext, accountReducer, initAccountState } from "./AccountService";
 import AddEntryModal from "./AddEntryModal";
-import { AccountResponse, useAccounts, useAddAccountCallback } from "./api/accountApi";
-import { Account, AccountEntries } from "./models/Account";
+import { type AccountResponse, useAccounts, useAddAccountCallback } from "./api/accountApi";
+import type { Account, AccountEntries } from "./models/Account";
 import OrderAccountsModal from "./OrderAccountsModal";
 import OverviewChart from "./OverviewChart";
 import Table from "./table";
 
-const AccountOverview = memo(() => {
+export default withAuthenticationRequired(AccountOverview, {
+	onRedirecting: () => <div>Redirecting you to the login page</div>,
+});
+
+function AccountOverview() {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
 	const accountState = useAccounts();
@@ -54,12 +58,7 @@ const AccountOverview = memo(() => {
 			<OverviewChart />
 		</AccountContext.Provider>
 	);
-});
-AccountOverview.displayName = "AccountOverview";
-
-export default withAuthenticationRequired(AccountOverview, {
-	onRedirecting: () => <div>Redirecting you to the login page</div>,
-});
+}
 
 function createAccountEntries(accounts: AccountResponse[]): AccountEntries {
 	const entries: AccountEntries = {};
