@@ -14,6 +14,42 @@ use crate::state::AppState;
 
 use axum::{extract::FromRequestParts, http::request::Parts, RequestPartsExt};
 
+/// Claims representing a user.
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct Claims {
+	aud: Vec<String>,
+	#[serde(with = "ts_seconds")]
+	exp: DateTime<Utc>,
+	#[serde(with = "ts_seconds")]
+	iat: DateTime<Utc>,
+	iss: String,
+	sub: String,
+	scope: String,
+}
+
+impl Claims {
+	pub fn user_id(&self) -> &str {
+		&self.sub
+	}
+
+	pub fn scopes(&self) -> HashSet<&str> {
+		self.scope.split(' ').collect()
+	}
+
+	pub fn has_scope(&self, scope: &str) -> bool {
+		self.scope.split(' ').any(|s| s == scope)
+	}
+
+	pub async fn decode(
+		token: &str,
+		jwks_repository: &dyn JwkValidator,
+		validation: Validation,
+	) -> Result<TokenData<Claims>, jsonwebtoken::errors::Error> {
+		let jwk = jwks_repository.get_key().expect("to have a key");
+		decode::<Claims>(token, &jwk.into(), &validation)
+	}
+}
+
 /// Extract `Claims` from the current request.
 ///
 /// If this cannot be done, the request is rejected with an `UNAUTHORIZED`
@@ -46,42 +82,6 @@ impl FromRequestParts<AppState> for Claims {
 			StatusCode::UNAUTHORIZED
 		})
 		.map(|t| t.claims)
-	}
-}
-
-/// Claims representing a user.
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct Claims {
-	aud: Vec<String>,
-	#[serde(with = "ts_seconds")]
-	exp: DateTime<Utc>,
-	#[serde(with = "ts_seconds")]
-	iat: DateTime<Utc>,
-	iss: String,
-	sub: String,
-	scope: String,
-}
-
-impl Claims {
-	pub fn user_id(&self) -> &str {
-		&self.sub
-	}
-
-	pub fn scopes(&self) -> HashSet<&str> {
-		self.scope.split(' ').collect()
-	}
-
-	pub fn has_scope(&self, scope: &str) -> bool {
-		self.scope.split(' ').any(|s| s == scope)
-	}
-
-	pub async fn decode(
-		token: &str,
-		jwks_repository: &dyn JwkValidator,
-		validation: Validation,
-	) -> Result<TokenData<Claims>, jsonwebtoken::errors::Error> {
-		let jwk = jwks_repository.get_key().unwrap();
-		decode::<Claims>(token, &jwk.into(), &validation)
 	}
 }
 

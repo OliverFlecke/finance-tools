@@ -33,6 +33,8 @@ sqlx-d1 = { version = "0.4.2", features = [
   "macros",
   "query",
 ] }
+strum = { version = "0.28.0", default-features = false, features = ["derive"] }
+thiserror = "2.0.18"
 time = { version = "0.3", features = ['wasm-bindgen'] }
 tokio = { version = "1.52.3", features = ["rt", "macros"] }
 tower-service = { version = "0.3.3" }
