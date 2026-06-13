@@ -22,6 +22,7 @@ use utoipa::{
         title = "Finance API",
         version = "0.1.0",
         description = "API for tracking personal finances",
+		license(name = "MIT", url = "https://opensource.org/licenses/MIT"),
     ),
     modifiers(&SecurityAddon)
 )]

@@ -69,6 +69,7 @@ impl IntoResponse for GetAccountError {
     feature = "openapi",
     utoipa::path(
         get,
+		tag = "Account",
         path = "/api/v1/account",
         responses(
             (status = 200, description = "Accounts retrieved successfully", body = AccountResponse),

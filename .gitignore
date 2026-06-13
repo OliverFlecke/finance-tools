@@ -27,3 +27,6 @@ out/
 certificates/
 tsconfig.tsbuildinfo
 next-env.d.ts
+
+openapi.json
+src/api/generated/

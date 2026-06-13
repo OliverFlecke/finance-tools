@@ -30,6 +30,7 @@
 			"@/components/*": ["components/*"],
 			"@/features/*": ["features/*"],
 			"@/hooks/*": ["hooks/*"],
+			"@/api/*": ["api/*"],
 			"@/utils/*": ["utils/*"]
 		},
 		"incremental": true
