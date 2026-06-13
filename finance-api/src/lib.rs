@@ -7,22 +7,15 @@ pub mod state;
 #[cfg(feature = "openapi")]
 pub mod openapi;
 
-#[cfg(not(target_arch = "wasm32"))]
-pub use router::build_router;
-
-#[cfg(target_arch = "wasm32")]
+use axum::response::IntoResponse;
+use http::{header, StatusCode};
 use tower_service::Service;
-#[cfg(target_arch = "wasm32")]
 use tracing_subscriber::{fmt::time::UtcTime, layer::SubscriberExt, util::SubscriberInitExt};
-#[cfg(target_arch = "wasm32")]
 use tracing_web::MakeConsoleWriter;
-#[cfg(target_arch = "wasm32")]
 use worker::*;
 
-#[cfg(target_arch = "wasm32")]
 use crate::{router::build_router, state::AppState};
 
-#[cfg(target_arch = "wasm32")]
 #[event(start)]
 fn start() {
 	let fmt_layer = tracing_subscriber::fmt::layer()
@@ -41,13 +34,25 @@ fn start() {
 		.init();
 }
 
-#[cfg(target_arch = "wasm32")]
 #[event(fetch)]
 async fn fetch(
 	req: HttpRequest,
 	env: Env,
 	_ctx: Context,
 ) -> Result<axum::http::Response<axum::body::Body>> {
+	if *req.method() == http::Method::OPTIONS {
+		return Ok((
+			StatusCode::OK,
+			[
+				(header::ACCESS_CONTROL_ALLOW_ORIGIN, "*"),
+				(header::ACCESS_CONTROL_REQUEST_METHOD, "*"),
+				(header::ACCESS_CONTROL_ALLOW_CREDENTIALS, "*"),
+				(header::ACCESS_CONTROL_ALLOW_HEADERS, "*"),
+			],
+		)
+			.into_response());
+	}
+
 	let db = env.d1("prod_d1_finance")?;
 
 	let state = AppState::new(db, &env)
