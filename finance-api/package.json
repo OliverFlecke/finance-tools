@@ -1,0 +1,14 @@
+{
+	"name": "finance-api",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build-worker": "worker-build --dev --panic-unwind",
+		"test": "worker-build --dev --panic-unwind && vitest run --config test/vitest.config.ts"
+	},
+	"devDependencies": {
+		"miniflare": "^4.20260611.0",
+		"typescript": "^5.8.0",
+		"vitest": "^3.1.0"
+	}
+}

@@ -41,7 +41,7 @@ impl FromRequestParts<AppState> for Claims {
 		)
 		.await
 		.map_err(|e| {
-			tracing::error!(?e, "Failed to decode token");
+			tracing::debug!(?e, "Failed to decode token");
 			StatusCode::UNAUTHORIZED
 		})
 		.map(|t| t.claims)

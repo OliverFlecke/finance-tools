@@ -22,7 +22,7 @@ fn start() {
 		.with_ansi(false) // Only partially supported across JavaScript runtimes
 		.with_timer(UtcTime::rfc_3339()) // std::time is not available in browsers
 		.with_writer(MakeConsoleWriter); // write events to the console
-								   //
+
 	let perf_layer = performance_layer().with_details_from_fields(Pretty::default());
 	tracing_subscriber::registry()
 		.with(fmt_layer)
