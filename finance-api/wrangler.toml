@@ -2,6 +2,10 @@ name = "finance-api"
 main = "build/index.js"
 compatibility_date = "2026-06-12"
 
+[vars]
+AUTH_ISSUER = "https://oliverflecke.eu.auth0.com/"
+AUTH_AUDIENCE = "https://finance.oliverflecke.me/"
+
 [build]
 command = "cargo install -q \"worker-build@^0.8\" && worker-build --release --panic-unwind"
 
