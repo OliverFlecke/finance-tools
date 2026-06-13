@@ -4,13 +4,25 @@ pub mod health;
 mod router;
 pub mod state;
 
+#[cfg(feature = "openapi")]
+pub mod openapi;
+
+#[cfg(not(target_arch = "wasm32"))]
+pub use router::build_router;
+
+#[cfg(target_arch = "wasm32")]
 use tower_service::Service;
+#[cfg(target_arch = "wasm32")]
 use tracing_subscriber::{fmt::time::UtcTime, layer::SubscriberExt, util::SubscriberInitExt};
+#[cfg(target_arch = "wasm32")]
 use tracing_web::MakeConsoleWriter;
+#[cfg(target_arch = "wasm32")]
 use worker::*;
 
+#[cfg(target_arch = "wasm32")]
 use crate::{router::build_router, state::AppState};
 
+#[cfg(target_arch = "wasm32")]
 #[event(start)]
 fn start() {
 	let fmt_layer = tracing_subscriber::fmt::layer()
@@ -29,6 +41,7 @@ fn start() {
 		.init();
 }
 
+#[cfg(target_arch = "wasm32")]
 #[event(fetch)]
 async fn fetch(
 	req: HttpRequest,

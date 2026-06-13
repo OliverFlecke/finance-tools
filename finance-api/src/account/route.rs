@@ -1,4 +1,4 @@
-mod get_accounts;
+pub mod get_accounts;
 
 use crate::{account::route::get_accounts::accounts, state::AppState};
 use axum::{routing::get, Router};

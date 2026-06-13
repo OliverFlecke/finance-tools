@@ -1,3 +1,3 @@
-mod route;
+pub mod route;
 
 pub use route::account_router;

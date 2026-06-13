@@ -5,7 +5,15 @@ edition = "2021"
 authors = ["Oliver Fleckenstein <oliverfl@live.dk>"]
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "openapi"
+path = "src/bin/openapi.rs"
+
+[features]
+default = []
+openapi = ["dep:utoipa"]
 
 [dependencies]
 axum = { version = "0.8.9", default-features = false, features = [
@@ -42,6 +50,12 @@ tracing = { version = "0.1.44" }
 tracing-subscriber = { version = "0.3.23", features = ['time', 'json'] }
 tracing-wasm = "0.2.1"
 tracing-web = "0.1"
+utoipa = { version = "5", features = [
+  "axum_extras",
+  "uuid",
+  "chrono",
+  "time",
+], optional = true }
 uuid = { version = "1.23.3", features = [
   "serde",
   "v4",

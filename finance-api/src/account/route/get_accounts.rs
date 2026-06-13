@@ -7,24 +7,30 @@ use rust_decimal::{prelude::FromPrimitive, Decimal};
 use sqlx_d1::D1Connection;
 use uuid::Uuid;
 
-use crate::{auth::Claims, state::AppState};
+use crate::auth::Claims;
 
 /// Response for accounts.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct AccountResponse {
 	accounts: Vec<Account>,
 }
 
 /// An account with name and currency. Amounts can be logged on different dates in this account.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, serde::Serialize, serde::Deserialize, sqlx_d1::FromRow)]
 pub struct Account {
+	/// Unique identifier for the account.
 	id: Uuid,
+	/// Name of the account.
 	name: String,
+	/// Currency of the account.
 	currency: String,
 	kind: AccountKind,
 	entries: Vec<AccountEntry>,
 }
 
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, serde::Serialize, serde::Deserialize, strum::FromRepr)]
 #[repr(u8)]
 pub enum AccountKind {
@@ -33,9 +39,11 @@ pub enum AccountKind {
 }
 
 /// Represents an amount logged for on an account on a given date.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct AccountEntry {
 	date: NaiveDate,
+	#[cfg_attr(feature = "openapi", schema(value_type = String))]
 	amount: Decimal,
 }
 
@@ -57,7 +65,22 @@ impl IntoResponse for GetAccountError {
 
 /// Get accounts for a user.
 /// Note that this currently only return accounts in the first project for the user.
-#[axum::debug_handler(state = AppState)]
+#[cfg_attr(
+    feature = "openapi",
+    utoipa::path(
+        get,
+        path = "/api/v1/account",
+        responses(
+            (status = 200, description = "Accounts retrieved successfully", body = AccountResponse),
+            (status = 401, description = "Unauthorized"),
+            (status = 500, description = "Internal server error"),
+        ),
+        security(
+            ("bearer_auth" = [])
+        )
+    )
+)]
+#[axum::debug_handler(state = crate::state::AppState)]
 #[tracing::instrument(skip(db))]
 pub async fn accounts(
 	State(db): State<Arc<D1Connection>>,
