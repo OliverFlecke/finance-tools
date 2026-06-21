@@ -5,29 +5,30 @@ use utoipa::{
 
 #[derive(OpenApi)]
 #[openapi(
-    paths(
-        crate::account::route::get::accounts,
-        crate::account::route::post::add_account,
-        crate::health::ready,
-        crate::health::liveness,
-    ),
-    components(
-        schemas(
-            crate::account::model::AccountKind,
-            crate::account::route::get::AccountResponse,
-            crate::account::route::get::Account,
-            crate::account::route::get::AccountEntry,
+	paths(
+		crate::account::route::get::accounts,
+		crate::account::route::post::add_account,
+		crate::account::route::delete::delete_account,
+		crate::health::ready,
+		crate::health::liveness,
+	),
+	components(
+		schemas(
+			crate::account::model::AccountKind,
+			crate::account::route::get::AccountResponse,
+			crate::account::route::get::Account,
+			crate::account::route::get::AccountEntry,
 			crate::account::route::post::CreateAccountRequest,
 			crate::account::route::post::CreateAccountResponse,
-        )
-    ),
-    info(
-        title = "Finance API",
-        version = "0.1.0",
-        description = "API for tracking personal finances",
+		)
+	),
+	info(
+		title = "Finance API",
+		version = "0.1.0",
+		description = "API for tracking personal finances",
 		license(name = "MIT", url = "https://opensource.org/licenses/MIT"),
-    ),
-    modifiers(&SecurityAddon)
+	),
+	modifiers(&SecurityAddon)
 )]
 pub struct ApiDoc;
 

@@ -36,7 +36,7 @@ pub async fn add_account(
 	tracing::info!(?user_id, ?request, "Creating account");
 
 	let account_id = Uuid::now_v7();
-	let _ = sqlx_d1::query!(
+	sqlx_d1::query!(
 		r#"
 		WITH project AS (
 			SELECT project_id as id FROM project_access
@@ -54,7 +54,7 @@ pub async fn add_account(
 		request.currency,
 		request.kind as u8
 	)
-	.fetch_one(db.as_ref())
+	.execute(db.as_ref())
 	.await
 	.map_err(CreateAccountError::DatabaseError)?;
 
@@ -91,7 +91,7 @@ pub enum CreateAccountError {
 impl IntoResponse for CreateAccountError {
 	fn into_response(self) -> axum::response::Response {
 		match self {
-			_ => (StatusCode::INTERNAL_SERVER_ERROR).into_response(),
+			Self::DatabaseError(_) => (StatusCode::INTERNAL_SERVER_ERROR).into_response(),
 		}
 	}
 }
