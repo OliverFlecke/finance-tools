@@ -7,7 +7,7 @@ use rust_decimal::{prelude::FromPrimitive, Decimal};
 use sqlx_d1::D1Connection;
 use uuid::Uuid;
 
-use crate::auth::Claims;
+use crate::{account::model::AccountKind, auth::Claims};
 
 /// Response for accounts.
 #[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
@@ -28,14 +28,6 @@ pub struct Account {
 	currency: String,
 	kind: AccountKind,
 	entries: Vec<AccountEntry>,
-}
-
-#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
-#[derive(Debug, serde::Serialize, serde::Deserialize, strum::FromRepr)]
-#[repr(u8)]
-pub enum AccountKind {
-	Cash,
-	Investment,
 }
 
 /// Represents an amount logged for on an account on a given date.

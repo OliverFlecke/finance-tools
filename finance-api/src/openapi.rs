@@ -6,16 +6,19 @@ use utoipa::{
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        crate::account::route::get_accounts::accounts,
+        crate::account::route::get::accounts,
+        crate::account::route::post::add_account,
         crate::health::ready,
         crate::health::liveness,
     ),
     components(
         schemas(
-            crate::account::route::get_accounts::AccountResponse,
-            crate::account::route::get_accounts::Account,
-            crate::account::route::get_accounts::AccountKind,
-            crate::account::route::get_accounts::AccountEntry,
+            crate::account::model::AccountKind,
+            crate::account::route::get::AccountResponse,
+            crate::account::route::get::Account,
+            crate::account::route::get::AccountEntry,
+			crate::account::route::post::CreateAccountRequest,
+			crate::account::route::post::CreateAccountResponse,
         )
     ),
     info(
