@@ -1,3 +1,0 @@
--- Migration number: 0002 	 2026-06-21T20:00:00.000Z
-ALTER TABLE account ADD COLUMN archived INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE account ADD COLUMN deleted_at TEXT;

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS project_access (
 	project_id uuid NOT NULL,
 	user_id uuid NOT NULL,
 
-	FOREIGN KEY (project_id) REFERENCES project(id)
+	FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS account (
@@ -18,8 +18,10 @@ CREATE TABLE IF NOT EXISTS account (
     type integer NOT NULL,
     currency varchar(3) DEFAULT 'USD' NOT NULL,
     sort_key integer DEFAULT 0 NOT NULL,
+	archived INTEGER NOT NULL DEFAULT 0,
+	deleted_at TEXT,
 
-	FOREIGN KEY (project_id) REFERENCES project(id)
+	FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS account_entry (
@@ -27,5 +29,5 @@ CREATE TABLE IF NOT EXISTS account_entry (
     account_id uuid NOT NULL,
     amount NUMERIC(15, 2) NOT NULL,
 
-	FOREIGN KEY (account_id) REFERENCES account(id)
+	FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
 );
