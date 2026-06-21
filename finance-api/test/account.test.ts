@@ -196,6 +196,108 @@ describe("account endpoint", () => {
 		expect(ids).toContain("00000000-0000-0000-0000-000000000002");
 	});
 
+	it("POST /api/v1/account/{id}/entry without auth returns 401", async () => {
+		const { mf } = await authWorker();
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ date: "2024-06-15", amount: "100.00" }),
+			},
+		);
+		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("POST /api/v1/account/{id}/entry with invalid token returns 401", async () => {
+		const { mf } = await authWorker();
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer invalid-token",
+				},
+				body: JSON.stringify({ date: "2024-06-15", amount: "100.00" }),
+			},
+		);
+		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("POST /api/v1/account/{id}/entry with valid token adds an entry", async () => {
+		const { mf, token } = await authWorker();
+
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "POST",
+				headers: authHeaders(token),
+				body: JSON.stringify({ date: "2024-06-15", amount: "500.00" }),
+			},
+		);
+		expect(res.status).toBe(200);
+
+		const db = await mf.getD1Database("prod_d1_finance");
+		const entry = await db
+			.prepare("SELECT amount FROM account_entry WHERE account_id = ? AND date = ?")
+			.bind("00000000-0000-0000-0000-000000000002", "2024-06-15")
+			.first<{ amount: number }>();
+		expect(entry?.amount).toBe(500);
+
+		await mf.dispose();
+	});
+
+	it("POST /api/v1/account/{id}/entry with non-existent account returns 404", async () => {
+		const { mf, token } = await authWorker();
+
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000099999",
+			{
+				method: "POST",
+				headers: authHeaders(token),
+				body: JSON.stringify({ date: "2024-06-15", amount: "100.00" }),
+			},
+		);
+		expect(res.status).toBe(404);
+
+		await mf.dispose();
+	});
+
+	it("POST /api/v1/account/{id}/entry upserts on duplicate date", async () => {
+		const { mf, token } = await authWorker();
+		const accountId = "00000000-0000-0000-0000-000000000002";
+		const date = "2024-06-15";
+
+		// First insert
+		const res1 = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "POST",
+			headers: authHeaders(token),
+			body: JSON.stringify({ date, amount: "100.00" }),
+		});
+		expect(res1.status).toBe(200);
+
+		// Upsert with new amount
+		const res2 = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "POST",
+			headers: authHeaders(token),
+			body: JSON.stringify({ date, amount: "250.00" }),
+		});
+		expect(res2.status).toBe(200);
+
+		const db = await mf.getD1Database("prod_d1_finance");
+		const entries = await db
+			.prepare("SELECT amount FROM account_entry WHERE account_id = ? AND date = ?")
+			.bind(accountId, date)
+			.all<{ amount: number }>();
+		expect(entries.results.length).toBe(1);
+		expect(entries.results[0].amount).toBe(250);
+
+		await mf.dispose();
+	});
+
 	it("DELETE /api/v1/account/{id} removes an account created via POST", async () => {
 		const { mf, token } = await authWorker();
 

@@ -45,11 +45,12 @@ pub async fn add(
 	let acccess = sqlx_d1::query!(
 		r#"
 		SELECT EXISTS (
-			SELECT 1 FROM project_access
-			WHERE project_id = ? AND user_id = ?
+			SELECT 1 FROM account a
+			JOIN project_access pa ON a.project_id = pa.project_id
+			WHERE a.id = ? AND pa.user_id = ?
 		) AS has_access
 		"#,
-		id,
+		id.hyphenated().to_string(),
 		user.user_id(),
 	)
 	.fetch_one(db.as_ref())
