@@ -40,13 +40,10 @@ pub async fn delete_account(
 	tracing::info!(?user, ?id, "Deleting account for user");
 
 	sqlx_d1::query!(
-		r#"
-		DELETE FROM account
-			WHERE id = ?
-			AND project_id IN (SELECT project_id FROM project_access WHERE user_id = ?)
-		"#,
-		id,
-		user.user_id()
+		"UPDATE account SET deleted_at = datetime('now')
+		WHERE id = ? AND project_id IN (SELECT project_id FROM project_access WHERE user_id = ?)",
+		id.hyphenated().to_string(),
+		user.user_id(),
 	)
 	.execute(db.as_ref())
 	.await

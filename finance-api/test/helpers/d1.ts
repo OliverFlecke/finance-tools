@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import type { Miniflare } from "miniflare";
@@ -19,7 +19,13 @@ export async function seedD1(mf: Miniflare) {
 	const projectRoot = process.cwd();
 	const db = await mf.getD1Database("prod_d1_finance");
 
-	await runSqlFile(db, path.join(projectRoot, "migrations", "0001_initial.sql"));
+	const migrationsDir = path.join(projectRoot, "migrations");
+	const migrations = readdirSync(migrationsDir)
+		.filter((f) => f.endsWith(".sql"))
+		.sort();
+	for (const migration of migrations) {
+		await runSqlFile(db, path.join(migrationsDir, migration));
+	}
 
 	const testDataPath = path.join(projectRoot, "test", "test-data.sql");
 	if (existsSync(testDataPath)) {

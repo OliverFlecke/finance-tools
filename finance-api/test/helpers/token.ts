@@ -1,3 +1,5 @@
+// biome-ignore-all lint/style/noNonNullAssertion: fine in tests
+
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
 
 export interface TestJwks {

@@ -37,8 +37,7 @@ pub async fn add_account(
 
 	let account_id = Uuid::now_v7();
 	sqlx_d1::query!(
-		r#"
-		WITH project AS (
+		r#"WITH project AS (
 			SELECT project_id as id FROM project_access
 			WHERE user_id = ? ORDER BY project_id LIMIT 1
 		)
@@ -46,13 +45,12 @@ pub async fn add_account(
 		SELECT
 			p.id, ?, ?, ?, ?
 			, (SELECT MAX(sort_key) + 1 FROM account a WHERE a.project_id = p.id)
-		FROM project p
-		"#,
+		FROM project p"#,
 		user_id,
-		account_id,
+		account_id.hyphenated().to_string(),
 		request.name,
 		request.currency,
-		request.kind as u8
+		request.kind as u8,
 	)
 	.execute(db.as_ref())
 	.await

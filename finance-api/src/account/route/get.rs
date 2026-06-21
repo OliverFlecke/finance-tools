@@ -103,6 +103,7 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 			WHERE pa.user_id = ?
 			LIMIT 1
 		)
+		AND a.deleted_at IS NULL
 		ORDER BY a.id, a.sort_key
 		"#,
 		user
