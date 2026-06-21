@@ -32,7 +32,7 @@ use crate::auth::Claims;
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
 #[tracing::instrument(skip(db))]
-pub async fn delete_account(
+pub async fn remove(
 	State(db): State<Arc<D1Connection>>,
 	user: Claims,
 	Path(id): Path<Uuid>,

@@ -27,7 +27,7 @@ use crate::{account::model::AccountKind, auth::Claims};
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
 #[tracing::instrument(skip(db))]
-pub async fn add_account(
+pub async fn add(
 	State(db): State<Arc<D1Connection>>,
 	user: Claims,
 	Json(request): Json<CreateAccountRequest>,

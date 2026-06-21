@@ -12,12 +12,12 @@ CREATE TABLE IF NOT EXISTS project_access (
 );
 
 CREATE TABLE IF NOT EXISTS account (
-    id uuid NOT NULL PRIMARY KEY,
+	id uuid NOT NULL PRIMARY KEY,
 	project_id uuid NOT NULL,
-    name text NOT NULL,
-    type integer NOT NULL,
-    currency varchar(3) DEFAULT 'USD' NOT NULL,
-    sort_key integer DEFAULT 0 NOT NULL,
+	name text NOT NULL,
+	type integer NOT NULL,
+	currency varchar(3) DEFAULT 'USD' NOT NULL,
+	sort_key integer DEFAULT 0 NOT NULL,
 	archived INTEGER NOT NULL DEFAULT 0,
 	deleted_at TEXT,
 
@@ -25,9 +25,10 @@ CREATE TABLE IF NOT EXISTS account (
 );
 
 CREATE TABLE IF NOT EXISTS account_entry (
-    date date NOT NULL,
-    account_id uuid NOT NULL,
-    amount NUMERIC(15, 2) NOT NULL,
+	account_id uuid NOT NULL,
+	date date NOT NULL,
+	amount NUMERIC(15, 2) NOT NULL,
 
+	UNIQUE (account_id, date),
 	FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE
 );

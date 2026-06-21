@@ -6,9 +6,10 @@ use utoipa::{
 #[derive(OpenApi)]
 #[openapi(
 	paths(
-		crate::account::route::get::accounts,
-		crate::account::route::post::add_account,
-		crate::account::route::delete::delete_account,
+		crate::account::route::get::read,
+		crate::account::route::post::add,
+		crate::account::route::delete::remove,
+		crate::account::route::entry::post::add,
 		crate::health::ready,
 		crate::health::liveness,
 	),
@@ -20,6 +21,7 @@ use utoipa::{
 			crate::account::route::get::AccountEntry,
 			crate::account::route::post::CreateAccountRequest,
 			crate::account::route::post::CreateAccountResponse,
+			crate::account::route::entry::post::AddAccountEntryRequest,
 		)
 	),
 	info(

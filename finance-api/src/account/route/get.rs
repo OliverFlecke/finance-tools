@@ -75,7 +75,7 @@ impl IntoResponse for GetAccountError {
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
 #[tracing::instrument(skip(db))]
-pub async fn accounts(
+pub async fn read(
 	State(db): State<Arc<D1Connection>>,
 	user: Claims,
 ) -> Result<Json<AccountResponse>, GetAccountError> {

@@ -1,11 +1,9 @@
-pub mod delete;
-pub mod get;
-pub mod post;
+pub(crate) mod delete;
+pub(crate) mod entry;
+pub(crate) mod get;
+pub(crate) mod post;
 
-use crate::{
-	account::route::{delete::delete_account, get::accounts, post::add_account},
-	state::AppState,
-};
+use crate::state::AppState;
 use axum::{
 	routing::{delete, get, post},
 	Router,
@@ -13,7 +11,8 @@ use axum::{
 
 pub fn account_router() -> Router<AppState> {
 	Router::new()
-		.route("/", get(accounts))
-		.route("/", post(add_account))
-		.route("/{id}", delete(delete_account))
+		.route("/", get(get::read))
+		.route("/", post(post::add))
+		.route("/{id}", delete(delete::remove))
+		.route("/{id}", post(entry::post::add))
 }
