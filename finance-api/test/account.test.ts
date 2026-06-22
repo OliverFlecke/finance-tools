@@ -298,6 +298,227 @@ describe("account endpoint", () => {
 		await mf.dispose();
 	});
 
+	it("PATCH /api/v1/account/{id} without auth returns 401", async () => {
+		const { mf } = await authWorker();
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ name: "Renamed" }),
+			},
+		);
+		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} with invalid token returns 401", async () => {
+		const { mf } = await authWorker();
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer invalid-token",
+				},
+				body: JSON.stringify({ name: "Renamed" }),
+			},
+		);
+		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates name", async () => {
+		const { mf, token } = await authWorker();
+
+		const patchRes = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "PATCH",
+				headers: authHeaders(token),
+				body: JSON.stringify({ name: "Renamed Account" }),
+			},
+		);
+		expect(patchRes.status).toBe(200);
+
+		const getRes = await mf.dispatchFetch("http://localhost/api/v1/account", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const body: any = await getRes.json();
+		const account = body.accounts.find((a: any) => a.id === "00000000-0000-0000-0000-000000000002");
+		expect(account.name).toBe("Renamed Account");
+		expect(account.currency).toBe("SGD");
+		expect(account.kind).toBe("Cash");
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates currency", async () => {
+		const { mf, token } = await authWorker();
+
+		const patchRes = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "PATCH",
+				headers: authHeaders(token),
+				body: JSON.stringify({ currency: "USD" }),
+			},
+		);
+		expect(patchRes.status).toBe(200);
+
+		const getRes = await mf.dispatchFetch("http://localhost/api/v1/account", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const body: any = await getRes.json();
+		const account = body.accounts.find((a: any) => a.id === "00000000-0000-0000-0000-000000000002");
+		expect(account.name).toBe("Test Account");
+		expect(account.currency).toBe("USD");
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates kind", async () => {
+		const { mf, token } = await authWorker();
+
+		const patchRes = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000000002",
+			{
+				method: "PATCH",
+				headers: authHeaders(token),
+				body: JSON.stringify({ kind: "Investment" }),
+			},
+		);
+		expect(patchRes.status).toBe(200);
+
+		const getRes = await mf.dispatchFetch("http://localhost/api/v1/account", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const body: any = await getRes.json();
+		const account = body.accounts.find((a: any) => a.id === "00000000-0000-0000-0000-000000000002");
+		expect(account.kind).toBe("Investment");
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates archived", async () => {
+		const { mf, token } = await authWorker();
+		const accountId = "00000000-0000-0000-0000-000000000002";
+
+		const patchRes = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "PATCH",
+			headers: authHeaders(token),
+			body: JSON.stringify({ archived: true }),
+		});
+		expect(patchRes.status).toBe(200);
+
+		const db = await mf.getD1Database("prod_d1_finance");
+		const row = await db
+			.prepare("SELECT archived FROM account WHERE id = ?")
+			.bind(accountId)
+			.first<{ archived: number }>();
+		expect(row?.archived).toBe(1);
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates sort_key", async () => {
+		const { mf, token } = await authWorker();
+		const accountId = "00000000-0000-0000-0000-000000000002";
+
+		const patchRes = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "PATCH",
+			headers: authHeaders(token),
+			body: JSON.stringify({ sort_key: 99 }),
+		});
+		expect(patchRes.status).toBe(200);
+
+		const db = await mf.getD1Database("prod_d1_finance");
+		const row = await db
+			.prepare("SELECT sort_key FROM account WHERE id = ?")
+			.bind(accountId)
+			.first<{ sort_key: number }>();
+		expect(row?.sort_key).toBe(99);
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} updates all fields", async () => {
+		const { mf, token } = await authWorker();
+		const accountId = "00000000-0000-0000-0000-000000000002";
+
+		const patchRes = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "PATCH",
+			headers: authHeaders(token),
+			body: JSON.stringify({
+				name: "Full Update",
+				currency: "EUR",
+				kind: "Investment",
+				archived: true,
+				sort_key: 42,
+			}),
+		});
+		expect(patchRes.status).toBe(200);
+
+		const db = await mf.getD1Database("prod_d1_finance");
+		const row = await db
+			.prepare("SELECT name, currency, type, archived, sort_key FROM account WHERE id = ?")
+			.bind(accountId)
+			.first<{
+				name: string;
+				currency: string;
+				type: number;
+				archived: number;
+				sort_key: number;
+			}>();
+		expect(row?.name).toBe("Full Update");
+		expect(row?.currency).toBe("EUR");
+		expect(row?.type).toBe(1);
+		expect(row?.archived).toBe(1);
+		expect(row?.sort_key).toBe(42);
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} with empty body makes no changes", async () => {
+		const { mf, token } = await authWorker();
+		const accountId = "00000000-0000-0000-0000-000000000002";
+
+		const patchRes = await mf.dispatchFetch(`http://localhost/api/v1/account/${accountId}`, {
+			method: "PATCH",
+			headers: authHeaders(token),
+			body: JSON.stringify({}),
+		});
+		expect(patchRes.status).toBe(200);
+
+		const getRes = await mf.dispatchFetch("http://localhost/api/v1/account", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const body: any = await getRes.json();
+		const account = body.accounts.find((a: any) => a.id === accountId);
+		expect(account.name).toBe("Test Account");
+		expect(account.currency).toBe("SGD");
+		expect(account.kind).toBe("Cash");
+
+		await mf.dispose();
+	});
+
+	it("PATCH /api/v1/account/{id} with non-existent id returns 404", async () => {
+		const { mf, token } = await authWorker();
+
+		const res = await mf.dispatchFetch(
+			"http://localhost/api/v1/account/00000000-0000-0000-0000-000000099999",
+			{
+				method: "PATCH",
+				headers: authHeaders(token),
+				body: JSON.stringify({ name: "Noop" }),
+			},
+		);
+		expect(res.status).toBe(404);
+
+		await mf.dispose();
+	});
+
 	it("DELETE /api/v1/account/{id} removes an account created via POST", async () => {
 		const { mf, token } = await authWorker();
 

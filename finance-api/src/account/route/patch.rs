@@ -51,6 +51,7 @@ pub async fn update_account(
 			sort_key = COALESCE(?, sort_key)
 		WHERE id = ?
 		  AND project_id IN (SELECT project_id FROM project_access WHERE user_id = ?)
+		RETURNING name
 		"#,
 		request.name,
 		request.currency,
@@ -60,9 +61,10 @@ pub async fn update_account(
 		id.hyphenated().to_string(),
 		user.user_id(),
 	)
-	.execute(db.as_ref())
+	.fetch_optional(db.as_ref())
 	.await
-	.map_err(UpdateAccountError::DatabaseError)?;
+	.map_err(UpdateAccountError::DatabaseError)?
+	.ok_or(UpdateAccountError::AccountNotFound)?;
 
 	Ok(StatusCode::OK)
 }
@@ -87,12 +89,15 @@ pub struct UpdateAccountRequest {
 pub enum UpdateAccountError {
 	#[error("Database error: {0}")]
 	DatabaseError(#[from] sqlx_d1::Error),
+	#[error("Account not found")]
+	AccountNotFound,
 }
 
 impl IntoResponse for UpdateAccountError {
 	fn into_response(self) -> axum::response::Response {
 		match self {
 			Self::DatabaseError(_) => (StatusCode::INTERNAL_SERVER_ERROR).into_response(),
+			Self::AccountNotFound => (StatusCode::NOT_FOUND).into_response(),
 		}
 	}
 }
