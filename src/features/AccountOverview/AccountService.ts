@@ -1,14 +1,13 @@
 import { createContext, useContext } from "react";
 import { sortObject } from "utils/converters";
 import { getDataFromStorage, storedReducer } from "utils/storage";
-import { Account, AccountEntries } from "./models/Account";
+import type { Account, AccountEntries } from "./models/Account";
 
 export const AccountContext = createContext({
 	state: {
 		accounts: [] as Account[],
 		entries: {} as AccountEntries,
 	},
-	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: AccountAction) => {},
 });
 

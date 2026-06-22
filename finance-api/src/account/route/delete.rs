@@ -14,6 +14,7 @@ use crate::auth::Claims;
 #[cfg_attr(
 	feature = "openapi",
 	utoipa::path(
+		operation_id = "delete_account",
 		delete,
 		tag = "Account",
 		path = "/api/v1/account/{id}",

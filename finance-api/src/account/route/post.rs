@@ -11,6 +11,7 @@ use crate::{account::model::AccountKind, auth::Claims};
 #[cfg_attr(
 	feature = "openapi",
 	utoipa::path(
+		operation_id = "create_account",
 		post,
 		tag = "Account",
 		path = "/api/v1/account",

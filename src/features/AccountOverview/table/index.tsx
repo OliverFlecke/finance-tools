@@ -1,21 +1,19 @@
-import { useAccountContext } from "features/AccountOverview/AccountService";
-import type { Account, AccountEntries } from "features/AccountOverview/models/Account";
+import { useAccountContext as useAccountContextLegacy } from "features/AccountOverview/AccountService";
+import type { AccountEntries } from "features/AccountOverview/models/Account";
+import type { Account } from "@/api/generated/dist";
 import DeleteButton from "@/components/DeleteButton";
+import { useAccountContext } from "../Context";
 import Cell from "./Cell";
 import styles from "./index.module.css";
 import RowSummary from "./RowSummary";
 import { useSummarizedAccounts } from "./useSummarizedAccounts";
 
 export default function Table() {
-	const {
-		state: { accounts },
-	} = useAccountContext();
-
 	return (
 		<div className={styles.container}>
 			<table className="w-full">
 				<thead>
-					<TableHeader accounts={accounts} />
+					<TableHeader />
 				</thead>
 				<tbody>
 					<TableBody />
@@ -25,11 +23,9 @@ export default function Table() {
 	);
 }
 
-interface TableHeaderProps {
-	accounts: Account[];
-}
+function TableHeader() {
+	const { accounts } = useAccountContext();
 
-function TableHeader({ accounts }: Readonly<TableHeaderProps>) {
 	return (
 		<tr className="whitespace-nowrap text-right">
 			<th className="pr-6 text-center">Date</th>
@@ -38,7 +34,7 @@ function TableHeader({ accounts }: Readonly<TableHeaderProps>) {
 			<th className="px-4 text-yellow-700 dark:text-yellow-500">Total cash</th>
 			<th className="px-4 text-purple-700 dark:text-purple-500">Total investments</th>
 			{accounts.map((account) => (
-				<th key={account.name} className="px-4">
+				<th key={account.id} className="px-4">
 					<span>{account.name}</span>
 				</th>
 			))}
@@ -48,10 +44,7 @@ function TableHeader({ accounts }: Readonly<TableHeaderProps>) {
 }
 
 function TableBody() {
-	const {
-		state: { accounts, entries },
-	} = useAccountContext();
-
+	const { accounts, entries } = useAccountContext();
 	const totals = calculateTotals(accounts, entries);
 
 	return (
@@ -66,7 +59,7 @@ function TableBody() {
 						<td className="pr-6 text-center">{date}</td>
 						<RowSummary date={date} index={i} totals={totals} />
 						{accounts.map((account) => (
-							<Cell key={account.name} account={account} entry={entries[date]} date={date} />
+							<Cell key={account.id} account={account} entry={entries[date]} date={date} />
 						))}
 						<RowActions date={date} />
 					</tr>
@@ -77,7 +70,7 @@ function TableBody() {
 }
 
 function RowActions({ date }: { date: string }) {
-	const { dispatch } = useAccountContext();
+	const { dispatch } = useAccountContextLegacy(); // TODO: Needs to be replaced
 
 	return (
 		<td className="pl-4">

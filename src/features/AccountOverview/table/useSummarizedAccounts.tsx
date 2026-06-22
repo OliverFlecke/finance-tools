@@ -1,6 +1,7 @@
+import type { Account } from "@/api/generated/src";
 import { useSettingsContext } from "@/features/Settings/context";
 import { convertToCurrency } from "@/utils/converters";
-import { Account, AccountEntries } from "../models/Account";
+import type { AccountEntries } from "../models/Account";
 
 export function useSummarizedAccounts(
 	accounts: Account[],
@@ -16,7 +17,7 @@ export function useSummarizedAccounts(
 		.filter(filter)
 		.map((account) =>
 			convertToCurrency(
-				entries[date][account.name] ?? 0,
+				entries[date][account.id] ?? 0,
 				currencyRates.usd,
 				account.currency,
 				preferredDisplayCurrency,

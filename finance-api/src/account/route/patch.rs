@@ -15,6 +15,7 @@ use crate::{account::model::AccountKind, auth::Claims};
 #[cfg_attr(
 	feature = "openapi",
 	utoipa::path(
+		operation_id = "update_account",
 		patch,
 		tag = "Account",
 		path = "/api/v1/account/{id}",

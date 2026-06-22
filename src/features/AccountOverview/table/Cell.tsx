@@ -1,8 +1,9 @@
 import { type ChangeEvent, useCallback, useContext, useRef } from "react";
 import { formatCurrency, parseNumber } from "utils/converters";
+import type { Account } from "@/api/generated/dist";
 import { AccountContext } from "../AccountService";
 import { useUpdateEntryCallback } from "../api/accountApi";
-import type { Account, DateEntry } from "../models/Account";
+import type { DateEntry } from "../models/Account";
 import styles from "./Cell.module.css";
 
 interface CellProps {
@@ -38,11 +39,11 @@ export default function Cell({ account, entry, date }: Readonly<CellProps>) {
 		[account.id, account.name, date, dispatch, updateEntryCallback],
 	);
 
-	const value = formatCurrency(entry[account.name], account.currency);
+	const value = formatCurrency(entry[account.id], account.currency);
 
 	return (
 		<td
-			key={account.name}
+			key={account.id}
 			contentEditable={true}
 			suppressContentEditableWarning={true}
 			ref={entryRef}

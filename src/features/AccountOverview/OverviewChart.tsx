@@ -9,11 +9,11 @@ import {
 	XYChart,
 } from "@visx/xychart";
 import useThemeDetector from "hooks/useThemeDetector";
-import React, { useCallback, useContext, useState } from "react";
-import { convertToCurrency, formatCurrency } from "../../utils/converters";
-import SettingsContext from "../Settings/context";
+import { useCallback, useContext, useState } from "react";
+import SettingsContext from "@/features/Settings/context";
+import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { AccountContext } from "./AccountService";
-import { Account } from "./models/Account";
+import type { Account } from "./models/Account";
 
 const accessors = {
 	// biome-ignore lint/suspicious/noExplicitAny: generic
@@ -30,7 +30,7 @@ const OverviewChart = () => {
 	const getEntries = useCallback(
 		(account: Account) => {
 			return Object.keys(state.entries).map((date) => {
-				const value = state.entries[date][account.name];
+				const value = state.entries[date][account.id];
 				const y =
 					value === undefined
 						? undefined
@@ -74,10 +74,10 @@ const OverviewChart = () => {
 	return (
 		<div className="py-4">
 			<div className="flex flex-row justify-end bg-transparent">
-				<label className="space-x-4 px-4">
+				<span className="space-x-4 px-4">
 					<span className="h-full align-middle">Show totals</span>
 					<Toggle checked={showTotals} onChange={(e) => setShowTotals(e.target.checked)} />
-				</label>
+				</span>
 			</div>
 			<XYChart
 				height={500}
@@ -97,7 +97,7 @@ const OverviewChart = () => {
 					: data.map((d) => (
 							<AnimatedLineSeries
 								key={d.account.id}
-								dataKey={d.account.name}
+								dataKey={d.account.id}
 								data={d.data}
 								{...accessors}
 							/>

@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import { useAccountContext } from "features/AccountOverview/AccountService";
 import { useSettingsContext } from "features/Settings/context";
 import { getValueColorIndicator } from "utils/colors";
 import { convertToCurrency, formatCurrency } from "utils/converters";
+import { useAccountContext } from "../Context";
 import styles from "./RowSummary.module.css";
 import { useSummarizedAccounts } from "./useSummarizedAccounts";
 
@@ -13,17 +13,15 @@ interface RowSummaryProps {
 }
 
 export default function RowSummary({ index, date, totals }: Readonly<RowSummaryProps>) {
-	const {
-		state: { accounts, entries },
-	} = useAccountContext();
+	const { accounts, entries } = useAccountContext();
 	const {
 		values: { preferredDisplayCurrency: currency },
 	} = useSettingsContext();
 
 	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
 	const total = totals[index];
-	const cash = useSummarizedAccounts(accounts, entries, date, (x) => x.type === "Cash");
-	const invested = useSummarizedAccounts(accounts, entries, date, (x) => x.type === "Investment");
+	const cash = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Cash");
+	const invested = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Investment");
 
 	return (
 		<>

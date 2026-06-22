@@ -5,7 +5,12 @@ import { sortObject } from "utils/converters";
 import { formatDate } from "utils/date";
 import { AccountContext, accountReducer, initAccountState } from "./AccountService";
 import AddEntryModal from "./AddEntryModal";
-import { type AccountResponse, useAccounts, useAddAccountCallback } from "./api/accountApi";
+import {
+	type AccountResponse,
+	useAccounts as useAccountsLegacy,
+	useAddAccountCallback,
+} from "./api/accountApi";
+import Context from "./Context";
 import type { Account, AccountEntries } from "./models/Account";
 import OrderAccountsModal from "./OrderAccountsModal";
 import OverviewChart from "./OverviewChart";
@@ -18,7 +23,7 @@ export default withAuthenticationRequired(AccountOverview, {
 function AccountOverview() {
 	const [state, dispatch] = useReducer(accountReducer, initAccountState());
 
-	const accountState = useAccounts();
+	const accountState = useAccountsLegacy();
 	// biome-ignore lint/correctness/useExhaustiveDependencies: we don't want to refresh here automatically
 	useEffect(() => {
 		if (!accountState.loading && accountState.data) {
@@ -48,15 +53,17 @@ function AccountOverview() {
 	}
 
 	return (
-		<AccountContext.Provider value={{ state, dispatch }}>
-			<Table />
-			<div className="flex flex-row justify-between px-4">
-				<AddAccount addAccount={add} />
-				<OrderAccountsModal />
-				<AddEntryModal />
-			</div>
-			<OverviewChart />
-		</AccountContext.Provider>
+		<Context>
+			<AccountContext.Provider value={{ state, dispatch }}>
+				<Table />
+				<div className="flex flex-row justify-between px-4">
+					<AddAccount addAccount={add} />
+					<OrderAccountsModal />
+					<AddEntryModal />
+				</div>
+				<OverviewChart />
+			</AccountContext.Provider>
+		</Context>
 	);
 }
 
@@ -71,7 +78,7 @@ function createAccountEntries(accounts: AccountResponse[]): AccountEntries {
 				entries[key] = {};
 			}
 
-			entries[key][account.name] = entry.amount;
+			entries[key][account.id] = entry.amount;
 		}
 	}
 

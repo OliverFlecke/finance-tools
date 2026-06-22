@@ -14,6 +14,7 @@ use uuid::Uuid;
 #[cfg_attr(
 	feature = "openapi",
 	utoipa::path(
+		operation_id = "add_entry",
 		post,
 		tag = "Account",
 		path = "/api/v1/account/{id}/entry",

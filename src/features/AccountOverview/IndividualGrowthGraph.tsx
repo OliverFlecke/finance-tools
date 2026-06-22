@@ -4,12 +4,12 @@ import { curveLinear } from "@visx/curve";
 import { Group } from "@visx/group";
 import { LegendItem, LegendLabel, LegendOrdinal } from "@visx/legend";
 import { ParentSize } from "@visx/responsive";
-import { scaleLinear, scaleOrdinal, scaleTime, TimeDomain } from "@visx/scale";
+import { scaleLinear, scaleOrdinal, scaleTime, type TimeDomain } from "@visx/scale";
 import { LinePath } from "@visx/shape";
 import { extent, max } from "d3-array";
-import { ScaleLinear, ScaleTime, tickFormat } from "d3-scale";
-import { Account, DateEntry } from "features/AccountOverview/models/Account";
-import { FC, useContext } from "react";
+import { type ScaleLinear, type ScaleTime, tickFormat } from "d3-scale";
+import type { Account, DateEntry } from "features/AccountOverview/models/Account";
+import { type FC, useContext } from "react";
 import colors from "tailwindcss/colors";
 import { AccountContext } from "./AccountService";
 
@@ -72,6 +72,7 @@ const IndividualGrowthGraph: FC = () => {
 				return (
 					<div>
 						<svg width={width} height={height}>
+							<title>Overview chart</title>
 							<Group top={25} left={65}>
 								<AxisLeft
 									scale={yScale}
@@ -100,7 +101,7 @@ const IndividualGrowthGraph: FC = () => {
 
 								{state.accounts.map((account, i) => (
 									<AccountLine
-										key={account.name}
+										key={account.id}
 										account={account}
 										color={lineColors[i][500]}
 										data={data}
@@ -113,9 +114,10 @@ const IndividualGrowthGraph: FC = () => {
 						<LegendOrdinal scale={legendScale} labelFormat={(label) => `${label.toUpperCase()}`}>
 							{(labels) => (
 								<div className="flex flex-row flex-wrap">
-									{labels.map((label, i) => (
-										<LegendItem key={`legend-quantile-${i}`} margin="0 5px">
+									{labels.map((label) => (
+										<LegendItem key={`legend-quantile-${label.text}`} margin="0 5px">
 											<svg width={legendGlyphSize} height={legendGlyphSize}>
+												<title>{label.text}</title>
 												<rect fill={label.value} width={legendGlyphSize} height={legendGlyphSize} />
 											</svg>
 											<LegendLabel align="left" margin="0 0 0 4px">
@@ -145,7 +147,7 @@ interface AccountLineProps {
 
 const AccountLine = ({ account, color, data, yScale, xScale }: AccountLineProps) => {
 	const x = (d: any) => new Date(d.date);
-	const y = (d: any) => d.value[account.name];
+	const y = (d: any) => d.value[account.id];
 
 	const compose = (scale: any, accessor: any) => (data: any) => scale(accessor(data));
 	const xCompose = compose(xScale, x);

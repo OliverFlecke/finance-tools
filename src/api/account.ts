@@ -12,6 +12,6 @@ const api = new AccountApi(configuration);
 export function useAccounts() {
 	return useQuery({
 		queryKey: ["accounts"],
-		queryFn: () => api.accounts(),
+		queryFn: () => api.getAccounts(),
 	});
 }

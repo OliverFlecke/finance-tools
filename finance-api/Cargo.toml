@@ -31,7 +31,7 @@ getrandom = { version = "0.2.17", features = [
 http = "1.4.2"
 jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
 reqwest = { version = "0.13.4", features = ["json"] }
-rust_decimal = "1.42.1"
+rust_decimal = { version = "1.42.1", features = ["serde-float"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
 sqlx-d1 = { version = "0.4.2", features = [
@@ -56,7 +56,7 @@ utoipa = { version = "5", features = [
   "uuid",
   "chrono",
   "time",
-  "decimal",
+  "decimal_float",
 ], optional = true }
 uuid = { version = "1.23.3", features = [
   "serde",

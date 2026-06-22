@@ -137,7 +137,7 @@ export function useApiWithUrlCall(): (
 export function parseJsonWithDate(data: string): any {
 	const reDateDetect = /(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?/;
 	return JSON.parse(data, (_: string, value: unknown) => {
-		if (typeof value == "string" && reDateDetect.exec(value)) {
+		if (typeof value === "string" && reDateDetect.exec(value)) {
 			return new Date(value);
 		}
 		return value;
