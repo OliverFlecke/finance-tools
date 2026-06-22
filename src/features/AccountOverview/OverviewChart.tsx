@@ -10,10 +10,10 @@ import {
 } from "@visx/xychart";
 import useThemeDetector from "hooks/useThemeDetector";
 import { useCallback, useContext, useState } from "react";
+import type { Account } from "@/api/generated/dist";
 import SettingsContext from "@/features/Settings/context";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
-import { AccountContext } from "./AccountService";
-import type { Account } from "./models/Account";
+import { useAccountContext } from "./Context";
 
 const accessors = {
 	// biome-ignore lint/suspicious/noExplicitAny: generic
@@ -22,15 +22,15 @@ const accessors = {
 	yAccessor: (d: any) => d.y,
 };
 
-const OverviewChart = () => {
+export default function OverviewChart() {
 	const isDarkTheme = useThemeDetector();
-	const { state } = useContext(AccountContext);
+	const { accounts, entries } = useAccountContext();
 	const { values: settings } = useContext(SettingsContext);
 
 	const getEntries = useCallback(
 		(account: Account) => {
-			return Object.keys(state.entries).map((date) => {
-				const value = state.entries[date][account.id];
+			return Object.keys(entries).map((date) => {
+				const value = entries[date][account.id];
 				const y =
 					value === undefined
 						? undefined
@@ -43,30 +43,27 @@ const OverviewChart = () => {
 				return { x: date, y };
 			});
 		},
-		[settings.currencyRates.usd, settings.preferredDisplayCurrency, state.entries],
+		[settings.currencyRates.usd, settings.preferredDisplayCurrency, entries],
 	);
 
-	const data = state.accounts.map((account) => ({
+	const data = accounts.map((account) => ({
 		account: account,
 		data: getEntries(account),
 	}));
 
-	const summarize = useCallback(
-		(name: string, predicate: (x: { account: Account }) => boolean) => {
-			const filteredData = data.filter(predicate).map((x) => x.data);
-			return {
-				name,
-				data: Object.keys(state.entries).map((date, i) => ({
-					x: date,
-					y: filteredData.map((x) => x[i].y ?? 0).reduce((sum, v) => sum + v, 0),
-				})),
-			};
-		},
-		[data, state.entries],
-	);
+	const summarize = (name: string, predicate: (x: { account: Account }) => boolean) => {
+		const filteredData = data.filter(predicate).map((x) => x.data);
+		return {
+			name,
+			data: Object.keys(entries).map((date, i) => ({
+				x: date,
+				y: filteredData.map((x) => x[i].y ?? 0).reduce((sum, v) => sum + v, 0),
+			})),
+		};
+	};
 
 	const types = ["Cash", "Investment"]
-		.map((type) => summarize(type, (x) => x.account.type === type))
+		.map((kind) => summarize(kind, (x) => x.account.kind === kind))
 		.concat([summarize("Total", () => true)]);
 
 	const [showTotals, setShowTotals] = useState(true);
@@ -130,6 +127,4 @@ const OverviewChart = () => {
 			</XYChart>
 		</div>
 	);
-};
-
-export default OverviewChart;
+}

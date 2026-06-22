@@ -17,7 +17,7 @@ use uuid::Uuid;
 		operation_id = "add_entry",
 		post,
 		tag = "Account",
-		path = "/api/v1/account/{id}/entry",
+		path = "/api/v1/account/{id}",
 		params(
 			("id" = Uuid, Path, description = "Account ID")
 		),
@@ -34,14 +34,14 @@ use uuid::Uuid;
 	)
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
-#[tracing::instrument(skip(db))]
+#[tracing::instrument(skip(db), err)]
 pub async fn add(
 	State(db): State<Arc<D1Connection>>,
 	user: crate::auth::Claims,
 	Path(id): Path<Uuid>,
 	Json(request): Json<AddAccountEntryRequest>,
 ) -> Result<StatusCode, AddEntryError> {
-	tracing::info!(?user, ?request, "Adding entry to account");
+	tracing::info!(?user, ?request, ?id, "Adding entry to account");
 
 	let acccess = sqlx_d1::query!(
 		r#"
@@ -59,6 +59,7 @@ pub async fn add(
 	.map_err(AddEntryError::DatabaseError)?;
 
 	if acccess.has_access == 0 {
+		tracing::warn!(?user, ?request, "Account not found");
 		return Err(AddEntryError::AccountNotFound);
 	}
 

@@ -1,45 +1,29 @@
-import { type ChangeEvent, useCallback, useContext, useRef } from "react";
+import { type ChangeEvent, useRef } from "react";
 import { formatCurrency, parseNumber } from "utils/converters";
+import { useAddEntryMutation } from "@/api/account";
 import type { Account } from "@/api/generated/dist";
-import { AccountContext } from "../AccountService";
-import { useUpdateEntryCallback } from "../api/accountApi";
 import type { DateEntry } from "../models/Account";
 import styles from "./Cell.module.css";
 
 interface CellProps {
 	account: Account;
 	entry: DateEntry;
-	date: string;
+	date: Date;
 }
 
 export default function Cell({ account, entry, date }: Readonly<CellProps>) {
-	const { dispatch } = useContext(AccountContext);
 	const entryRef = useRef<HTMLTableCellElement>(null);
 
-	const updateEntryCallback = useUpdateEntryCallback();
-	const onBlur = useCallback(
-		async (element: ChangeEvent<HTMLTableCellElement>) => {
-			const amount = parseNumber(element.currentTarget.innerText);
-			if (Number.isNaN(amount)) {
-				return;
-			}
+	const { mutate } = useAddEntryMutation();
+	const onBlur = async (element: ChangeEvent<HTMLTableCellElement>) => {
+		const amount = parseNumber(element.target.innerText);
+		if (Number.isNaN(amount)) {
+			return;
+		}
 
-			await updateEntryCallback({
-				date,
-				amount,
-				accountId: account.id,
-			});
-			dispatch({
-				type: "EDIT ENTRY FOR ACCOUNT",
-				name: account.name,
-				key: date,
-				value: amount,
-			});
-		},
-		[account.id, account.name, date, dispatch, updateEntryCallback],
-	);
-
-	const value = formatCurrency(entry[account.id], account.currency);
+		mutate({ id: account.id, date, amount }, { onError: (err) => console.error(err) });
+		element.target.innerText = formatCurrency(amount, account.currency);
+	};
 
 	return (
 		<td
@@ -50,7 +34,7 @@ export default function Cell({ account, entry, date }: Readonly<CellProps>) {
 			onBlur={onBlur}
 			className={styles.container}
 		>
-			{value}
+			{formatCurrency(entry[account.id], account.currency)}
 		</td>
 	);
 }

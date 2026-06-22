@@ -1,41 +1,44 @@
 import { Button, ButtonContainer, Input, Modal } from "@oliverflecke/components-react";
-import React, { FC, memo, useCallback, useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AccountContext } from "./AccountService";
+import { useAccountContext } from "./Context";
 
-const AddEntryModal: FC = memo(() => {
-	const { dispatch } = useContext(AccountContext);
+export default function AddEntryModal() {
 	const [isOpen, setIsOpen] = useState(false);
-	const dismiss = useCallback(() => setIsOpen(false), []);
-
-	const { register, handleSubmit } = useForm<{ date: string }>();
-	const onSubmit = handleSubmit(({ date }) => {
-		dispatch({ type: "ADD ENTRY", date });
-		dismiss();
-	});
 
 	return (
 		<>
 			<Button buttonType="Primary" onClick={() => setIsOpen(true)}>
 				Add entry
 			</Button>
-			<Modal isOpen={isOpen} onDismiss={dismiss}>
-				<form onSubmit={onSubmit}>
-					<div className="p-4">
-						<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
-						<Input type="date" className="m-4" {...register("date")} />
-					</div>
 
-					<ButtonContainer>
-						<Button buttonType="Primary" type="submit">
-							Add
-						</Button>
-					</ButtonContainer>
-				</form>
+			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
+				<Form onSuccess={() => setIsOpen(false)} />
 			</Modal>
 		</>
 	);
-});
-AddEntryModal.displayName = "AddEntryModal";
+}
 
-export default AddEntryModal;
+function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
+	const { addEntry } = useAccountContext();
+	const { register, handleSubmit } = useForm<{ date: string }>();
+	const onSubmit = ({ date }: { date: string }) => {
+		addEntry(date);
+		onSuccess();
+	};
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className="p-4">
+				<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
+				<Input type="date" className="m-4" {...register("date")} />
+			</div>
+
+			<ButtonContainer>
+				<Button buttonType="Primary" type="submit">
+					Add
+				</Button>
+			</ButtonContainer>
+		</form>
+	);
+}

@@ -1,24 +1,10 @@
-import { ApiResponse, apiUrlWithPath, useApi, useApiCall } from "features/apiBase";
-import { CurrencySymbol } from "features/Currency/api";
-import { Account, AccountType } from "../models/Account";
+import { type ApiResponse, apiUrlWithPath, useApi, useApiCall } from "features/apiBase";
+import type { CurrencySymbol } from "features/Currency/api";
+import { Account, type AccountType } from "../models/Account";
 
 export function useAccounts(): ApiResponse<AccountResponse[]> {
 	return useApi<AccountResponse[]>(`${apiUrlWithPath}/account`, {
 		method: "GET",
-	});
-}
-
-export function useAddAccountCallback(): (account: Account) => Promise<Response | undefined> {
-	return useApiCall(`${apiUrlWithPath}/account`, {
-		method: "POST",
-	});
-}
-
-export function useUpdateEntryCallback(): (
-	entry: AddAccountEntryRequest,
-) => Promise<Response | undefined> {
-	return useApiCall(`${apiUrlWithPath}/account/entry`, {
-		method: "POST",
 	});
 }
 
@@ -41,12 +27,6 @@ export interface AccountResponse {
 
 interface EntryResponse {
 	date: Date;
-	amount: number;
-}
-
-interface AddAccountEntryRequest {
-	accountId: string;
-	date: string; // Must be a DateOnly formatted string
 	amount: number;
 }
 

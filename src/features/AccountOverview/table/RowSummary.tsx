@@ -8,7 +8,7 @@ import { useSummarizedAccounts } from "./useSummarizedAccounts";
 
 interface RowSummaryProps {
 	index: number;
-	date: string;
+	date: Date;
 	totals: number[];
 }
 

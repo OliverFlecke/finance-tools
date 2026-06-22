@@ -1,6 +1,6 @@
-import { AccountApi, Configuration } from "@api/finance";
+import { AccountApi, type AddAccountEntryRequest, Configuration } from "@api/finance";
 import type { CreateAccountRequest } from "@api/finance/esm";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authClient } from "api/auth";
 
 const configuration = new Configuration({
@@ -21,5 +21,30 @@ export function useAddAccountMutation() {
 	return useMutation({
 		mutationFn: (account: CreateAccountRequest) =>
 			api.createAccount({ createAccountRequest: account }),
+	});
+}
+
+export function useAddEntryMutation() {
+	interface Args extends AddAccountEntryRequest {
+		id: string;
+	}
+
+	const qc = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({ id, ...addAccountEntryRequest }: Args) =>
+			api.addEntry({ id, addAccountEntryRequest }),
+		onSuccess: () => {
+			qc.invalidateQueries({ queryKey: ["account"] });
+
+			// TODO: set local state instead of invalidating the query
+			// qc.setQueryData<AccountResponse | undefined>(["account"], (data) =>
+			// 	!data
+			// 		? undefined
+			// 		: {
+			// 				...data,
+			// 			},
+			// );
+		},
 	});
 }
