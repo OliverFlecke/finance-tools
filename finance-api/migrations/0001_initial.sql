@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS project (
 
 CREATE TABLE IF NOT EXISTS project_access (
 	project_id uuid NOT NULL,
-	user_id uuid NOT NULL,
+	user_id text NOT NULL,
 
 	FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );

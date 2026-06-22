@@ -51,15 +51,10 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 			, a.sort_key
 			, e.amount as "amount: f64"
 			, e.date as "date: NaiveDate"
-		FROM account_entry e
-		JOIN account a ON a.id = e.account_id
-		WHERE a.project_id IN (
-			SELECT p.id FROM project p
-			JOIN project_access pa ON pa.project_id = p.id
-			WHERE pa.user_id = ?
-			LIMIT 1
-		)
-		AND a.deleted_at IS NULL
+		FROM account a
+		LEFT JOIN account_entry e ON a.id = e.account_id
+		JOIN project_access p ON p.project_id = a.project_id AND CAST(p.user_id AS TEXT) = ?
+		WHERE a.deleted_at IS NULL
 		ORDER BY a.sort_key
 		"#,
 		user
@@ -83,9 +78,10 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 					.expect("to be a valid account kind"),
 				entries: values
 					.iter()
-					.map(|x| AccountEntry {
-						date: x.date,
-						amount: Decimal::from_f64(x.amount).expect("to be a valid decimal"),
+					.filter_map(|x| {
+						x.date
+							.zip(x.amount.and_then(Decimal::from_f64))
+							.map(|(date, amount)| AccountEntry { amount, date })
 					})
 					.collect(),
 			}

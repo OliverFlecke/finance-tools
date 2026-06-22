@@ -1,4 +1,3 @@
-import { useAccountContext as useAccountContextLegacy } from "features/AccountOverview/AccountService";
 import type { AccountEntries } from "features/AccountOverview/models/Account";
 import type { Account } from "@/api/generated/dist";
 import DeleteButton from "@/components/DeleteButton";
@@ -61,7 +60,7 @@ function TableBody() {
 						{accounts.map((account) => (
 							<Cell key={account.id} account={account} entry={entries[date]} date={date} />
 						))}
-						<RowActions date={date} />
+						<RowActions date={new Date(Date.parse(date))} />
 					</tr>
 				);
 			})}
@@ -69,12 +68,10 @@ function TableBody() {
 	);
 }
 
-function RowActions({ date }: { date: string }) {
-	const { dispatch } = useAccountContextLegacy(); // TODO: Needs to be replaced
-
+function RowActions(_: { date: Date }) {
 	return (
 		<td className="pl-4">
-			<DeleteButton onClick={() => dispatch({ type: "DELETE ENTRY", date: date })} />
+			<DeleteButton onClick={() => {}} />
 		</td>
 	);
 }

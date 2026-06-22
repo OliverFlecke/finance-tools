@@ -1,17 +1,13 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import AddAccount from "features/AccountOverview/AddAccountModal";
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { sortObject } from "utils/converters";
 import { formatDate } from "utils/date";
 import { AccountContext, accountReducer, initAccountState } from "./AccountService";
 import AddEntryModal from "./AddEntryModal";
-import {
-	type AccountResponse,
-	useAccounts as useAccountsLegacy,
-	useAddAccountCallback,
-} from "./api/accountApi";
+import { type AccountResponse, useAccounts as useAccountsLegacy } from "./api/accountApi";
 import Context from "./Context";
-import type { Account, AccountEntries } from "./models/Account";
+import type { AccountEntries } from "./models/Account";
 import OrderAccountsModal from "./OrderAccountsModal";
 import OverviewChart from "./OverviewChart";
 import Table from "./table";
@@ -38,15 +34,6 @@ function AccountOverview() {
 		}
 	}, [accountState.loading]);
 
-	const addAccountCallback = useAddAccountCallback();
-	const add = useCallback(
-		async (account: Account) => {
-			await addAccountCallback(account);
-			dispatch({ type: "ADD ACCOUNT", account });
-		},
-		[addAccountCallback],
-	);
-
 	if (accountState.loading) {
 		// TODO: Spinner
 		return <div>Loading data</div>;
@@ -57,7 +44,7 @@ function AccountOverview() {
 			<AccountContext.Provider value={{ state, dispatch }}>
 				<Table />
 				<div className="flex flex-row justify-between px-4">
-					<AddAccount addAccount={add} />
+					<AddAccount />
 					<OrderAccountsModal />
 					<AddEntryModal />
 				</div>
