@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authClient } from "api/auth";
 
 const configuration = new Configuration({
-	basePath: "http://localhost:8787",
+	basePath: "https://finance-api.oliverfl.workers.dev",
 	accessToken: () => authClient.getTokenSilently(),
 });
 
