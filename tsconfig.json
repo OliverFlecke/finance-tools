@@ -36,5 +36,5 @@
 		"incremental": true
 	},
 	"include": ["src", "pages", "**/*.module.css"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "src/api/generated/src/**/*.ts"]
 }

@@ -73,7 +73,7 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 				id: Uuid::parse_str(&account.id).expect("to be valid uuid"),
 				currency: account.currency.clone(),
 				name: account.name.clone(),
-				sort_key: account.sort_key as u32,
+				sorting: account.sort_key as u32,
 				kind: AccountKind::from_repr(account.kind as u8)
 					.expect("to be a valid account kind"),
 				entries: values
@@ -108,7 +108,7 @@ pub struct Account {
 	currency: String,
 	kind: AccountKind,
 	entries: Vec<AccountEntry>,
-	sort_key: u32,
+	sorting: u32,
 }
 
 /// Represents an amount logged for on an account on a given date.

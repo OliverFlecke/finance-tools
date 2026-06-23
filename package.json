@@ -26,7 +26,8 @@
 		"openapi-generate-spec": "cd finance-api && cargo openapi > ../openapi.json && cd ..",
 		"openapi-generate-client": "openapi-generator-cli generate && pnpm -C src/api/generated build",
 		"openapi": "pnpm openapi-generate-spec && pnpm openapi-generate-client",
-		"deploy": "pnpm build && gh-pages -t true -d out"
+		"deploy": "pnpm run build && wrangler deploy",
+		"preview": "pnpm run build && wrangler dev"
 	},
 	"dependencies": {
 		"@api/finance": "link:src/api/generated/dist",
@@ -99,7 +100,8 @@
 		"start-server-and-test": "^2.0.0",
 		"tailwindcss": "^3.3.3",
 		"ts-node": "^10.2.1",
-		"typescript": "^5.1.6"
+		"typescript": "^5.1.6",
+		"wrangler": "^4.103.0"
 	},
 	"browserslist": {
 		"production": [">0.2%", "not dead", "not op_mini all"],
