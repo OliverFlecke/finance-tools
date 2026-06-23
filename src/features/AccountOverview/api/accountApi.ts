@@ -1,12 +1,6 @@
-import { type ApiResponse, apiUrlWithPath, useApi, useApiCall } from "features/apiBase";
+import { apiUrlWithPath, useApiCall } from "features/apiBase";
 import type { CurrencySymbol } from "features/Currency/api";
-import { Account, type AccountType } from "../models/Account";
-
-export function useAccounts(): ApiResponse<AccountResponse[]> {
-	return useApi<AccountResponse[]>(`${apiUrlWithPath}/account`, {
-		method: "GET",
-	});
-}
+import type { AccountType } from "../models/Account";
 
 export function useUpdateAccountsCallback(): (
 	accounts: UpdateAccount[],

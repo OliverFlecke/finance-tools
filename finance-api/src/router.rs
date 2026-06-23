@@ -7,7 +7,8 @@ use crate::{account::account_router, health::health_check_router, state::AppStat
 pub fn build_router(state: AppState) -> Router {
 	// TODO: CORS should not be necessary when running in production.
 	let cors = CorsLayer::very_permissive()
-		.allow_origin("https://localhost:3000".parse::<HeaderValue>().unwrap());
+		.allow_origin(HeaderValue::from_static("https://localhost:3000"))
+		.allow_origin(HeaderValue::from_static("https://finance.oliverflecke.me"));
 
 	Router::new()
 		.nest("/api/v1/account", account_router())

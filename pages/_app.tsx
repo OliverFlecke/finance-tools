@@ -37,7 +37,7 @@ export default function Layout({ Component, pageProps }: AppProps) {
 					<Settings>
 						<div className="flex min-h-screen flex-col">
 							<Header />
-							<main className="h-full grow bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+							<main className="h-full grow bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200 relative">
 								<Component {...pageProps} />
 							</main>
 							<Footer />
