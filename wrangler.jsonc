@@ -6,7 +6,7 @@
 		"enabled": true
 	},
 	"assets": {
-		"directory": ".next"
+		"directory": "out/"
 	},
-	"compatibility_flags": ["nodejs_compat"]
+	"compatibility_flags": []
 }
