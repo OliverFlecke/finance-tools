@@ -7,7 +7,7 @@ export const authClient = new Auth0Client({
 	useRefreshTokens: true,
 	useRefreshTokensFallback: true,
 	authorizationParams: {
-		redirect_uri: typeof window !== "undefined" ? process.env.NEXT_PUBLIC_REDIRECT_URI : undefined,
+		redirect_uri: typeof window !== "undefined" ? window.location.href : undefined,
 		audience: process.env.NEXT_PUBLIC_AUDIENCE,
 		scope: "account:read profile",
 	},
