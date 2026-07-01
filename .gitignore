@@ -4,10 +4,10 @@
 .pnp.js
 
 # testing
-/coverage
+**/coverage
 
 # production
-/build
+**/build
 
 # misc
 .DS_Store
@@ -22,14 +22,14 @@ yarn-error.log*
 
 **/compiled.css
 
-.next/
-out/
-certificates/
-tsconfig.tsbuildinfo
-next-env.d.ts
+frontend/.next/
+frontend/out/
+frontend/certificates/
+frontend/tsconfig.tsbuildinfo
+frontend/next-env.d.ts
 
-openapi.json
-src/api/generated/
+frontend/openapi.json
+frontend/src/api/generated/
 
 # wrangler files
 .wrangler
