@@ -34,7 +34,9 @@ jobs:
         run: corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
+        working-directory: frontend
         run: pnpm i --frozen-lockfile && pnpm -r install
 
       - name: Build
+        working-directory: frontend
         run: pnpm build
