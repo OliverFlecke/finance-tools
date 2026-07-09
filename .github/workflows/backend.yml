@@ -17,8 +17,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
 
-      - run: cargo build --release --target wasm32-wasi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+          cache: pnpm
+          cache-dependency-path: finance-api/package-lock.json
+
+      - run: pnpm install --frozen-lockfile
+        working-directory: finance-api
+
+      - run: pnpm wrangler build
         working-directory: finance-api
 
       - uses: actions/upload-artifact@v4
