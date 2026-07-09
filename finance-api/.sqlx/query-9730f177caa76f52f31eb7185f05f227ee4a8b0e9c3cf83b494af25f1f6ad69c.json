@@ -1,5 +1,1 @@
-{
-	"columns": [{ "ordinal": 0, "name": "name", "type_info": "TEXT" }],
-	"parameters": { "Right": 7 },
-	"nullable": [false]
-}
+{"columns":[{"ordinal":0,"name":"name","type_info":"TEXT"}],"parameters":{"Right":7},"nullable":[false]}

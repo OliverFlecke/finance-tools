@@ -23,7 +23,7 @@
 		"prebuild": "pnpm postcss src/main.css -o src/compiled.css -v",
 		"build": "next build",
 		"test": "jest --watch",
-		"openapi-generate-spec": "cd finance-api && cargo openapi > ../openapi.json && cd ..",
+		"openapi-generate-spec": "cargo run --manifest-path ../finance-api/Cargo.toml --features openapi openapi > ./openapi.json",
 		"openapi-generate-client": "openapi-generator-cli generate && pnpm -C src/api/generated build",
 		"openapi": "pnpm openapi-generate-spec && pnpm openapi-generate-client",
 		"deploy": "pnpm run build && wrangler deploy",
