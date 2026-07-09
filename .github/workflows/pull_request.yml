@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          version: "26"
+          node-version: "26"
           cache: pnpm
           cache-dependency-path: finance-api/package-lock.json
 
@@ -42,13 +42,13 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
-          version: "26"
+          node-version: "26"
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
