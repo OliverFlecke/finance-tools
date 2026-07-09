@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - "finance-api/**"
-      - ".github/workflows/deploy-backend.yml"
+      - 'finance-api/**'
+      - '.github/workflows/deploy-backend.yml'
 
 concurrency:
   group: backend-${{ github.ref }}
@@ -14,18 +14,13 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: finance-api
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Build & Deploy Worker
-        uses: cloudflare/wrangler-action@v3
+      - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: finance-api

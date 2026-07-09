@@ -4,8 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - "frontend/**"
-      - ".github/workflows/deploy-frontend.yml"
+      - 'frontend/**'
+      - 'finance-api/src/**'
+      - 'finance-api/Cargo.toml'
+      - '.github/workflows/deploy-frontend.yml'
 
 concurrency:
   group: frontend-${{ github.ref }}
@@ -14,14 +16,29 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
-      - name: Build & Deploy Worker
-        uses: cloudflare/wrangler-action@v3
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/package.json
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+        working-directory: frontend
+
+      - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: frontend
+          preCommands: |
+            pnpm openapi-generate-spec
+            pnpm openapi-generate-client
+            pnpm prebuild
+            pnpm build
