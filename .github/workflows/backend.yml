@@ -1,0 +1,60 @@
+name: Backend - Build and Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "finance-api/**"
+      - ".github/workflows/deploy-backend.yml"
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - run: cargo build --release --target wasm32-wasi
+        working-directory: finance-api
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finance-api
+          path: finance-api/target
+
+  build-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - run: cargo openapi > openapi.json
+        working-directory: finance-api
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openapi
+          path: openapi.json
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: finance-api
+          path: finance-api/target
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: finance-api
