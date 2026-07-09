@@ -1,0 +1,51 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "cargo"
+    schedule:
+      interval: "weekly"
+    directories:
+      - "/finance-api"
+    groups:
+      production-major:
+        dependency-type: production
+        update-types:
+          - major
+      production-minor:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development:
+        dependency-type: development
+
+  - package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+    directories:
+      - "/finance-api"
+
+  - package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+    directories:
+      - "/frontend"
+    groups:
+      production-major:
+        dependency-type: production
+        update-types:
+          - major
+      production-minor:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development:
+        dependency-type: development
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
