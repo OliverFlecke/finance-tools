@@ -1,4 +1,0 @@
-allowBuilds:
-  browser-tabs-lock: true
-  cypress: true
-  sharp: true

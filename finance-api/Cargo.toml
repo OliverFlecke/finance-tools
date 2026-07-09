@@ -1,0 +1,68 @@
+[package]
+name = "finance-api"
+version = "0.1.0"
+edition = "2021"
+authors = ["Oliver Fleckenstein <oliverfl@live.dk>"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "openapi"
+path = "src/bin/openapi.rs"
+
+[features]
+default = []
+openapi = ["dep:utoipa"]
+
+[dependencies]
+axum = { version = "0.8.9", default-features = false, features = [
+  "macros",
+  "json",
+] }
+axum-extra = { version = "0.12.6", features = ["typed-header"] }
+axum-macros = "0.5.1"
+chrono = { version = "0.4.45", features = ["serde"] }
+derive-getters = { version = "0.5.0" }
+duplicate = { version = "2.0.1" }
+getrandom = { version = "0.2.17", features = [
+  "js",
+] } # Required for wasm-bindgen support in jsonwebtooken
+http = "1.4.2"
+jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
+reqwest = { version = "0.13.4", features = ["json"] }
+rust_decimal = { version = "1.42.1", features = ["serde-float"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+sqlx-d1 = { version = "0.4.2", features = [
+  "uuid",
+  "chrono",
+  "decimal",
+  "macros",
+  "query",
+] }
+strum = { version = "0.28.0", default-features = false, features = ["derive"] }
+thiserror = "2.0.18"
+time = { version = "0.3", features = ['wasm-bindgen'] }
+tokio = { version = "1.52.3", features = ["rt", "macros"] }
+tower-http = { version = "0.6.11", features = ["cors"] }
+tower-service = { version = "0.3.3" }
+tracing = { version = "0.1.44" }
+tracing-subscriber = { version = "0.3.23", features = ['time', 'json'] }
+tracing-wasm = "0.2.1"
+tracing-web = "0.1"
+utoipa = { version = "5", features = [
+  "axum_extras",
+  "uuid",
+  "chrono",
+  "time",
+  "decimal_float",
+], optional = true }
+uuid = { version = "1.23.3", features = [
+  "serde",
+  "v4",
+  "v7",
+  "js",
+], default-features = true }
+worker = { version = "0.8", features = ["http", "axum", "d1"] }
+worker-macros = { version = "0.8", features = ["http"] }

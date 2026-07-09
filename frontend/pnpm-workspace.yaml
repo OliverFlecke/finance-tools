@@ -1,0 +1,7 @@
+allowBuilds:
+  '@openapitools/openapi-generator-cli': true
+  browser-tabs-lock: true
+  cypress: true
+  esbuild: true
+  sharp: true
+  workerd: true
