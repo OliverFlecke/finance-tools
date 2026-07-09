@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "finance-api/**"
-      - ".github/workflows/deploy-backend.yml"
+      - ".github/workflows/backend.yml"
 
 concurrency:
   group: backend-${{ github.ref }}
