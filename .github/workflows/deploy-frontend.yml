@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - 'frontend/**'
-      - 'finance-api/src/**'
-      - 'finance-api/Cargo.toml'
-      - '.github/workflows/deploy-frontend.yml'
+      - "frontend/**"
+      - "finance-api/src/**"
+      - "finance-api/Cargo.toml"
+      - ".github/workflows/deploy-frontend.yml"
 
 concurrency:
   group: frontend-${{ github.ref }}
@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: frontend/package.json
+          node-version: "26"
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
