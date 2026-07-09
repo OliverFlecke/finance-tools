@@ -9,9 +9,6 @@
 	},
 	"packageManager": "pnpm@11.5.0",
 	"scripts": {
-		"cy:open": "cypress open",
-		"cy:test": "cypress run",
-		"cy:ci": "start-server-and-test start-server http://localhost:3000 cy:test",
 		"start-server": "pnpm build && pnpm start",
 		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
 		"css": "cross-env TAILWIND_MODE=watch pnpm postcss src/main.css -o src/compiled.css -v --watch",
@@ -97,7 +94,6 @@
 		"postcss-import": "^15.1.0",
 		"postcss-nested": "^6.0.1",
 		"prettier-plugin-tailwindcss": "^0.4.1",
-		"start-server-and-test": "^2.0.0",
 		"tailwindcss": "^3.3.3",
 		"ts-node": "^10.2.1",
 		"typescript": "^5.1.6",
