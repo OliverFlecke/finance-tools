@@ -18,18 +18,18 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "26"
-          cache: npm
+          version: "26"
+          cache: pnpm
           cache-dependency-path: finance-api/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm ci
 
       - name: Install worker-build
         run: cargo install -q "worker-build@^0.8"
 
       - name: Build and test
-        run: npm run test
+        run: pnpm run test
 
   frontend:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "26"
+          version: "26"
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
