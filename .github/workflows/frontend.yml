@@ -57,7 +57,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: frontend
-          path: out/
+          path: frontend/out/
 
       - uses: pnpm/action-setup@v4
         with:
