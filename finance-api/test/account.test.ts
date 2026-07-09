@@ -123,15 +123,15 @@ describe("account endpoint", () => {
 		expect(accountId).toBeDefined();
 		expect(typeof accountId).toBe("string");
 
-		// GET should still return the seed account (new account has no entries so
-		// it won't appear in GET — the query uses INNER JOIN with account_entry)
 		const getRes = await mf.dispatchFetch("http://localhost/api/v1/account", {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		expect(getRes.status).toBe(200);
 		const getBody: any = await getRes.json();
-		expect(getBody.accounts.length).toBe(1);
-		expect(getBody.accounts[0].id).toBe("00000000-0000-0000-0000-000000000002");
+		expect(getBody.accounts.length).toBe(2);
+		const ids = getBody.accounts.map((a: any) => a.id);
+		expect(ids).toContain("00000000-0000-0000-0000-000000000002");
+		expect(ids).toContain(accountId);
 
 		await mf.dispose();
 	});
