@@ -8,7 +8,7 @@
 	},
 	"devDependencies": {
 		"jose": "^6.2.3",
-		"miniflare": "^4.20260611.0",
+		"miniflare": "^4.20260708.1",
 		"typescript": "^5.8.0",
 		"vitest": "^4.1.10",
 		"wrangler": "^4.107.1"
