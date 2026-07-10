@@ -7,7 +7,7 @@
 	"engines": {
 		"node": "^26"
 	},
-	"packageManager": "pnpm@11.5.0",
+	"packageManager": "pnpm@11.10.0",
 	"scripts": {
 		"start-server": "pnpm build && pnpm start",
 		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
@@ -43,19 +43,15 @@
 		"@visx/xychart": "^4.0.0",
 		"clsx": "^2.1.1",
 		"d3-array": "^3.2.4",
-		"dotenv": "^17.4.2",
-		"file-saver": "^2.0.5",
 		"immutability-helper": "^3.1.1",
+		"next": "16.2.10",
 		"react": "19.2.7",
-		"react-async-hook": "^4.0.0",
 		"react-dnd": "^16.0.1",
 		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "19.2.7",
 		"react-hook-form": "^7.81.0",
 		"react-icons": "^5.7.0",
-		"react-number-format": "^5.4.5",
-		"react-spring": "^10.0.4",
-		"web-vitals": "^5.3.0"
+		"react-number-format": "^5.4.5"
 	},
 	"devDependencies": {
 		"@babel/core": "^8.0.1",
@@ -63,8 +59,6 @@
 		"@babel/preset-react": "^8.0.1",
 		"@babel/preset-typescript": "^8.0.1",
 		"@biomejs/biome": "2.5.3",
-		"@commitlint/cli": "^21.2.1",
-		"@commitlint/config-conventional": "^21.2.0",
 		"@css-modules-kit/ts-plugin": "^1.4.0",
 		"@openapitools/openapi-generator-cli": "^2.39.1",
 		"@testing-library/jest-dom": "^6.9.1",
@@ -84,16 +78,12 @@
 		"cross-env": "^10.1.0",
 		"cssnano": "^8.0.2",
 		"cypress": "^15.18.1",
-		"gh-pages": "^6.3.0",
-		"husky": "^9.1.7",
 		"jest": "^30.4.2",
-		"next": "16.2.10",
 		"postcss": "^8.5.16",
 		"postcss-cli": "^11.0.1",
 		"postcss-import": "^16.1.1",
 		"postcss-nested": "^7.0.2",
 		"tailwindcss": "^3.4.14",
-		"ts-node": "^10.2.1",
 		"typescript": "^5.9.3",
 		"wrangler": "^4.109.0"
 	},
