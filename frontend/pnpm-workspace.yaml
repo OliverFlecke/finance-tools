@@ -1,7 +1,13 @@
 allowBuilds:
-  '@openapitools/openapi-generator-cli': true
+  "@openapitools/openapi-generator-cli": true
   browser-tabs-lock: true
   cypress: true
   esbuild: true
   sharp: true
+  unrs-resolver: set this to true or false
   workerd: true
+minimumReleaseAgeExclude:
+  - "@css-modules-kit/core@1.4.0"
+  - "@css-modules-kit/ts-plugin@1.4.0"
+  - miniflare@4.20260708.0
+  - wrangler@4.109.0
