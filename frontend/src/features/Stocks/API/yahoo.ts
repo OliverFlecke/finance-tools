@@ -1,6 +1,8 @@
-import { apiUrlWithPath, useApiWithUrlCall, useSampleData } from "features/apiBase";
+import { apiUrlWithPath, useApiWithUrlCall } from "features/apiBase";
 import { useCallback } from "react";
 import stocksForUserSampleData from "./sampleData/stocksForUser";
+
+const useSampleData = false;
 
 export function useSharesCallback(): (...symbols: string[]) => Promise<QuoteResponse[] | null> {
 	const handler = useApiWithUrlCall();
