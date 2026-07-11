@@ -2,12 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useCallback, useEffect, useState } from "react";
 import { isDevelopment } from "utils/general";
 
-// TODO: Consider using react-query to handle data fetching and state.
-
-export const useSampleData = false; //isDevelopment;
-
 const apiVersion = "api/v1";
-export const baseUri = process.env.NEXT_PUBLIC_API_HOST; // isDevelopment ? 'https://localhost:5001' : 'https://finance.oliverflecke.me'
+export const baseUri = process.env.NEXT_PUBLIC_API_HOST;
 
 export const apiUrlWithPath = `${baseUri}/${apiVersion}`;
 

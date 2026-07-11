@@ -1,10 +1,14 @@
-import { AccountApi, type AddAccountEntryRequest, Configuration } from "@api/finance";
-import type { CreateAccountRequest } from "@api/finance/esm";
+import {
+	AccountApi,
+	type AddAccountEntryRequest,
+	Configuration,
+	type CreateAccountRequest,
+} from "@api/finance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authClient } from "api/auth";
 
 const configuration = new Configuration({
-	basePath: "https://finance-api.oliverfl.workers.dev",
+	basePath: process.env.NEXT_PUBLIC_API_HOST,
 	accessToken: () => authClient.getTokenSilently(),
 });
 
