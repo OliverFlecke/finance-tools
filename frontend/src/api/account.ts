@@ -1,5 +1,6 @@
 import {
 	AccountApi,
+	type AccountResponse,
 	type AddAccountEntryRequest,
 	Configuration,
 	type CreateAccountRequest,
@@ -38,17 +39,19 @@ export function useAddEntryMutation() {
 	return useMutation({
 		mutationFn: ({ id, ...addAccountEntryRequest }: Args) =>
 			api.addEntry({ id, addAccountEntryRequest }),
-		onSuccess: () => {
-			qc.invalidateQueries({ queryKey: ["account"] });
 
-			// TODO: set local state instead of invalidating the query
-			// qc.setQueryData<AccountResponse | undefined>(["account"], (data) =>
-			// 	!data
-			// 		? undefined
-			// 		: {
-			// 				...data,
-			// 			},
-			// );
+		// Update the local state as soon as the request is submitted, so
+		// the UI can be updated immediately.
+		onMutate: ({ id, ...entry }) => {
+			qc.setQueryData<AccountResponse>(["accounts"], (data) =>
+				!data
+					? undefined
+					: {
+							accounts: data.accounts.map((a) =>
+								a.id !== id ? a : { ...a, entries: [...a.entries, entry] },
+							),
+						},
+			);
 		},
 	});
 }
