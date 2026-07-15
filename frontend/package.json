@@ -28,7 +28,7 @@
 	},
 	"dependencies": {
 		"@api/finance": "link:src/api/generated/dist",
-		"@auth0/auth0-react": "^2.20.0",
+		"@auth0/auth0-react": "^2.21.0",
 		"@auth0/auth0-spa-js": "^2.23.0",
 		"@oliverflecke/components-react": "^0.7.0",
 		"@tanstack/react-query": "^5.101.2",
