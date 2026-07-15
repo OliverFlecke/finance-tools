@@ -24,16 +24,22 @@ updates:
         dependency-type: development
 
   - package-ecosystem: "npm"
-    schedule:
-      interval: "weekly"
     directories:
       - "/finance-api"
-
-  - package-ecosystem: "npm"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 1
+      semver-major-days: 7
+
+  - package-ecosystem: "npm"
     directories:
       - "/frontend"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 1
+      semver-major-days: 7
     groups:
       production-major:
         dependency-type: production
