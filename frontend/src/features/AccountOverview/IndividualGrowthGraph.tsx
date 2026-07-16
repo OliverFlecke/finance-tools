@@ -22,7 +22,7 @@ const IndividualGrowthGraph: FC = () => {
 
 	const lineColors = [
 		colors.amber,
-		colors.blueGray,
+		colors.slate,
 		colors.green,
 		colors.pink,
 		colors.yellow,
