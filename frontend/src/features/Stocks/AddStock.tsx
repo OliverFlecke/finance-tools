@@ -46,7 +46,7 @@ const AddStock: React.FC = () => {
 
 	return (
 		<>
-			<button className="btn btn-primary space-x-2" onClick={() => setIsOpen(true)}>
+			<button type="button" className="btn btn-primary space-x-2" onClick={() => setIsOpen(true)}>
 				<IoAddCircleOutline className="inline" />
 				<span className="align-middle">Add symbol</span>
 			</button>

@@ -16,8 +16,10 @@ export default function TaxCalculatorInput() {
 
 	return (
 		<div className="flex space-x-4 p-4">
-			<label className="flex flex-col space-y-2">
-				<span className="input-label">Income</span>
+			<div className="flex flex-col space-y-2">
+				<label className="input-label" htmlFor="salary">
+					Income
+				</label>
 				<NumericFormat
 					inputMode="numeric"
 					placeholder="100,000"
@@ -26,7 +28,7 @@ export default function TaxCalculatorInput() {
 					thousandSeparator={true}
 					onValueChange={(e) => dispatch({ type: "SET SALARY", salary: e.floatValue ?? 0 })}
 				/>
-			</label>
+			</div>
 			<SelectCurrency
 				label="Currency"
 				onChange={onCurrencyChanged}
@@ -51,7 +53,7 @@ function SalaryInPreferredCurrency({ salary, currency }: SalaryInPreferredCurren
 
 	return (
 		<div className="flex h-full flex-col space-y-2">
-			<label className="input-label">Income in preferred currency</label>
+			<span className="input-label">Income in preferred currency</span>
 			<span className="py-1 text-yellow-700 dark:text-yellow-400">
 				{formatCurrency(value, preferredDisplayCurrency, {
 					maximumFractionDigits: 0,

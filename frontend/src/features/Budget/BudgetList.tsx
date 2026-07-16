@@ -75,9 +75,9 @@ const BudgetListItem: FC<{
 	deleteCallback: (id: string) => void;
 }> = ({ budget, deleteCallback, onSelect }) => (
 	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
-		<span onClick={() => onSelect(budget)} className="hover:cursor-pointer">
+		<button type="button" onClick={() => onSelect(budget)} className="hover:cursor-pointer">
 			{budget.title}
-		</span>
+		</button>
 		<span>{budget.created_at.toDateString()}</span>
 		<span>
 			<DeleteButton onClick={() => deleteCallback(budget.id)} />

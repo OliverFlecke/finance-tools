@@ -121,6 +121,13 @@ input[type="number"] {
 
 /* End @oliverflecke/components-react styles */
 
+label.edit-item {
+	@apply space-y-2;
+	span {
+		@apply text-sm;
+	}
+}
+
 @layer components {
 	.page-header {
 		@apply px-4 py-4 text-xl;
@@ -212,12 +219,5 @@ input[type="number"] {
 
 	input.edit-item {
 		@apply w-full rounded;
-	}
-
-	label.edit-item {
-		@apply space-y-2;
-		span {
-			@apply text-sm;
-		}
 	}
 }

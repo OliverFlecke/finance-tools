@@ -41,9 +41,9 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 	const onSubmit = handleSubmit((data) => {
 		const url = new URL(window.location.href);
 		console.log(data);
-		Object.keys(data).forEach((key) =>
-			url.searchParams.set(key, data[key as keyof FormData].toString()),
-		);
+		Object.keys(data).forEach((key) => {
+			url.searchParams.set(key, data[key as keyof FormData].toString());
+		});
 		window.history.replaceState(null, "", url.toString());
 
 		setData(data);
@@ -160,8 +160,7 @@ function useDefaultValues(): FormData {
 		const params = new URL(window.location.href).searchParams;
 
 		function getNumber(name: string): number {
-			// We allow return of undefined here even though the type does not match. It us only used to populate the default value of the form.
-			return params.has(name) ? Number.parseFloat(params.get(name)!) : undefined!;
+			return params.has(name) ? Number.parseFloat(params.get(name) ?? "") : Number.NaN;
 		}
 
 		return {

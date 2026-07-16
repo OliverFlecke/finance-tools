@@ -35,12 +35,12 @@ const FileOptionMenu: React.FC = () => {
 
 	return (
 		<div className="flex justify-end space-x-4">
-			<button className="btn btn-primary space-x-2" onClick={save}>
+			<button type="button" className="btn btn-primary space-x-2" onClick={save}>
 				<IoSaveOutline className="inline" />
 				<span className="align-middle">Save</span>
 			</button>
 			<input type="file" onChange={fileChange} className="rounded bg-blue-400 p-2" />
-			<button className="btn btn-secondary" onClick={closeFile}>
+			<button type="button" className="btn btn-secondary" onClick={closeFile}>
 				Close
 			</button>
 		</div>

@@ -8,7 +8,6 @@ const SettingsContext = createContext<{
 	values: SettingsValues;
 	dispatch: React.Dispatch<SettingsAction>;
 }>({
-	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: SettingsAction) => {},
 	values: getDefaultSettings(),
 });

@@ -6,7 +6,7 @@ interface Props {
 
 export default function AddButton({ onClick }: Props) {
 	return (
-		<button onClick={onClick} className="flex focus:outline-none">
+		<button type="button" onClick={onClick} className="flex focus:outline-none">
 			<IoAddCircleOutline size={24} className="text-green-700 dark:text-green-500" />
 		</button>
 	);

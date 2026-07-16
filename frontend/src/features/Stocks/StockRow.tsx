@@ -80,7 +80,7 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 
 	return (
 		<td className="flex h-full flex-row justify-end space-x-2 px-4">
-			<button onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
+			<button type="button" onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
 			<DeleteButton onClick={deleteStock} />

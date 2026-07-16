@@ -18,11 +18,11 @@ export default function PreferredCurrenciesSetting() {
 					label="Add to preferred currencies"
 					onChange={(ref) => setCode(ref.valueOf())}
 				/>
-				<button onClick={addCode} className="rounded btn btn-secondary">
+				<button type="button" onClick={addCode} className="rounded btn btn-secondary">
 					Add
 				</button>
 			</div>
-			<label className="input-label">Preferred currencies:</label>
+			<span className="input-label">Preferred currencies:</span>
 			<span className="currency-list">
 				{values.preferredCurrencies.map((code) => (
 					<span key={code}>{code}</span>

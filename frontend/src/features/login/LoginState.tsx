@@ -18,13 +18,13 @@ interface LoginDropDownMenuProps {
 function LoginDropDownMenu({ user }: Readonly<LoginDropDownMenuProps>) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const ref = useRef<HTMLDivElement>(null!);
+	const ref = useRef<HTMLDivElement>(null as never);
 	useOnOutsideMouseDown(ref, () => setIsOpen(false));
 
 	return (
 		<div ref={ref} className="relative flex items-center space-x-4">
 			<div className="group">
-				<button onClick={() => setIsOpen((x) => !x)}>
+				<button type="button" onClick={() => setIsOpen((x) => !x)}>
 					<UserAvatar pictureUrl={user.picture} />
 				</button>
 			</div>

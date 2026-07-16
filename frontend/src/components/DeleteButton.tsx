@@ -6,7 +6,7 @@ interface Props {
 
 export default function DeleteButton({ onClick }: Props) {
 	return (
-		<button onClick={onClick} className="flex focus:outline-none">
+		<button type="button" onClick={onClick} className="flex focus:outline-none">
 			<IoTrashOutline size={24} className="text-red-700 dark:text-red-500" />
 		</button>
 	);

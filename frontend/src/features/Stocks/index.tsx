@@ -164,6 +164,7 @@ interface HeaderProps {
 const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) => (
 	<th>
 		<button
+			type="button"
 			onClick={sort(sortKey)}
 			className="whitespace-nowrap rounded-sm ring-red-800 focus:ring-1 dark:ring-red-600"
 		>

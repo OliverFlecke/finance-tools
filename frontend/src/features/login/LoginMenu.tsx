@@ -23,6 +23,7 @@ const LogoutButton = () => {
 
 	return (
 		<button
+			type="button"
 			className="btn flex items-center space-x-2 hover:text-gray-900 hover:underline dark:hover:text-gray-400"
 			onClick={() => {
 				logout({

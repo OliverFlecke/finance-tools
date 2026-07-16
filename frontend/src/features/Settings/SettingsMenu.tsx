@@ -20,6 +20,7 @@ const SettingsMenu: FC = () => {
 	return (
 		<div className="z-50">
 			<button
+				type="button"
 				className="flex h-full justify-center"
 				title="Settings"
 				onClick={() => setIsOpen((x) => !x)}

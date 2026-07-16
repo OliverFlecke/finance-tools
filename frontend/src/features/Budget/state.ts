@@ -4,7 +4,6 @@ import type { AddItemToBudgetRequest, BudgetWithItems, Item } from "./api";
 
 export const BudgetContext = React.createContext({
 	state: fetchInitialData(),
-	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: Action) => {},
 });
 

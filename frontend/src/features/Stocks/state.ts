@@ -7,7 +7,6 @@ const storageKey = "stocks_state";
 
 export const StockContext = createContext({
 	state: getDefaultStockState(),
-	// biome-ignore lint/suspicious/noEmptyBlockStatements: default value
 	dispatch: (_: StockAction) => {},
 });
 

@@ -22,7 +22,11 @@ export default function BudgetLineActions({ item, deleteItem, updateItem }: Read
 		<td className="flex flex-row justify-end space-x-2 pr-4">
 			<DeleteButton onClick={() => deleteItem(item.id)} />
 
-			<button onClick={() => setEdit(true)} className="text-green-700 dark:text-green-400">
+			<button
+				type="button"
+				onClick={() => setEdit(true)}
+				className="text-green-700 dark:text-green-400"
+			>
 				<IoCreateOutline size={24} />
 			</button>
 
