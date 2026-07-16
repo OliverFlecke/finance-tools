@@ -8,12 +8,45 @@ on:
       - "finance-api/src/**"
       - "finance-api/Cargo.toml"
       - ".github/workflows/frontend.yml"
+  pull_request:
 
 concurrency:
   group: frontend-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION: 26
+  PNPM_VERSION: 11.13.0
+
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm fmt
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -25,11 +58,11 @@ jobs:
 
       - uses: pnpm/action-setup@v6
         with:
-          version: 11
+          version: ${{ env.PNPM_VERSION }}
 
       - uses: actions/setup-node@v7
         with:
-          node-version: "26"
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
@@ -62,11 +95,11 @@ jobs:
 
       - uses: pnpm/action-setup@v6
         with:
-          version: 11
+          version: ${{ env.PNPM_VERSION }}
 
       - uses: actions/setup-node@v7
         with:
-          node-version: "26"
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
 
