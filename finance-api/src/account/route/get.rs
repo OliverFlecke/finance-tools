@@ -36,7 +36,7 @@ pub async fn read(
 ) -> Result<Json<AccountResponse>, GetAccountError> {
 	tracing::info!(?user, "Fetching accounts");
 
-	let accounts = get_accounts(db, &user.user_id()).await?;
+	let accounts = get_accounts(db, user.user_id()).await?;
 	Ok(Json(AccountResponse { accounts }))
 }
 
@@ -64,7 +64,7 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 	.map_err(GetAccountError::DatabaseError)?;
 
 	Ok(entries
-		.chunk_by(|a, b| &a.id == &b.id)
+		.chunk_by(|a, b| a.id == b.id)
 		.map(|values| {
 			let account = values.first().unwrap();
 
