@@ -1,4 +1,5 @@
 [tools]
+biome = "2.5.4"
 node = "26"
 pnpm = "11.10"
 sqlite = "latest"
