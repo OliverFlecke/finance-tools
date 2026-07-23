@@ -7,7 +7,7 @@
 		"test": "worker-build --dev --panic-unwind && vitest run --config test/vitest.config.ts"
 	},
 	"devDependencies": {
-		"jose": "^6.2.3",
+		"jose": "^6.2.4",
 		"miniflare": "^4.20260710.0",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.10",
