@@ -1,5 +1,5 @@
 import type { AccountEntries } from "features/AccountOverview/models/Account";
-import type { Account } from "@/api/generated/dist";
+import type { Account } from "@/api/generated/types.gen";
 import DeleteButton from "@/components/DeleteButton";
 import { useAccountContext } from "@/features/AccountOverview/Context";
 import { useSettingsContext } from "@/features/Settings/context";

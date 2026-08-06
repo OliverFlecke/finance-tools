@@ -1,7 +1,8 @@
 import { type ChangeEvent, useRef } from "react";
 import { formatCurrency, parseNumber } from "utils/converters";
 import { useAddEntryMutation } from "@/api/account";
-import type { Account } from "@/api/generated/dist";
+import type { Account } from "@/api/generated/types.gen";
+import { formatDate } from "@/utils/date";
 import type { DateEntry } from "../models/Account";
 import styles from "./Cell.module.css";
 
@@ -21,7 +22,10 @@ export default function Cell({ account, entry, date }: Readonly<CellProps>) {
 			return;
 		}
 
-		mutate({ id: account.id, date, amount }, { onError: (err) => console.error(err) });
+		mutate(
+			{ id: account.id, date: formatDate(date), amount },
+			{ onError: (err) => console.error(err) },
+		);
 		element.target.innerText = formatCurrency(amount, account.currency);
 	};
 

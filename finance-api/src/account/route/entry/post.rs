@@ -29,7 +29,7 @@ use uuid::Uuid;
 			(status = 500, description = "Internal server error"),
 		),
 		security(
-			("bearer_auth" = [])
+			("bearer" = [])
 		)
 	)
 )]
