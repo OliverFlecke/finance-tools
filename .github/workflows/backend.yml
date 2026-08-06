@@ -39,11 +39,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm wrangler build
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: finance-api
-          path: finance-api/target
-
   build-openapi:
     runs-on: ubuntu-latest
     defaults:
@@ -70,11 +65,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: jdx/mise-action@v3
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: finance-api
-          path: finance-api/target
 
       - uses: cloudflare/wrangler-action@v4
         with:
