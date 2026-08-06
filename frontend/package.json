@@ -7,7 +7,6 @@
 	"engines": {
 		"node": "^26"
 	},
-	"packageManager": "pnpm@11.10.0",
 	"scripts": {
 		"start-server": "pnpm build && pnpm start",
 		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
@@ -82,8 +81,7 @@
 		"postcss": "^8.5.23",
 		"postcss-cli": "^11.0.1",
 		"tailwindcss": "^4.3.3",
-		"typescript": "^5.9.3",
-		"wrangler": "^4.114.0"
+		"typescript": "^5.9.3"
 	},
 	"browserslist": {
 		"production": [">0.2%", "not dead", "not op_mini all"],
