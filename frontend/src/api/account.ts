@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { authClient } from "api/auth";
+import { userManager } from "api/auth";
 import { getAccountsOptions, getAccountsQueryKey } from "@/api/generated/@tanstack/react-query.gen";
 import { client } from "@/api/generated/client.gen";
 import { addEntry, createAccount } from "@/api/generated/sdk.gen";
@@ -11,7 +11,14 @@ import type {
 
 client.setConfig({
 	baseUrl: process.env.NEXT_PUBLIC_API_HOST,
-	auth: () => authClient.getTokenSilently(),
+	auth: async () => {
+		const user = await userManager.getUser();
+		if (user && !user.expired) {
+			return user.access_token;
+		}
+		const renewedUser = await userManager.signinSilent();
+		return renewedUser?.access_token;
+	},
 });
 
 export function useAccounts() {

@@ -1,12 +1,13 @@
-import { type User, useAuth0 } from "@auth0/auth0-react";
 import { useOnOutsideMouseDown } from "@oliverflecke/components-react";
+import type { User } from "oidc-client-ts";
 import { useRef, useState } from "react";
+import { useAuth } from "react-oidc-context";
 import LoginButton from "./LoginButton";
 import LoginMenu from "./LoginMenu";
 import UserAvatar from "./UserAvatar";
 
 export default function LoginState() {
-	const { user } = useAuth0();
+	const { user } = useAuth();
 
 	return user ? <LoginDropDownMenu user={user} /> : <LoginButton />;
 }
@@ -25,7 +26,7 @@ function LoginDropDownMenu({ user }: Readonly<LoginDropDownMenuProps>) {
 		<div ref={ref} className="relative flex items-center space-x-4">
 			<div className="group">
 				<button type="button" onClick={() => setIsOpen((x) => !x)}>
-					<UserAvatar pictureUrl={user.picture} />
+					<UserAvatar pictureUrl={user.profile.picture} />
 				</button>
 			</div>
 			<LoginMenu isOpen={isOpen} />

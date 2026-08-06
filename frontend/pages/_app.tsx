@@ -1,6 +1,5 @@
-import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { authClient } from "api/auth";
+import { userManager } from "api/auth";
 import "compiled.css";
 import Footer from "features/Footer";
 import Header from "features/Header";
@@ -8,6 +7,7 @@ import Settings from "features/Settings";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
+import { AuthProvider } from "react-oidc-context";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,12 @@ export default function Layout({ Component, pageProps }: AppProps) {
 				data-domain="finance.oliverflecke.me"
 				src="https://plausible.oliverflecke.me/js/script.js"
 			/>
-			<Auth0Provider client={authClient}>
+			<AuthProvider
+				userManager={userManager}
+				onSigninCallback={() => {
+					window.history.replaceState({}, document.title, window.location.pathname);
+				}}
+			>
 				<QueryClientProvider client={queryClient}>
 					<Settings>
 						<div className="flex min-h-screen flex-col">
@@ -44,7 +49,7 @@ export default function Layout({ Component, pageProps }: AppProps) {
 						</div>
 					</Settings>
 				</QueryClientProvider>
-			</Auth0Provider>
+			</AuthProvider>
 		</>
 	);
 }

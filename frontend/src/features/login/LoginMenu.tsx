@@ -1,6 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import type React from "react";
 import { IoLogOutOutline } from "react-icons/io5";
+import { useAuth } from "react-oidc-context";
 
 interface LoginMenuProps {
 	isOpen: boolean;
@@ -19,17 +19,15 @@ const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen }) => (
 export default LoginMenu;
 
 const LogoutButton = () => {
-	const { logout } = useAuth0();
+	const { signoutRedirect } = useAuth();
 
 	return (
 		<button
 			type="button"
 			className="btn flex items-center space-x-2 hover:text-gray-900 hover:underline dark:hover:text-gray-400"
 			onClick={() => {
-				logout({
-					logoutParams: {
-						returnTo: window.location.origin,
-					},
+				signoutRedirect({
+					post_logout_redirect_uri: window.location.origin,
 				});
 			}}
 		>
