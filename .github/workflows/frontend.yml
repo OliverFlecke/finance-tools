@@ -18,7 +18,7 @@ concurrency:
 
 env:
   NODE_VERSION: 26
-  PNPM_VERSION: 11.13.0
+  PNPM_VERSION: 11.20.0
 
 jobs:
   format:

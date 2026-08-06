@@ -1,6 +1,6 @@
 [tools]
 biome = "2.5.4"
 node = "26"
-pnpm = "11.10"
+pnpm = "11.20"
 sqlite = "latest"
 wrangler = "4.103.0"
