@@ -1,5 +1,8 @@
 .worktrees/
 worktrees/
+
+dist/
+
 # dependencies
 **/node_modules
 /.pnp
