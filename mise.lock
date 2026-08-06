@@ -237,6 +237,10 @@ checksum = "sha256:ea2528bdc3d96a1ff3c35587dc48ca692b39d77f08f26df4adeaaa9eb4270
 url = "https://github.com/pnpm/pnpm/releases/download/v11.20.0/pnpm-win32-x64.zip"
 provenance = "github-attestations"
 
+[[tools.rust]]
+version = "nightly"
+backend = "core:rust"
+
 [[tools.sqlite]]
 version = "3.53.2"
 backend = "conda:sqlite"
