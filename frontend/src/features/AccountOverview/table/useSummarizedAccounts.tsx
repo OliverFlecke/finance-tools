@@ -1,4 +1,4 @@
-import type { Account } from "@/api/generated/src";
+import type { Account } from "@/api/generated/types.gen";
 import { useSettingsContext } from "@/features/Settings/context";
 import type SettingsValues from "@/features/Settings/state";
 import { convertToCurrency } from "@/utils/converters";

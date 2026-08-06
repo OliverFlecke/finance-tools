@@ -1,6 +1,6 @@
 import { createContext, type PropsWithChildren, useContext, useState } from "react";
 import { useAccounts } from "@/api/account";
-import type { Account } from "@/api/generated/dist";
+import type { Account } from "@/api/generated/types.gen";
 import { sortObject } from "@/utils/converters";
 import { formatDate } from "@/utils/date";
 import type { AccountEntries } from "./models/Account";
@@ -47,7 +47,7 @@ export function useAccountContext() {
 function createAccountEntries(accounts: Account[], entries: AccountEntries): AccountEntries {
 	for (const account of accounts) {
 		for (const entry of account.entries) {
-			const key = formatDate(entry.date);
+			const key = formatDate(new Date(entry.date));
 
 			if (!(key in entries)) {
 				entries[key] = {};
