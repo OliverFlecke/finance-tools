@@ -1,6 +1,6 @@
 use utoipa::{
-	openapi::security::{HttpAuthScheme, HttpBuilder, SecurityRequirement, SecurityScheme},
 	Modify, OpenApi,
+	openapi::security::{HttpAuthScheme, HttpBuilder, SecurityRequirement, SecurityScheme},
 };
 
 #[derive(OpenApi)]

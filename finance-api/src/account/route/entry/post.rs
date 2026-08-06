@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
 use axum::{
+	Json,
 	extract::{Path, State},
 	response::IntoResponse,
-	Json,
 };
 use http::StatusCode;
 use rust_decimal::Decimal;

@@ -1,18 +1,18 @@
 use std::collections::HashSet;
 
 use axum_extra::{
-	headers::{authorization::Bearer, Authorization},
 	TypedHeader,
+	headers::{Authorization, authorization::Bearer},
 };
-use chrono::{serde::ts_seconds, DateTime, Utc};
+use chrono::{DateTime, Utc, serde::ts_seconds};
 use http::StatusCode;
-use jsonwebtoken::{decode, TokenData, Validation};
+use jsonwebtoken::{TokenData, Validation, decode};
 use serde::{Deserialize, Serialize};
 
 use crate::auth::jwk::JwkValidator;
 use crate::state::AppState;
 
-use axum::{extract::FromRequestParts, http::request::Parts, RequestPartsExt};
+use axum::{RequestPartsExt, extract::FromRequestParts, http::request::Parts};
 
 /// Claims representing a user.
 #[derive(Debug, Serialize, Deserialize, Default)]
