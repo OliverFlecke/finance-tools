@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { useAddAccountMutation } from "@/api/account";
-import type { Account } from "@/api/generated/dist";
+import type { Account } from "@/api/generated/types.gen";
 
 export default function AddAccount() {
 	const [showPrompt, setShowPrompt] = useState(false);

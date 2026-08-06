@@ -10,7 +10,7 @@ import {
 } from "@visx/xychart";
 import useThemeDetector from "hooks/useThemeDetector";
 import { useCallback, useContext, useState } from "react";
-import type { Account } from "@/api/generated/dist";
+import type { Account } from "@/api/generated/types.gen";
 import SettingsContext from "@/features/Settings/context";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";

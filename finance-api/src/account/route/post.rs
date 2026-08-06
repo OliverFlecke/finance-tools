@@ -22,7 +22,7 @@ use crate::{account::model::AccountKind, auth::Claims};
 		),
 		request_body = CreateAccountRequest,
 		security(
-			("bearer_auth" = [])
+			("bearer" = [])
 		)
 	)
 )]
