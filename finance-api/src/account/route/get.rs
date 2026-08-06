@@ -24,7 +24,7 @@ use crate::{account::model::AccountKind, auth::Claims};
             (status = 500, description = "Internal server error"),
         ),
         security(
-            ("bearer_auth" = [])
+            ("bearer" = [])
         )
     )
 )]
