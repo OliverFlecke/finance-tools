@@ -16,10 +16,6 @@ concurrency:
   group: frontend-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  NODE_VERSION: 26
-  PNPM_VERSION: 11.20.0
-
 jobs:
   format:
     runs-on: ubuntu-latest
@@ -28,14 +24,7 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
+      - uses: jdx/mise-action@v3
       - run: pnpm install --frozen-lockfile
       - run: pnpm fmt
 
@@ -46,14 +35,7 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
+      - uses: jdx/mise-action@v3
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
 
@@ -66,15 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
-      - uses: pnpm/action-setup@v6
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
-
+      - uses: jdx/mise-action@v3
       - run: pnpm install --frozen-lockfile
       - run: pnpm build:api
       - run: pnpm run build
@@ -95,17 +69,7 @@ jobs:
         with:
           name: frontend
           path: frontend/out/
-
-      - uses: pnpm/action-setup@v6
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
-
+      - uses: jdx/mise-action@v3
       - uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
