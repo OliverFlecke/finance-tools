@@ -2,13 +2,73 @@
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:recommended"],
 	"lockFileMaintenance": { "enabled": true },
+	"prConcurrentLimit": 5,
+	"prHourlyLimit": 0,
 	"packageRules": [
 		{
+			"description": "npm (frontend): group production minor/patch updates into one PR",
 			"matchManagers": ["npm"],
+			"matchFileNames": ["frontend/**"],
+			"matchDepTypes": ["dependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "frontend production dependencies (non-major)"
+		},
+		{
+			"description": "npm (frontend): group devDependencies minor/patch updates into one PR",
+			"matchManagers": ["npm"],
+			"matchFileNames": ["frontend/**"],
 			"matchDepTypes": ["devDependencies"],
-			"matchPaths": ["**"],
-			"groupName": "pnpm devDependencies ({{{matchBasePath}}})",
-			"groupSlug": "pnpm-dev-deps-{{{matchBasePath}}}"
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "frontend devDependencies (non-major)"
+		},
+		{
+			"description": "npm (finance-api): group production minor/patch updates into one PR",
+			"matchManagers": ["npm"],
+			"matchFileNames": ["finance-api/**"],
+			"matchDepTypes": ["dependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "finance-api production dependencies (non-major)"
+		},
+		{
+			"description": "npm (finance-api): group devDependencies minor/patch updates into one PR",
+			"matchManagers": ["npm"],
+			"matchFileNames": ["finance-api/**"],
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "finance-api devDependencies (non-major)"
+		},
+		{
+			"description": "cargo (finance-api): group all minor/patch updates into one PR (Renovate's cargo manager doesn't distinguish prod vs dev dependencies)",
+			"matchManagers": ["cargo"],
+			"matchFileNames": ["finance-api/**"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "finance-api cargo dependencies (non-major)"
+		},
+		{
+			"description": "npm: wait 2 days before raising non-major update PRs",
+			"matchManagers": ["npm"],
+			"matchUpdateTypes": ["patch", "minor"],
+			"minimumReleaseAge": "2 days"
+		},
+		{
+			"description": "npm: wait 7 days before raising major update PRs",
+			"matchManagers": ["npm"],
+			"matchUpdateTypes": ["major"],
+			"minimumReleaseAge": "7 days"
+		},
+		{
+			"description": "frontend: never raise major TypeScript updates",
+			"matchFileNames": ["frontend/**"],
+			"matchPackageNames": ["typescript"],
+			"matchUpdateTypes": ["major"],
+			"enabled": false
+		},
+		{
+			"description": "frontend: never raise major Tailwind CSS updates",
+			"matchFileNames": ["frontend/**"],
+			"matchPackageNames": ["tailwindcss"],
+			"matchUpdateTypes": ["major"],
+			"enabled": false
 		}
 	]
 }
