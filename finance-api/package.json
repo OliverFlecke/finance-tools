@@ -9,7 +9,7 @@
 	"devDependencies": {
 		"jose": "^6.2.3",
 		"miniflare": "^4.20260710.0",
-		"typescript": "^6.0.3",
+		"typescript": "^7.0.0",
 		"vitest": "^4.1.10"
 	}
 }
