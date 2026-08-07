@@ -4,6 +4,7 @@
 	"lockFileMaintenance": { "enabled": true },
 	"prConcurrentLimit": 5,
 	"prHourlyLimit": 0,
+	"minimumReleaseAge": "1 day",
 	"packageRules": [
 		{
 			"description": "npm (frontend): group production minor/patch updates into one PR",
