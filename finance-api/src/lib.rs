@@ -8,7 +8,7 @@ pub mod state;
 pub mod openapi;
 
 use axum::response::IntoResponse;
-use http::{header, StatusCode};
+use http::{StatusCode, header};
 use tower_service::Service;
 use tracing_subscriber::{fmt::time::UtcTime, layer::SubscriberExt, util::SubscriberInitExt};
 use tracing_web::MakeConsoleWriter;

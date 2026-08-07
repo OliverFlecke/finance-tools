@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use axum::{extract::State, response::IntoResponse, Json};
+use axum::{Json, extract::State, response::IntoResponse};
 use http::StatusCode;
 use sqlx_d1::D1Connection;
 use uuid::Uuid;

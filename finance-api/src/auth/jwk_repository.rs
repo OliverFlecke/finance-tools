@@ -1,6 +1,6 @@
 use jsonwebtoken::Validation;
 
-use crate::auth::{jwk::JwksResponse, AuthConfig, Jwk, JwkValidator};
+use crate::auth::{AuthConfig, Jwk, JwkValidator, jwk::JwksResponse};
 
 /// Represents a repository for storing and managing JWKs locally.
 /// This includes fetching them from a remote authority and updating them regularly.

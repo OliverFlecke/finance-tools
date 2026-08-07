@@ -6,8 +6,8 @@ pub(crate) mod post;
 
 use crate::state::AppState;
 use axum::{
-	routing::{delete, get, patch, post},
 	Router,
+	routing::{delete, get, patch, post},
 };
 
 pub fn account_router() -> Router<AppState> {

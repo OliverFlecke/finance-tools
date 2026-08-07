@@ -1,4 +1,4 @@
-use axum::{routing::get, Router};
+use axum::{Router, routing::get};
 use http::StatusCode;
 
 pub fn health_check_router() -> Router {
