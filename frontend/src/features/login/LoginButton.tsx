@@ -1,11 +1,11 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import type React from "react";
+import { useAuth } from "react-oidc-context";
 
 const LoginButton: React.FC = () => {
-	const { loginWithRedirect } = useAuth0();
+	const { signinRedirect } = useAuth();
 
 	return (
-		<button type="button" className="btn btn-primary" onClick={() => loginWithRedirect()}>
+		<button type="button" className="btn btn-primary" onClick={() => signinRedirect()}>
 			Login
 		</button>
 	);

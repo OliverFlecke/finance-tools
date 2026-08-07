@@ -1,12 +1,12 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 import AddAccount from "features/AccountOverview/AddAccountModal";
+import { withAuthenticationRequired } from "react-oidc-context";
 import AddEntryModal from "./AddEntryModal";
 import Context from "./Context";
 import OverviewChart from "./OverviewChart";
 import Table from "./table";
 
 export default withAuthenticationRequired(AccountOverview, {
-	onRedirecting: () => <div>Redirecting you to the login page</div>,
+	OnRedirecting: () => <div>Redirecting you to the login page</div>,
 });
 
 function AccountOverview() {

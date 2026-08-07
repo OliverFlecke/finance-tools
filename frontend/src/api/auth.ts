@@ -1,14 +1,18 @@
-import { Auth0Client } from "@auth0/auth0-spa-js";
+import { UserManager, WebStorageStateStore } from "oidc-client-ts";
 
-export const authClient = new Auth0Client({
-	domain: process.env.NEXT_PUBLIC_DOMAIN ?? "",
-	clientId: process.env.NEXT_PUBLIC_CLIENT_ID ?? "",
-	cacheLocation: "localstorage",
-	useRefreshTokens: true,
-	useRefreshTokensFallback: true,
-	authorizationParams: {
-		redirect_uri: typeof window !== "undefined" ? window.location.href : undefined,
-		audience: process.env.NEXT_PUBLIC_AUDIENCE,
-		scope: "account:read profile",
+export const userManager = new UserManager({
+	authority: `https://${process.env.NEXT_PUBLIC_DOMAIN ?? ""}`,
+	client_id: process.env.NEXT_PUBLIC_CLIENT_ID ?? "",
+	redirect_uri:
+		process.env.NEXT_PUBLIC_REDIRECT_URI ??
+		(typeof window !== "undefined" ? window.location.origin : ""),
+	scope: "openid profile offline_access account:read",
+	automaticSilentRenew: true,
+	userStore:
+		typeof window !== "undefined"
+			? new WebStorageStateStore({ store: window.localStorage })
+			: undefined,
+	extraQueryParams: {
+		audience: process.env.NEXT_PUBLIC_AUDIENCE ?? "",
 	},
 });

@@ -1,5 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import type { User } from "oidc-client-ts";
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "react-oidc-context";
 import { isDevelopment } from "utils/general";
 
 const apiVersion = "api/v1";
@@ -17,8 +18,22 @@ export interface ApiResponseWithActions<T> extends ApiResponse<T> {
 	refresh: () => void;
 }
 
+async function getAccessToken(
+	user: User | null | undefined,
+	signinSilent: () => Promise<User | null>,
+): Promise<string> {
+	if (user && !user.expired) {
+		return user.access_token;
+	}
+	const renewedUser = await signinSilent();
+	if (!renewedUser) {
+		throw new Error("Unable to acquire access token");
+	}
+	return renewedUser.access_token;
+}
+
 export function useApi<T>(url: RequestInfo, options?: RequestInit): ApiResponseWithActions<T> {
-	const { getAccessTokenSilently } = useAuth0();
+	const { user, signinSilent } = useAuth();
 	const [state, setState] = useState<ApiResponse<T>>({
 		loading: true,
 	});
@@ -32,7 +47,7 @@ export function useApi<T>(url: RequestInfo, options?: RequestInit): ApiResponseW
 				error: undefined,
 				loading: true,
 			});
-			const accessToken = await getAccessTokenSilently();
+			const accessToken = await getAccessToken(user, signinSilent);
 			const res = await fetch(url, {
 				...options,
 				mode: isDevelopment ? "cors" : undefined,
@@ -56,7 +71,7 @@ export function useApi<T>(url: RequestInfo, options?: RequestInit): ApiResponseW
 				loading: false,
 			});
 		}
-	}, [options, url, getAccessTokenSilently]);
+	}, [options, url, user, signinSilent]);
 
 	useEffect(() => {
 		(async () => await execute())();
@@ -72,12 +87,12 @@ export function useApiCall<T>(
 	url: RequestInfo,
 	options?: RequestInit,
 ): (body?: T) => Promise<Response | undefined> {
-	const { getAccessTokenSilently } = useAuth0();
+	const { user, signinSilent } = useAuth();
 
 	return useCallback(
 		async (body?: unknown) => {
 			try {
-				const accessToken = await getAccessTokenSilently();
+				const accessToken = await getAccessToken(user, signinSilent);
 				return await fetch(url, {
 					...options,
 
@@ -94,7 +109,7 @@ export function useApiCall<T>(
 				return undefined;
 			}
 		},
-		[getAccessTokenSilently, options, url],
+		[user, signinSilent, options, url],
 	);
 }
 
@@ -103,12 +118,12 @@ export function useApiWithUrlCall(): (
 	options?: RequestInit,
 	body?: unknown,
 ) => Promise<Response | undefined> {
-	const { getAccessTokenSilently } = useAuth0();
+	const { user, signinSilent } = useAuth();
 
 	return useCallback(
 		async (url: RequestInfo, options?: RequestInit, body?: unknown) => {
 			try {
-				const accessToken = await getAccessTokenSilently();
+				const accessToken = await getAccessToken(user, signinSilent);
 				return await fetch(url, {
 					...options,
 
@@ -125,7 +140,7 @@ export function useApiWithUrlCall(): (
 				return undefined;
 			}
 		},
-		[getAccessTokenSilently],
+		[user, signinSilent],
 	);
 }
 
