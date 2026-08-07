@@ -2,6 +2,7 @@
 
 [![Frontend](https://github.com/OliverFlecke/finance-tools/actions/workflows/frontend.yml/badge.svg)](https://github.com/OliverFlecke/finance-tools/actions/workflows/frontend.yml)
 [![Backend](https://github.com/OliverFlecke/finance-tools/actions/workflows/backend.yml/badge.svg)](https://github.com/OliverFlecke/finance-tools/actions/workflows/backend.yml)
+[![dependency status](https://deps.rs/repo/github/OliverFlecke/finance-tools/status.svg?path=finance-api)](https://deps.rs/repo/github/OliverFlecke/finance-tools?path=finance-api)
 
 Dashboard for tracking personal finances — accounts, stock lots, and compound interest calculations.
 
