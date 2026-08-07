@@ -35,7 +35,10 @@ export default function Layout({ Component, pageProps }: AppProps) {
 			<AuthProvider
 				userManager={userManager}
 				onSigninCallback={() => {
-					window.history.replaceState({}, document.title, window.location.pathname);
+					const url = new URL(window.location.href);
+					url.searchParams.delete("code");
+					url.searchParams.delete("state");
+					window.history.replaceState({}, document.title, url.toString());
 				}}
 			>
 				<QueryClientProvider client={queryClient}>
