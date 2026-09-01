@@ -1,3 +1,5 @@
+"use client";
+
 import ClientOnly from "components/ClientOnly";
 import useAsyncReducer from "hooks/useAsyncReducer";
 import type React from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import AddAccount from "features/AccountOverview/AddAccountModal";
 import { withAuthenticationRequired } from "react-oidc-context";
 import AddEntryModal from "./AddEntryModal";

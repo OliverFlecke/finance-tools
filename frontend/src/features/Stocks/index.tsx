@@ -1,3 +1,5 @@
+"use client";
+
 import type { CurrencyRates } from "features/Currency/api";
 import SettingsContext from "features/Settings/context";
 import type React from "react";

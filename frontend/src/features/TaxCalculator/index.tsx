@@ -1,3 +1,5 @@
+"use client";
+
 import SettingsContext from "features/Settings/context";
 import type React from "react";
 import { useContext, useReducer } from "react";
