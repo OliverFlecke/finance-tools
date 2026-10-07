@@ -29,8 +29,11 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<div className="p-4">
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
+		>
+			<div className="pb-4">
 				<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
 				<Input type="date" className="m-4" {...register("date")} />
 			</div>
