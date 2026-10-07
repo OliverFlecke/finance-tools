@@ -1,8 +1,9 @@
-import { Button, ButtonContainer, Modal } from "@oliverflecke/components-react";
+import { Button, ButtonContainer } from "@oliverflecke/components-react";
 import SortableDragAndDropList from "components/SortableDragAndDropList";
 import Spinner from "components/Spinner";
 import { type FC, useCallback, useContext, useMemo, useState } from "react";
 import { IoShuffleOutline } from "react-icons/io5";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import { AccountContext } from "./AccountService";
 import { useUpdateAccountsCallback } from "./api/accountApi";
 import type { Account } from "./models/Account";
@@ -47,7 +48,7 @@ const OrderAccountsModal: FC = () => {
 				<IoShuffleOutline className="inline" />
 				<span className="align-middle">Order accounts</span>
 			</Button>
-			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<div className="max-h-screen w-80 max-w-full overflow-y-scroll rounded bg-slate-200 p-4 dark:bg-slate-700">
 					<h2 className="modal-header">Reorder accounts</h2>
 					<SortableDragAndDropList
@@ -71,7 +72,7 @@ const OrderAccountsModal: FC = () => {
 						{state === "SAVED" && <div className="text-xl font-bold">Order saved!</div>}
 					</div>
 				)}
-			</Modal>
+			</Dialog>
 		</>
 	);
 };

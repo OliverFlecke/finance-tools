@@ -1,7 +1,8 @@
-import { Button, Modal } from "@oliverflecke/components-react";
+import { Button } from "@oliverflecke/components-react";
 import { getCurrencies } from "features/Currency/api";
 import { type FC, useContext, useEffect, useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import DisplayCurrencySetting from "./Components/DisplayCurrencySetting";
 import PreferredCurrenciesSetting from "./Components/PreferredCurrenciesSetting";
 import ThemeSetting from "./Components/ThemeSetting";
@@ -27,7 +28,7 @@ const SettingsMenu: FC = () => {
 			>
 				<IoSettingsOutline size={24} />
 			</button>
-			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<div className="space-y-4 rounded bg-indigo-100 p-4 text-black dark:bg-indigo-900 dark:text-white">
 					<h2 className="bold col-span-2 text-xl">Settings</h2>
 					<SettingsList />
@@ -36,7 +37,7 @@ const SettingsMenu: FC = () => {
 						Close
 					</Button>
 				</div>
-			</Modal>
+			</Dialog>
 		</div>
 	);
 };

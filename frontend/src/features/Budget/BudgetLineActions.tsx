@@ -1,7 +1,7 @@
-import { Modal } from "@oliverflecke/components-react";
 import DeleteButton from "components/DeleteButton";
 import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import type { AddItemToBudgetRequest, Item } from "./api";
 import EditItem from "./EditItem";
 
@@ -30,9 +30,9 @@ export default function BudgetLineActions({ item, deleteItem, updateItem }: Read
 				<IoCreateOutline size={24} />
 			</button>
 
-			<Modal isOpen={edit} onDismiss={() => setEdit(false)}>
+			<Dialog open={edit} onClose={() => setEdit(false)}>
 				<EditItem item={item} update={update} />
-			</Modal>
+			</Dialog>
 		</td>
 	);
 }

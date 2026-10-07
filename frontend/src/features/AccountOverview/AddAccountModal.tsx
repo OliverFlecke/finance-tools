@@ -1,10 +1,11 @@
-import { Button, ButtonContainer, Input, Modal } from "@oliverflecke/components-react";
+import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import { useSettingsContext } from "features/Settings/context";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { useAddAccountMutation } from "@/api/account";
 import type { Account } from "@/api/generated/types.gen";
+import { Dialog } from "@/ui/Dialog/Dialog";
 
 export default function AddAccount() {
 	const [showPrompt, setShowPrompt] = useState(false);
@@ -20,9 +21,9 @@ export default function AddAccount() {
 				<span className="align-middle">Add account</span>
 			</button>
 
-			<Modal isOpen={showPrompt} onDismiss={close}>
+			<Dialog open={showPrompt} onClose={() => setShowPrompt(false)}>
 				<Form onSuccess={() => setShowPrompt(false)} />
-			</Modal>
+			</Dialog>
 		</>
 	);
 }

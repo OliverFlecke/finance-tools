@@ -1,6 +1,7 @@
-import { Button, ButtonContainer, Input, Modal } from "@oliverflecke/components-react";
+import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import { useAccountContext } from "./Context";
 
 export default function AddEntryModal() {
@@ -12,9 +13,9 @@ export default function AddEntryModal() {
 				Add entry
 			</Button>
 
-			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<Form onSuccess={() => setIsOpen(false)} />
-			</Modal>
+			</Dialog>
 		</>
 	);
 }

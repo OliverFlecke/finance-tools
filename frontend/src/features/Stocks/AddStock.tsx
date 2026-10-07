@@ -1,8 +1,9 @@
-import { Button, ButtonContainer, Input, Modal } from "@oliverflecke/components-react";
+import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import { useTrackStockCallback } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
 import type { Stock } from "./models";
@@ -51,7 +52,7 @@ const AddStock: React.FC = () => {
 				<span className="align-middle">Add symbol</span>
 			</button>
 
-			<Modal isOpen={isOpen} onDismiss={() => setIsOpen(false)}>
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<div className="rounded bg-gray-300 p-4 dark:bg-gray-700">
 					<h3 className="pb-4 text-lg font-bold">Add symbol</h3>
 
@@ -75,7 +76,7 @@ const AddStock: React.FC = () => {
 						</ButtonContainer>
 					</form>
 				</div>
-			</Modal>
+			</Dialog>
 		</>
 	);
 };

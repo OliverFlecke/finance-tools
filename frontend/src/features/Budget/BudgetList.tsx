@@ -1,6 +1,6 @@
-import { Modal } from "@oliverflecke/components-react";
 import type React from "react";
 import { type FC, useCallback, useContext, useState } from "react";
+import { Dialog } from "@/ui/Dialog/Dialog";
 import AddButton from "../../components/button/AddButton";
 import DeleteButton from "../../components/DeleteButton";
 import {
@@ -60,9 +60,9 @@ const BudgetList: React.FC = () => {
 			<div className="flex-end flex w-full">
 				<AddButton onClick={() => setIsCreateOpen(true)} />
 			</div>
-			<Modal isOpen={isCreateOpen} onDismiss={() => setIsCreateOpen(false)}>
+			<Dialog open={isCreateOpen} onClose={() => setIsCreateOpen(false)}>
 				<BudgetCreate onBudgetCreated={budgets.refresh} />
-			</Modal>
+			</Dialog>
 		</div>
 	);
 };
