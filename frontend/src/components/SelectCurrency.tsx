@@ -3,6 +3,7 @@ import SettingsContext from "features/Settings/context";
 import type React from "react";
 import { type FC, useCallback, useContext, useId, useState } from "react";
 import ClientOnly from "./ClientOnly";
+import styles from "./SelectCurrency.module.css";
 
 interface Props {
 	label: string;
@@ -32,14 +33,9 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 
 	return (
 		<ClientOnly>
-			<label htmlFor={id} className="space-y-2">
+			<label htmlFor={id} className={styles.label}>
 				<span className="input-label">{label}</span>
-				<select
-					id={id}
-					onChange={onSelection}
-					className="block rounded w-full bg-gray-100 px-4 py-2 text-black shadow dark:bg-gray-700 dark:text-white"
-					value={currency}
-				>
+				<select id={id} onChange={onSelection} className={styles.select} value={currency}>
 					<optgroup label="Preferred currencies">
 						{preferredCurrencies.map((code) => (
 							<option key={code} value={code}>

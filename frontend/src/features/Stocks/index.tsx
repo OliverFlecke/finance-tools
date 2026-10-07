@@ -9,6 +9,7 @@ import { convertToCurrency } from "../../utils/converters";
 import AddStock from "./AddStock";
 import { useFetchStocks } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
+import styles from "./index.module.css";
 import { type Stock, type StockList, stockAvgPrice, stockGain, stockTotalShares } from "./models";
 import RefreshStocksButton from "./RefreshStocksButton";
 import StockErrorDisplay from "./StockErrorDisplay";
@@ -72,8 +73,8 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 	const [ascending, setAscending] = useState(false);
 
 	return (
-		<div className="overflow-x-scroll">
-			<table className="w-full">
+		<div className={styles.table_wrapper}>
+			<table className={styles.table}>
 				<thead>
 					<StockTableHeader
 						sortKey={sortKey}
@@ -121,7 +122,7 @@ const StockTableHeader = ({
 	);
 
 	return (
-		<tr className="align-bottom text-sm text-gray-600 dark:text-gray-400">
+		<tr className={styles.header_row}>
 			<Header sort={sort} currentSortKey={sortKey} sortKey={"Symbol"} ascending={ascending}>
 				Symbol
 			</Header>
@@ -149,7 +150,7 @@ const StockTableHeader = ({
 
 const StockActionBar = () => {
 	return (
-		<div className="flex justify-between p-4">
+		<div className={styles.action_bar}>
 			<AddStock />
 			<RefreshStocksButton />
 		</div>
@@ -165,11 +166,7 @@ interface HeaderProps {
 }
 const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) => (
 	<th>
-		<button
-			type="button"
-			onClick={sort(sortKey)}
-			className="whitespace-nowrap rounded-sm ring-red-800 focus:ring-1 dark:ring-red-600"
-		>
+		<button type="button" onClick={sort(sortKey)} className={styles.sort_button}>
 			{children}
 			{sortKey === currentSortKey && <Caret ascending={ascending} />}
 		</button>
@@ -177,7 +174,7 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 );
 
 const Caret = ({ ascending }: { ascending: boolean }) => (
-	<>{ascending ? <IoCaretDown className="inline" /> : <IoCaretUp className="inline" />}</>
+	<>{ascending ? <IoCaretDown className={styles.icon} /> : <IoCaretUp className={styles.icon} />}</>
 );
 
 function stocksComparer(

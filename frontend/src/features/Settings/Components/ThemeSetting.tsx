@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { DarkModeToggle } from "@/ui/DarkModeToggle/DarkModeToggle";
 import { Toggle } from "@/ui/Toggle/Toggle";
 import SettingsContext from "../context";
+import styles from "./ThemeSetting.module.css";
 
 const ThemeSetting = () => {
 	const { values, dispatch } = useContext(SettingsContext);
@@ -9,7 +10,7 @@ const ThemeSetting = () => {
 	return (
 		<>
 			<span>Theme follow OS</span>
-			<div className="flex flex-row justify-end">
+			<div className={styles.toggle_row}>
 				<Toggle
 					checked={values.themeFollowsOS}
 					onChange={(e) =>
@@ -24,7 +25,7 @@ const ThemeSetting = () => {
 			{!values.themeFollowsOS && (
 				<>
 					<span>Theme</span>
-					<div className="flex flex-row justify-end">
+					<div className={styles.toggle_row}>
 						<DarkModeToggle
 							onToggle={() =>
 								dispatch({

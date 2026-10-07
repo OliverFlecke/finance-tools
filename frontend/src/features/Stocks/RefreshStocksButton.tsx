@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import type React from "react";
 import { useCallback, useContext } from "react";
 import { IoReload } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { useSharesCallback } from "./API/yahoo";
+import styles from "./RefreshStocksButton.module.css";
 import { StockContext } from "./state";
 
 const RefreshStocksButton: React.FC = () => {
@@ -20,9 +22,9 @@ const RefreshStocksButton: React.FC = () => {
 	}, [fetchShares, state.stocks, dispatch]);
 
 	return (
-		<Button onClick={reload} className="btn btn-primary space-x-2">
-			<IoReload aria-label="Reload current stock prices" className="inline" />
-			<span className="align-middle">Refresh stocks</span>
+		<Button onClick={reload} className={clsx("btn btn-primary", styles.button)}>
+			<IoReload aria-label="Reload current stock prices" className={styles.icon} />
+			<span className={styles.label}>Refresh stocks</span>
 		</Button>
 	);
 };

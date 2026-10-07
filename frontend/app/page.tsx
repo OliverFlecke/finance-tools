@@ -1,6 +1,7 @@
 import TextPage from "components/TextPage";
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export const metadata: Metadata = { title: { absolute: "Finance Tracker | Finance" } };
 
@@ -10,14 +11,14 @@ export default function Index() {
 			<h2>Tools to help with your finances</h2>
 
 			<p>
-				This page is a collection of difference tools to help track finances and help with
-				different standard calculations that people come across. These has primarely been made for
-				my own use, and are shared here to expand my own development skills, and for whoever else
-				are interested in using these.
+				This page is a collection of difference tools to help track finances and help with different
+				standard calculations that people come across. These has primarely been made for my own use,
+				and are shared here to expand my own development skills, and for whoever else are interested
+				in using these.
 			</p>
 
 			<h3>Features</h3>
-			<ul className="list-disc pl-4">
+			<ul className={styles.list}>
 				<li>
 					Overview of your money across <Link href="/accounts">accounts</Link>
 				</li>

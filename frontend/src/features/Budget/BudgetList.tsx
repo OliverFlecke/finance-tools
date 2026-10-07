@@ -10,6 +10,7 @@ import {
 	useFetchBudgetWithItemsCallback,
 } from "./api";
 import BudgetCreate from "./BudgetCreate";
+import styles from "./BudgetList.module.css";
 import { BudgetContext } from "./state";
 
 const BudgetList: React.FC = () => {
@@ -39,8 +40,8 @@ const BudgetList: React.FC = () => {
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
 
 	return (
-		<div className="bg-sky-300 p-4 dark:bg-sky-900">
-			<div className="flex w-full flex-row justify-between space-x-4 font-bold text-gray-800 dark:text-gray-300">
+		<div className={styles.container}>
+			<div className={styles.header_row}>
 				<span>Title</span>
 				<span>Created at</span>
 				<span></span>
@@ -57,7 +58,7 @@ const BudgetList: React.FC = () => {
 					))}
 				</ul>
 			)}
-			<div className="flex-end flex w-full">
+			<div className={styles.footer_row}>
 				<AddButton onClick={() => setIsCreateOpen(true)} />
 			</div>
 			<Dialog open={isCreateOpen} onClose={() => setIsCreateOpen(false)}>
@@ -74,8 +75,8 @@ const BudgetListItem: FC<{
 	onSelect: (budget: Budget) => void;
 	deleteCallback: (id: string) => void;
 }> = ({ budget, deleteCallback, onSelect }) => (
-	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
-		<button type="button" onClick={() => onSelect(budget)} className="hover:cursor-pointer">
+	<li className={styles.item}>
+		<button type="button" onClick={() => onSelect(budget)} className={styles.select_button}>
 			{budget.title}
 		</button>
 		<span>{budget.created_at.toDateString()}</span>

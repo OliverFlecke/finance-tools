@@ -1,0 +1,102 @@
+.nav {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+@media (min-width: 768px) {
+	.nav {
+		flex-direction: row;
+	}
+}
+
+.top_row {
+	display: flex;
+	align-items: center;
+}
+
+.menu_button {
+	display: block;
+}
+
+@media (min-width: 768px) {
+	.menu_button {
+		display: none;
+	}
+}
+
+.title {
+	padding-left: var(--space-4);
+	padding-right: var(--space-3);
+	font-size: var(--font-size-xl);
+	/* ponytail: Tailwind's font-extralight (200) isn't in the shared
+	   font-weight tokens (lightest is --font-weight-light: 300); hardcoded. */
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+	.title {
+		padding-inline: 0;
+	}
+}
+
+.current_page {
+	display: none;
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+	.current_page {
+		display: inline;
+	}
+}
+
+@media (min-width: 768px) {
+	.current_page {
+		display: none;
+	}
+}
+
+.current_page_slash {
+	font-size: var(--font-size-lg);
+}
+
+.current_page_text {
+	padding-inline: var(--space-2);
+}
+
+.links {
+	display: none;
+	flex-direction: column;
+	font-weight: 200;
+}
+
+.links.open {
+	display: flex;
+}
+
+@media (min-width: 768px) {
+	.links {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--space-6);
+		padding-left: var(--space-8);
+	}
+}
+
+.link {
+	height: 100%;
+	vertical-align: middle;
+	font-weight: var(--font-weight-light);
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.link_active {
+	text-decoration: underline;
+}

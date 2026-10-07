@@ -1,3 +1,43 @@
+.gain_positive {
+	color: var(--color-green-700);
+}
+
+:global(.dark) .gain_positive {
+	color: var(--color-green-500);
+}
+
+.gain_negative {
+	color: var(--color-red-700);
+}
+
+:global(.dark) .gain_negative {
+	color: var(--color-red-500);
+}
+
+.total {
+	color: var(--color-blue-700);
+}
+
+:global(.dark) .total {
+	color: var(--color-blue-500);
+}
+
+.total_cash {
+	color: var(--color-yellow-700);
+}
+
+:global(.dark) .total_cash {
+	color: var(--color-yellow-500);
+}
+
+.total_investments {
+	color: var(--color-purple-700);
+}
+
+:global(.dark) .total_investments {
+	color: var(--color-purple-500);
+}
+
 .cell_summary {
 	position: relative;
 	cursor: context-menu;
@@ -7,8 +47,8 @@
 	anchor-name: --summary;
 
 	& ol {
-		background: var(--bg-primary);
-		box-shadow: 3px 3px 5px var(--shadow-primary);
+		background: var(--color-bg);
+		box-shadow: 3px 3px 5px var(--color-black);
 
 		z-index: 2;
 		position: fixed;

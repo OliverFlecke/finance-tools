@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import type { FC } from "react";
+import styles from "./AmountSummaryProps.module.css";
 import { formatter } from "./index";
 
 interface AmountSummaryProps {
@@ -8,11 +10,11 @@ interface AmountSummaryProps {
 }
 
 const AmountSummary: FC<AmountSummaryProps> = ({ amount, label, color }) => (
-	<div className="flex space-x-4">
-		<div className={`h-6 w-6 rounded-full ${color}`}></div>
+	<div className={styles.row}>
+		<div className={clsx(styles.dot, color)}></div>
 		<div>
-			<span className="text-black dark:text-gray-300">{label}</span>
-			<div className="text-2xl text-black dark:text-white">{formatter.format(amount)}</div>
+			<span className={styles.label}>{label}</span>
+			<div className={styles.amount}>{formatter.format(amount)}</div>
 		</div>
 	</div>
 );

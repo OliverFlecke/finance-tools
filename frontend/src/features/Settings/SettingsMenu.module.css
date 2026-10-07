@@ -1,0 +1,33 @@
+.container {
+	z-index: 50;
+}
+
+.trigger {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+}
+
+.panel {
+	border-radius: var(--radius);
+	background-color: var(--color-indigo-100);
+	padding: var(--space-4);
+	color: var(--color-black);
+
+	& > * + * {
+		margin-top: var(--space-4);
+	}
+}
+
+:global(.dark) .panel {
+	background-color: var(--color-indigo-900);
+	color: var(--color-white);
+}
+
+.heading {
+	font-size: var(--font-size-xl);
+}
+
+.full_row {
+	grid-column: span 2 / span 2;
+}

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
+import clsx from "clsx";
 import { type FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
@@ -11,6 +12,7 @@ import { Button } from "@/ui/Button/Button";
 import { Input } from "@/ui/Input/Input";
 import { Select, SelectOption } from "@/ui/Select/Select";
 import CalculationSummary from "./CalculationSummary";
+import styles from "./index.module.css";
 
 interface CompoundInterestProps {
 	name?: string;
@@ -60,10 +62,10 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 	}, []);
 
 	return (
-		<div className="pb-4 dark:bg-gray-800">
-			<h2 className="px-4 py-4 text-xl lg:text-left">Compound interest calculator</h2>
-			<form onSubmit={onSubmit} className="flex-col-center w-full overflow-x-hidden px-4">
-				<fieldset className="flex flex-col items-start space-y-6 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
+		<div className={styles.container}>
+			<h2 className={styles.heading}>Compound interest calculator</h2>
+			<form onSubmit={onSubmit} className={clsx("flex-col-center", styles.form)}>
+				<fieldset className={styles.fieldset}>
 					<NumericFormat
 						// biome-ignore lint/suspicious/noExplicitAny: unknown type
 						customInput={(props: any) => (
@@ -71,7 +73,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								{...props}
 								label="Existing amount"
 								errorMessage={errors.existingAmount?.message}
-								className="dark:placeholder-gray-600"
+								className={styles.placeholder}
 								placeholder="20,000"
 								inputMode="numeric"
 							/>
@@ -87,7 +89,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
-						className="dark:placeholder-gray-600"
+						className={styles.placeholder}
 						errorMessage={errors.interestRate?.message}
 						{...register("interestRate", {
 							required: "Please provide a valid value",
@@ -96,7 +98,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 					<Input
 						label="Investment period"
 						placeholder="10"
-						className="dark:placeholder-gray-600"
+						className={styles.placeholder}
 						errorMessage={errors.investmentPeriod?.message}
 						{...register("investmentPeriod", {
 							required: "Please provide a number of years you are investing",
@@ -117,7 +119,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								label="Monthly deposit"
 								placeholder="10,000"
 								inputMode="numeric"
-								className="dark:placeholder-gray-600"
+								className={styles.placeholder}
 								errorMessage={errors.monthlyDeposit?.message}
 							/>
 						)}
@@ -130,7 +132,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 						})}
 					/>
 				</fieldset>
-				<div className="flex w-full justify-center space-x-4 pt-4">
+				<div className={styles.actions}>
 					<Button type="submit">Calculate</Button>
 					<Button type="reset" buttonType="Secondary" onClick={resetForm}>
 						Reset

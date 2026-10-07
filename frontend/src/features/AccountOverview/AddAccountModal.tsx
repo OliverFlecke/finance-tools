@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useSettingsContext } from "features/Settings/context";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,7 @@ import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { Input } from "@/ui/Input/Input";
+import styles from "./AddAccountModal.module.css";
 
 export default function AddAccount() {
 	const [showPrompt, setShowPrompt] = useState(false);
@@ -17,10 +19,10 @@ export default function AddAccount() {
 			<button
 				type="button"
 				onClick={() => setShowPrompt((x) => !x)}
-				className="btn btn-primary space-x-2"
+				className={clsx("btn btn-primary", styles.btn_spacing)}
 			>
-				<IoAddCircleOutline className="inline" />
-				<span className="align-middle">Add account</span>
+				<IoAddCircleOutline className={styles.icon} />
+				<span className={styles.align_middle}>Add account</span>
 			</button>
 
 			<Dialog open={showPrompt} onClose={() => setShowPrompt(false)}>
@@ -54,28 +56,25 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 	const currencyId = useId();
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
-		>
-			<div className="pb-4">
-				<h2 className="text-lg text-gray-700 dark:text-gray-200">Add new account</h2>
+		<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+			<div className={styles.field_group}>
+				<h2 className={styles.heading}>Add new account</h2>
 
-				<fieldset className="space-y-2">
+				<fieldset className={styles.fieldset}>
 					<Input
 						placeholder="Savings, Investments..."
 						label="Name"
 						{...register("name", { required: true })}
 						errorMessage={errors.name && "Please provide a name for your account"}
 					/>
-					<label className="flex flex-col space-y-2">
+					<label className={styles.field}>
 						<span className="modal-form-label">Account type</span>
 						<select className="modal-select" {...register("kind", { required: true })}>
 							<option value={"Cash"}>Cash</option>
 							<option value={"Investment"}>Investment</option>
 						</select>
 					</label>
-					<label htmlFor={currencyId} className="flex flex-col space-y-2">
+					<label htmlFor={currencyId} className={styles.field}>
 						<span className="modal-form-label">Account currency</span>
 						<select
 							id={currencyId}

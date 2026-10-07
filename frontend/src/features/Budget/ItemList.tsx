@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useContext, useMemo, useState } from "react";
 import { formatCurrency } from "utils/converters";
 import { sum } from "utils/math";
@@ -6,6 +7,7 @@ import RemoveButton from "../../components/button/RemoveButton";
 import AddLine from "./AddLine";
 import type { AddItemToBudgetRequest, Item } from "./api";
 import BudgetLineActions from "./BudgetLineActions";
+import styles from "./ItemList.module.css";
 import { currency } from "./index";
 import MonthAndYearCells from "./MonthAndYearCells";
 import { BudgetContext } from "./state";
@@ -17,8 +19,7 @@ interface Props {
 	addItem: (item: AddItemToBudgetRequest) => void;
 	deleteItem: (id: string) => void;
 	updateItem: (id: string, item: AddItemToBudgetRequest) => void;
-	primaryBackgroundColor?: string;
-	oddRowBackgroundColor?: string;
+	variant?: "income" | "expenses";
 }
 
 const ItemList: React.FC<Props> = ({
@@ -28,8 +29,7 @@ const ItemList: React.FC<Props> = ({
 	addItem,
 	deleteItem,
 	updateItem,
-	primaryBackgroundColor,
-	oddRowBackgroundColor,
+	variant,
 }) => {
 	const {
 		state: { hideItems },
@@ -37,23 +37,31 @@ const ItemList: React.FC<Props> = ({
 	const groups = useMemo(() => Array.from(groupByCategory(items)), [items]);
 	const [addVisible, setAddVisible] = useState(false);
 
+	const bgClass =
+		variant === "income"
+			? styles.income_bg
+			: variant === "expenses"
+				? styles.expenses_bg
+				: undefined;
+	const oddClass =
+		variant === "income"
+			? styles.income_odd
+			: variant === "expenses"
+				? styles.expenses_odd
+				: undefined;
+
 	return (
 		<>
-			<tbody className={primaryBackgroundColor}>
+			<tbody className={bgClass}>
 				<tr>
-					<th className="px-4 pt-2 text-left text-xl underline" colSpan={4}>
+					<th className={styles.section_title} colSpan={4}>
 						{title}
 					</th>
 				</tr>
 				{groups.map((group) => (
 					<React.Fragment key={group.category}>
-						<tr
-							key={group.category}
-							className={`text-fuchsia-700 dark:text-fuchsia-300 ${
-								hideItems ? oddRowBackgroundColor : ""
-							}`}
-						>
-							<th className="px-8 text-left font-normal">{group.category}</th>
+						<tr key={group.category} className={clsx(styles.category_row, hideItems && oddClass)}>
+							<th className={styles.category_label}>{group.category}</th>
 							<MonthAndYearCells value={Math.abs(sum(...group.items.map((x) => x.amount)))} />
 							<td></td>
 						</tr>
@@ -61,8 +69,8 @@ const ItemList: React.FC<Props> = ({
 							group.items
 								.sort((a, z) => a.amount - z.amount)
 								.map((item) => (
-									<tr key={item.name} className={`px-8 ${oddRowBackgroundColor}`}>
-										<td className="pl-12">{item.name}</td>
+									<tr key={item.name} className={clsx(styles.item_row, oddClass)}>
+										<td className={styles.item_name}>{item.name}</td>
 										<MonthAndYearCells value={Math.abs(item.amount)} />
 										<BudgetLineActions
 											item={item}
@@ -74,10 +82,10 @@ const ItemList: React.FC<Props> = ({
 					</React.Fragment>
 				))}
 				<tr>
-					<th className="pl-4 pb-2 text-left">Total</th>
+					<th className={styles.total_label}>Total</th>
 					<th className="currency">{formatCurrency(total, currency)}</th>
 					<th className="currency">{formatCurrency(12 * total, currency)}</th>
-					<th className="flex flex-row justify-end pr-4">
+					<th className={styles.actions_header}>
 						{addVisible ? (
 							<RemoveButton onClick={() => setAddVisible(false)} />
 						) : (

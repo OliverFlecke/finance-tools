@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import type { AddItemToBudgetRequest, Item } from "./api";
+import styles from "./BudgetLineActions.module.css";
 import EditItem from "./EditItem";
 
 interface Props {
@@ -19,14 +20,10 @@ export default function BudgetLineActions({ item, deleteItem, updateItem }: Read
 	};
 
 	return (
-		<td className="flex flex-row justify-end space-x-2 pr-4">
+		<td className={styles.cell}>
 			<DeleteButton onClick={() => deleteItem(item.id)} />
 
-			<button
-				type="button"
-				onClick={() => setEdit(true)}
-				className="text-green-700 dark:text-green-400"
-			>
+			<button type="button" onClick={() => setEdit(true)} className={styles.edit_button}>
 				<IoCreateOutline size={24} />
 			</button>
 

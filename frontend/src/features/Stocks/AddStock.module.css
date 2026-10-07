@@ -1,0 +1,46 @@
+.trigger {
+	& > * + * {
+		margin-left: var(--space-2);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.label {
+	vertical-align: middle;
+}
+
+.dialog_content {
+	border-radius: var(--radius);
+	padding: var(--space-4);
+	background-color: var(--color-gray-300);
+}
+
+:global(.dark) .dialog_content {
+	background-color: var(--color-gray-700);
+}
+
+.title {
+	padding-bottom: var(--space-4);
+	font-size: var(--font-size-lg);
+	font-weight: var(--font-weight-bold);
+}
+
+.form {
+	& > * + * {
+		margin-top: var(--space-4);
+	}
+}
+
+.fieldset {
+	& > * + * {
+		margin-top: var(--space-2);
+	}
+}
+
+.submit_button {
+	order: 9999;
+	margin-left: var(--space-4);
+}

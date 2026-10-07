@@ -1,0 +1,125 @@
+.wrapper {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+}
+
+.grid {
+	display: grid;
+	width: 100%;
+	max-width: 42rem;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	justify-content: center;
+	gap: var(--space-4) var(--space-8);
+	padding: var(--space-8);
+}
+
+@media (min-width: 768px) {
+	.grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.dot_blue {
+	background-color: var(--color-blue-900);
+}
+:global(.dark) .dot_blue {
+	background-color: var(--color-blue-300);
+}
+
+.dot_green {
+	background-color: var(--color-green-900);
+}
+:global(.dark) .dot_green {
+	background-color: var(--color-green-300);
+}
+
+.dot_indigo {
+	background-color: var(--color-indigo-900);
+}
+:global(.dark) .dot_indigo {
+	background-color: var(--color-indigo-300);
+}
+
+.dot_yellow {
+	background-color: var(--color-yellow-900);
+}
+:global(.dark) .dot_yellow {
+	background-color: var(--color-yellow-300);
+}
+
+.table_wrapper {
+	overflow-x: scroll;
+}
+
+@media (min-width: 1024px) {
+	.table_wrapper {
+		margin: 0;
+		width: 100%;
+		overflow-x: auto;
+	}
+}
+
+.table {
+	width: 100%;
+}
+
+.body {
+	text-align: right;
+	font-family: monospace;
+}
+
+.header_row {
+	text-align: right;
+}
+
+.cell {
+	padding-inline: var(--space-4);
+}
+
+.cell_center {
+	text-align: center;
+}
+
+.row:nth-child(odd) {
+	background-color: var(--color-gray-200);
+}
+:global(.dark) .row:nth-child(odd) {
+	background-color: var(--color-gray-900);
+}
+
+.text_deposit {
+	color: var(--color-teal-800);
+}
+:global(.dark) .text_deposit {
+	color: var(--color-teal-400);
+}
+
+.text_interest {
+	color: var(--color-green-800);
+}
+:global(.dark) .text_interest {
+	color: var(--color-green-400);
+}
+
+.text_total_deposit {
+	color: var(--color-orange-800);
+}
+:global(.dark) .text_total_deposit {
+	color: var(--color-orange-400);
+}
+
+.text_total_interest {
+	color: var(--color-purple-800);
+}
+:global(.dark) .text_total_interest {
+	color: var(--color-purple-400);
+}
+
+.text_balance {
+	color: var(--color-red-800);
+}
+:global(.dark) .text_balance {
+	color: var(--color-red-400);
+}

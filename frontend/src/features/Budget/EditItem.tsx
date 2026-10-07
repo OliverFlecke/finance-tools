@@ -5,6 +5,7 @@ import { IoSaveOutline } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import type { AddItemToBudgetRequest, Item } from "./api";
+import styles from "./EditItem.module.css";
 
 const EditItem: React.FC<{
 	item: Item;
@@ -21,11 +22,8 @@ const EditItem: React.FC<{
 	);
 
 	return (
-		<form
-			onSubmit={handleSubmit(handleUpdate)}
-			className="flex w-96 max-w-screen-lg flex-col space-y-4 rounded bg-indigo-500 p-4 dark:bg-indigo-900"
-		>
-			<h4 className="text-xl">Edit item</h4>
+		<form onSubmit={handleSubmit(handleUpdate)} className={styles.form}>
+			<h4 className={styles.title}>Edit item</h4>
 			<label className="edit-item">
 				<span>Category</span>
 				<input
@@ -58,11 +56,7 @@ const EditItem: React.FC<{
 
 			<ButtonContainer>
 				<Button buttonType="Transparent">Cancel</Button>
-				<Button
-					type="submit"
-					buttonType="Primary"
-					className="btn btn-primary flex items-center justify-center space-x-2 align-middle"
-				>
+				<Button type="submit" buttonType="Primary" className={styles.submit}>
 					<span>Save</span>
 					<IoSaveOutline />
 				</Button>

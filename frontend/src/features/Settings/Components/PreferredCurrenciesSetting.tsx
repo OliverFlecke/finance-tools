@@ -1,6 +1,7 @@
 import { useCallback, useContext, useState } from "react";
 import SelectCurrency from "../../../components/SelectCurrency";
 import SettingsContext from "../context";
+import styles from "./PreferredCurrenciesSetting.module.css";
 
 export default function PreferredCurrenciesSetting() {
 	const { values, dispatch } = useContext(SettingsContext);
@@ -13,12 +14,12 @@ export default function PreferredCurrenciesSetting() {
 
 	return (
 		<div>
-			<div className="flex justify-between items-end">
+			<div className={styles.header}>
 				<SelectCurrency
 					label="Add to preferred currencies"
 					onChange={(ref) => setCode(ref.valueOf())}
 				/>
-				<button type="button" onClick={addCode} className="rounded btn btn-secondary">
+				<button type="button" onClick={addCode} className="btn btn-secondary">
 					Add
 				</button>
 			</div>

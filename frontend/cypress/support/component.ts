@@ -15,7 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
-import "compiled.css";
+import "main.css";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

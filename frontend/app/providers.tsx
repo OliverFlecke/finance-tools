@@ -7,6 +7,7 @@ import Header from "features/Header";
 import Settings from "features/Settings";
 import type React from "react";
 import { AuthProvider } from "react-oidc-context";
+import styles from "./providers.module.css";
 
 const queryClient = new QueryClient();
 
@@ -23,11 +24,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 		>
 			<QueryClientProvider client={queryClient}>
 				<Settings>
-					<div className="flex min-h-screen flex-col">
+					<div className={styles.wrapper}>
 						<Header />
-						<main className="h-full grow bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200 relative">
-							{children}
-						</main>
+						<main className={styles.main}>{children}</main>
 						<Footer />
 					</div>
 				</Settings>

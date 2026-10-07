@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import type React from "react";
 import { type FC, useRef } from "react";
 import { useDrag, useDrop, type XYCoord } from "react-dnd";
+import styles from "./SortableDragAndDropItem.module.css";
 
 interface DragItem {
 	index: number;
@@ -85,7 +87,7 @@ const SortableDragAndDropItem: FC<{
 		<li
 			ref={ref}
 			data-handler-id={handlerId}
-			className={`cursor-move ${isDragging ? "opacity-25" : ""} ${!className ? "" : className}`}
+			className={clsx(styles.item, isDragging && styles.dragging, className)}
 		>
 			{children}
 		</li>

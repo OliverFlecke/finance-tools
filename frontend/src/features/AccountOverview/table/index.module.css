@@ -18,3 +18,69 @@
 		padding-right: 1rem;
 	}
 }
+
+.table {
+	width: 100%;
+}
+
+.row {
+	white-space: nowrap;
+	text-align: right;
+}
+
+.row_body {
+	font-family: monospace;
+
+	&:nth-child(odd) {
+		background-color: var(--color-bg-stripe);
+	}
+}
+
+.date_cell {
+	padding-right: var(--space-6);
+	text-align: center;
+}
+
+.gain_header {
+	padding-inline: var(--space-4);
+	color: var(--color-green-700);
+}
+
+:global(.dark) .gain_header {
+	color: var(--color-green-500);
+}
+
+.total_header {
+	padding-inline: var(--space-4);
+	color: var(--color-blue-700);
+}
+
+:global(.dark) .total_header {
+	color: var(--color-blue-500);
+}
+
+.cash_header {
+	padding-inline: var(--space-4);
+	color: var(--color-yellow-700);
+}
+
+:global(.dark) .cash_header {
+	color: var(--color-yellow-500);
+}
+
+.investments_header {
+	padding-inline: var(--space-4);
+	color: var(--color-purple-700);
+}
+
+:global(.dark) .investments_header {
+	color: var(--color-purple-500);
+}
+
+.account_header {
+	padding-inline: var(--space-4);
+}
+
+.actions_cell {
+	padding-left: var(--space-4);
+}

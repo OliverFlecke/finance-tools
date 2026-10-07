@@ -1,0 +1,14 @@
+.container {
+	margin: var(--space-2) var(--space-4) 0;
+	border-radius: var(--radius);
+	background-color: var(--color-sky-300);
+	padding: var(--space-4);
+}
+
+:global(.dark) .container {
+	background-color: var(--color-sky-900);
+}
+
+.label > * + * {
+	margin-left: var(--space-4);
+}

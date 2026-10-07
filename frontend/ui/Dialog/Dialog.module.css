@@ -1,0 +1,11 @@
+.dialog {
+	margin: auto;
+	max-width: calc(100vw - 2rem);
+	border-radius: var(--radius-md);
+	background-color: var(--color-bg-elevated);
+	padding: 0;
+
+	&::backdrop {
+		background-color: var(--color-backdrop);
+	}
+}

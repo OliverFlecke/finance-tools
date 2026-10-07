@@ -1,0 +1,42 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	max-width: 32rem;
+	border-radius: var(--radius);
+	background-color: var(--color-sky-300);
+	padding: var(--space-4);
+}
+
+:global(.dark) .container {
+	background-color: var(--color-sky-900);
+}
+
+.title {
+	font-size: var(--font-size-lg);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-4);
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	align-items: baseline;
+}
+
+.label {
+	font-size: var(--font-size-base);
+	color: var(--color-gray-700);
+}
+
+:global(.dark) .label {
+	color: var(--color-gray-100);
+}
+
+.submit {
+	width: 100%;
+}

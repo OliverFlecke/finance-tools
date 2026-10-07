@@ -4,6 +4,7 @@ import { convertToCurrency, formatCurrency } from "utils/converters";
 import { sum } from "utils/math";
 import SettingsContext from "../Settings/context";
 import type { StockList } from "./models";
+import styles from "./StockSummaryRow.module.css";
 
 interface StockSummaryRowProps {
 	stocks: StockList;
@@ -50,7 +51,7 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 	const gainPercentage = (totalValue / (totalValue - totalGain) - 1) * 100;
 
 	return (
-		<tr className="text-right font-bold dark:text-purple-400">
+		<tr className={styles.row}>
 			<td></td>
 			<td></td>
 			<td>{formatCurrency(totalValue, preferredDisplayCurrency)}</td>

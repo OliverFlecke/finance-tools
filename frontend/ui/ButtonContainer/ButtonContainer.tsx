@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
+import styles from "./ButtonContainer.module.css";
 
 export type ButtonContainerPosition = "Left" | "Right" | "Center";
 
@@ -11,25 +12,17 @@ export interface ButtonContainerProps {
 
 export function ButtonContainer({ position = "Right", className, children }: ButtonContainerProps) {
 	return (
-		<div
-			className={clsx(
-				"flex w-full flex-row space-x-4 rounded-md bg-gray-50 p-4 dark:bg-gray-900",
-				positionClass(position),
-				className,
-			)}
-		>
-			{children}
-		</div>
+		<div className={clsx(styles.container, positionClass(position), className)}>{children}</div>
 	);
 }
 
 function positionClass(position: ButtonContainerPosition): string {
 	switch (position) {
 		case "Left":
-			return "justify-start";
+			return styles.left;
 		case "Center":
-			return "justify-center";
+			return styles.center;
 		case "Right":
-			return "justify-end";
+			return styles.right;
 	}
 }

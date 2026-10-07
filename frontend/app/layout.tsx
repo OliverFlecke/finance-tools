@@ -1,7 +1,8 @@
-import "compiled.css";
+import "main.css";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import type React from "react";
+import styles from "./layout.module.css";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-			<body className="min-h-screen">
+			<body className={styles.body}>
 				{/* <Script */}
 				{/* 	async */}
 				{/* 	defer */}

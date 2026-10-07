@@ -1,4 +1,5 @@
 import { IoAddCircleOutline } from "react-icons/io5";
+import styles from "./AddButton.module.css";
 
 interface Props {
 	onClick: () => void;
@@ -6,8 +7,8 @@ interface Props {
 
 export default function AddButton({ onClick }: Props) {
 	return (
-		<button type="button" onClick={onClick} className="flex focus:outline-none">
-			<IoAddCircleOutline size={24} className="text-green-700 dark:text-green-500" />
+		<button type="button" onClick={onClick} className={styles.button}>
+			<IoAddCircleOutline size={24} className={styles.icon} />
 		</button>
 	);
 }

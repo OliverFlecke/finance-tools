@@ -1,4 +1,5 @@
 import { IoRemoveCircleOutline } from "react-icons/io5";
+import styles from "./RemoveButton.module.css";
 
 interface Props {
 	onClick: () => void;
@@ -6,8 +7,8 @@ interface Props {
 
 export default function RemoveButton({ onClick }: Props) {
 	return (
-		<button type="button" onClick={onClick} className="flex focus:outline-none">
-			<IoRemoveCircleOutline size={24} className="text-red-700 dark:text-red-500" />
+		<button type="button" onClick={onClick} className={styles.button}>
+			<IoRemoveCircleOutline size={24} className={styles.icon} />
 		</button>
 	);
 }

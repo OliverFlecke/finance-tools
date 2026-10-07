@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { useSettingsContext } from "features/Settings/context";
-import { getValueColorIndicator } from "utils/colors";
 import { convertToCurrency, formatCurrency } from "utils/converters";
 import { useAccountContext } from "../Context";
 import styles from "./RowSummary.module.css";
@@ -23,24 +22,26 @@ export default function RowSummary({ index, date, totals }: Readonly<RowSummaryP
 	const cash = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Cash");
 	const invested = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Investment");
 
+	const gainClass = gain > 0 ? styles.gain_positive : gain < 0 ? styles.gain_negative : undefined;
+
 	return (
 		<>
-			<td className={clsx(getValueColorIndicator(gain), styles.cell_summary)}>
+			<td className={clsx(gainClass, styles.cell_summary)}>
 				{formatCurrency(gain, currency)}
 				<Tooltip value={gain} />
 			</td>
 
-			<td className={clsx("text-blue-700 dark:text-blue-500", styles.cell_summary)}>
+			<td className={clsx(styles.total, styles.cell_summary)}>
 				{formatCurrency(total, currency)}
 				<Tooltip value={total} />
 			</td>
 
-			<td className={clsx("text-yellow-700 dark:text-yellow-500", styles.cell_summary)}>
+			<td className={clsx(styles.total_cash, styles.cell_summary)}>
 				{formatCurrency(cash, currency)}
 				<Tooltip value={cash} />
 			</td>
 
-			<td className={clsx("text-purple-700 dark:text-purple-500", styles.cell_summary)}>
+			<td className={clsx(styles.total_investments, styles.cell_summary)}>
 				{formatCurrency(invested, currency)}
 				<Tooltip value={invested} />
 			</td>

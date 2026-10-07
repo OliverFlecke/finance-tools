@@ -4,6 +4,7 @@ import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { Input } from "@/ui/Input/Input";
+import styles from "./AddEntryModal.module.css";
 import { useAccountContext } from "./Context";
 
 export default function AddEntryModal() {
@@ -31,13 +32,10 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
-		>
-			<div className="pb-4">
-				<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
-				<Input type="date" className="m-4" {...register("date")} />
+		<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+			<div className={styles.field_group}>
+				<h2 className={styles.heading}>Add new entry on date</h2>
+				<Input type="date" className={styles.date_input} {...register("date")} />
 			</div>
 
 			<ButtonContainer>

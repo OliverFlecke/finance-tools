@@ -14,6 +14,7 @@ import SettingsContext from "@/features/Settings/context";
 import { Toggle } from "@/ui/Toggle/Toggle";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";
+import styles from "./OverviewChart.module.css";
 
 const accessors = {
 	// biome-ignore lint/suspicious/noExplicitAny: generic
@@ -69,10 +70,10 @@ export default function OverviewChart() {
 	const [showTotals, setShowTotals] = useState(true);
 
 	return (
-		<div className="py-4">
-			<div className="flex flex-row justify-end bg-transparent">
-				<span className="space-x-4 px-4">
-					<span className="h-full align-middle">Show totals</span>
+		<div className={styles.wrapper}>
+			<div className={styles.toggle_row}>
+				<span className={styles.toggle_label}>
+					<span className={styles.toggle_text}>Show totals</span>
 					<Toggle checked={showTotals} onChange={(e) => setShowTotals(e.target.checked)} />
 				</span>
 			</div>
@@ -109,12 +110,12 @@ export default function OverviewChart() {
 						if (!tooltipData?.nearestDatum || !colorScale) return;
 
 						return (
-							<div className="flex flex-col">
+							<div className={styles.tooltip}>
 								<div style={{ color: colorScale(tooltipData.nearestDatum.key) }}>
 									{tooltipData.nearestDatum.key}
 								</div>
 								<span>{accessors.xAccessor(tooltipData.nearestDatum.datum)}</span>
-								<span className="text-green-700 dark:text-green-500">
+								<span className={styles.tooltip_value}>
 									{formatCurrency(
 										accessors.yAccessor(tooltipData.nearestDatum.datum),
 										settings.preferredDisplayCurrency,

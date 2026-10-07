@@ -1,0 +1,15 @@
+.button {
+	display: flex;
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.icon {
+	color: var(--color-red-700);
+}
+
+:global(.dark) .icon {
+	color: var(--color-red-500);
+}

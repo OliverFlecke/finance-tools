@@ -1,0 +1,26 @@
+.form {
+	border-radius: var(--radius);
+	background-color: var(--color-indigo-500);
+	padding: var(--space-4);
+}
+
+:global(.dark) .form {
+	background-color: var(--color-indigo-900);
+}
+
+.field_group {
+	padding-bottom: var(--space-4);
+}
+
+.heading {
+	font-size: var(--font-size-lg);
+	color: var(--color-gray-700);
+}
+
+:global(.dark) .heading {
+	color: var(--color-gray-400);
+}
+
+.date_input {
+	margin: var(--space-4);
+}

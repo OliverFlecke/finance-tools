@@ -4,6 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { useOnOutsideMouseDown } from "@/ui/hooks/useOnOutsideMouseDown";
 import LoginButton from "./LoginButton";
 import LoginMenu from "./LoginMenu";
+import styles from "./LoginState.module.css";
 import UserAvatar from "./UserAvatar";
 
 export default function LoginState() {
@@ -23,8 +24,8 @@ function LoginDropDownMenu({ user }: Readonly<LoginDropDownMenuProps>) {
 	useOnOutsideMouseDown(ref, () => setIsOpen(false));
 
 	return (
-		<div ref={ref} className="relative flex items-center space-x-4">
-			<div className="group">
+		<div ref={ref} className={styles.wrapper}>
+			<div>
 				<button type="button" onClick={() => setIsOpen((x) => !x)}>
 					<UserAvatar pictureUrl={user.profile.picture} />
 				</button>

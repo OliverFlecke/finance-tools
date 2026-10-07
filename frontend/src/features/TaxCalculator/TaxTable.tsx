@@ -3,6 +3,7 @@ import { useCallback, useContext } from "react";
 import { convertToCurrency, formatCurrency, useConverter } from "utils/converters";
 import type { CurrencyRates } from "../Currency/api";
 import { TaxCalculatorContext, type TaxCalculatorOptions } from "./state";
+import styles from "./TaxTable.module.css";
 import taxCalculator, { type TaxSystem } from "./taxRates";
 
 const formatOptions = {
@@ -28,8 +29,8 @@ export default function TaxTable() {
 	if (!salary) return null;
 
 	return (
-		<div className="overflow-x-auto">
-			<table className="w-full">
+		<div className={styles.wrapper}>
+			<table className={styles.table}>
 				<TableHeader />
 				<TableBody countries={countries} calculator={calculator} />
 			</table>
@@ -91,10 +92,8 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 	return (
 		<tr key={country} className="tax-row">
 			<td>{result.country}</td>
-			<td className="text-green-700 dark:text-green-400">
-				{formatPreferred(result.preferred.salaryNet)}
-			</td>
-			<td className="text-red-700 dark:text-red-400">{formatPreferred(result.preferred.taxes)}</td>
+			<td className={styles.net_cell}>{formatPreferred(result.preferred.salaryNet)}</td>
+			<td className={styles.taxes_cell}>{formatPreferred(result.preferred.taxes)}</td>
 			<td>
 				{result.taxPercent.toLocaleString(undefined, {
 					style: "percent",
@@ -113,7 +112,7 @@ function TableHeader() {
 	return (
 		<thead className="tax-header">
 			<tr>
-				<th className="text-left">Country</th>
+				<th className={styles.header_cell}>Country</th>
 				<th>Net salary</th>
 				<th>Taxes</th>
 				<th>Tax percent</th>

@@ -1,0 +1,12 @@
+.error {
+	margin: var(--space-4);
+	border-radius: var(--radius);
+	padding: var(--space-2) var(--space-4);
+	text-align: center;
+	font-size: var(--font-size-lg);
+	background-color: var(--color-red-500);
+}
+
+:global(.dark) .error {
+	background-color: var(--color-red-900);
+}

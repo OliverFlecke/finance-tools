@@ -1,0 +1,54 @@
+.row {
+	display: flex;
+	padding: var(--space-4);
+
+	& > * + * {
+		margin-left: var(--space-4);
+	}
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+
+	& > * + * {
+		margin-top: var(--space-2);
+	}
+}
+
+.salary_input {
+	border-radius: var(--radius-md);
+	background-color: var(--color-white);
+	padding: var(--space-2) var(--space-4);
+	box-shadow: var(--shadow);
+
+	&:focus {
+		border-color: var(--color-focus-ring);
+		outline: none;
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 50%, transparent);
+	}
+}
+
+:global(.dark) .salary_input {
+	background-color: var(--color-gray-900);
+	color: var(--color-gray-100);
+}
+
+.preferred_currency {
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+
+	& > * + * {
+		margin-top: var(--space-2);
+	}
+}
+
+.preferred_currency_value {
+	padding-block: var(--space-1);
+	color: var(--color-yellow-700);
+}
+
+:global(.dark) .preferred_currency_value {
+	color: var(--color-yellow-400);
+}

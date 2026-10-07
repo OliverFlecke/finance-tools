@@ -1,0 +1,27 @@
+.wrapper {
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+}
+
+.net_cell {
+	color: var(--color-green-700);
+}
+
+:global(.dark) .net_cell {
+	color: var(--color-green-400);
+}
+
+.taxes_cell {
+	color: var(--color-red-700);
+}
+
+:global(.dark) .taxes_cell {
+	color: var(--color-red-400);
+}
+
+.header_cell {
+	text-align: left;
+}

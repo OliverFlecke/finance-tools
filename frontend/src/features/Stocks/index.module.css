@@ -1,0 +1,40 @@
+.table_wrapper {
+	overflow-x: scroll;
+}
+
+.table {
+	width: 100%;
+}
+
+.header_row {
+	vertical-align: bottom;
+	font-size: var(--font-size-sm);
+	color: var(--color-gray-600);
+}
+
+:global(.dark) .header_row {
+	color: var(--color-gray-400);
+}
+
+.action_bar {
+	display: flex;
+	justify-content: space-between;
+	padding: var(--space-4);
+}
+
+.sort_button {
+	white-space: nowrap;
+	border-radius: var(--radius-sm);
+
+	&:focus {
+		box-shadow: 0 0 0 1px var(--color-red-800);
+	}
+}
+
+:global(.dark) .sort_button:focus {
+	box-shadow: 0 0 0 1px var(--color-red-600);
+}
+
+.icon {
+	display: inline;
+}

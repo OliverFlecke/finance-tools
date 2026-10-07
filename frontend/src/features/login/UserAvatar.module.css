@@ -1,0 +1,4 @@
+.avatar {
+	max-height: 2.5rem;
+	border-radius: var(--radius-full);
+}

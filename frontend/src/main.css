@@ -1,16 +1,212 @@
-@import "tailwindcss";
+/*
+ * Design tokens. Light values live on :root; dark overrides live under .dark,
+ * which useDarkModeWithClass() toggles on <body> (see ui/hooks). Variables
+ * cascade to all descendants, so components only ever reference a token.
+ */
+:root {
+	/* Spacing scale (matches the rem steps actually used across the app) */
+	--space-0: 0px;
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 0.75rem;
+	--space-4: 1rem;
+	--space-6: 1.5rem;
+	--space-8: 2rem;
+	--space-12: 3rem;
 
-@custom-variant dark (&:where(.dark, .dark *));
+	/* Typography */
+	--font-size-sm: 0.875rem;
+	--font-size-base: 1rem;
+	--font-size-lg: 1.125rem;
+	--font-size-xl: 1.25rem;
+	--font-size-2xl: 1.5rem;
+	--font-size-3xl: 1.875rem;
 
-* {
-	--secondary-color: rgb(156 163 175);
+	--font-weight-light: 300;
+	--font-weight-normal: 400;
+	--font-weight-medium: 500;
+	--font-weight-bold: 700;
 
-	--bg-primary: rgb(243 244 246);
-	--shadow-primary: rgb(0 0 0);
+	/* Radius */
+	--radius-sm: 0.125rem;
+	--radius: 0.25rem;
+	--radius-md: 0.375rem;
+	--radius-full: 9999px;
 
-	@media (prefers-color-scheme: dark) {
-		--bg-primary: rgb(17 24 39);
-	}
+	/* Shadow */
+	--shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+	/* Flat palette: raw hues still used as one-off accents (table headers,
+	   category badges). Only the shades actually referenced exist here. */
+	--color-white: #fff;
+	--color-black: #000;
+
+	--color-gray-50: #f9fafb;
+	--color-gray-100: #f3f4f6;
+	--color-gray-200: #e5e7eb;
+	--color-gray-300: #d1d5db;
+	--color-gray-400: #9ca3af;
+	--color-gray-500: #6b7280;
+	--color-gray-600: #4b5563;
+	--color-gray-700: #374151;
+	--color-gray-800: #1f2937;
+	--color-gray-900: #111827;
+
+	--color-slate-100: #f1f5f9;
+	--color-slate-200: #e2e8f0;
+	--color-slate-700: #334155;
+	--color-slate-800: #1e293b;
+
+	--color-indigo-50: #eef2ff;
+	--color-indigo-100: #e0e7ff;
+	--color-indigo-200: #c7d2fe;
+	--color-indigo-300: #a5b4fc;
+	--color-indigo-400: #818cf8;
+	--color-indigo-500: #6366f1;
+	--color-indigo-800: #3730a3;
+	--color-indigo-900: #312e81;
+
+	--color-blue-100: #dbeafe;
+	--color-blue-200: #bfdbfe;
+	--color-blue-300: #93c5fd;
+	--color-blue-400: #60a5fa;
+	--color-blue-500: #3b82f6;
+	--color-blue-600: #2563eb;
+	--color-blue-700: #1d4ed8;
+	--color-blue-800: #1e40af;
+	--color-blue-900: #1e3a8a;
+
+	--color-lime-500: #84cc16;
+	--color-lime-600: #65a30d;
+	--color-lime-700: #4d7c0f;
+
+	--color-amber-300: #fcd34d;
+	--color-amber-400: #fbbf24;
+	--color-amber-600: #d97706;
+	--color-amber-700: #b45309;
+
+	--color-red-200: #fecaca;
+	--color-red-300: #fca5a5;
+	--color-red-400: #f87171;
+	--color-red-500: #ef4444;
+	--color-red-600: #dc2626;
+	--color-red-700: #b91c1c;
+	--color-red-800: #991b1b;
+	--color-red-900: #7f1d1d;
+
+	--color-green-200: #bbf7d0;
+	--color-green-300: #86efac;
+	--color-green-400: #4ade80;
+	--color-green-500: #22c55e;
+	--color-green-700: #15803d;
+	--color-green-800: #166534;
+	--color-green-900: #14532d;
+
+	--color-yellow-300: #fde047;
+	--color-yellow-400: #facc15;
+	--color-yellow-500: #eab308;
+	--color-yellow-700: #a16207;
+	--color-yellow-900: #713f12;
+
+	--color-purple-400: #c084fc;
+	--color-purple-500: #a855f7;
+	--color-purple-700: #7e22ce;
+	--color-purple-800: #6b21a8;
+
+	--color-emerald-500: #10b981;
+	--color-emerald-900: #064e3b;
+
+	--color-teal-400: #2dd4bf;
+	--color-teal-800: #115e59;
+
+	--color-orange-400: #fb923c;
+	--color-orange-800: #9a3412;
+
+	--color-zinc-100: #f4f4f5;
+	--color-zinc-900: #18181b;
+
+	--color-cyan-600: #0891b2;
+	--color-cyan-700: #0e7490;
+
+	--color-sky-300: #7dd3fc;
+	--color-sky-900: #0c4a6e;
+
+	--color-fuchsia-300: #f0abfc;
+	--color-fuchsia-500: #d946ef;
+	--color-fuchsia-600: #c026d3;
+	--color-fuchsia-700: #a21caf;
+
+	/* Value-indicator globals, shared by Stocks + Budget (see src/utils/colors.ts) */
+	--color-value-positive: var(--color-green-700);
+	--color-value-negative: var(--color-red-700);
+	--color-value-bg-positive: var(--color-green-400);
+	--color-value-bg-negative: var(--color-red-400);
+
+	/* Semantic tokens: theme-aware, prefer these over the flat palette above */
+	--color-bg: var(--color-gray-100);
+	--color-bg-elevated: var(--color-white);
+	--color-bg-subtle: var(--color-gray-50);
+	--color-bg-muted: var(--color-gray-200);
+	--color-bg-stripe: var(--color-gray-300);
+
+	--color-text: var(--color-gray-900);
+	--color-text-secondary: var(--color-gray-700);
+	--color-text-muted: var(--color-gray-500);
+
+	--color-border: var(--color-gray-300);
+
+	--color-primary: var(--color-indigo-500);
+	--color-primary-hover: var(--color-indigo-400);
+	--color-secondary: var(--color-indigo-200);
+	--color-secondary-hover: var(--color-indigo-100);
+	--color-secondary-text: var(--color-indigo-800);
+	--color-success: var(--color-lime-500);
+	--color-success-hover: var(--color-lime-400);
+	--color-warning: var(--color-amber-400);
+	--color-warning-hover: var(--color-amber-300);
+	--color-danger: var(--color-red-500);
+	--color-danger-hover: var(--color-red-400);
+	--color-link: var(--color-blue-500);
+	--color-link-hover: var(--color-blue-400);
+
+	--color-focus-ring: var(--color-indigo-400);
+	--color-backdrop: rgb(0 0 0 / 0.4);
+}
+
+.dark {
+	--color-bg: var(--color-gray-900);
+	--color-bg-elevated: var(--color-black);
+	--color-bg-subtle: var(--color-gray-900);
+	--color-bg-muted: var(--color-gray-900);
+	--color-bg-stripe: var(--color-gray-800);
+
+	--color-text: var(--color-gray-100);
+	--color-text-secondary: var(--color-gray-300);
+	--color-text-muted: var(--color-gray-400);
+
+	--color-border: var(--color-gray-700);
+
+	--color-primary: var(--color-indigo-800);
+	--color-primary-hover: var(--color-indigo-900);
+	--color-secondary: var(--color-indigo-500);
+	--color-secondary-hover: var(--color-indigo-400);
+	--color-secondary-text: var(--color-indigo-50);
+	--color-success: var(--color-lime-600);
+	--color-success-hover: var(--color-lime-700);
+	--color-warning: var(--color-amber-600);
+	--color-warning-hover: var(--color-amber-700);
+	--color-danger: var(--color-red-700);
+	--color-danger-hover: var(--color-red-800);
+	--color-link: var(--color-blue-400);
+	--color-link-hover: var(--color-blue-500);
+
+	--color-backdrop: rgb(0 0 0 / 0.6);
+
+	--color-value-positive: var(--color-green-500);
+	--color-value-negative: var(--color-red-500);
+	--color-value-bg-positive: var(--color-green-700);
+	--color-value-bg-negative: var(--color-red-700);
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -25,71 +221,121 @@ input[type="number"] {
 	-moz-appearance: textfield;
 }
 
-#id {
-	@apply bg-white dark:bg-black;
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .flex-col-center {
-	@apply flex flex-col items-center justify-center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 /* ui/Button, ui/Input, ui/Select, ui/Toggle styles */
-.center {
-	@apply flex justify-center items-center;
-}
-
 .btn {
-	@apply rounded py-2 px-4 text-gray-100 outline-none;
+	border-radius: var(--radius);
+	padding: var(--space-2) var(--space-4);
+	color: var(--color-gray-100);
+	outline: none;
 
 	&:disabled {
-		@apply cursor-not-allowed text-gray-500 bg-gray-300 dark:text-gray-400 dark:bg-gray-600;
+		cursor: not-allowed;
+		color: var(--color-text-muted);
+		background-color: var(--color-gray-300);
 	}
+}
+
+.dark .btn:disabled {
+	background-color: var(--color-gray-600);
 }
 
 .btn-primary {
-	@apply text-gray-100 bg-indigo-500 hover:bg-indigo-400 dark:bg-indigo-800 dark:hover:bg-indigo-900;
+	color: var(--color-gray-100);
+	background-color: var(--color-primary);
+
+	&:hover {
+		background-color: var(--color-primary-hover);
+	}
 }
 
 .btn-secondary {
-	@apply text-indigo-800 bg-indigo-200 hover:bg-indigo-100 dark:text-indigo-50 dark:bg-indigo-500 dark:hover:bg-indigo-400;
+	color: var(--color-secondary-text);
+	background-color: var(--color-secondary);
+
+	&:hover {
+		background-color: var(--color-secondary-hover);
+	}
 }
 
 .btn-success {
-	@apply text-white bg-lime-500 hover:bg-lime-400 dark:bg-lime-600 dark:hover:bg-lime-700;
+	color: var(--color-white);
+	background-color: var(--color-success);
+
+	&:hover {
+		background-color: var(--color-success-hover);
+	}
 }
 
 .btn-warning {
-	@apply text-gray-900 bg-amber-400 hover:bg-amber-300 dark:bg-amber-600 dark:hover:bg-amber-700;
+	color: var(--color-gray-900);
+	background-color: var(--color-warning);
+
+	&:hover {
+		background-color: var(--color-warning-hover);
+	}
 }
 
 .btn-danger {
-	@apply text-white bg-red-500 hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800;
+	color: var(--color-white);
+	background-color: var(--color-danger);
+
+	&:hover {
+		background-color: var(--color-danger-hover);
+	}
 }
 
 .btn-transparent {
-	@apply border;
-	@apply bg-white border-gray-300 text-gray-500;
-	@apply dark:bg-black dark:border-gray-700 dark:text-gray-300;
+	border: 1px solid var(--color-border);
+	background-color: var(--color-bg-elevated);
+	color: var(--color-text-muted);
 }
 
 .btn-link {
-	@apply underline text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-500;
+	text-decoration: underline;
+	color: var(--color-link);
+
+	&:hover {
+		color: var(--color-link-hover);
+	}
 }
 
 .input-label {
-	@apply block text-gray-700 dark:text-gray-300 font-medium text-sm;
+	display: block;
+	color: var(--color-text-secondary);
+	font-weight: var(--font-weight-medium);
+	font-size: var(--font-size-sm);
 }
 
 .switch {
-	@apply relative inline-block w-16;
+	position: relative;
+	display: inline-block;
+	width: 4rem;
 	height: 34px;
 
 	input {
-		@apply opacity-0 w-0 h-0;
+		opacity: 0;
+		width: 0;
+		height: 0;
 	}
 
 	.slider {
-		@apply rounded-full absolute duration-300 bg-gray-400 dark:bg-gray-600;
+		border-radius: var(--radius-full);
+		position: absolute;
+		transition-duration: 300ms;
+		background-color: var(--color-gray-400);
 		cursor: pointer;
 		top: 0;
 		left: 0;
@@ -98,7 +344,10 @@ input[type="number"] {
 	}
 
 	.slider:before {
-		@apply absolute rounded-full duration-300 bg-white dark:bg-gray-900;
+		position: absolute;
+		border-radius: var(--radius-full);
+		transition-duration: 300ms;
+		background-color: var(--color-white);
 		content: "";
 		height: 26px;
 		width: 26px;
@@ -107,117 +356,206 @@ input[type="number"] {
 	}
 
 	input:checked + .slider {
-		@apply bg-blue-500 dark:bg-blue-600;
+		background-color: var(--color-blue-500);
 	}
 
 	input:focus + .slider {
-		@apply shadow shadow-blue-500 dark:shadow-gray-900;
+		box-shadow: 0 1px 3px 0 var(--color-blue-500);
 	}
 
 	input:checked + .slider:before {
-		@apply translate-x-7;
+		transform: translateX(1.75rem);
 	}
+}
+
+.dark .switch .slider {
+	background-color: var(--color-gray-600);
+}
+
+.dark .switch .slider:before {
+	background-color: var(--color-gray-900);
+}
+
+.dark .switch input:checked + .slider {
+	background-color: var(--color-blue-600);
+}
+
+.dark .switch input:focus + .slider {
+	box-shadow: 0 1px 3px 0 var(--color-gray-900);
 }
 
 /* End ui/Button, ui/Input, ui/Select, ui/Toggle styles */
 
 label.edit-item {
-	@apply space-y-2;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+
 	span {
-		@apply text-sm;
+		font-size: var(--font-size-sm);
 	}
 }
 
-@layer components {
-	.page-header {
-		@apply px-4 py-4 text-xl;
+.page-header {
+	padding: var(--space-4);
+	font-size: var(--font-size-xl);
+}
+
+.text-page {
+	h2,
+	h3 {
+		color: var(--color-emerald-900);
+		padding-top: var(--space-4);
+	}
+	h2 {
+		text-align: center;
+		font-size: var(--font-size-2xl);
+	}
+	h3 {
+		font-size: var(--font-size-xl);
 	}
 
-	.text-page {
-		h2,
-		h3 {
-			@apply text-emerald-900 dark:text-emerald-500;
-			@apply pt-4;
-		}
-		h2 {
-			@apply text-center text-2xl;
-		}
-		h3 {
-			@apply text-xl;
-		}
-
-		p {
-			@apply max-w-prose py-2 text-justify;
-		}
-
-		ul li a {
-			@apply text-blue-900 underline dark:text-blue-500;
-		}
+	p {
+		max-width: 65ch;
+		padding-top: var(--space-2);
+		padding-bottom: var(--space-2);
+		text-align: justify;
 	}
 
-	.settings-list {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		row-gap: 1rem;
-		column-gap: 3rem;
+	ul li a {
+		color: var(--color-blue-900);
+		text-decoration: underline;
+	}
+}
 
-		input.preferred-currency {
-			border-radius: 0.25rem;
-		}
+.dark .text-page h2,
+.dark .text-page h3 {
+	color: var(--color-emerald-500);
+}
 
-		.currency-list {
-			@apply space-x-4;
-			display: flex;
-			width: 100%;
+.dark .text-page ul li a {
+	color: var(--color-blue-500);
+}
 
-			span {
-				color: var(--secondary-color);
-			}
+.settings-list {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	row-gap: var(--space-4);
+	column-gap: var(--space-12);
+
+	input.preferred-currency {
+		border-radius: var(--radius);
+	}
+
+	.currency-list {
+		display: flex;
+		width: 100%;
+		gap: var(--space-4);
+
+		span {
+			color: var(--color-text-muted);
 		}
 	}
 }
 
-@layer utilities {
-	.modal-form-label {
-		@apply text-sm font-medium text-gray-700 dark:text-gray-300;
+.modal-form-label {
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-medium);
+	color: var(--color-text-secondary);
+}
+
+.modal-select {
+	border-radius: var(--radius-md);
+	background-color: var(--color-bg-elevated);
+	padding: var(--space-2) var(--space-4);
+	box-shadow: var(--shadow);
+	color: var(--color-text);
+
+	&:focus {
+		border-color: var(--color-focus-ring);
+		outline: none;
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus-ring) 50%, transparent);
 	}
-	.modal-select {
-		@apply rounded-md bg-white py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100;
+}
+
+.modal-header {
+	font-size: var(--font-size-2xl);
+}
+
+tr.tax-row {
+	&:nth-child(odd) {
+		background-color: var(--color-bg-muted);
 	}
 
-	.modal-header {
-		@apply text-2xl;
-	}
+	td {
+		white-space: nowrap;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+		text-align: right;
 
-	tr.tax-row {
-		@apply odd:bg-gray-200 dark:odd:bg-gray-900;
-
-		td {
-			@apply whitespace-nowrap px-4 text-right first:text-left;
+		&:first-child {
+			text-align: left;
 		}
 	}
+}
 
-	thead.tax-header {
-		th {
-			@apply whitespace-nowrap px-4 font-bold text-gray-700 dark:text-gray-500;
-		}
+thead.tax-header {
+	th {
+		white-space: nowrap;
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+		font-weight: var(--font-weight-bold);
+		color: var(--color-text-secondary);
 	}
+}
 
-	th.currency,
-	td.currency {
-		@apply px-2 text-right;
-	}
+.dark thead.tax-header th {
+	color: var(--color-gray-500);
+}
 
-	input.budget {
-		@apply rounded py-2 px-2;
-		@apply shadow-md bg-slate-100 dark:bg-slate-700;
-	}
+th.currency,
+td.currency {
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
+	text-align: right;
+}
 
-	input.add-item {
-		@apply w-24 max-w-xs grow;
-	}
+input.budget {
+	border-radius: var(--radius);
+	padding: var(--space-2);
+	box-shadow: var(--shadow-md);
+	background-color: var(--color-slate-100);
+	color: var(--color-text);
+}
 
-	input.edit-item {
-		@apply w-full rounded;
-	}
+.dark input.budget {
+	background-color: var(--color-slate-700);
+}
+
+input.add-item {
+	width: 6rem;
+	max-width: 20rem;
+	flex-grow: 1;
+}
+
+input.edit-item {
+	width: 100%;
+	border-radius: var(--radius);
+}
+
+/* Shared by src/utils/colors.ts (Stocks, Budget) */
+.value-positive {
+	color: var(--color-value-positive);
+}
+
+.value-negative {
+	color: var(--color-value-negative);
+}
+
+.value-bg-positive {
+	background-color: var(--color-value-bg-positive);
+}
+
+.value-bg-negative {
+	background-color: var(--color-value-bg-negative);
 }

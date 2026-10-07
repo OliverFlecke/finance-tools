@@ -1,0 +1,42 @@
+.heading {
+	text-align: center;
+	font-size: var(--font-size-2xl);
+	color: var(--color-green-700);
+}
+
+:global(.dark) .heading {
+	color: var(--color-green-400);
+}
+
+.panel {
+	margin-inline: var(--space-8);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	background-color: var(--color-gray-300);
+}
+
+:global(.dark) .panel {
+	background-color: var(--color-gray-700);
+}
+
+.table {
+	width: 100%;
+}
+
+.footer {
+	padding: var(--space-4);
+}
+
+.add_button {
+	& > * + * {
+		margin-left: var(--space-2);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.label {
+	vertical-align: middle;
+}

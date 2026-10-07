@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
 import type React from "react";
 import { useCallback, useContext, useState } from "react";
@@ -7,6 +8,7 @@ import { formatCurrency, useConverter } from "utils/converters";
 import DeleteButton from "../../components/DeleteButton";
 import { type Stock, stockAvgPrice, stockGain, stockTotalShares } from "./models";
 import StockLotsTable from "./StockLotsTable";
+import styles from "./StockRow.module.css";
 import { StockContext } from "./state";
 
 interface StockRowProps {
@@ -34,21 +36,21 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 
 	return (
 		<>
-			<tr className="relative w-full bg-gray-200 text-right dark:bg-gray-800">
-				<td className="px-2 text-left">{stock.symbol}</td>
-				<td className="px-2">{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
-				<td className="px-0">
+			<tr className={styles.row}>
+				<td className={styles.symbol_cell}>{stock.symbol}</td>
+				<td className={styles.cell}>{formatCurrency(stock.regularMarketPrice, stock.currency)}</td>
+				<td className={styles.cell_tight}>
 					{formatCurrency(currencyConverter(marketValue), preferredDisplayCurrency)}
 				</td>
 				<td>{totalShares}</td>
-				<td className={`px-2 ${getValueColorIndicator(avgPrice)}`}>
+				<td className={clsx(styles.cell, getValueColorIndicator(avgPrice))}>
 					{formatCurrency(avgPrice, stock.currency)}
 				</td>
-				<td className={`px-2 ${getValueColorIndicator(gain)}`}>
+				<td className={clsx(styles.cell, getValueColorIndicator(gain))}>
 					<span>{formatCurrency(gain, preferredDisplayCurrency)}</span>
 				</td>
-				<td className={`px-1 ${getValueColorIndicator(gainPercentage)}`}>
-					<span className={Number.isNaN(gainPercentage) ? "hidden" : ""}>
+				<td className={clsx(styles.cell_narrow, getValueColorIndicator(gainPercentage))}>
+					<span className={Number.isNaN(gainPercentage) ? styles.hidden : ""}>
 						{gainPercentage.toFixed(2)} %
 					</span>
 				</td>
@@ -56,7 +58,7 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 				<StockRowActions stock={stock} setShowLots={setShowLots} />
 			</tr>
 			<tr>
-				<td colSpan={7} className={`p-0 pb-4 ${showLots ? "" : "hidden"}`}>
+				<td colSpan={7} className={clsx(styles.lots_cell, !showLots && styles.hidden)}>
 					<StockLotsTable lots={stock.lots} stock={stock} />
 				</td>
 			</tr>
@@ -79,8 +81,8 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 	}, [dispatch, stock.symbol]);
 
 	return (
-		<td className="flex h-full flex-row justify-end space-x-2 px-4">
-			<button type="button" onClick={() => setShowLots((x) => !x)} className="hover:cursor-pointer">
+		<td className={styles.actions_cell}>
+			<button type="button" onClick={() => setShowLots((x) => !x)} className={styles.toggle_button}>
 				<IoEllipsisHorizontalCircleOutline size={24} />
 			</button>
 			<DeleteButton onClick={deleteStock} />

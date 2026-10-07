@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useRef } from "react";
+import styles from "./Dialog.module.css";
 
 export interface DialogProps {
 	/** Controls whether the dialog is open. */
@@ -27,7 +28,7 @@ export function Dialog({ open, onClose, children }: DialogProps) {
 		// biome-ignore lint/a11y/useKeyWithClickEvents: closes on backdrop click; Escape (native to <dialog>) already covers keyboard dismissal
 		<dialog
 			ref={dialogRef}
-			className="m-auto max-w-[calc(100vw-2rem)] rounded-md bg-white p-0 backdrop:bg-black/40 dark:bg-black dark:backdrop:bg-black/60"
+			className={styles.dialog}
 			onClick={(e) => {
 				if (e.target === dialogRef.current) onClose();
 			}}

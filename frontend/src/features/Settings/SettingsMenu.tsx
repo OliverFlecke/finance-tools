@@ -7,6 +7,7 @@ import DisplayCurrencySetting from "./Components/DisplayCurrencySetting";
 import PreferredCurrenciesSetting from "./Components/PreferredCurrenciesSetting";
 import ThemeSetting from "./Components/ThemeSetting";
 import SettingsContext from "./context";
+import styles from "./SettingsMenu.module.css";
 
 const SettingsMenu: FC = () => {
 	const { dispatch } = useContext(SettingsContext);
@@ -19,18 +20,18 @@ const SettingsMenu: FC = () => {
 	}, [dispatch]);
 
 	return (
-		<div className="z-50">
+		<div className={styles.container}>
 			<button
 				type="button"
-				className="flex h-full justify-center"
+				className={styles.trigger}
 				title="Settings"
 				onClick={() => setIsOpen((x) => !x)}
 			>
 				<IoSettingsOutline size={24} />
 			</button>
 			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-				<div className="space-y-4 rounded bg-indigo-100 p-4 text-black dark:bg-indigo-900 dark:text-white">
-					<h2 className="bold col-span-2 text-xl">Settings</h2>
+				<div className={styles.panel}>
+					<h2 className={styles.heading}>Settings</h2>
 					<SettingsList />
 
 					<Button buttonType="Secondary" onClick={() => setIsOpen(false)}>
@@ -46,10 +47,10 @@ export default SettingsMenu;
 
 const SettingsList: FC = () => (
 	<div className="settings-list">
-		<div className="col-span-2">
+		<div className={styles.full_row}>
 			<DisplayCurrencySetting />
 		</div>
-		<div className="col-span-2">
+		<div className={styles.full_row}>
 			<PreferredCurrenciesSetting />
 		</div>
 		<ThemeSetting />

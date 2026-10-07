@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import type React from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
+import styles from "./AddLine.module.css";
 import type { AddItemToBudgetRequest } from "./api";
 
 interface Props {
@@ -19,10 +21,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 		<tbody>
 			<tr>
 				<td colSpan={4}>
-					<form
-						onSubmit={handleSubmit(add)}
-						className="flex flex-wrap justify-end space-x-2 pb-4 pt-2"
-					>
+					<form onSubmit={handleSubmit(add)} className={styles.form}>
 						{!category && (
 							<input
 								placeholder="Category"
@@ -46,12 +45,9 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							{...register("amount", { required: true, valueAsNumber: true })}
 						/>
 
-						<button
-							type="submit"
-							className="btn btn-primary flex items-center space-x-2 align-middle"
-						>
+						<button type="submit" className={clsx("btn btn-primary", styles.submit)}>
 							<span>Add</span>
-							<IoAddCircleOutline size={24} className="text-green-400 dark:text-green-500" />
+							<IoAddCircleOutline size={24} className={styles.add_icon} />
 						</button>
 					</form>
 				</td>

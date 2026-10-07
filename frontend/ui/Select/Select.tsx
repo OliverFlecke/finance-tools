@@ -6,6 +6,7 @@ import {
 	type SelectHTMLAttributes,
 	useCallback,
 } from "react";
+import styles from "./Select.module.css";
 
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 	label: string;
@@ -21,15 +22,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 		);
 
 		return (
-			<label className="flex flex-col space-y-2">
+			<label className={styles.label}>
 				<span className="input-label">{label}</span>
 				<select
 					ref={ref}
 					onChange={onChange}
-					className={clsx(
-						"rounded-md bg-gray-100 px-4 py-2 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-white",
-						className,
-					)}
+					className={clsx(styles.select, className)}
 					{...selectProps}
 				>
 					{children}

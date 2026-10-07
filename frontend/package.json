@@ -9,14 +9,11 @@
 	},
 	"scripts": {
 		"start-server": "pnpm build && pnpm start",
-		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
-		"css": "cross-env TAILWIND_MODE=watch pnpm postcss src/main.css -o src/compiled.css -v --watch",
-		"dev:js": "next dev --experimental-https --turbo",
+		"dev": "next dev --experimental-https --turbo",
 		"dev:https": "node server.js",
 		"lint": "biome lint --write",
 		"fmt": "biome format --write",
 		"start": "next start",
-		"prebuild": "pnpm postcss src/main.css -o src/compiled.css -v",
 		"build": "next build",
 		"test": "jest --watch",
 		"build:api:spec": "cargo run --manifest-path ../finance-api/Cargo.toml --features openapi openapi > ./openapi.json",
@@ -27,7 +24,6 @@
 	},
 	"dependencies": {
 		"@hey-api/client-fetch": "^0.13.1",
-		"@tailwindcss/postcss": "^4.3.3",
 		"@tanstack/react-query": "^5.101.4",
 		"@visx/axis": "^4.0.0",
 		"@visx/curve": "^4.0.0",
@@ -72,14 +68,8 @@
 		"@types/react-dom": "19.2.5",
 		"babel-jest": "^30.4.1",
 		"babel-plugin-react-compiler": "^1.0.0",
-		"concurrently": "^10.0.4",
-		"cross-env": "^10.1.0",
-		"cssnano": "^8.0.2",
 		"cypress": "^15.19.0",
 		"jest": "^30.4.2",
-		"postcss": "^8.5.23",
-		"postcss-cli": "^11.0.1",
-		"tailwindcss": "^4.3.3",
 		"typescript": "^5.9.3"
 	},
 	"browserslist": {

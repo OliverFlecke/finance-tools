@@ -6,6 +6,7 @@ import AddLine from "./AddLine";
 import type { AddItemToBudgetRequest, Item } from "./api";
 import BudgetLineActions from "./BudgetLineActions";
 import MonthAndYearCells from "./MonthAndYearCells";
+import styles from "./SavingsList.module.css";
 
 const SavingsList: React.FC<{
 	items: Item[];
@@ -19,24 +20,24 @@ const SavingsList: React.FC<{
 
 	return (
 		<>
-			<tbody className="bg-blue-100 dark:bg-blue-900">
+			<tbody className={styles.container}>
 				<tr>
-					<td className="px-4 pt-2 text-left text-xl underline" colSpan={4}>
+					<td className={styles.title} colSpan={4}>
 						Savings
 					</td>
 				</tr>
 				{items.map((x) => (
-					<tr key={x.id} className="odd:bg-blue-200 dark:odd:bg-blue-800">
-						<td className="pl-8 text-fuchsia-700  dark:text-fuchsia-500 ">{x.name}</td>
+					<tr key={x.id} className={styles.row}>
+						<td className={styles.name}>{x.name}</td>
 						<MonthAndYearCells value={x.amount} />
 						<BudgetLineActions item={x} deleteItem={deleteItem} updateItem={updateItem} />
 					</tr>
 				))}
 
-				<tr className="font-bold">
-					<td className="px-4 pb-2">Total</td>
+				<tr className={styles.total_row}>
+					<td className={styles.total_label}>Total</td>
 					<MonthAndYearCells value={total} />
-					<th className="flex flex-row justify-end pr-4">
+					<th className={styles.actions_header}>
 						{addVisible ? (
 							<RemoveButton onClick={() => setAddVisible(false)} />
 						) : (

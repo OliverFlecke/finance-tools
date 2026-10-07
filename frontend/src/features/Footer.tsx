@@ -1,7 +1,8 @@
 import Link from "next/link";
+import styles from "./Footer.module.css";
 
 const Footer = () => (
-	<footer className="flex h-full flex-row-reverse rounded bg-green-900 px-4 pb-4 pt-2 text-gray-300">
+	<footer className={styles.footer}>
 		<Link href="/privacy">Privacy and data</Link>
 	</footer>
 );

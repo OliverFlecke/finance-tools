@@ -1,0 +1,13 @@
+.button {
+	& > * + * {
+		margin-left: var(--space-2);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.label {
+	vertical-align: middle;
+}
