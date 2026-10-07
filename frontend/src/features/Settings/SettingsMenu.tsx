@@ -1,7 +1,7 @@
-import { Button } from "@oliverflecke/components-react";
 import { getCurrencies } from "features/Currency/api";
 import { type FC, useContext, useEffect, useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import DisplayCurrencySetting from "./Components/DisplayCurrencySetting";
 import PreferredCurrenciesSetting from "./Components/PreferredCurrenciesSetting";

@@ -1,7 +1,7 @@
-import { Button } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback, useContext } from "react";
 import { IoReload } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import { useSharesCallback } from "./API/yahoo";
 import { StockContext } from "./state";
 

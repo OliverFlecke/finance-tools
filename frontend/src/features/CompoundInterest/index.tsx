@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
-import { Button, Input, Select, SelectOption } from "@oliverflecke/components-react";
 import { type FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type { InterestAccrual } from "services/formulas";
 import { parseNumber } from "utils/converters";
 import { allPropertiesAreDefined } from "utils/general";
+import { Button } from "@/ui/Button/Button";
+import { Input } from "@/ui/Input/Input";
+import { Select, SelectOption } from "@/ui/Select/Select";
 import CalculationSummary from "./CalculationSummary";
 
 interface CompoundInterestProps {

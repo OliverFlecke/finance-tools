@@ -1,5 +1,6 @@
-import { DarkModeToggle, Toggle } from "@oliverflecke/components-react";
 import { useContext } from "react";
+import { DarkModeToggle } from "@/ui/DarkModeToggle/DarkModeToggle";
+import { Toggle } from "@/ui/Toggle/Toggle";
 import SettingsContext from "../context";
 
 const ThemeSetting = () => {

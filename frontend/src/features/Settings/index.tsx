@@ -1,7 +1,7 @@
-import { useDarkModeWithClass } from "@oliverflecke/components-react";
 import useThemeDetector from "hooks/useThemeDetector";
 import type React from "react";
 import { type FC, useEffect, useReducer } from "react";
+import { useDarkModeWithClass } from "@/ui/hooks/useDarkModeWithClass";
 import SettingsContext from "./context";
 import reducer from "./reducer";
 import { initSettings } from "./state";

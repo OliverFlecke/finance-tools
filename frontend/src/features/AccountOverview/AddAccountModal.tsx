@@ -1,11 +1,13 @@
-import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import { useSettingsContext } from "features/Settings/context";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { useAddAccountMutation } from "@/api/account";
 import type { Account } from "@/api/generated/types.gen";
+import { Button } from "@/ui/Button/Button";
+import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
+import { Input } from "@/ui/Input/Input";
 
 export default function AddAccount() {
 	const [showPrompt, setShowPrompt] = useState(false);

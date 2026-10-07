@@ -1,8 +1,9 @@
-import { Button, ButtonContainer } from "@oliverflecke/components-react";
 import SortableDragAndDropList from "components/SortableDragAndDropList";
 import Spinner from "components/Spinner";
 import { type FC, useCallback, useContext, useMemo, useState } from "react";
 import { IoShuffleOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
+import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { AccountContext } from "./AccountService";
 import { useUpdateAccountsCallback } from "./api/accountApi";

@@ -33,7 +33,7 @@ input[type="number"] {
 	@apply flex flex-col items-center justify-center;
 }
 
-/* @oliverflecke/components-react styles */
+/* ui/Button, ui/Input, ui/Select, ui/Toggle styles */
 .center {
 	@apply flex justify-center items-center;
 }
@@ -119,7 +119,7 @@ input[type="number"] {
 	}
 }
 
-/* End @oliverflecke/components-react styles */
+/* End ui/Button, ui/Input, ui/Select, ui/Toggle styles */
 
 label.edit-item {
 	@apply space-y-2;

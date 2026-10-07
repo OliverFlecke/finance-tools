@@ -1,7 +1,7 @@
-import { Button } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback, useContext } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import { useAddStockLotCallback } from "./API/stockApi";
 import type { Stock, StockLot } from "./models";
 import StockLotRow from "./StockLotRow";

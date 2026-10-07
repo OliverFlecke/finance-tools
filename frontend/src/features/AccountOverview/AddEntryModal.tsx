@@ -1,7 +1,9 @@
-import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Button } from "@/ui/Button/Button";
+import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
+import { Input } from "@/ui/Input/Input";
 import { useAccountContext } from "./Context";
 
 export default function AddEntryModal() {

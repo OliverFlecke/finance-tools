@@ -1,7 +1,7 @@
-import { useOnOutsideMouseDown } from "@oliverflecke/components-react";
 import type { User } from "oidc-client-ts";
 import { useRef, useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useOnOutsideMouseDown } from "@/ui/hooks/useOnOutsideMouseDown";
 import LoginButton from "./LoginButton";
 import LoginMenu from "./LoginMenu";
 import UserAvatar from "./UserAvatar";

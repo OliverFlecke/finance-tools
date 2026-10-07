@@ -1,9 +1,11 @@
-import { Button, ButtonContainer, Input } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
+import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
+import { Input } from "@/ui/Input/Input";
 import { useTrackStockCallback } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
 import type { Stock } from "./models";

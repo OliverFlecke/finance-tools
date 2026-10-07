@@ -1,8 +1,9 @@
-import { Button, ButtonContainer } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { IoSaveOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
+import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import type { AddItemToBudgetRequest, Item } from "./api";
 
 const EditItem: React.FC<{

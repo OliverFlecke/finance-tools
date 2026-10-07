@@ -1,4 +1,3 @@
-import { Toggle } from "@oliverflecke/components-react";
 import {
 	AnimatedAxis, // any of these can be non-animated equivalents
 	AnimatedGrid,
@@ -12,6 +11,7 @@ import useThemeDetector from "hooks/useThemeDetector";
 import { useCallback, useContext, useState } from "react";
 import type { Account } from "@/api/generated/types.gen";
 import SettingsContext from "@/features/Settings/context";
+import { Toggle } from "@/ui/Toggle/Toggle";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";
 

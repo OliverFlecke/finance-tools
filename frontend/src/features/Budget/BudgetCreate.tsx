@@ -1,7 +1,7 @@
-import { Input } from "@oliverflecke/components-react";
 import type React from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { Input } from "@/ui/Input/Input";
 import { type CreateBudgetDto, useCreateBudgetCallback } from "./api";
 
 const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreated }) => {
