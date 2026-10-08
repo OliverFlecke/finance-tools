@@ -1,7 +1,9 @@
+import clsx from "clsx";
 import type React from "react";
 import { useMemo } from "react";
 import { FV } from "services/formulas";
 import AmountSummary from "./AmountSummaryProps";
+import styles from "./CalculationSummary.module.css";
 import { type FormData, formatter } from "./index";
 
 const CalculationSummary: React.FC<FormData> = (props) => {
@@ -14,34 +16,34 @@ const CalculationSummary: React.FC<FormData> = (props) => {
 
 	return (
 		<>
-			<div className="flex w-full flex-col items-center">
-				<div className="grid w-full max-w-2xl grid-cols-1 justify-center gap-y-4 gap-x-8 p-8 md:grid-cols-2">
+			<div className={styles.wrapper}>
+				<div className={styles.grid}>
 					<AmountSummary
 						amount={balance}
 						label={`Balance after ${props.investmentPeriod} years`}
-						color="bg-blue-900 dark:bg-blue-300"
+						color={styles.dot_blue}
 					/>
 					<AmountSummary
 						amount={props.existingAmount}
 						label={`Initial amount`}
-						color="bg-green-900 dark:bg-green-300"
+						color={styles.dot_green}
 					/>
 					<AmountSummary
 						amount={totalDeposits}
 						label={`Total deposits`}
-						color="bg-indigo-900 dark:bg-indigo-300"
+						color={styles.dot_indigo}
 					/>
 					<AmountSummary
 						amount={totalInterest}
 						label={"Gain from interest"}
-						color="bg-yellow-900 dark:bg-yellow-300"
+						color={styles.dot_yellow}
 					/>
 				</div>
 			</div>
-			<div className="overflow-x-scroll lg:m-0 lg:w-full lg:overflow-x-auto">
-				<table className="w-full">
+			<div className={styles.table_wrapper}>
+				<table className={styles.table}>
 					<TableHeader isWithDeposits={isWithDeposits} />
-					<tbody className="text-right font-mono">
+					<tbody className={styles.body}>
 						{[...Array(props.investmentPeriod + 1).keys()].map((year) => (
 							<TableRow
 								key={year}
@@ -61,24 +63,26 @@ const CalculationSummary: React.FC<FormData> = (props) => {
 
 export default CalculationSummary;
 
-const typeColors = {
-	deposit: "text-teal-800 dark:text-teal-400",
-	interest: "text-green-800 dark:text-green-400",
-	totalDeposit: "text-orange-800 dark:text-orange-400",
-	totalInterest: "text-purple-800 dark:text-purple-400",
-	balance: "text-red-800 dark:text-red-400",
+export const typeColors = {
+	deposit: styles.text_deposit,
+	interest: styles.text_interest,
+	totalDeposit: styles.text_total_deposit,
+	totalInterest: styles.text_total_interest,
+	balance: styles.text_balance,
 };
 
 const TableHeader: React.FC<{ isWithDeposits: boolean }> = ({ isWithDeposits }) => (
 	<thead>
-		<tr className="text-right">
-			<th className="px-4 text-center">Year</th>
-			{isWithDeposits && <th className={`px-4 ${typeColors.deposit}`}>Deposit</th>}
-			<th className={`px-4 ${typeColors.interest}`}>Interest</th>
-			{isWithDeposits && <th className={`px-4 ${typeColors.totalDeposit}`}>Total deposits</th>}
-			<th className={`px-4 ${typeColors.totalInterest}`}>Total interest</th>
-			<th className={`px-4 ${typeColors.balance}`}>Balance</th>
-			<th className="px-4">Date</th>
+		<tr className={styles.header_row}>
+			<th className={clsx(styles.cell, styles.cell_center)}>Year</th>
+			{isWithDeposits && <th className={clsx(styles.cell, typeColors.deposit)}>Deposit</th>}
+			<th className={clsx(styles.cell, typeColors.interest)}>Interest</th>
+			{isWithDeposits && (
+				<th className={clsx(styles.cell, typeColors.totalDeposit)}>Total deposits</th>
+			)}
+			<th className={clsx(styles.cell, typeColors.totalInterest)}>Total interest</th>
+			<th className={clsx(styles.cell, typeColors.balance)}>Balance</th>
+			<th className={styles.cell}>Date</th>
 		</tr>
 	</thead>
 );
@@ -104,28 +108,28 @@ const TableRow: React.FC<TableRowProps> = (props) => {
 	const interest = year === 0 ? 0 : totalInterest - (balancePrevious - depositPrevious);
 
 	return (
-		<tr key={year} className="odd:bg-gray-200 dark:odd:bg-gray-900">
-			<td className="px-4 text-center">{year}</td>
+		<tr key={year} className={styles.row}>
+			<td className={clsx(styles.cell, styles.cell_center)}>{year}</td>
 			{isWithDeposits && (
-				<td className={`px-4 ${isLastRow ? typeColors.deposit : ""}`.trim()}>
+				<td className={clsx(styles.cell, isLastRow && typeColors.deposit)}>
 					{formatter.format(deposit)}
 				</td>
 			)}
-			<td className={`px-4 ${isLastRow ? typeColors.interest : ""}`.trim()}>
+			<td className={clsx(styles.cell, isLastRow && typeColors.interest)}>
 				{formatter.format(interest)}
 			</td>
 			{isWithDeposits && (
-				<td className={`px-4 ${isLastRow ? typeColors.totalDeposit : ""}`.trim()}>
+				<td className={clsx(styles.cell, isLastRow && typeColors.totalDeposit)}>
 					{formatter.format(totalDeposit)}
 				</td>
 			)}
-			<td className={`px-4 ${isLastRow ? typeColors.totalInterest : ""}`.trim()}>
+			<td className={clsx(styles.cell, isLastRow && typeColors.totalInterest)}>
 				{formatter.format(totalInterest)}
 			</td>
-			<td className={`px-4 ${isLastRow ? typeColors.balance : ""}`.trim()}>
+			<td className={clsx(styles.cell, isLastRow && typeColors.balance)}>
 				{formatter.format(totalBalance)}
 			</td>
-			<td className="px-4">{addYears(new Date(), year).toLocaleDateString()}</td>
+			<td className={styles.cell}>{addYears(new Date(), year).toLocaleDateString()}</td>
 		</tr>
 	);
 };

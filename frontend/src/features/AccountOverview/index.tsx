@@ -4,7 +4,7 @@ import AddAccount from "features/AccountOverview/AddAccountModal";
 import { withAuthenticationRequired } from "react-oidc-context";
 import AddEntryModal from "./AddEntryModal";
 import Context from "./Context";
-import OverviewChart from "./OverviewChart";
+import styles from "./index.module.css";
 import Table from "./table";
 
 export default withAuthenticationRequired(AccountOverview, {
@@ -15,12 +15,12 @@ function AccountOverview() {
 	return (
 		<Context>
 			<Table />
-			<div className="flex flex-row justify-between px-4 relative">
+			<div className={styles.actions}>
 				<AddAccount />
 				{/* <OrderAccountsModal /> */}
 				<AddEntryModal />
 			</div>
-			<OverviewChart />
+			{/* <OverviewChart /> */}
 		</Context>
 	);
 }

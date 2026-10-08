@@ -1,8 +1,9 @@
-import DeleteButton from "components/DeleteButton";
+import { SquarePen, Trash } from "lucide-react";
 import { useState } from "react";
-import { IoCreateOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import type { AddItemToBudgetRequest, Item } from "./api";
+import styles from "./BudgetLineActions.module.css";
 import EditItem from "./EditItem";
 
 interface Props {
@@ -19,18 +20,16 @@ export default function BudgetLineActions({ item, deleteItem, updateItem }: Read
 	};
 
 	return (
-		<td className="flex flex-row justify-end space-x-2 pr-4">
-			<DeleteButton onClick={() => deleteItem(item.id)} />
+		<td className={styles.cell}>
+			<Button onClick={() => deleteItem(item.id)} icon variant="Danger">
+				<Trash />
+			</Button>
 
-			<button
-				type="button"
-				onClick={() => setEdit(true)}
-				className="text-green-700 dark:text-green-400"
-			>
-				<IoCreateOutline size={24} />
-			</button>
+			<Button onClick={() => setEdit(true)} icon>
+				<SquarePen />
+			</Button>
 
-			<Dialog open={edit} onClose={() => setEdit(false)}>
+			<Dialog title="Edit" open={edit} onClose={() => setEdit(false)}>
 				<EditItem item={item} update={update} />
 			</Dialog>
 		</td>

@@ -4,6 +4,7 @@ import { useCallback, useContext } from "react";
 import { NumericFormat } from "react-number-format";
 import { convertToCurrency, formatCurrency } from "../../utils/converters";
 import { TaxCalculatorContext } from "./state";
+import styles from "./TaxCalculatorInput.module.css";
 
 export default function TaxCalculatorInput() {
 	const { values } = useContext(SettingsContext);
@@ -15,15 +16,15 @@ export default function TaxCalculatorInput() {
 	);
 
 	return (
-		<div className="flex space-x-4 p-4">
-			<div className="flex flex-col space-y-2">
+		<div className={styles.row}>
+			<div className={styles.field}>
 				<label className="input-label" htmlFor="salary">
 					Income
 				</label>
 				<NumericFormat
 					inputMode="numeric"
 					placeholder="100,000"
-					className="rounded-md bg-white py-2 px-4 shadow focus:border-indigo-400 focus:outline-none focus:ring dark:bg-gray-900 dark:text-gray-100"
+					className={styles.salary_input}
 					defaultValue={state.salary}
 					thousandSeparator={true}
 					onValueChange={(e) => dispatch({ type: "SET SALARY", salary: e.floatValue ?? 0 })}
@@ -52,9 +53,9 @@ function SalaryInPreferredCurrency({ salary, currency }: SalaryInPreferredCurren
 	const value = convertToCurrency(salary, currencyRates.usd, currency, preferredDisplayCurrency);
 
 	return (
-		<div className="flex h-full flex-col space-y-2">
+		<div className={styles.preferred_currency}>
 			<span className="input-label">Income in preferred currency</span>
-			<span className="py-1 text-yellow-700 dark:text-yellow-400">
+			<span className={styles.preferred_currency_value}>
 				{formatCurrency(value, preferredDisplayCurrency, {
 					maximumFractionDigits: 0,
 				})}

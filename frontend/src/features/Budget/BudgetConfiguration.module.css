@@ -1,0 +1,10 @@
+.container {
+	margin: var(--space-2) var(--space-4) 0;
+	border-radius: var(--radius);
+	background-color: var(--color-budget-panel);
+	padding: var(--space-4);
+}
+
+.label > * + * {
+	margin-left: var(--space-4);
+}

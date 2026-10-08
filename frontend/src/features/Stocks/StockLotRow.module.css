@@ -1,0 +1,42 @@
+.row {
+	&:nth-child(odd) {
+		background-color: var(--color-gray-200);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.row:nth-child(odd) {
+		background-color: var(--color-gray-600);
+	}
+}
+
+.form {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.date_input {
+	background-color: transparent;
+}
+
+.number_input {
+	width: 5rem;
+	text-align: center;
+	background-color: transparent;
+}
+
+.value_cell {
+	text-align: right;
+}
+
+.gain_cell {
+	display: flex;
+	flex-direction: column;
+	text-align: right;
+}
+
+.delete_cell {
+	padding-left: var(--space-4);
+}

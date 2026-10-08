@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
-import { type FC, useCallback, useEffect, useMemo, useState } from "react";
+import clsx from "clsx";
+import { type FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type { InterestAccrual } from "services/formulas";
 import { parseNumber } from "utils/converters";
-import { allPropertiesAreDefined } from "utils/general";
 import { Button } from "@/ui/Button/Button";
 import { Input } from "@/ui/Input/Input";
 import { Select, SelectOption } from "@/ui/Select/Select";
 import CalculationSummary from "./CalculationSummary";
+import styles from "./index.module.css";
 
 interface CompoundInterestProps {
 	name?: string;
@@ -25,14 +26,7 @@ export type FormData = {
 };
 
 const CompoundInterest: FC<CompoundInterestProps> = () => {
-	const [data, setData] = useState<FormData | null>(null);
-	const defaultValues = useDefaultValues();
-
-	useEffect(() => {
-		if (allPropertiesAreDefined(defaultValues)) {
-			setData(defaultValues);
-		}
-	}, [defaultValues]);
+	const [data, setData] = useState<FormData>(defaultValues());
 
 	const {
 		register,
@@ -40,7 +34,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>({
-		defaultValues,
+		defaultValues: defaultValues(),
 	});
 	const onSubmit = handleSubmit((data) => {
 		const url = new URL(window.location.href);
@@ -59,11 +53,13 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 		window.location.href = url.toString();
 	}, []);
 
+	console.debug("data", data);
+
 	return (
-		<div className="pb-4 dark:bg-gray-800">
-			<h2 className="px-4 py-4 text-xl lg:text-left">Compound interest calculator</h2>
-			<form onSubmit={onSubmit} className="flex-col-center w-full overflow-x-hidden px-4">
-				<fieldset className="flex flex-col items-start space-y-6 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
+		<div className={styles.container}>
+			<h2 className={styles.heading}>Compound interest calculator</h2>
+			<form onSubmit={onSubmit} className={clsx("flex-col-center", styles.form)}>
+				<fieldset className={styles.fieldset}>
 					<NumericFormat
 						// biome-ignore lint/suspicious/noExplicitAny: unknown type
 						customInput={(props: any) => (
@@ -71,12 +67,12 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								{...props}
 								label="Existing amount"
 								errorMessage={errors.existingAmount?.message}
-								className="dark:placeholder-gray-600"
+								className={styles.placeholder}
 								placeholder="20,000"
 								inputMode="numeric"
 							/>
 						)}
-						defaultValue={defaultValues.existingAmount}
+						defaultValue={defaultValues().existingAmount}
 						thousandSeparator={true}
 						onValueChange={(x) => setValue("existingAmount", x.floatValue ?? 0)}
 						{...register("existingAmount", {
@@ -87,7 +83,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 					<Input
 						label="Expected yearly growth"
 						placeholder="7"
-						className="dark:placeholder-gray-600"
+						className={styles.placeholder}
 						errorMessage={errors.interestRate?.message}
 						{...register("interestRate", {
 							required: "Please provide a valid value",
@@ -96,7 +92,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 					<Input
 						label="Investment period"
 						placeholder="10"
-						className="dark:placeholder-gray-600"
+						className={styles.placeholder}
 						errorMessage={errors.investmentPeriod?.message}
 						{...register("investmentPeriod", {
 							required: "Please provide a number of years you are investing",
@@ -117,11 +113,11 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								label="Monthly deposit"
 								placeholder="10,000"
 								inputMode="numeric"
-								className="dark:placeholder-gray-600"
+								className={styles.placeholder}
 								errorMessage={errors.monthlyDeposit?.message}
 							/>
 						)}
-						defaultValue={defaultValues.monthlyDeposit}
+						defaultValue={data.monthlyDeposit}
 						thousandSeparator={true}
 						onValueChange={(x) => setValue("monthlyDeposit", x.floatValue ?? 0)}
 						{...register("monthlyDeposit", {
@@ -130,9 +126,9 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 						})}
 					/>
 				</fieldset>
-				<div className="flex w-full justify-center space-x-4 pt-4">
+				<div className={styles.actions}>
 					<Button type="submit">Calculate</Button>
-					<Button type="reset" buttonType="Secondary" onClick={resetForm}>
+					<Button type="reset" variant="Secondary" onClick={resetForm}>
 						Reset
 					</Button>
 				</div>
@@ -157,22 +153,20 @@ export const formatter = Intl.NumberFormat("en-US", {
 	currency: "DKK",
 });
 
-function useDefaultValues(): FormData {
-	return useMemo<FormData>(() => {
-		if (typeof window === "undefined") return {} as FormData;
+function defaultValues(): FormData {
+	if (typeof window === "undefined") return {} as FormData;
 
-		const params = new URL(window.location.href).searchParams;
+	const params = new URL(window.location.href).searchParams;
 
-		function getNumber(name: string): number {
-			return params.has(name) ? Number.parseFloat(params.get(name) ?? "") : Number.NaN;
-		}
+	function getNumber(name: string): number | undefined {
+		return params.has(name) ? Number.parseFloat(params.get(name) ?? "") : undefined;
+	}
 
-		return {
-			existingAmount: getNumber("existingAmount"),
-			interestRate: getNumber("interestRate"),
-			investmentPeriod: getNumber("investmentPeriod"),
-			interestAccural: (params.get("interestAccural") as InterestAccrual) ?? "Yearly",
-			monthlyDeposit: getNumber("monthlyDeposit"),
-		};
-	}, []);
+	return {
+		existingAmount: getNumber("existingAmount") ?? 0,
+		interestRate: getNumber("interestRate") ?? 7,
+		investmentPeriod: getNumber("investmentPeriod") ?? 10,
+		interestAccural: (params.get("interestAccural") as InterestAccrual) ?? "Yearly",
+		monthlyDeposit: getNumber("monthlyDeposit") ?? 0,
+	};
 }

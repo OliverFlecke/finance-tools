@@ -1,13 +1,16 @@
+import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
+import { Trash } from "lucide-react";
 import type React from "react";
 import { useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { getValueColorIndicator } from "utils/colors";
 import { formatCurrency, useConverter } from "utils/converters";
 import { formatDate } from "utils/date";
-import DeleteButton from "../../components/DeleteButton";
+import { Button } from "@/ui/Button/Button";
 import { useDeleteStockLotCallback, useUpdateStockLotCallback } from "./API/stockApi";
 import type { Stock, StockLot } from "./models";
+import styles from "./StockLotRow.module.css";
 import { StockContext } from "./state";
 
 interface StockLotRowProps {
@@ -74,31 +77,25 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 	const gain = marketValue - buyMarketValue;
 
 	return (
-		<tr className="odd:bg-gray-200 dark:odd:bg-gray-600">
+		<tr className={styles.row}>
 			<td colSpan={3}>
-				<form onChange={handleSubmit(onChange)} className="flex w-full flex-row justify-evenly">
-					<input type="date" {...register("buyDate")} className="bg-transparent" />
-					<input
-						type="number"
-						{...register("shares")}
-						className="w-20 bg-transparent text-center"
-					/>
-					<input
-						type="number"
-						{...register("buyPrice")}
-						className="w-20 bg-transparent text-center"
-					/>
+				<form onChange={handleSubmit(onChange)} className={styles.form}>
+					<input type="date" {...register("buyDate")} className={styles.date_input} />
+					<input type="number" {...register("shares")} className={styles.number_input} />
+					<input type="number" {...register("buyPrice")} className={styles.number_input} />
 				</form>
 			</td>
-			<td className="text-right">
+			<td className={styles.value_cell}>
 				{formatCurrency(convert(marketValue), preferredDisplayCurrency)}
 			</td>
-			<td className={`${getValueColorIndicator(gain)} flex flex-col text-right`}>
+			<td className={clsx(getValueColorIndicator(gain), styles.gain_cell)}>
 				<span>{formatCurrency(convert(gain), preferredDisplayCurrency)}</span>
 				<span>{((marketValue / buyMarketValue - 1) * 100).toFixed(2)} %</span>
 			</td>
-			<td className="pl-4">
-				<DeleteButton onClick={deleteLot} />
+			<td className={styles.delete_cell}>
+				<Button onClick={deleteLot} icon variant="Danger">
+					<Trash />
+				</Button>
 			</td>
 		</tr>
 	);

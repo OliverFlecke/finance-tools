@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import type React from "react";
 import { type FC, useCallback, useContext, useMemo } from "react";
 import { getBackgroundColorValueIndicator } from "utils/colors";
 import { sum } from "../../utils/math";
 import type { AddItemToBudgetRequest, BudgetWithItems } from "./api";
+import styles from "./BudgetDetails.module.css";
 import ItemList from "./ItemList";
 import MonthAndYearCells from "./MonthAndYearCells";
 import SavingsList from "./SavingsList";
@@ -17,8 +19,8 @@ const BudgetDetails: FC<{
 	const { deleteItem, updateItem, addItem, addExpense, addSavings } = useHandlers(budget.id);
 
 	return (
-		<div className="mx-4 pt-4 pb-8">
-			<table className="w-full border-separate border-spacing-0 overflow-hidden rounded">
+		<div className={styles.container}>
+			<table className={styles.table}>
 				<Header />
 
 				<ItemList
@@ -28,8 +30,7 @@ const BudgetDetails: FC<{
 					addItem={addItem}
 					deleteItem={deleteItem}
 					updateItem={updateItem}
-					primaryBackgroundColor="bg-green-200 dark:bg-green-900"
-					oddRowBackgroundColor="odd:bg-green-300 dark:odd:bg-green-700"
+					variant="income"
 				/>
 
 				<ItemList
@@ -39,8 +40,7 @@ const BudgetDetails: FC<{
 					addItem={addExpense}
 					deleteItem={deleteItem}
 					updateItem={updateItem}
-					primaryBackgroundColor="bg-red-200 dark:bg-red-900"
-					oddRowBackgroundColor="odd:bg-red-300 dark:odd:bg-red-700"
+					variant="expenses"
 				/>
 
 				<SavingsList
@@ -69,23 +69,19 @@ const Footer: React.FC<{
 	savings: number;
 	remaining: number;
 }> = ({ totalIncome, total, savings, remaining }) => (
-	<tfoot className="bg-sky-300 dark:bg-sky-900">
+	<tfoot className={styles.panel_bg}>
 		<tr className={getBackgroundColorValueIndicator(total)}>
-			<th className="px-4 pt-2 text-left">After monthley expenses</th>
+			<th className={styles.label_top}>After monthley expenses</th>
 			<MonthAndYearCells value={total} />
 			<td></td>
 		</tr>
 		<tr>
-			<td className="px-4 py-2 text-left">Savings</td>
+			<td className={styles.label_mid}>Savings</td>
 			<MonthAndYearCells value={savings} />
-			<td className="pr-4 text-right">{(100 * (savings / totalIncome)).toFixed(2)} %</td>
+			<td className={styles.percentage_cell}>{(100 * (savings / totalIncome)).toFixed(2)} %</td>
 		</tr>
-		<tr
-			className={`text-fuchsia-700 underline dark:text-fuchsia-500 ${getBackgroundColorValueIndicator(
-				remaining,
-			)}`}
-		>
-			<th className="px-4 pb-2 text-left">Remaining</th>
+		<tr className={clsx(styles.remaining_row, getBackgroundColorValueIndicator(remaining))}>
+			<th className={styles.label_bottom}>Remaining</th>
 			<MonthAndYearCells value={remaining} />
 			<td></td>
 		</tr>
@@ -93,11 +89,11 @@ const Footer: React.FC<{
 );
 
 const Header = () => (
-	<thead className="bg-sky-300 dark:bg-sky-900">
-		<tr className="text-right">
-			<th className="px-2"></th>
-			<th className="px-2">Per month</th>
-			<th className="px-2">Per year</th>
+	<thead className={styles.panel_bg}>
+		<tr className={styles.header_row}>
+			<th className={styles.header_cell}></th>
+			<th className={styles.header_cell}>Per month</th>
+			<th className={styles.header_cell}>Per year</th>
 			<th></th>
 		</tr>
 	</thead>

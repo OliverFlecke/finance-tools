@@ -1,0 +1,39 @@
+.guide {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: var(--space-8);
+	border-radius: var(--radius);
+	padding: var(--space-4);
+	background-color: var(--color-zinc-100);
+
+	& > * + * {
+		margin-top: var(--space-4);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.guide {
+		background-color: var(--color-zinc-900);
+	}
+}
+
+.heading {
+	text-align: center;
+	font-size: var(--font-size-xl);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-cyan-700);
+}
+
+@media (prefers-color-scheme: dark) {
+	.heading {
+		color: var(--color-cyan-600);
+	}
+}
+
+.paragraph {
+	max-width: 65ch;
+	font-size: var(--font-size-sm);
+}

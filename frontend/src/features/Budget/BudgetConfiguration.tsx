@@ -1,5 +1,6 @@
 import type React from "react";
 import { useContext } from "react";
+import styles from "./BudgetConfiguration.module.css";
 import { BudgetContext } from "./state";
 
 const Configuration: React.FC = () => {
@@ -9,8 +10,8 @@ const Configuration: React.FC = () => {
 	} = useContext(BudgetContext);
 
 	return (
-		<div className="mx-4 mt-2 rounded bg-sky-300 p-4 dark:bg-sky-900">
-			<label className="space-x-4">
+		<div className={styles.container}>
+			<label className={styles.label}>
 				<span>Hide items</span>
 				<input
 					type="checkbox"

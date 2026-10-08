@@ -1,17 +1,18 @@
-import type React from "react";
+import clsx from "clsx";
+import { Plus } from "lucide-react";
 import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { Input } from "@/ui/Input/Input";
+import styles from "./AddStock.module.css";
 import { useTrackStockCallback } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
 import type { Stock } from "./models";
 import { StockContext } from "./state";
 
-const AddStock: React.FC = () => {
+export default function AddStock() {
 	const { dispatch } = useContext(StockContext);
 	const fetchShares = useSharesCallback();
 	const trackStock = useTrackStockCallback();
@@ -49,38 +50,32 @@ const AddStock: React.FC = () => {
 
 	return (
 		<>
-			<button type="button" className="btn btn-primary space-x-2" onClick={() => setIsOpen(true)}>
-				<IoAddCircleOutline className="inline" />
-				<span className="align-middle">Add symbol</span>
-			</button>
+			<Button onClick={() => setIsOpen(true)}>
+				<Plus />
+				Add symbol
+			</Button>
 
-			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-				<div className="rounded bg-gray-300 p-4 dark:bg-gray-700">
-					<h3 className="pb-4 text-lg font-bold">Add symbol</h3>
+			<Dialog title="Add symbol" open={isOpen} onClose={() => setIsOpen(false)}>
+				<form onSubmit={handleSubmit(addSymbol)} className={styles.form}>
+					<fieldset className={styles.fieldset}>
+						<Input
+							placeholder="AAPL, MSFT..."
+							label="Symbol"
+							{...register("symbol", { required: true })}
+							errorMessage={errors.symbol && "Please provide a symbol to add"}
+						/>
+					</fieldset>
 
-					<form onSubmit={handleSubmit(addSymbol)} className="space-y-4">
-						<fieldset className="space-y-2">
-							<Input
-								placeholder="AAPL, MSFT..."
-								label="Symbol"
-								{...register("symbol", { required: true })}
-								errorMessage={errors.symbol && "Please provide a symbol to add"}
-							/>
-						</fieldset>
-
-						<ButtonContainer>
-							<Button type="submit" className="btn btn-primary order-last ml-4">
-								Add
-							</Button>
-							<Button buttonType="Transparent" onClick={() => setIsOpen(false)}>
-								Cancel
-							</Button>
-						</ButtonContainer>
-					</form>
-				</div>
+					<ButtonContainer>
+						<Button type="submit" className={clsx("btn btn-primary", styles.submit_button)}>
+							Add
+						</Button>
+						<Button variant="Transparent" onClick={() => setIsOpen(false)}>
+							Cancel
+						</Button>
+					</ButtonContainer>
+				</form>
 			</Dialog>
 		</>
 	);
-};
-
-export default AddStock;
+}

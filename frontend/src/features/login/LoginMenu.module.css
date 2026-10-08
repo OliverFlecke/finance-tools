@@ -1,0 +1,39 @@
+.menu {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	z-index: 10;
+	border-radius: var(--radius);
+	background-color: var(--color-surface-raised);
+	padding-block: var(--space-4);
+	box-shadow: var(--shadow);
+}
+
+.hidden {
+	display: none;
+}
+
+.logout {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+
+	&:hover {
+		color: var(--color-gray-900);
+		text-decoration: underline;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.logout:hover {
+		color: var(--color-gray-400);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.label {
+	vertical-align: middle;
+}

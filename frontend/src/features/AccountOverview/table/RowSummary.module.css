@@ -1,3 +1,23 @@
+.gain_positive {
+	color: var(--color-value-positive);
+}
+
+.gain_negative {
+	color: var(--color-value-negative);
+}
+
+.total {
+	color: var(--color-metric-blue);
+}
+
+.total_cash {
+	color: var(--color-metric-yellow);
+}
+
+.total_investments {
+	color: var(--color-metric-purple);
+}
+
 .cell_summary {
 	position: relative;
 	cursor: context-menu;
@@ -7,8 +27,8 @@
 	anchor-name: --summary;
 
 	& ol {
-		background: var(--bg-primary);
-		box-shadow: 3px 3px 5px var(--shadow-primary);
+		background: var(--color-bg);
+		box-shadow: 3px 3px 5px var(--color-black);
 
 		z-index: 2;
 		position: fixed;

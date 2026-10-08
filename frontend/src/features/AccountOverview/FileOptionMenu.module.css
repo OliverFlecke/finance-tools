@@ -1,0 +1,28 @@
+.container {
+	display: flex;
+	justify-content: flex-end;
+
+	& > * + * {
+		margin-left: var(--space-4);
+	}
+}
+
+.btn_spacing {
+	& > * + * {
+		margin-left: var(--space-2);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.align_middle {
+	vertical-align: middle;
+}
+
+.file_input {
+	border-radius: var(--radius);
+	background-color: var(--color-blue-400);
+	padding: var(--space-2);
+}

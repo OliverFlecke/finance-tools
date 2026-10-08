@@ -1,16 +1,14 @@
 import { getCurrencies } from "features/Currency/api";
-import { type FC, useContext, useEffect, useState } from "react";
-import { IoSettingsOutline } from "react-icons/io5";
-import { Button } from "@/ui/Button/Button";
+import { Settings } from "lucide-react";
+import { type FC, useContext, useEffect } from "react";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import DisplayCurrencySetting from "./Components/DisplayCurrencySetting";
 import PreferredCurrenciesSetting from "./Components/PreferredCurrenciesSetting";
-import ThemeSetting from "./Components/ThemeSetting";
 import SettingsContext from "./context";
+import styles from "./SettingsMenu.module.css";
 
-const SettingsMenu: FC = () => {
+export default function SettingsMenu() {
 	const { dispatch } = useContext(SettingsContext);
-	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		getCurrencies()
@@ -19,39 +17,22 @@ const SettingsMenu: FC = () => {
 	}, [dispatch]);
 
 	return (
-		<div className="z-50">
-			<button
-				type="button"
-				className="flex h-full justify-center"
-				title="Settings"
-				onClick={() => setIsOpen((x) => !x)}
-			>
-				<IoSettingsOutline size={24} />
-			</button>
-			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-				<div className="space-y-4 rounded bg-indigo-100 p-4 text-black dark:bg-indigo-900 dark:text-white">
-					<h2 className="bold col-span-2 text-xl">Settings</h2>
-					<SettingsList />
-
-					<Button buttonType="Secondary" onClick={() => setIsOpen(false)}>
-						Close
-					</Button>
-				</div>
-			</Dialog>
-		</div>
+		<Dialog
+			title="Settings"
+			trigger={
+				<button type="button" title="Settings">
+					<Settings />
+				</button>
+			}
+		>
+			<SettingsList />
+		</Dialog>
 	);
-};
-
-export default SettingsMenu;
+}
 
 const SettingsList: FC = () => (
-	<div className="settings-list">
-		<div className="col-span-2">
-			<DisplayCurrencySetting />
-		</div>
-		<div className="col-span-2">
-			<PreferredCurrenciesSetting />
-		</div>
-		<ThemeSetting />
+	<div className={styles.container}>
+		<DisplayCurrencySetting />
+		<PreferredCurrenciesSetting />
 	</div>
 );

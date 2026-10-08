@@ -1,0 +1,91 @@
+/* ui/Button, ui/Input, ui/Select, ui/Toggle styles */
+.btn {
+	border-radius: var(--radius);
+	padding: var(--space-2) var(--space-4);
+	color: var(--color-gray-100);
+	outline: none;
+	font-size: var(--font-size-base);
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-2);
+	cursor: pointer;
+
+	&:disabled {
+		cursor: not-allowed;
+		color: var(--color-text-muted);
+		background-color: var(--color-gray-300);
+	}
+
+	&.icon {
+		padding: 0;
+	}
+
+	&.primary {
+		color: var(--color-gray-100);
+		background-color: var(--color-primary);
+
+		&:hover {
+			background-color: var(--color-primary-hover);
+		}
+	}
+
+	&.secondary {
+		color: var(--color-secondary-text);
+		background-color: var(--color-secondary);
+
+		&:hover {
+			background-color: var(--color-secondary-hover);
+		}
+	}
+
+	&.success {
+		color: var(--color-white);
+		background-color: var(--color-success);
+
+		&:hover {
+			background-color: var(--color-success-hover);
+		}
+	}
+
+	&.warning {
+		color: var(--color-gray-900);
+		background-color: var(--color-warning);
+
+		&:hover {
+			background-color: var(--color-warning-hover);
+		}
+	}
+
+	&.danger {
+		color: var(--color-white);
+		background-color: var(--color-danger);
+
+		&:hover {
+			background-color: var(--color-danger-hover);
+		}
+	}
+
+	&.transparent {
+		border: 1px solid var(--color-border);
+		background-color: var(--color-bg-elevated);
+		color: var(--color-text-muted);
+	}
+
+	&.link {
+		text-decoration: underline;
+		color: var(--color-link);
+
+		&:hover {
+			color: var(--color-link-hover);
+		}
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.btn:disabled {
+		background-color: var(--color-gray-600);
+	}
+}

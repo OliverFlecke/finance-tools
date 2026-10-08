@@ -9,14 +9,11 @@
 	},
 	"scripts": {
 		"start-server": "pnpm build && pnpm start",
-		"dev": "concurrently --kill-others --names \"JS,CSS\" -c \"bgBlue.bold,bgGreen.bold\" \"pnpm dev:js\" \"pnpm css\"",
-		"css": "cross-env TAILWIND_MODE=watch pnpm postcss src/main.css -o src/compiled.css -v --watch",
-		"dev:js": "next dev --experimental-https --turbo",
+		"dev": "next dev --experimental-https --turbo",
 		"dev:https": "node server.js",
 		"lint": "biome lint --write",
 		"fmt": "biome format --write",
 		"start": "next start",
-		"prebuild": "pnpm postcss src/main.css -o src/compiled.css -v",
 		"build": "next build",
 		"test": "jest --watch",
 		"build:api:spec": "cargo run --manifest-path ../finance-api/Cargo.toml --features openapi openapi > ./openapi.json",
@@ -27,7 +24,6 @@
 	},
 	"dependencies": {
 		"@hey-api/client-fetch": "^0.13.1",
-		"@tailwindcss/postcss": "^4.3.3",
 		"@tanstack/react-query": "^5.101.4",
 		"@visx/axis": "^4.0.0",
 		"@visx/curve": "^4.0.0",
@@ -41,6 +37,7 @@
 		"clsx": "^2.1.1",
 		"d3-array": "^3.2.4",
 		"immutability-helper": "^3.1.1",
+		"lucide-react": "^1.52.0",
 		"next": "16.3.8",
 		"oidc-client-ts": "^3.5.0",
 		"react": "19.3.0",
@@ -48,7 +45,6 @@
 		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "19.3.0",
 		"react-hook-form": "^7.84.0",
-		"react-icons": "^5.7.0",
 		"react-number-format": "^5.4.5",
 		"react-oidc-context": "^3.3.1"
 	},
@@ -72,18 +68,20 @@
 		"@types/react-dom": "19.2.5",
 		"babel-jest": "^30.4.1",
 		"babel-plugin-react-compiler": "^1.0.0",
-		"concurrently": "^10.0.4",
-		"cross-env": "^10.1.0",
-		"cssnano": "^8.0.2",
 		"cypress": "^15.19.0",
 		"jest": "^30.4.2",
-		"postcss": "^8.5.23",
-		"postcss-cli": "^11.0.1",
-		"tailwindcss": "^4.3.3",
 		"typescript": "^5.9.3"
 	},
 	"browserslist": {
-		"production": [">0.2%", "not dead", "not op_mini all"],
-		"development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	}
 }

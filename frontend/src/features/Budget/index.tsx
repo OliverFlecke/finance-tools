@@ -8,6 +8,7 @@ import { useAddItemToBudgetCallback, useDeleteItemCallback, useUpdateItemCallbac
 import Configuration from "./BudgetConfiguration";
 import BudgetDetails from "./BudgetDetails";
 import BudgetList from "./BudgetList";
+import styles from "./index.module.css";
 import { type Action, BudgetContext, createReducer, fetchInitialData, type State } from "./state";
 
 // TODO: This should be part of the settings for a budget
@@ -44,9 +45,7 @@ const Budget: React.FC<{
 			<ClientOnly>
 				{state.budget && (
 					<>
-						<h3 className=" px-4 pt-6 text-3xl text-fuchsia-700 dark:text-fuchsia-600">
-							{state.budget.title}
-						</h3>
+						<h3 className={styles.budget_title}>{state.budget.title}</h3>
 						<Configuration />
 						<BudgetDetails budget={state.budget} />
 					</>

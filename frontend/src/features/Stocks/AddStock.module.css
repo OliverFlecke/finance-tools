@@ -1,0 +1,31 @@
+.trigger {
+	& > * + * {
+		margin-left: var(--space-2);
+	}
+}
+
+.icon {
+	display: inline;
+}
+
+.label {
+	vertical-align: middle;
+}
+
+.form {
+	padding: var(--space-4);
+	& > * + * {
+		margin-top: var(--space-4);
+	}
+}
+
+.fieldset {
+	& > * + * {
+		margin-top: var(--space-2);
+	}
+}
+
+.submit_button {
+	order: 9999;
+	margin-left: var(--space-4);
+}

@@ -1,0 +1,21 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.content {
+	display: flex;
+	max-width: 65ch;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding-top: var(--space-4);
+	padding-bottom: var(--space-4);
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
+
+	@media (min-width: 768px) {
+		padding-left: var(--space-4);
+		padding-right: var(--space-4);
+	}
+}

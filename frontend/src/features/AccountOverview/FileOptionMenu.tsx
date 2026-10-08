@@ -1,8 +1,10 @@
 import { saveAs } from "file-saver";
+import { Save } from "lucide-react";
 import type React from "react";
 import { useCallback, useContext } from "react";
-import { IoSaveOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import { AccountContext } from "./AccountService";
+import styles from "./FileOptionMenu.module.css";
 
 const FileOptionMenu: React.FC = () => {
 	const { dispatch, state } = useContext(AccountContext);
@@ -34,15 +36,17 @@ const FileOptionMenu: React.FC = () => {
 	);
 
 	return (
-		<div className="flex justify-end space-x-4">
-			<button type="button" className="btn btn-primary space-x-2" onClick={save}>
-				<IoSaveOutline className="inline" />
-				<span className="align-middle">Save</span>
-			</button>
-			<input type="file" onChange={fileChange} className="rounded bg-blue-400 p-2" />
-			<button type="button" className="btn btn-secondary" onClick={closeFile}>
+		<div className={styles.container}>
+			<Button onClick={save}>
+				<Save />
+				Save
+			</Button>
+
+			<input type="file" onChange={fileChange} className={styles.file_input} />
+
+			<Button onClick={closeFile} variant="Secondary">
 				Close
-			</button>
+			</Button>
 		</div>
 	);
 };

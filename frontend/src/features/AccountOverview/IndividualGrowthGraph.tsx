@@ -10,8 +10,23 @@ import { extent, max } from "d3-array";
 import { type ScaleLinear, type ScaleTime, tickFormat } from "d3-scale";
 import type { Account, DateEntry } from "features/AccountOverview/models/Account";
 import { type FC, useContext } from "react";
-import colors from "tailwindcss/colors";
 import { AccountContext } from "./AccountService";
+import styles from "./IndividualGrowthGraph.module.css";
+
+// 500-shade hex values from Tailwind's default palette, used directly since
+// the tailwindcss package is no longer a dependency.
+const lineColors500 = [
+	"#f59e0b", // amber-500
+	"#64748b", // slate-500
+	"#22c55e", // green-500
+	"#ec4899", // pink-500
+	"#eab308", // yellow-500
+	"#f43f5e", // rose-500
+	"#a855f7", // purple-500
+	"#0ea5e9", // sky-500
+	"#6366f1", // indigo-500
+];
+const cyan500 = "#06b6d4";
 
 const IndividualGrowthGraph: FC = () => {
 	const { state } = useContext(AccountContext);
@@ -19,18 +34,6 @@ const IndividualGrowthGraph: FC = () => {
 		date: x,
 		value: state.entries[x],
 	}));
-
-	const lineColors = [
-		colors.amber,
-		colors.slate,
-		colors.green,
-		colors.pink,
-		colors.yellow,
-		colors.rose,
-		colors.purple,
-		colors.sky,
-		colors.indigo,
-	];
 
 	return (
 		<ParentSize>
@@ -61,11 +64,11 @@ const IndividualGrowthGraph: FC = () => {
 				});
 
 				const axisFormat = tickFormat(0, yMaxValue ?? 0, 10, "~s");
-				const labelColor = colors.cyan[500];
+				const labelColor = cyan500;
 
 				const legendScale = scaleOrdinal({
 					domain: state.accounts.map((x) => x.name),
-					range: state.accounts.map((_, i) => lineColors[i][500]),
+					range: state.accounts.map((_, i) => lineColors500[i]),
 				});
 				const legendGlyphSize = 15;
 
@@ -103,7 +106,7 @@ const IndividualGrowthGraph: FC = () => {
 									<AccountLine
 										key={account.id}
 										account={account}
-										color={lineColors[i][500]}
+										color={lineColors500[i]}
 										data={data}
 										xScale={xScale}
 										yScale={yScale}
@@ -113,7 +116,7 @@ const IndividualGrowthGraph: FC = () => {
 						</svg>
 						<LegendOrdinal scale={legendScale} labelFormat={(label) => `${label.toUpperCase()}`}>
 							{(labels) => (
-								<div className="flex flex-row flex-wrap">
+								<div className={styles.legend}>
 									{labels.map((label) => (
 										<LegendItem key={`legend-quantile-${label.text}`} margin="0 5px">
 											<svg width={legendGlyphSize} height={legendGlyphSize}>

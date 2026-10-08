@@ -1,50 +1,47 @@
-import { useState } from "react";
+import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/ui/Button/Button";
-import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { Input } from "@/ui/Input/Input";
+import { Label } from "@/ui/Label/Label";
+import styles from "./AddEntryModal.module.css";
 import { useAccountContext } from "./Context";
 
 export default function AddEntryModal() {
-	const [isOpen, setIsOpen] = useState(false);
-
 	return (
-		<>
-			<Button buttonType="Primary" onClick={() => setIsOpen(true)}>
-				Add entry
-			</Button>
-
-			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-				<Form onSuccess={() => setIsOpen(false)} />
-			</Dialog>
-		</>
+		<Dialog
+			title="Add new date entry"
+			trigger={
+				<Button variant="Primary">
+					<Plus />
+					Add entry
+				</Button>
+			}
+		>
+			<Form />
+		</Dialog>
 	);
 }
 
-function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
+function Form() {
 	const { addEntry } = useAccountContext();
 	const { register, handleSubmit } = useForm<{ date: string }>();
 	const onSubmit = ({ date }: { date: string }) => {
 		addEntry(date);
-		onSuccess();
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="rounded bg-indigo-500 p-4 dark:bg-indigo-900"
-		>
-			<div className="pb-4">
-				<h2 className="text-lg text-gray-700 dark:text-gray-400">Add new entry on date</h2>
-				<Input type="date" className="m-4" {...register("date")} />
-			</div>
+		<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+			<fieldset>
+				<Label>
+					Date
+					<Input type="date" className={styles.date_input} {...register("date")} />
+				</Label>
+			</fieldset>
 
-			<ButtonContainer>
-				<Button buttonType="Primary" type="submit">
-					Add
-				</Button>
-			</ButtonContainer>
+			<Button variant="Primary" type="submit">
+				Add
+			</Button>
 		</form>
 	);
 }

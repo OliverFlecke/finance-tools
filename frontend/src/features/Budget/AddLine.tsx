@@ -1,6 +1,7 @@
-import type React from "react";
+import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { IoAddCircleOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
+import styles from "./AddLine.module.css";
 import type { AddItemToBudgetRequest } from "./api";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 	category?: string;
 }
 
-const AddLine: React.FC<Props> = ({ add, category }) => {
+export default function AddLine({ add, category }: Props) {
 	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>({
 		defaultValues: {
 			category,
@@ -19,10 +20,7 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 		<tbody>
 			<tr>
 				<td colSpan={4}>
-					<form
-						onSubmit={handleSubmit(add)}
-						className="flex flex-wrap justify-end space-x-2 pb-4 pt-2"
-					>
+					<form onSubmit={handleSubmit(add)} className={styles.form}>
 						{!category && (
 							<input
 								placeholder="Category"
@@ -46,18 +44,13 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							{...register("amount", { required: true, valueAsNumber: true })}
 						/>
 
-						<button
-							type="submit"
-							className="btn btn-primary flex items-center space-x-2 align-middle"
-						>
-							<span>Add</span>
-							<IoAddCircleOutline size={24} className="text-green-400 dark:text-green-500" />
-						</button>
+						<Button type="submit">
+							<Plus />
+							Add
+						</Button>
 					</form>
 				</td>
 			</tr>
 		</tbody>
 	);
-};
-
-export default AddLine;
+}

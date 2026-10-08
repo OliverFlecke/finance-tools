@@ -2,6 +2,10 @@
 import { useCallback } from "react";
 
 export function parseNumber(value: any): number {
+	if (!value) {
+		return 0;
+	}
+
 	return Number.parseFloat(value.toString().replace(/[^.\d]/g, ""));
 }
 

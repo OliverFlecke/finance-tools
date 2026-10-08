@@ -1,0 +1,58 @@
+.section_title {
+	padding: var(--space-2) var(--space-4) 0;
+	text-align: left;
+	font-size: var(--font-size-xl);
+	text-decoration: underline;
+}
+
+.category_row {
+	color: var(--color-fuchsia-700);
+}
+
+@media (prefers-color-scheme: dark) {
+	.category_row {
+		color: var(--color-fuchsia-300);
+	}
+}
+
+.category_label {
+	padding: 0 var(--space-8);
+	text-align: left;
+	font-weight: var(--font-weight-normal);
+}
+
+.item_row {
+	padding: 0 var(--space-8);
+}
+
+.item_name {
+	padding-left: var(--space-12);
+}
+
+.total_label {
+	padding: 0 0 var(--space-2) var(--space-4);
+	text-align: left;
+}
+
+.actions_header {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	padding-right: var(--space-4);
+}
+
+.income_bg {
+	background-color: var(--color-income-bg);
+}
+
+.income_odd:nth-child(odd) {
+	background-color: var(--color-income-bg-stripe);
+}
+
+.expenses_bg {
+	background-color: var(--color-expense-bg);
+}
+
+.expenses_odd:nth-child(odd) {
+	background-color: var(--color-expense-bg-stripe);
+}

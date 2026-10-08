@@ -4,6 +4,7 @@ import SettingsContext from "features/Settings/context";
 import type React from "react";
 import { useContext, useReducer } from "react";
 import Guide from "./Guide";
+import styles from "./index.module.css";
 import { getDefaultState, TaxCalculatorContext } from "./state";
 import taxCalculatorReducer from "./state/reducer";
 import TaxCalculatorInput from "./TaxCalculatorInput";
@@ -17,7 +18,7 @@ const TaxCalculator: React.FC = () => {
 	});
 
 	return (
-		<div className="h-full bg-white dark:bg-gray-800">
+		<div className={styles.container}>
 			<TaxCalculatorContext.Provider value={{ state, dispatch }}>
 				<TaxCalculatorInput />
 				<TaxTable />

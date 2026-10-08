@@ -1,10 +1,10 @@
-import type React from "react";
+import { Plus } from "lucide-react";
 import { useCallback, useContext } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { useAddStockLotCallback } from "./API/stockApi";
 import type { Stock, StockLot } from "./models";
 import StockLotRow from "./StockLotRow";
+import styles from "./StockLotsTable.module.css";
 import { StockContext } from "./state";
 
 interface StockLotsTableProps {
@@ -12,7 +12,7 @@ interface StockLotsTableProps {
 	lots: StockLot[];
 }
 
-const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
+export default function StockLotsTable({ lots, stock }: StockLotsTableProps) {
 	const { dispatch } = useContext(StockContext);
 	const addStockLot = useAddStockLotCallback();
 
@@ -29,11 +29,9 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 
 	return (
 		<>
-			<h3 className="text-center text-2xl text-green-700 dark:text-green-400">
-				Lots for {stock.displayName ?? stock.symbol}
-			</h3>
-			<div className="mx-8 rounded bg-gray-300 shadow dark:bg-gray-700">
-				<table className="w-full">
+			<h3 className={styles.heading}>Lots for {stock.displayName ?? stock.symbol}</h3>
+			<div className={styles.panel}>
+				<table className={styles.table}>
 					<thead>
 						<tr>
 							<th>Buy date</th>
@@ -52,15 +50,13 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 					</tbody>
 				</table>
 
-				<div className="p-4">
-					<Button onClick={addLot} className="btn btn-primary space-x-2">
-						<IoAddCircleOutline className="inline" />
-						<span className="align-middle">Add lot</span>
+				<div className={styles.footer}>
+					<Button onClick={addLot}>
+						<Plus />
+						Add lot
 					</Button>
 				</div>
 			</div>
 		</>
 	);
-};
-
-export default StockLotsTable;
+}

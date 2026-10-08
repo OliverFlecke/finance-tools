@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { ButtonHTMLAttributes } from "react";
+import styles from "./Button.module.css";
 
 export type ButtonType =
 	| "Primary"
@@ -11,17 +12,28 @@ export type ButtonType =
 	| "Transparent";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	buttonType?: ButtonType;
+	variant?: ButtonType;
+	icon?: boolean;
 }
 
 export function Button({
-	buttonType = "Primary",
+	variant = "Primary",
 	className,
+	icon,
 	children,
 	...buttonProps
 }: ButtonProps) {
+	const c = color(variant);
+
 	return (
-		<button className={clsx("btn", colorClass(buttonType), className)} {...buttonProps}>
+		<button
+			className={clsx(styles.btn, colorClass(variant), icon && styles.icon, className)}
+			style={{
+				color: icon ? c?.background : undefined,
+				backgroundColor: icon ? "transparent" : undefined,
+			}}
+			{...buttonProps}
+		>
 			{children}
 		</button>
 	);
@@ -30,18 +42,57 @@ export function Button({
 function colorClass(type: ButtonType): string {
 	switch (type) {
 		case "Link":
-			return "btn-link";
+			return styles.link;
 		case "Warning":
-			return "btn-warning";
+			return styles.warning;
 		case "Danger":
-			return "btn-danger";
+			return styles.danger;
 		case "Transparent":
-			return "btn-transparent";
+			return styles.transparent;
 		case "Success":
-			return "btn-success";
+			return styles.success;
 		case "Secondary":
-			return "btn-secondary";
+			return styles.secondary;
 		case "Primary":
-			return "btn-primary";
+			return styles.primary;
+	}
+}
+
+function color(type: ButtonType) {
+	switch (type) {
+		case "Primary":
+			return {
+				color: "var(--color-gray-100)",
+				background: "var(--color-primary)",
+				hoverBackground: "var(--color-primary-hover)",
+			};
+
+		case "Secondary":
+			return {
+				color: "var(--color-secondary-text)",
+				background: "var(--color-secondary)",
+				hoverBackground: "var(--color-secondary-hover)",
+			};
+
+		case "Success":
+			return {
+				color: "var(--color-white)",
+				background: "var(--color-success)",
+				hoverBackground: "var(--color-success-hover)",
+			};
+
+		case "Warning":
+			return {
+				color: "var(--color-gray-900)",
+				background: "var(--color-warning)",
+				hoverBackground: "var(--color-warning-hover)",
+			};
+
+		case "Danger":
+			return {
+				color: "var(--color-white)",
+				background: "var(--color-danger)",
+				hoverBackground: "var(--color-danger-hover)",
+			};
 	}
 }

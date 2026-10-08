@@ -1,8 +1,8 @@
+import { Plus, Trash } from "lucide-react";
 import type React from "react";
-import { type FC, useCallback, useContext, useState } from "react";
+import { type FC, useCallback, useContext } from "react";
+import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
-import AddButton from "../../components/button/AddButton";
-import DeleteButton from "../../components/DeleteButton";
 import {
 	type Budget,
 	useDeleteBudgetCallback,
@@ -10,6 +10,7 @@ import {
 	useFetchBudgetWithItemsCallback,
 } from "./api";
 import BudgetCreate from "./BudgetCreate";
+import styles from "./BudgetList.module.css";
 import { BudgetContext } from "./state";
 
 const BudgetList: React.FC = () => {
@@ -36,11 +37,9 @@ const BudgetList: React.FC = () => {
 		[budgets, deleteCallback],
 	);
 
-	const [isCreateOpen, setIsCreateOpen] = useState(false);
-
 	return (
-		<div className="bg-sky-300 p-4 dark:bg-sky-900">
-			<div className="flex w-full flex-row justify-between space-x-4 font-bold text-gray-800 dark:text-gray-300">
+		<div className={styles.container}>
+			<div className={styles.header_row}>
 				<span>Title</span>
 				<span>Created at</span>
 				<span></span>
@@ -57,10 +56,14 @@ const BudgetList: React.FC = () => {
 					))}
 				</ul>
 			)}
-			<div className="flex-end flex w-full">
-				<AddButton onClick={() => setIsCreateOpen(true)} />
-			</div>
-			<Dialog open={isCreateOpen} onClose={() => setIsCreateOpen(false)}>
+			<Dialog
+				title="Create new budget"
+				trigger={
+					<Button>
+						<Plus />
+					</Button>
+				}
+			>
 				<BudgetCreate onBudgetCreated={budgets.refresh} />
 			</Dialog>
 		</div>
@@ -74,13 +77,14 @@ const BudgetListItem: FC<{
 	onSelect: (budget: Budget) => void;
 	deleteCallback: (id: string) => void;
 }> = ({ budget, deleteCallback, onSelect }) => (
-	<li className="flex w-full flex-row justify-between space-x-4 rounded px-4 odd:bg-slate-200 dark:odd:bg-slate-800">
-		<button type="button" onClick={() => onSelect(budget)} className="hover:cursor-pointer">
+	<li className={styles.item}>
+		<button type="button" onClick={() => onSelect(budget)} className={styles.select_button}>
 			{budget.title}
 		</button>
 		<span>{budget.created_at.toDateString()}</span>
-		<span>
-			<DeleteButton onClick={() => deleteCallback(budget.id)} />
-		</span>
+
+		<Button onClick={() => deleteCallback(budget.id)} icon variant="Danger">
+			<Trash />
+		</Button>
 	</li>
 );

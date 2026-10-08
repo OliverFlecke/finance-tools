@@ -1,0 +1,11 @@
+.budget_title {
+	padding: var(--space-6) var(--space-4) 0;
+	font-size: var(--font-size-3xl);
+	color: var(--color-fuchsia-700);
+}
+
+@media (prefers-color-scheme: dark) {
+	.budget_title {
+		color: var(--color-fuchsia-600);
+	}
+}

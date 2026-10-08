@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import type React from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/ui/Input/Input";
 import { type CreateBudgetDto, useCreateBudgetCallback } from "./api";
+import styles from "./BudgetCreate.module.css";
 
 const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreated }) => {
 	const createBudget = useCreateBudgetCallback();
@@ -18,16 +20,15 @@ const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreat
 	);
 
 	return (
-		<div className="flex max-w-lg flex-col space-y-2 rounded bg-sky-300 p-4 dark:bg-sky-900">
-			<h3 className="text-lg">New budget</h3>
-			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
-				<div className="flex flex-col items-baseline">
-					<label className="text-md text-gray-700 dark:text-gray-100" htmlFor="title">
+		<div className={styles.container}>
+			<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+				<div className={styles.field}>
+					<label className={styles.label} htmlFor="title">
 						Title
 					</label>
 					<Input {...register("title")} id="title" placeholder="My budget" />
 				</div>
-				<input type="submit" value="Create" className="btn btn-success w-full" />
+				<input type="submit" value="Create" className={clsx("btn btn-success", styles.submit)} />
 			</form>
 		</div>
 	);

@@ -1,38 +1,34 @@
-import type React from "react";
-import { IoLogOutOutline } from "react-icons/io5";
+import clsx from "clsx";
+import { LogOut } from "lucide-react";
 import { useAuth } from "react-oidc-context";
+import { Button } from "@/ui/Button/Button";
+import styles from "./LoginMenu.module.css";
 
-interface LoginMenuProps {
+interface Props {
 	isOpen: boolean;
 }
 
-const LoginMenu: React.FC<LoginMenuProps> = ({ isOpen }) => (
-	<div
-		className={`${
-			isOpen ? "" : "hidden"
-		} absolute top-full right-0 z-10 rounded bg-gray-100 py-4 shadow outline group-hover:block dark:bg-gray-700`}
-	>
-		<LogoutButton />
-	</div>
-);
+export default function LoginMenu({ isOpen }: Props) {
+	return (
+		<div className={clsx(styles.menu, !isOpen && styles.hidden)}>
+			<LogoutButton />
+		</div>
+	);
+}
 
-export default LoginMenu;
-
-const LogoutButton = () => {
+function LogoutButton() {
 	const { signoutRedirect } = useAuth();
 
 	return (
-		<button
-			type="button"
-			className="btn flex items-center space-x-2 hover:text-gray-900 hover:underline dark:hover:text-gray-400"
+		<Button
 			onClick={() => {
 				signoutRedirect({
 					post_logout_redirect_uri: window.location.origin,
 				});
 			}}
 		>
-			<IoLogOutOutline className="inline" />
-			<span className="align-middle">Logout</span>
-		</button>
+			<LogOut />
+			Logout
+		</Button>
 	);
-};
+}

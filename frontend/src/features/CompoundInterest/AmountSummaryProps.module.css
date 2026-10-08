@@ -1,0 +1,19 @@
+.row {
+	display: flex;
+	gap: var(--space-4);
+}
+
+.dot {
+	width: 1.5rem;
+	height: 1.5rem;
+	border-radius: var(--radius-full);
+}
+
+.label {
+	color: var(--color-text-secondary);
+}
+
+.amount {
+	font-size: var(--font-size-2xl);
+	color: var(--color-text);
+}

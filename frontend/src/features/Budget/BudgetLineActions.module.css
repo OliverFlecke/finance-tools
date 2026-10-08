@@ -1,0 +1,11 @@
+.cell {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: var(--space-2);
+	padding-right: var(--space-4);
+}
+
+.edit_button {
+	color: var(--color-action-positive);
+}
