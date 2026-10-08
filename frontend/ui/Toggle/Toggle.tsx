@@ -1,10 +1,11 @@
 import type { InputHTMLAttributes } from "react";
+import styles from "./Toggle.module.css";
 
 export function Toggle(props: InputHTMLAttributes<HTMLInputElement>) {
 	return (
-		<label className="switch">
+		<label className={styles.switch}>
 			<input type="checkbox" {...props} />
-			<span className="slider" />
+			<span className={styles.slider} />
 		</label>
 	);
 }

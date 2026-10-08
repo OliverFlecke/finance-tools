@@ -59,18 +59,18 @@ function Form() {
 						errorMessage={errors.name && "Please provide a name for your account"}
 					/>
 					<label className={styles.field}>
-						<span className="modal-form-label">Account type</span>
-						<select className="modal-select" {...register("kind", { required: true })}>
+						<span className={styles.form_label}>Account type</span>
+						<select className={styles.select} {...register("kind", { required: true })}>
 							<option value={"Cash"}>Cash</option>
 							<option value={"Investment"}>Investment</option>
 						</select>
 					</label>
 					<label htmlFor={currencyId} className={styles.field}>
-						<span className="modal-form-label">Account currency</span>
+						<span className={styles.form_label}>Account currency</span>
 						<select
 							id={currencyId}
 							defaultValue={preferredDisplayCurrency}
-							className="modal-select"
+							className={styles.select}
 							{...register("currency", { required: true })}
 						>
 							{Object.keys(currencyRates.usd)

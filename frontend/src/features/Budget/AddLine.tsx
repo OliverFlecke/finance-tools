@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/ui/Button/Button";
@@ -24,18 +25,18 @@ export default function AddLine({ add, category }: Props) {
 						{!category && (
 							<input
 								placeholder="Category"
-								className="budget add-item"
+								className={clsx("budget", styles.add_item)}
 								{...register("category", { required: true })}
 							/>
 						)}
 						<input
 							placeholder="Name"
-							className="budget add-item"
+							className={clsx("budget", styles.add_item)}
 							{...register("name", { required: true })}
 						/>
 						<input
 							placeholder="Amount"
-							className="budget add-item"
+							className={clsx("budget", styles.add_item)}
 							onKeyDown={(event) => {
 								if (!/\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
 									event.preventDefault();

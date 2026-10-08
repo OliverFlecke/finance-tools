@@ -54,7 +54,7 @@ const OrderAccountsModal: FC = () => {
 			}
 		>
 			<div className={styles.panel}>
-				<h2 className="modal-header">Reorder accounts</h2>
+				<h2 className={styles.header}>Reorder accounts</h2>
 				<SortableDragAndDropList
 					className={styles.list}
 					typeIdentifier="ACCOUNT"

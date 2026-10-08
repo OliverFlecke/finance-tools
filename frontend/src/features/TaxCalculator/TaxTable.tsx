@@ -90,7 +90,7 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 	);
 
 	return (
-		<tr key={country} className="tax-row">
+		<tr key={country} className={styles.tax_row}>
 			<td>{result.country}</td>
 			<td className={styles.net_cell}>{formatPreferred(result.preferred.salaryNet)}</td>
 			<td className={styles.taxes_cell}>{formatPreferred(result.preferred.taxes)}</td>
@@ -110,7 +110,7 @@ function TableRow({ country, salary, currency, calculator }: TableRowProps) {
 
 function TableHeader() {
 	return (
-		<thead className="tax-header">
+		<thead className={styles.tax_header}>
 			<tr>
 				<th className={styles.header_cell}>Country</th>
 				<th>Net salary</th>

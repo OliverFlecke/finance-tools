@@ -23,3 +23,9 @@
 		color: var(--color-green-500);
 	}
 }
+
+.add_item {
+	width: 6rem;
+	max-width: 20rem;
+	flex-grow: 1;
+}

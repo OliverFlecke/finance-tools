@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
-import clsx from "clsx";
 import { type FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
@@ -58,7 +57,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 	return (
 		<div className={styles.container}>
 			<h2 className={styles.heading}>Compound interest calculator</h2>
-			<form onSubmit={onSubmit} className={clsx("flex-col-center", styles.form)}>
+			<form onSubmit={onSubmit} className={styles.form}>
 				<fieldset className={styles.fieldset}>
 					<NumericFormat
 						// biome-ignore lint/suspicious/noExplicitAny: unknown type

@@ -34,3 +34,7 @@
 	font-size: var(--font-size-xl);
 	font-weight: var(--font-weight-bold);
 }
+
+.header {
+	font-size: var(--font-size-2xl);
+}

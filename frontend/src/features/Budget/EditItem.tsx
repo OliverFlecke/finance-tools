@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Save } from "lucide-react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -25,27 +26,27 @@ export default function EditItem({ update, item }: Props) {
 	return (
 		<form onSubmit={handleSubmit(handleUpdate)} className={styles.form}>
 			<h4 className={styles.title}>Edit item</h4>
-			<label className="edit-item">
+			<label className={styles.edit_item}>
 				<span>Category</span>
 				<input
 					placeholder="Category"
-					className="budget edit-item"
+					className={clsx("budget", styles.edit_item)}
 					{...register("category", { required: true })}
 				/>
 			</label>
-			<label className="edit-item">
+			<label className={styles.edit_item}>
 				<span>Name</span>
 				<input
 					placeholder="Name"
-					className="budget edit-item"
+					className={clsx("budget", styles.edit_item)}
 					{...register("name", { required: true })}
 				/>
 			</label>
-			<label className="edit-item">
+			<label className={styles.edit_item}>
 				<span>Amount</span>
 				<input
 					placeholder="Amount"
-					className="budget edit-item"
+					className={clsx("budget", styles.edit_item)}
 					onKeyDown={(event) => {
 						if (!/-|\d|\.|Enter|Shift|Tab|Backspace|Delete|Arrow/.test(event.key)) {
 							event.preventDefault();
