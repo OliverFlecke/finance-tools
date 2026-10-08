@@ -1,4 +1,7 @@
 {
+	"cmkOptions": {
+		"enabled": true
+	},
 	"compilerOptions": {
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
