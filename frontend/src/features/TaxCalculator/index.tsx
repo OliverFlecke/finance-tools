@@ -1,7 +1,6 @@
 "use client";
 
 import SettingsContext from "features/Settings/context";
-import type React from "react";
 import { useContext, useReducer } from "react";
 import Guide from "./Guide";
 import styles from "./index.module.css";
@@ -10,7 +9,7 @@ import taxCalculatorReducer from "./state/reducer";
 import TaxCalculatorInput from "./TaxCalculatorInput";
 import TaxTable from "./TaxTable";
 
-const TaxCalculator: React.FC = () => {
+export default function TaxCalculator() {
 	const { values } = useContext(SettingsContext);
 	const [state, dispatch] = useReducer(taxCalculatorReducer, {
 		...getDefaultState(),
@@ -27,6 +26,4 @@ const TaxCalculator: React.FC = () => {
 			<Guide />
 		</div>
 	);
-};
-
-export default TaxCalculator;
+}

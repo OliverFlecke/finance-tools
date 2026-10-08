@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
 import { Trash } from "lucide-react";
-import type React from "react";
 import { useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { getValueColorIndicator } from "utils/colors";
@@ -25,7 +24,7 @@ interface LotForm {
 	buyDate: string;
 }
 
-const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProps) => {
+export default function StockLotRow({ stock, lot }: StockLotRowProps) {
 	const { dispatch } = useContext(StockContext);
 	const updateStockLot = useUpdateStockLotCallback();
 	const deleteStockLot = useDeleteStockLotCallback();
@@ -99,6 +98,4 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 			</td>
 		</tr>
 	);
-};
-
-export default StockLotRow;
+}

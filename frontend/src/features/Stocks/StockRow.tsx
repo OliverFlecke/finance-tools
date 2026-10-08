@@ -15,7 +15,7 @@ interface StockRowProps {
 	stock: Stock;
 }
 
-const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
+export default function StockRow({ stock }: StockRowProps) {
 	const {
 		values: { preferredDisplayCurrency, currencyRates },
 	} = useContext(SettingsContext);
@@ -64,16 +64,14 @@ const StockRow: React.FC<StockRowProps> = ({ stock }: StockRowProps) => {
 			</tr>
 		</>
 	);
-};
-
-export default StockRow;
+}
 
 interface StockRowActionProps {
 	stock: Stock;
 	setShowLots: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
+function StockRowActions({ stock, setShowLots }: StockRowActionProps) {
 	const { dispatch } = useContext(StockContext);
 
 	const deleteStock = useCallback(() => {
@@ -90,4 +88,4 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 			</Button>
 		</td>
 	);
-};
+}

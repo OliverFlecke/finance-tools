@@ -2,7 +2,6 @@
 
 import ClientOnly from "components/ClientOnly";
 import useAsyncReducer from "hooks/useAsyncReducer";
-import type React from "react";
 import { useMemo } from "react";
 import { useAddItemToBudgetCallback, useDeleteItemCallback, useUpdateItemCallback } from "./api";
 import Configuration from "./BudgetConfiguration";
@@ -14,7 +13,7 @@ import { type Action, BudgetContext, createReducer, fetchInitialData, type State
 // TODO: This should be part of the settings for a budget
 export const currency = "GBP";
 
-const Wrapper: React.FC = () => {
+export default function Wrapper() {
 	const addItemToBudgetCallback = useAddItemToBudgetCallback();
 	const deleteItemFromBudgetCallback = useDeleteItemCallback();
 	const updateItemCallback = useUpdateItemCallback();
@@ -30,11 +29,9 @@ const Wrapper: React.FC = () => {
 	);
 
 	return <Budget reducer={reducer} />;
-};
+}
 
-const Budget: React.FC<{
-	reducer: (state: State, action: Action) => Promise<State>;
-}> = ({ reducer }) => {
+function Budget({ reducer }: { reducer: (state: State, action: Action) => Promise<State> }) {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const [state, dispatch] = useAsyncReducer(reducer, fetchInitialData(), "budget");
 
@@ -53,6 +50,4 @@ const Budget: React.FC<{
 			</ClientOnly>
 		</BudgetContext.Provider>
 	);
-};
-
-export default Wrapper;
+}

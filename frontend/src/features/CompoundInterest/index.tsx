@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 "use client";
 
-import { type FC, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type { InterestAccrual } from "services/formulas";
@@ -12,10 +12,6 @@ import { Select, SelectOption } from "@/ui/Select/Select";
 import CalculationSummary from "./CalculationSummary";
 import styles from "./index.module.css";
 
-interface CompoundInterestProps {
-	name?: string;
-}
-
 export type FormData = {
 	existingAmount: number;
 	interestRate: number;
@@ -24,7 +20,7 @@ export type FormData = {
 	monthlyDeposit: number;
 };
 
-const CompoundInterest: FC<CompoundInterestProps> = () => {
+export default function CompoundInterest() {
 	const [data, setData] = useState<FormData>(defaultValues());
 
 	const {
@@ -143,9 +139,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 			)}
 		</div>
 	);
-};
-
-export default CompoundInterest;
+}
 
 export const formatter = Intl.NumberFormat("en-US", {
 	style: "currency",

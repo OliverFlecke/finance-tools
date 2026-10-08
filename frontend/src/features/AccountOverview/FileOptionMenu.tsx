@@ -6,7 +6,7 @@ import { Button } from "@/ui/Button/Button";
 import { AccountContext } from "./AccountService";
 import styles from "./FileOptionMenu.module.css";
 
-const FileOptionMenu: React.FC = () => {
+export default function FileOptionMenu() {
 	const { dispatch, state } = useContext(AccountContext);
 
 	const closeFile = useCallback(() => dispatch({ type: "RESET" }), [dispatch]);
@@ -49,5 +49,4 @@ const FileOptionMenu: React.FC = () => {
 			</Button>
 		</div>
 	);
-};
-export default FileOptionMenu;
+}

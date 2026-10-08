@@ -1,7 +1,7 @@
 import type { CurrencySymbol } from "features/Currency/api";
 import SettingsContext from "features/Settings/context";
 import type React from "react";
-import { type FC, useCallback, useContext, useId, useState } from "react";
+import { useCallback, useContext, useId, useState } from "react";
 import ClientOnly from "./ClientOnly";
 import styles from "./SelectCurrency.module.css";
 
@@ -11,7 +11,7 @@ interface Props {
 	onChange: (currency: CurrencySymbol) => void;
 }
 
-const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
+export default function SelectCurrency({ label, defaultCurrency, onChange }: Props) {
 	const id = useId();
 	const {
 		values: { currencyRates, preferredDisplayCurrency, preferredCurrencies },
@@ -57,6 +57,4 @@ const SelectCurrency: FC<Props> = ({ label, defaultCurrency, onChange }) => {
 			</label>
 		</ClientOnly>
 	);
-};
-
-export default SelectCurrency;
+}

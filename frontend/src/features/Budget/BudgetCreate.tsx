@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import type React from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/ui/Input/Input";
 import { type CreateBudgetDto, useCreateBudgetCallback } from "./api";
 import styles from "./BudgetCreate.module.css";
 
-const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreated }) => {
+export default function BudgetCreate({ onBudgetCreated }: { onBudgetCreated: () => void }) {
 	const createBudget = useCreateBudgetCallback();
 	const { register, handleSubmit } = useForm<CreateBudgetDto>();
 
@@ -32,6 +31,4 @@ const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreat
 			</form>
 		</div>
 	);
-};
-
-export default BudgetCreate;
+}

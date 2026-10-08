@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type React from "react";
-import { type FC, useRef } from "react";
+import { useRef } from "react";
 import { useDrag, useDrop, type XYCoord } from "react-dnd";
 import styles from "./SortableDragAndDropItem.module.css";
 
@@ -10,14 +10,23 @@ interface DragItem {
 	type: string;
 }
 
-const SortableDragAndDropItem: FC<{
+interface SortableDragAndDropItemProps {
 	id: string;
 	type: string;
 	index: number;
 	move: (dragIndex: number, hoverIndex: number) => void;
 	children: React.ReactNode;
 	className?: string;
-}> = ({ id, type, index, move, children, className }) => {
+}
+
+export default function SortableDragAndDropItem({
+	id,
+	type,
+	index,
+	move,
+	children,
+	className,
+}: SortableDragAndDropItemProps) {
 	const ref = useRef<HTMLLIElement>(null);
 
 	// biome-ignore lint/suspicious/noExplicitAny: unknown type
@@ -92,6 +101,4 @@ const SortableDragAndDropItem: FC<{
 			{children}
 		</li>
 	);
-};
-
-export default SortableDragAndDropItem;
+}

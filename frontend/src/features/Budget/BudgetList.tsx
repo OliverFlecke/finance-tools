@@ -1,6 +1,5 @@
 import { Plus, Trash } from "lucide-react";
-import type React from "react";
-import { type FC, useCallback, useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import {
@@ -13,7 +12,7 @@ import BudgetCreate from "./BudgetCreate";
 import styles from "./BudgetList.module.css";
 import { BudgetContext } from "./state";
 
-const BudgetList: React.FC = () => {
+export default function BudgetList() {
 	const { dispatch } = useContext(BudgetContext);
 
 	const budgets = useFetchAllBudgets();
@@ -68,23 +67,25 @@ const BudgetList: React.FC = () => {
 			</Dialog>
 		</div>
 	);
-};
+}
 
-export default BudgetList;
-
-const BudgetListItem: FC<{
+interface BudgetListItemProps {
 	budget: Budget;
 	onSelect: (budget: Budget) => void;
 	deleteCallback: (id: string) => void;
-}> = ({ budget, deleteCallback, onSelect }) => (
-	<li className={styles.item}>
-		<button type="button" onClick={() => onSelect(budget)} className={styles.select_button}>
-			{budget.title}
-		</button>
-		<span>{budget.created_at.toDateString()}</span>
+}
 
-		<Button onClick={() => deleteCallback(budget.id)} icon variant="Danger">
-			<Trash />
-		</Button>
-	</li>
-);
+function BudgetListItem({ budget, deleteCallback, onSelect }: BudgetListItemProps) {
+	return (
+		<li className={styles.item}>
+			<button type="button" onClick={() => onSelect(budget)} className={styles.select_button}>
+				{budget.title}
+			</button>
+			<span>{budget.created_at.toDateString()}</span>
+
+			<Button onClick={() => deleteCallback(budget.id)} icon variant="Danger">
+				<Trash />
+			</Button>
+		</li>
+	);
+}

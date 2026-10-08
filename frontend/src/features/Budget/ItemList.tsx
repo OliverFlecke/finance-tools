@@ -22,15 +22,7 @@ interface Props {
 	variant?: "income" | "expenses";
 }
 
-const ItemList: React.FC<Props> = ({
-	title,
-	items,
-	total,
-	addItem,
-	deleteItem,
-	updateItem,
-	variant,
-}) => {
+export default function ItemList({ title, items, total, addItem, deleteItem, updateItem, variant }: Props) {
 	const {
 		state: { hideItems },
 	} = useContext(BudgetContext);
@@ -101,9 +93,7 @@ const ItemList: React.FC<Props> = ({
 			{addVisible && <AddLine add={addItem} />}
 		</>
 	);
-};
-
-export default ItemList;
+}
 
 /**
  * Helper function to group items by their category.

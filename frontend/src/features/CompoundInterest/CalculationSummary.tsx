@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import type React from "react";
 import { useMemo } from "react";
 import { FV } from "services/formulas";
 import AmountSummary from "./AmountSummaryProps";
 import styles from "./CalculationSummary.module.css";
 import { type FormData, formatter } from "./index";
 
-const CalculationSummary: React.FC<FormData> = (props) => {
+export default function CalculationSummary(props: FormData) {
 	const rate = useMemo(() => props.interestRate / 100, [props.interestRate]);
 	const isWithDeposits = useMemo(() => props.monthlyDeposit !== 0, [props.monthlyDeposit]);
 
@@ -59,9 +58,7 @@ const CalculationSummary: React.FC<FormData> = (props) => {
 			</div>
 		</>
 	);
-};
-
-export default CalculationSummary;
+}
 
 export const typeColors = {
 	deposit: styles.text_deposit,
@@ -71,21 +68,23 @@ export const typeColors = {
 	balance: styles.text_balance,
 };
 
-const TableHeader: React.FC<{ isWithDeposits: boolean }> = ({ isWithDeposits }) => (
-	<thead>
-		<tr className={styles.header_row}>
-			<th className={clsx(styles.cell, styles.cell_center)}>Year</th>
-			{isWithDeposits && <th className={clsx(styles.cell, typeColors.deposit)}>Deposit</th>}
-			<th className={clsx(styles.cell, typeColors.interest)}>Interest</th>
-			{isWithDeposits && (
-				<th className={clsx(styles.cell, typeColors.totalDeposit)}>Total deposits</th>
-			)}
-			<th className={clsx(styles.cell, typeColors.totalInterest)}>Total interest</th>
-			<th className={clsx(styles.cell, typeColors.balance)}>Balance</th>
-			<th className={styles.cell}>Date</th>
-		</tr>
-	</thead>
-);
+function TableHeader({ isWithDeposits }: { isWithDeposits: boolean }) {
+	return (
+		<thead>
+			<tr className={styles.header_row}>
+				<th className={clsx(styles.cell, styles.cell_center)}>Year</th>
+				{isWithDeposits && <th className={clsx(styles.cell, typeColors.deposit)}>Deposit</th>}
+				<th className={clsx(styles.cell, typeColors.interest)}>Interest</th>
+				{isWithDeposits && (
+					<th className={clsx(styles.cell, typeColors.totalDeposit)}>Total deposits</th>
+				)}
+				<th className={clsx(styles.cell, typeColors.totalInterest)}>Total interest</th>
+				<th className={clsx(styles.cell, typeColors.balance)}>Balance</th>
+				<th className={styles.cell}>Date</th>
+			</tr>
+		</thead>
+	);
+}
 
 interface TableRowProps extends FormData {
 	year: number;
@@ -94,7 +93,7 @@ interface TableRowProps extends FormData {
 	isLastRow: boolean;
 }
 
-const TableRow: React.FC<TableRowProps> = (props) => {
+function TableRow(props: TableRowProps) {
 	const { rate, year, isWithDeposits, isLastRow } = props;
 	const deposit = year === 0 ? props.existingAmount : 12 * props.monthlyDeposit;
 	const totalDeposit = year * 12 * props.monthlyDeposit + props.existingAmount;
@@ -132,7 +131,7 @@ const TableRow: React.FC<TableRowProps> = (props) => {
 			<td className={styles.cell}>{addYears(new Date(), year).toLocaleDateString()}</td>
 		</tr>
 	);
-};
+}
 
 function addYears(date: Date, years: number): Date {
 	date.setFullYear(date.getFullYear() + years);

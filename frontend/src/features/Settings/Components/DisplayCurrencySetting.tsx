@@ -1,8 +1,8 @@
 import SelectCurrency from "components/SelectCurrency";
-import { type FC, useCallback, useContext } from "react";
+import { useCallback, useContext } from "react";
 import SettingsContext from "../context";
 
-const DisplayCurrencySetting: FC = () => {
+export default function DisplayCurrencySetting() {
 	const {
 		values: { preferredDisplayCurrency },
 		dispatch,
@@ -20,6 +20,4 @@ const DisplayCurrencySetting: FC = () => {
 			onChange={onChange}
 		/>
 	);
-};
-
-export default DisplayCurrencySetting;
+}

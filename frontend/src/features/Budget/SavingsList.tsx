@@ -1,5 +1,4 @@
 import { Eraser, Plus } from "lucide-react";
-import type React from "react";
 import { useState } from "react";
 import { Button } from "@/ui/Button/Button";
 import AddLine from "./AddLine";
@@ -8,12 +7,14 @@ import BudgetLineActions from "./BudgetLineActions";
 import MonthAndYearCells from "./MonthAndYearCells";
 import styles from "./SavingsList.module.css";
 
-const SavingsList: React.FC<{
+interface SavingsListProps {
 	items: Item[];
 	addItem: (item: AddItemToBudgetRequest) => void;
 	deleteItem: (id: string) => void;
 	updateItem: (id: string, item: AddItemToBudgetRequest) => void;
-}> = ({ items, addItem, deleteItem, updateItem }) => {
+}
+
+export default function SavingsList({ items, addItem, deleteItem, updateItem }: SavingsListProps) {
 	const [addVisible, setAddVisible] = useState(false);
 
 	const total = items.map((x) => x.amount).reduce((acc, value) => acc + value, 0);
@@ -54,6 +55,4 @@ const SavingsList: React.FC<{
 			{addVisible && <AddLine add={addItem} category="Savings" />}
 		</>
 	);
-};
-
-export default SavingsList;
+}

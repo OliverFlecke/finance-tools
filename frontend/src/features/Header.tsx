@@ -1,11 +1,10 @@
 import ClientOnly from "components/ClientOnly";
 import SettingsMenu from "features/Settings/SettingsMenu";
-import type React from "react";
 import styles from "./Header.module.css";
 import LoginState from "./login/LoginState";
 import Navigation from "./Navigation";
 
-const Header: React.FC = () => {
+export default function Header() {
 	return (
 		<header className={styles.header}>
 			<Navigation />
@@ -19,6 +18,4 @@ const Header: React.FC = () => {
 			</div>
 		</header>
 	);
-};
-
-export default Header;
+}

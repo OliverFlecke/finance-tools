@@ -9,7 +9,7 @@ import { LinePath } from "@visx/shape";
 import { extent, max } from "d3-array";
 import { type ScaleLinear, type ScaleTime, tickFormat } from "d3-scale";
 import type { Account, DateEntry } from "features/AccountOverview/models/Account";
-import { type FC, useContext } from "react";
+import { useContext } from "react";
 import { AccountContext } from "./AccountService";
 import styles from "./IndividualGrowthGraph.module.css";
 
@@ -28,7 +28,7 @@ const lineColors500 = [
 ];
 const cyan500 = "#06b6d4";
 
-const IndividualGrowthGraph: FC = () => {
+export default function IndividualGrowthGraph() {
 	const { state } = useContext(AccountContext);
 	const data = Object.keys(state.entries).map((x) => ({
 		date: x,
@@ -136,9 +136,7 @@ const IndividualGrowthGraph: FC = () => {
 			}}
 		</ParentSize>
 	);
-};
-
-export default IndividualGrowthGraph;
+}
 
 interface AccountLineProps {
 	account: Account;
@@ -148,7 +146,7 @@ interface AccountLineProps {
 	xScale: ScaleTime<number, number, never>;
 }
 
-const AccountLine = ({ account, color, data, yScale, xScale }: AccountLineProps) => {
+function AccountLine({ account, color, data, yScale, xScale }: AccountLineProps) {
 	const x = (d: any) => new Date(d.date);
 	const y = (d: any) => d.value[account.id];
 
@@ -169,4 +167,4 @@ const AccountLine = ({ account, color, data, yScale, xScale }: AccountLineProps)
 			curve={curveLinear}
 		/>
 	);
-};
+}

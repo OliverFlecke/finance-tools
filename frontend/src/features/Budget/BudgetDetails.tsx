@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import type React from "react";
-import { type FC, useCallback, useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { getBackgroundColorValueIndicator } from "utils/colors";
 import { sum } from "../../utils/math";
 import type { AddItemToBudgetRequest, BudgetWithItems } from "./api";
@@ -10,9 +9,7 @@ import MonthAndYearCells from "./MonthAndYearCells";
 import SavingsList from "./SavingsList";
 import { BudgetContext } from "./state";
 
-const BudgetDetails: FC<{
-	budget: BudgetWithItems;
-}> = ({ budget }) => {
+export default function BudgetDetails({ budget }: { budget: BudgetWithItems }) {
 	const { income, expenses, total, totalIncome, totalExpenses, savings, totalSavings, remaining } =
 		useComputation(budget);
 
@@ -59,45 +56,49 @@ const BudgetDetails: FC<{
 			</table>
 		</div>
 	);
-};
+}
 
-export default BudgetDetails;
-
-const Footer: React.FC<{
+interface FooterProps {
 	totalIncome: number;
 	total: number;
 	savings: number;
 	remaining: number;
-}> = ({ totalIncome, total, savings, remaining }) => (
-	<tfoot className={styles.panel_bg}>
-		<tr className={getBackgroundColorValueIndicator(total)}>
-			<th className={styles.label_top}>After monthley expenses</th>
-			<MonthAndYearCells value={total} />
-			<td></td>
-		</tr>
-		<tr>
-			<td className={styles.label_mid}>Savings</td>
-			<MonthAndYearCells value={savings} />
-			<td className={styles.percentage_cell}>{(100 * (savings / totalIncome)).toFixed(2)} %</td>
-		</tr>
-		<tr className={clsx(styles.remaining_row, getBackgroundColorValueIndicator(remaining))}>
-			<th className={styles.label_bottom}>Remaining</th>
-			<MonthAndYearCells value={remaining} />
-			<td></td>
-		</tr>
-	</tfoot>
-);
+}
 
-const Header = () => (
-	<thead className={styles.panel_bg}>
-		<tr className={styles.header_row}>
-			<th className={styles.header_cell}></th>
-			<th className={styles.header_cell}>Per month</th>
-			<th className={styles.header_cell}>Per year</th>
-			<th></th>
-		</tr>
-	</thead>
-);
+function Footer({ totalIncome, total, savings, remaining }: FooterProps) {
+	return (
+		<tfoot className={styles.panel_bg}>
+			<tr className={getBackgroundColorValueIndicator(total)}>
+				<th className={styles.label_top}>After monthley expenses</th>
+				<MonthAndYearCells value={total} />
+				<td></td>
+			</tr>
+			<tr>
+				<td className={styles.label_mid}>Savings</td>
+				<MonthAndYearCells value={savings} />
+				<td className={styles.percentage_cell}>{(100 * (savings / totalIncome)).toFixed(2)} %</td>
+			</tr>
+			<tr className={clsx(styles.remaining_row, getBackgroundColorValueIndicator(remaining))}>
+				<th className={styles.label_bottom}>Remaining</th>
+				<MonthAndYearCells value={remaining} />
+				<td></td>
+			</tr>
+		</tfoot>
+	);
+}
+
+function Header() {
+	return (
+		<thead className={styles.panel_bg}>
+			<tr className={styles.header_row}>
+				<th className={styles.header_cell}></th>
+				<th className={styles.header_cell}>Per month</th>
+				<th className={styles.header_cell}>Per year</th>
+				<th></th>
+			</tr>
+		</thead>
+	);
+}
 
 function useHandlers(budgetId: string) {
 	const { dispatch } = useContext(BudgetContext);

@@ -1,7 +1,6 @@
-import type React from "react";
 import { useAuth } from "react-oidc-context";
 
-const LoginButton: React.FC = () => {
+export default function LoginButton() {
 	const { signinRedirect } = useAuth();
 
 	return (
@@ -9,6 +8,4 @@ const LoginButton: React.FC = () => {
 			Login
 		</button>
 	);
-};
-
-export default LoginButton;
+}

@@ -17,7 +17,7 @@ import StockRow from "./StockRow";
 import StockSummaryRow from "./StockSummaryRow";
 import { getDefaultStockState, StockContext, stockReducer } from "./state";
 
-const Stocks: React.FC = () => {
+export default function Stocks() {
 	const [state, dispatch] = useReducer(stockReducer, getDefaultStockState());
 	const stocks = useFetchStocks();
 	const fetchShares = useSharesCallback();
@@ -48,9 +48,7 @@ const Stocks: React.FC = () => {
 			<StockActionBar />
 		</StockContext.Provider>
 	);
-};
-
-export default Stocks;
+}
 
 interface StocksTableProps {
 	stocks: StockList;
@@ -65,7 +63,7 @@ type StockColumn =
 	| "Gain"
 	| "Gain percentage";
 
-const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) => {
+function StocksTable({ stocks }: StocksTableProps) {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useContext(SettingsContext);
@@ -96,7 +94,7 @@ const StocksTable: React.FC<StocksTableProps> = ({ stocks }: StocksTableProps) =
 			</table>
 		</div>
 	);
-};
+}
 
 interface StockTableHeaderProps {
 	sortKey?: StockColumn;
@@ -104,12 +102,7 @@ interface StockTableHeaderProps {
 	setAscending: React.Dispatch<React.SetStateAction<boolean>>;
 	setSortKey: React.Dispatch<React.SetStateAction<StockColumn | undefined>>;
 }
-const StockTableHeader = ({
-	sortKey,
-	ascending,
-	setAscending,
-	setSortKey,
-}: StockTableHeaderProps) => {
+function StockTableHeader({ sortKey, ascending, setAscending, setSortKey }: StockTableHeaderProps) {
 	const sort = useCallback(
 		(key: StockColumn) => () => {
 			if (sortKey === key) {
@@ -146,16 +139,16 @@ const StockTableHeader = ({
 			</Header>
 		</tr>
 	);
-};
+}
 
-const StockActionBar = () => {
+function StockActionBar() {
 	return (
 		<div className={styles.action_bar}>
 			<AddStock />
 			<RefreshStocksButton />
 		</div>
 	);
-};
+}
 
 interface HeaderProps {
 	sort: (key: StockColumn) => () => void;
@@ -164,14 +157,16 @@ interface HeaderProps {
 	sortKey: StockColumn;
 	ascending: boolean;
 }
-const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) => (
-	<th>
-		<button type="button" onClick={sort(sortKey)} className={styles.sort_button}>
-			{children}
-			{sortKey === currentSortKey && <Caret ascending={ascending} />}
-		</button>
-	</th>
-);
+function Header({ sort, children, currentSortKey, sortKey, ascending }: HeaderProps) {
+	return (
+		<th>
+			<button type="button" onClick={sort(sortKey)} className={styles.sort_button}>
+				{children}
+				{sortKey === currentSortKey && <Caret ascending={ascending} />}
+			</button>
+		</th>
+	);
+}
 
 function Caret({ ascending }: { ascending: boolean }) {
 	return <>{ascending ? <ChevronDown /> : <ChevronUp />}</>;

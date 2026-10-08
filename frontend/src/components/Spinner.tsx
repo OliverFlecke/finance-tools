@@ -1,6 +1,6 @@
 import styles from "./Spinner.module.css";
 
-const Spinner = () => {
+export default function Spinner() {
 	return (
 		<svg
 			className={styles.spinner}
@@ -25,6 +25,4 @@ const Spinner = () => {
 			></path>
 		</svg>
 	);
-};
-
-export default Spinner;
+}

@@ -1,6 +1,6 @@
 import { getCurrencies } from "features/Currency/api";
 import { Settings } from "lucide-react";
-import { type FC, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import DisplayCurrencySetting from "./Components/DisplayCurrencySetting";
 import PreferredCurrenciesSetting from "./Components/PreferredCurrenciesSetting";
@@ -30,9 +30,11 @@ export default function SettingsMenu() {
 	);
 }
 
-const SettingsList: FC = () => (
-	<div className={styles.container}>
-		<DisplayCurrencySetting />
-		<PreferredCurrenciesSetting />
-	</div>
-);
+function SettingsList() {
+	return (
+		<div className={styles.container}>
+			<DisplayCurrencySetting />
+			<PreferredCurrenciesSetting />
+		</div>
+	);
+}

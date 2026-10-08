@@ -1,9 +1,8 @@
-import type React from "react";
 import { useContext } from "react";
 import styles from "./BudgetConfiguration.module.css";
 import { BudgetContext } from "./state";
 
-const Configuration: React.FC = () => {
+export default function Configuration() {
 	const {
 		state: { hideItems },
 		dispatch,
@@ -21,6 +20,4 @@ const Configuration: React.FC = () => {
 			</label>
 		</div>
 	);
-};
-
-export default Configuration;
+}

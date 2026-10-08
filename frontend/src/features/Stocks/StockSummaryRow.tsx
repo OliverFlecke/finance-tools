@@ -1,4 +1,3 @@
-import type React from "react";
 import { useContext, useMemo } from "react";
 import { convertToCurrency, formatCurrency } from "utils/converters";
 import { sum } from "utils/math";
@@ -10,7 +9,7 @@ interface StockSummaryRowProps {
 	stocks: StockList;
 }
 
-const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummaryRowProps) => {
+export default function StockSummaryRow({ stocks }: StockSummaryRowProps) {
 	const {
 		values: { preferredDisplayCurrency, currencyRates },
 	} = useContext(SettingsContext);
@@ -61,6 +60,4 @@ const StockSummaryRow: React.FC<StockSummaryRowProps> = ({ stocks }: StockSummar
 			<td>{gainPercentage.toFixed(2)} %</td>
 		</tr>
 	);
-};
-
-export default StockSummaryRow;
+}

@@ -1,6 +1,6 @@
 import styles from "./Guide.module.css";
 
-const Guide = () => {
+export default function Guide() {
 	return (
 		<section className={styles.guide}>
 			<h2 className={styles.heading}>Guide to tax calculator</h2>
@@ -19,6 +19,4 @@ const Guide = () => {
 			</p>
 		</section>
 	);
-};
-
-export default Guide;
+}
