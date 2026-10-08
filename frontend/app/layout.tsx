@@ -1,7 +1,7 @@
 import "main.css";
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import type React from "react";
+import { Toaster } from "sonner";
 import styles from "./layout.module.css";
 import Providers from "./providers";
 
@@ -29,14 +29,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={styles.body}>
-				{/* <Script */}
-				{/* 	async */}
-				{/* 	defer */}
-				{/* 	data-api="https://plausible.oliverflecke.me/api/event" */}
-				{/* 	data-domain="finance.oliverflecke.me" */}
-				{/* 	src="https://plausible.oliverflecke.me/js/script.js" */}
-				{/* /> */}
 				<Providers>{children}</Providers>
+				<Toaster closeButton richColors theme="system" />
 			</body>
 		</html>
 	);

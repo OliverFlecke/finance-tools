@@ -5,6 +5,7 @@ import { withAuthenticationRequired } from "react-oidc-context";
 import AddEntryModal from "./AddEntryModal";
 import Context from "./Context";
 import styles from "./index.module.css";
+import OrderAccountsModal from "./OrderAccountsModal";
 import Table from "./table";
 
 export default withAuthenticationRequired(AccountOverview, {
@@ -17,7 +18,7 @@ function AccountOverview() {
 			<Table />
 			<div className={styles.actions}>
 				<AddAccount />
-				{/* <OrderAccountsModal /> */}
+				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
 			{/* <OverviewChart /> */}

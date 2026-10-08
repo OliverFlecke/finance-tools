@@ -4,8 +4,9 @@
 	max-width: 100%;
 	overflow-y: scroll;
 	border-radius: var(--radius);
-	background-color: var(--color-slate-200);
 	padding: var(--space-4);
+	display: flex;
+	flex-direction: column;
 }
 
 .list {
@@ -13,26 +14,6 @@
 	border-radius: var(--radius);
 	background-color: var(--color-green-500);
 	padding: var(--space-2);
-}
-
-.overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 10;
-	display: flex;
-	height: 100%;
-	width: 100%;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	background-color: var(--color-black);
-	opacity: 0.75;
-}
-
-.saved_message {
-	font-size: var(--font-size-xl);
-	font-weight: var(--font-weight-bold);
 }
 
 .header {

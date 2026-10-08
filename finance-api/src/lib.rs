@@ -45,8 +45,8 @@ async fn fetch(
 			StatusCode::OK,
 			[
 				(header::ACCESS_CONTROL_ALLOW_ORIGIN, "*"),
-				(header::ACCESS_CONTROL_REQUEST_METHOD, "*"),
-				(header::ACCESS_CONTROL_ALLOW_CREDENTIALS, "*"),
+				(header::ACCESS_CONTROL_ALLOW_METHODS, "*"),
+				(header::ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"),
 				(header::ACCESS_CONTROL_ALLOW_HEADERS, "*"),
 			],
 		)

@@ -1,12 +1,13 @@
+import { useQuery } from "@tanstack/react-query";
 import { createContext, type PropsWithChildren, useContext, useState } from "react";
-import { useAccounts } from "@/api/account";
+import { getAccountsOptions } from "@/api/generated/@tanstack/react-query.gen";
 import type { Account } from "@/api/generated/types.gen";
 import { sortObject } from "@/utils/converters";
 import { formatDate } from "@/utils/date";
 import type { AccountEntries } from "./models/Account";
 
 export default function AccountContext({ children }: PropsWithChildren) {
-	const { data, error } = useAccounts();
+	const { data, error } = useQuery(getAccountsOptions());
 	const [entries, setEntries] = useState<AccountEntries>({});
 	const addEntry = (date: string) => setEntries((x) => ({ ...x, [date]: {} }));
 
