@@ -1,6 +1,6 @@
 import { useSettingsContext } from "features/Settings/context";
 import { CreditCardPlus } from "lucide-react";
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useAddAccountMutation } from "@/api/account";
 import type { Account } from "@/api/generated/types.gen";
@@ -11,8 +11,10 @@ import { Input } from "@/ui/Input/Input";
 import styles from "./AddAccountModal.module.css";
 
 export default function AddAccount() {
+	const ref = useRef<HTMLDialogElement>(null);
 	return (
 		<Dialog
+			ref={ref}
 			title="Add new account"
 			trigger={
 				<Button type="button">
@@ -21,12 +23,12 @@ export default function AddAccount() {
 				</Button>
 			}
 		>
-			<Form />
+			<Form onSuccess={() => ref.current?.close()} />
 		</Dialog>
 	);
 }
 
-function Form() {
+function Form({ onSuccess }: { onSuccess: () => void }) {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useSettingsContext();
@@ -43,6 +45,7 @@ function Form() {
 		mutate(account, {
 			onSuccess: () => {
 				reset();
+				onSuccess();
 			},
 		});
 
