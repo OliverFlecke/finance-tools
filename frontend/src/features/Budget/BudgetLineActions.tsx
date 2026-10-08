@@ -27,7 +27,7 @@ export default function BudgetLineActions({ item, deleteItem, updateItem }: Read
 				<IoCreateOutline size={24} />
 			</button>
 
-			<Dialog open={edit} onClose={() => setEdit(false)}>
+			<Dialog title="Edit" open={edit} onClose={() => setEdit(false)}>
 				<EditItem item={item} update={update} />
 			</Dialog>
 		</td>

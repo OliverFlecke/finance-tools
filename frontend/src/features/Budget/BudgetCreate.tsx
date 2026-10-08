@@ -21,7 +21,6 @@ const BudgetCreate: React.FC<{ onBudgetCreated: () => void }> = ({ onBudgetCreat
 
 	return (
 		<div className={styles.container}>
-			<h3 className={styles.title}>New budget</h3>
 			<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 				<div className={styles.field}>
 					<label className={styles.label} htmlFor="title">

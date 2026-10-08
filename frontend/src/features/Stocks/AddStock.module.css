@@ -12,23 +12,8 @@
 	vertical-align: middle;
 }
 
-.dialog_content {
-	border-radius: var(--radius);
-	padding: var(--space-4);
-	background-color: var(--color-gray-300);
-}
-
-:global(.dark) .dialog_content {
-	background-color: var(--color-gray-700);
-}
-
-.title {
-	padding-bottom: var(--space-4);
-	font-size: var(--font-size-lg);
-	font-weight: var(--font-weight-bold);
-}
-
 .form {
+	padding: var(--space-4);
 	& > * + * {
 		margin-top: var(--space-4);
 	}

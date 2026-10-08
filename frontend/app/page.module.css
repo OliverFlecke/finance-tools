@@ -1,4 +1,4 @@
 .list {
-	list-style: disc;
+	list-style-type: disc;
 	padding-left: var(--space-4);
 }

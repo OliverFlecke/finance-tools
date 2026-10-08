@@ -55,8 +55,8 @@ const EditItem: React.FC<{
 			</label>
 
 			<ButtonContainer>
-				<Button buttonType="Transparent">Cancel</Button>
-				<Button type="submit" buttonType="Primary" className={styles.submit}>
+				<Button variant="Transparent">Cancel</Button>
+				<Button type="submit" variant="Primary" className={styles.submit}>
 					<span>Save</span>
 					<IoSaveOutline />
 				</Button>

@@ -1,8 +1,7 @@
-import clsx from "clsx";
 import { useSettingsContext } from "features/Settings/context";
-import { useId, useState } from "react";
+import { CreditCardPlus } from "lucide-react";
+import { useId } from "react";
 import { useForm } from "react-hook-form";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { useAddAccountMutation } from "@/api/account";
 import type { Account } from "@/api/generated/types.gen";
 import { Button } from "@/ui/Button/Button";
@@ -12,27 +11,22 @@ import { Input } from "@/ui/Input/Input";
 import styles from "./AddAccountModal.module.css";
 
 export default function AddAccount() {
-	const [showPrompt, setShowPrompt] = useState(false);
-
 	return (
-		<>
-			<button
-				type="button"
-				onClick={() => setShowPrompt((x) => !x)}
-				className={clsx("btn btn-primary", styles.btn_spacing)}
-			>
-				<IoAddCircleOutline className={styles.icon} />
-				<span className={styles.align_middle}>Add account</span>
-			</button>
-
-			<Dialog open={showPrompt} onClose={() => setShowPrompt(false)}>
-				<Form onSuccess={() => setShowPrompt(false)} />
-			</Dialog>
-		</>
+		<Dialog
+			title="Add new account"
+			trigger={
+				<Button type="button">
+					<CreditCardPlus size={16} />
+					Add account
+				</Button>
+			}
+		>
+			<Form />
+		</Dialog>
 	);
 }
 
-function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
+function Form() {
 	const {
 		values: { currencyRates, preferredDisplayCurrency },
 	} = useSettingsContext();
@@ -49,7 +43,6 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 		mutate(account, {
 			onSuccess: () => {
 				reset();
-				onSuccess();
 			},
 		});
 
@@ -58,8 +51,6 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
 			<div className={styles.field_group}>
-				<h2 className={styles.heading}>Add new account</h2>
-
 				<fieldset className={styles.fieldset}>
 					<Input
 						placeholder="Savings, Investments..."
@@ -95,7 +86,7 @@ function Form({ onSuccess }: Readonly<{ onSuccess: () => void }>) {
 			</div>
 
 			<ButtonContainer>
-				<Button buttonType="Transparent" onClick={close}>
+				<Button variant="Transparent" onClick={close}>
 					Cancel
 				</Button>
 				<Button type="submit">Add</Button>

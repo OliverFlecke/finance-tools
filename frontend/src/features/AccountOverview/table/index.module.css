@@ -29,7 +29,7 @@
 }
 
 .row_body {
-	font-family: monospace;
+	font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
 	&:nth-child(odd) {
 		background-color: var(--color-bg-stripe);
@@ -43,38 +43,22 @@
 
 .gain_header {
 	padding-inline: var(--space-4);
-	color: var(--color-green-700);
-}
-
-:global(.dark) .gain_header {
-	color: var(--color-green-500);
+	color: var(--color-success);
 }
 
 .total_header {
 	padding-inline: var(--space-4);
-	color: var(--color-blue-700);
-}
-
-:global(.dark) .total_header {
-	color: var(--color-blue-500);
+	color: var(--color-primary);
 }
 
 .cash_header {
 	padding-inline: var(--space-4);
-	color: var(--color-yellow-700);
-}
-
-:global(.dark) .cash_header {
-	color: var(--color-yellow-500);
+	color: var(--color-warning);
 }
 
 .investments_header {
 	padding-inline: var(--space-4);
 	color: var(--color-purple-700);
-}
-
-:global(.dark) .investments_header {
-	color: var(--color-purple-500);
 }
 
 .account_header {

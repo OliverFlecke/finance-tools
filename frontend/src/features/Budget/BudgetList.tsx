@@ -1,8 +1,9 @@
+import { Plus } from "lucide-react";
 import type React from "react";
-import { type FC, useCallback, useContext, useState } from "react";
+import { type FC, useCallback, useContext } from "react";
+import DeleteButton from "@/components/DeleteButton";
+import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
-import AddButton from "../../components/button/AddButton";
-import DeleteButton from "../../components/DeleteButton";
 import {
 	type Budget,
 	useDeleteBudgetCallback,
@@ -37,8 +38,6 @@ const BudgetList: React.FC = () => {
 		[budgets, deleteCallback],
 	);
 
-	const [isCreateOpen, setIsCreateOpen] = useState(false);
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.header_row}>
@@ -58,10 +57,14 @@ const BudgetList: React.FC = () => {
 					))}
 				</ul>
 			)}
-			<div className={styles.footer_row}>
-				<AddButton onClick={() => setIsCreateOpen(true)} />
-			</div>
-			<Dialog open={isCreateOpen} onClose={() => setIsCreateOpen(false)}>
+			<Dialog
+				title="Create new budget"
+				trigger={
+					<Button>
+						<Plus />
+					</Button>
+				}
+			>
 				<BudgetCreate onBudgetCreated={budgets.refresh} />
 			</Dialog>
 		</div>

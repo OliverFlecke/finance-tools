@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { ButtonHTMLAttributes } from "react";
+import styles from "./Button.module.css";
 
 export type ButtonType =
 	| "Primary"
@@ -11,17 +12,17 @@ export type ButtonType =
 	| "Transparent";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	buttonType?: ButtonType;
+	variant?: ButtonType;
 }
 
 export function Button({
-	buttonType = "Primary",
+	variant: buttonType = "Primary",
 	className,
 	children,
 	...buttonProps
 }: ButtonProps) {
 	return (
-		<button className={clsx("btn", colorClass(buttonType), className)} {...buttonProps}>
+		<button className={clsx(styles.btn, colorClass(buttonType), className)} {...buttonProps}>
 			{children}
 		</button>
 	);
@@ -30,18 +31,18 @@ export function Button({
 function colorClass(type: ButtonType): string {
 	switch (type) {
 		case "Link":
-			return "btn-link";
+			return styles.link;
 		case "Warning":
-			return "btn-warning";
+			return styles.warning;
 		case "Danger":
-			return "btn-danger";
+			return styles.danger;
 		case "Transparent":
-			return "btn-transparent";
+			return styles.transparent;
 		case "Success":
-			return "btn-success";
+			return styles.success;
 		case "Secondary":
-			return "btn-secondary";
+			return styles.secondary;
 		case "Primary":
-			return "btn-primary";
+			return styles.primary;
 	}
 }

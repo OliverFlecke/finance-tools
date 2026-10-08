@@ -1,10 +1,4 @@
-/*
- * Design tokens. Light values live on :root; dark overrides live under .dark,
- * which useDarkModeWithClass() toggles on <body> (see ui/hooks). Variables
- * cascade to all descendants, so components only ever reference a token.
- */
 :root {
-	/* Spacing scale (matches the rem steps actually used across the app) */
 	--space-0: 0px;
 	--space-1: 0.25rem;
 	--space-2: 0.5rem;
@@ -145,6 +139,7 @@
 
 	/* Semantic tokens: theme-aware, prefer these over the flat palette above */
 	--color-bg: var(--color-gray-100);
+	--color-bg-secondary: var(--color-indigo-100);
 	--color-bg-elevated: var(--color-white);
 	--color-bg-subtle: var(--color-gray-50);
 	--color-bg-muted: var(--color-gray-200);
@@ -172,41 +167,79 @@
 
 	--color-focus-ring: var(--color-indigo-400);
 	--color-backdrop: rgb(0 0 0 / 0.4);
+
+	@media (prefers-color-scheme: dark) {
+		--color-bg: var(--color-gray-900);
+		--color-bg-secondary: var(--color-indigo-900);
+		--color-bg-elevated: var(--color-900);
+		--color-bg-subtle: var(--color-gray-900);
+		--color-bg-muted: var(--color-gray-900);
+		--color-bg-stripe: var(--color-gray-800);
+
+		--color-text: var(--color-gray-100);
+		--color-text-secondary: var(--color-gray-300);
+		--color-text-muted: var(--color-gray-400);
+
+		--color-border: var(--color-gray-700);
+
+		--color-primary: var(--color-indigo-800);
+		--color-primary-hover: var(--color-indigo-900);
+		--color-secondary: var(--color-indigo-500);
+		--color-secondary-hover: var(--color-indigo-400);
+		--color-secondary-text: var(--color-indigo-50);
+		--color-success: var(--color-lime-600);
+		--color-success-hover: var(--color-lime-700);
+		--color-warning: var(--color-amber-600);
+		--color-warning-hover: var(--color-amber-700);
+		--color-danger: var(--color-red-700);
+		--color-danger-hover: var(--color-red-800);
+		--color-link: var(--color-blue-400);
+		--color-link-hover: var(--color-blue-500);
+
+		--color-backdrop: rgb(0 0 0 / 0.6);
+
+		--color-value-positive: var(--color-green-500);
+		--color-value-negative: var(--color-red-500);
+		--color-value-bg-positive: var(--color-green-700);
+		--color-value-bg-negative: var(--color-red-700);
+	}
 }
 
-.dark {
-	--color-bg: var(--color-gray-900);
-	--color-bg-elevated: var(--color-black);
-	--color-bg-subtle: var(--color-gray-900);
-	--color-bg-muted: var(--color-gray-900);
-	--color-bg-stripe: var(--color-gray-800);
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	list-style-position: inside;
+}
+button {
+	border: none;
+	background: none;
+}
+ul,
+li {
+	list-style-type: none;
+}
+fieldset,
+input {
+	outline: none;
+	border: none;
+}
 
-	--color-text: var(--color-gray-100);
-	--color-text-secondary: var(--color-gray-300);
-	--color-text-muted: var(--color-gray-400);
+html {
+	height: 100%;
+	max-width: 100vw;
+	overflow-x: hidden;
+}
 
-	--color-border: var(--color-gray-700);
-
-	--color-primary: var(--color-indigo-800);
-	--color-primary-hover: var(--color-indigo-900);
-	--color-secondary: var(--color-indigo-500);
-	--color-secondary-hover: var(--color-indigo-400);
-	--color-secondary-text: var(--color-indigo-50);
-	--color-success: var(--color-lime-600);
-	--color-success-hover: var(--color-lime-700);
-	--color-warning: var(--color-amber-600);
-	--color-warning-hover: var(--color-amber-700);
-	--color-danger: var(--color-red-700);
-	--color-danger-hover: var(--color-red-800);
-	--color-link: var(--color-blue-400);
-	--color-link-hover: var(--color-blue-500);
-
-	--color-backdrop: rgb(0 0 0 / 0.6);
-
-	--color-value-positive: var(--color-green-500);
-	--color-value-negative: var(--color-red-500);
-	--color-value-bg-positive: var(--color-green-700);
-	--color-value-bg-negative: var(--color-red-700);
+body {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	color: var(--color-text);
+	background: var(--color-bg);
+	font-family: Arial, Helvetica, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -214,11 +247,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-	-moz-appearance: textfield;
 }
 
 .center {
@@ -232,91 +260,6 @@ input[type="number"] {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-}
-
-/* ui/Button, ui/Input, ui/Select, ui/Toggle styles */
-.btn {
-	border-radius: var(--radius);
-	padding: var(--space-2) var(--space-4);
-	color: var(--color-gray-100);
-	outline: none;
-
-	&:disabled {
-		cursor: not-allowed;
-		color: var(--color-text-muted);
-		background-color: var(--color-gray-300);
-	}
-}
-
-.dark .btn:disabled {
-	background-color: var(--color-gray-600);
-}
-
-.btn-primary {
-	color: var(--color-gray-100);
-	background-color: var(--color-primary);
-
-	&:hover {
-		background-color: var(--color-primary-hover);
-	}
-}
-
-.btn-secondary {
-	color: var(--color-secondary-text);
-	background-color: var(--color-secondary);
-
-	&:hover {
-		background-color: var(--color-secondary-hover);
-	}
-}
-
-.btn-success {
-	color: var(--color-white);
-	background-color: var(--color-success);
-
-	&:hover {
-		background-color: var(--color-success-hover);
-	}
-}
-
-.btn-warning {
-	color: var(--color-gray-900);
-	background-color: var(--color-warning);
-
-	&:hover {
-		background-color: var(--color-warning-hover);
-	}
-}
-
-.btn-danger {
-	color: var(--color-white);
-	background-color: var(--color-danger);
-
-	&:hover {
-		background-color: var(--color-danger-hover);
-	}
-}
-
-.btn-transparent {
-	border: 1px solid var(--color-border);
-	background-color: var(--color-bg-elevated);
-	color: var(--color-text-muted);
-}
-
-.btn-link {
-	text-decoration: underline;
-	color: var(--color-link);
-
-	&:hover {
-		color: var(--color-link-hover);
-	}
-}
-
-.input-label {
-	display: block;
-	color: var(--color-text-secondary);
-	font-weight: var(--font-weight-medium);
-	font-size: var(--font-size-sm);
 }
 
 .switch {
@@ -435,27 +378,6 @@ label.edit-item {
 
 .dark .text-page ul li a {
 	color: var(--color-blue-500);
-}
-
-.settings-list {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	row-gap: var(--space-4);
-	column-gap: var(--space-12);
-
-	input.preferred-currency {
-		border-radius: var(--radius);
-	}
-
-	.currency-list {
-		display: flex;
-		width: 100%;
-		gap: var(--space-4);
-
-		span {
-			color: var(--color-text-muted);
-		}
-	}
 }
 
 .modal-form-label {

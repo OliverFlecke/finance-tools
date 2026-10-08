@@ -2,12 +2,11 @@
 "use client";
 
 import clsx from "clsx";
-import { type FC, useCallback, useEffect, useMemo, useState } from "react";
+import { type FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import type { InterestAccrual } from "services/formulas";
 import { parseNumber } from "utils/converters";
-import { allPropertiesAreDefined } from "utils/general";
 import { Button } from "@/ui/Button/Button";
 import { Input } from "@/ui/Input/Input";
 import { Select, SelectOption } from "@/ui/Select/Select";
@@ -27,14 +26,7 @@ export type FormData = {
 };
 
 const CompoundInterest: FC<CompoundInterestProps> = () => {
-	const [data, setData] = useState<FormData | null>(null);
-	const defaultValues = useDefaultValues();
-
-	useEffect(() => {
-		if (allPropertiesAreDefined(defaultValues)) {
-			setData(defaultValues);
-		}
-	}, [defaultValues]);
+	const [data, setData] = useState<FormData>(defaultValues());
 
 	const {
 		register,
@@ -42,7 +34,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>({
-		defaultValues,
+		defaultValues: defaultValues(),
 	});
 	const onSubmit = handleSubmit((data) => {
 		const url = new URL(window.location.href);
@@ -61,6 +53,8 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 		window.location.href = url.toString();
 	}, []);
 
+	console.debug("data", data);
+
 	return (
 		<div className={styles.container}>
 			<h2 className={styles.heading}>Compound interest calculator</h2>
@@ -78,7 +72,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								inputMode="numeric"
 							/>
 						)}
-						defaultValue={defaultValues.existingAmount}
+						defaultValue={defaultValues().existingAmount}
 						thousandSeparator={true}
 						onValueChange={(x) => setValue("existingAmount", x.floatValue ?? 0)}
 						{...register("existingAmount", {
@@ -123,7 +117,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 								errorMessage={errors.monthlyDeposit?.message}
 							/>
 						)}
-						defaultValue={defaultValues.monthlyDeposit}
+						defaultValue={data.monthlyDeposit}
 						thousandSeparator={true}
 						onValueChange={(x) => setValue("monthlyDeposit", x.floatValue ?? 0)}
 						{...register("monthlyDeposit", {
@@ -134,7 +128,7 @@ const CompoundInterest: FC<CompoundInterestProps> = () => {
 				</fieldset>
 				<div className={styles.actions}>
 					<Button type="submit">Calculate</Button>
-					<Button type="reset" buttonType="Secondary" onClick={resetForm}>
+					<Button type="reset" variant="Secondary" onClick={resetForm}>
 						Reset
 					</Button>
 				</div>
@@ -159,22 +153,20 @@ export const formatter = Intl.NumberFormat("en-US", {
 	currency: "DKK",
 });
 
-function useDefaultValues(): FormData {
-	return useMemo<FormData>(() => {
-		if (typeof window === "undefined") return {} as FormData;
+function defaultValues(): FormData {
+	if (typeof window === "undefined") return {} as FormData;
 
-		const params = new URL(window.location.href).searchParams;
+	const params = new URL(window.location.href).searchParams;
 
-		function getNumber(name: string): number {
-			return params.has(name) ? Number.parseFloat(params.get(name) ?? "") : Number.NaN;
-		}
+	function getNumber(name: string): number | undefined {
+		return params.has(name) ? Number.parseFloat(params.get(name) ?? "") : undefined;
+	}
 
-		return {
-			existingAmount: getNumber("existingAmount"),
-			interestRate: getNumber("interestRate"),
-			investmentPeriod: getNumber("investmentPeriod"),
-			interestAccural: (params.get("interestAccural") as InterestAccrual) ?? "Yearly",
-			monthlyDeposit: getNumber("monthlyDeposit"),
-		};
-	}, []);
+	return {
+		existingAmount: getNumber("existingAmount") ?? 0,
+		interestRate: getNumber("interestRate") ?? 7,
+		investmentPeriod: getNumber("investmentPeriod") ?? 10,
+		interestAccural: (params.get("interestAccural") as InterestAccrual) ?? "Yearly",
+		monthlyDeposit: getNumber("monthlyDeposit") ?? 0,
+	};
 }

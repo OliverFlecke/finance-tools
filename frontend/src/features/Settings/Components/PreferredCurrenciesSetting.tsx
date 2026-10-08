@@ -1,5 +1,7 @@
+import { Plus } from "lucide-react";
 import { useCallback, useContext, useState } from "react";
-import SelectCurrency from "../../../components/SelectCurrency";
+import SelectCurrency from "@/components/SelectCurrency";
+import { Button } from "@/ui/Button/Button";
 import SettingsContext from "../context";
 import styles from "./PreferredCurrenciesSetting.module.css";
 
@@ -13,22 +15,23 @@ export default function PreferredCurrenciesSetting() {
 	);
 
 	return (
-		<div>
+		<div className={styles.container}>
 			<div className={styles.header}>
 				<SelectCurrency
 					label="Add to preferred currencies"
 					onChange={(ref) => setCode(ref.valueOf())}
 				/>
-				<button type="button" onClick={addCode} className="btn btn-secondary">
-					Add
-				</button>
+				<Button onClick={addCode} variant="Link">
+					<Plus />
+				</Button>
 			</div>
-			<span className="input-label">Preferred currencies:</span>
-			<span className="currency-list">
+
+			<span>Preferred currencies:</span>
+			<ol>
 				{values.preferredCurrencies.map((code) => (
-					<span key={code}>{code}</span>
+					<li key={code}>{code}</li>
 				))}
-			</span>
+			</ol>
 		</div>
 	);
 }

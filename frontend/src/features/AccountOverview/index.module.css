@@ -2,6 +2,6 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding-inline: var(--space-4);
+	padding: var(--space-4);
 	position: relative;
 }
