@@ -14,13 +14,13 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<AuthProvider
-			userManager={userManager}
 			onSigninCallback={() => {
 				const url = new URL(window.location.href);
 				url.searchParams.delete("code");
 				url.searchParams.delete("state");
 				window.history.replaceState({}, document.title, url.toString());
 			}}
+			userManager={userManager}
 		>
 			<QueryClientProvider client={queryClient}>
 				<Settings>

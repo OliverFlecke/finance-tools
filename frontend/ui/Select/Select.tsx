@@ -25,9 +25,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 			<label className={styles.label}>
 				<span className="input-label">{label}</span>
 				<select
-					ref={ref}
-					onChange={onChange}
 					className={clsx(styles.select, className)}
+					onChange={onChange}
+					ref={ref}
 					{...selectProps}
 				>
 					{children}

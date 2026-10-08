@@ -1,10 +1,12 @@
 import { X } from "lucide-react";
 import {
 	cloneElement,
+	forwardRef,
 	isValidElement,
 	type ReactElement,
 	type ReactNode,
 	useEffect,
+	useImperativeHandle,
 	useRef,
 	useState,
 } from "react";
@@ -26,59 +28,58 @@ export interface DialogProps {
  * Modal dialog built on the native `<dialog>` element, for focus trapping, `::backdrop`,
  * and Escape-to-close for free.
  */
-export function Dialog({
-	open: openProp,
-	title,
-	onClose,
-	trigger,
-	children,
-}: Readonly<DialogProps>) {
-	const [internalOpen, setInternalOpen] = useState(false);
-	const open = trigger ? internalOpen : Boolean(openProp);
-	const dialogRef = useRef<HTMLDialogElement>(null);
+export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
+	({ open: openProp, title, onClose, trigger, children }, ref) => {
+		const [internalOpen, setInternalOpen] = useState(false);
+		const open = trigger ? internalOpen : Boolean(openProp);
+		const dialogRef = useRef<HTMLDialogElement>(null);
+		// biome-ignore lint/style/noNonNullAssertion: fine here
+		useImperativeHandle(ref, () => dialogRef.current!);
 
-	const close = () => {
-		if (trigger) setInternalOpen(false);
-		onClose?.();
-	};
+		const close = () => {
+			if (trigger) setInternalOpen(false);
+			onClose?.();
+		};
 
-	useEffect(() => {
-		const dialog = dialogRef.current;
-		if (!dialog) return;
-		if (open && !dialog.open) dialog.showModal();
-		if (!open && dialog.open) dialog.close();
-	}, [open]);
+		useEffect(() => {
+			const dialog = dialogRef.current;
 
-	const triggerElement = isValidElement(trigger)
-		? cloneElement(trigger, {
-				onClick: (e: MouseEvent) => {
-					trigger.props.onClick?.(e);
-					setInternalOpen(true);
-				},
-			})
-		: trigger;
+			if (!dialog) return;
+			if (open && !dialog.open) dialog.showModal();
+			if (!open && dialog.open) dialog.close();
+		}, [open]);
 
-	return (
-		<>
-			{trigger && triggerElement}
-			{/* biome-ignore lint/a11y/useKeyWithClickEvents: closes on backdrop click; Escape (native to <dialog>) already covers keyboard dismissal */}
-			<dialog
-				ref={dialogRef}
-				className={styles.dialog}
-				onClick={(e) => {
-					if (e.target === dialogRef.current) close();
-				}}
-				onClose={close}
-			>
-				<div className={styles.header}>
-					<h2>{title}</h2>
-					<button type="button" onClick={close} aria-label="Close">
-						<X />
-					</button>
-				</div>
+		const triggerElement = isValidElement(trigger)
+			? cloneElement(trigger, {
+					onClick: (e: MouseEvent) => {
+						trigger.props.onClick?.(e);
+						setInternalOpen(true);
+					},
+				})
+			: trigger;
 
-				{children}
-			</dialog>
-		</>
-	);
-}
+		return (
+			<>
+				{trigger && triggerElement}
+				{/* biome-ignore lint/a11y/useKeyWithClickEvents: closes on backdrop click; Escape (native to <dialog>) already covers keyboard dismissal */}
+				<dialog
+					className={styles.dialog}
+					onClick={(e) => {
+						if (e.target === dialogRef.current) close();
+					}}
+					onClose={close}
+					ref={dialogRef}
+				>
+					<div className={styles.header}>
+						<h2>{title}</h2>
+						<button type="button" onClick={close} aria-label="Close">
+							<X />
+						</button>
+					</div>
+
+					{children}
+				</dialog>
+			</>
+		);
+	},
+);

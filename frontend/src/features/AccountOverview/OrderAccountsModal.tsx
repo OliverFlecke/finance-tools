@@ -1,9 +1,10 @@
 import SortableDragAndDropList from "components/SortableDragAndDropList";
 import { Shuffle } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useUpdateAccountOrderMutation } from "@/api/account";
 import type { Account } from "@/api/generated/types.gen";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { useAccountContext } from "./Context";
@@ -13,16 +14,21 @@ export default function OrderAccountsModal() {
 	const { accounts } = useAccountContext();
 
 	const [items, setItems] = useState(accounts);
+	const ref = useRef<HTMLDialogElement>(null);
 
-	const { mutate } = useUpdateAccountOrderMutation();
+	const { mutate, isPending } = useUpdateAccountOrderMutation();
 	const saveOrder = () =>
 		mutate(items, {
 			onError: (err) => toast.error("Failed to save order", { description: err.message }),
-			onSuccess: () => toast.success("Order saved!"),
+			onSuccess: () => {
+				ref.current?.close();
+				toast.success("Order saved!");
+			},
 		});
 
 	return (
 		<Dialog
+			ref={ref}
 			title="Reorder accounts"
 			trigger={
 				<Button>
@@ -40,7 +46,10 @@ export default function OrderAccountsModal() {
 				>
 					{(a) => <AccountCard account={a} />}
 				</SortableDragAndDropList>
-				<Button onClick={saveOrder}>Save order</Button>
+				<Button disabled={isPending} onClick={saveOrder}>
+					{isPending && <Spinner />}
+					Save order
+				</Button>
 			</div>
 		</Dialog>
 	);
