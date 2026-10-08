@@ -48,6 +48,7 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 			, a.name
 			, a.currency
 			, a.type as "kind"
+			, a.archived
 			, a.sort_key
 			, e.amount as "amount: f64"
 			, e.date as "date: NaiveDate"
@@ -73,6 +74,7 @@ async fn get_accounts(db: Arc<D1Connection>, user: &str) -> Result<Vec<Account>,
 				id: Uuid::parse_str(&account.id).expect("to be valid uuid"),
 				currency: account.currency.clone(),
 				name: account.name.clone(),
+				archived: account.archived != 0,
 				sorting: account.sort_key as u32,
 				kind: AccountKind::from_repr(account.kind as u8)
 					.expect("to be a valid account kind"),
@@ -109,6 +111,7 @@ pub struct Account {
 	kind: AccountKind,
 	entries: Vec<AccountEntry>,
 	sorting: u32,
+	archived: bool,
 }
 
 /// Represents an amount logged for on an account on a given date.

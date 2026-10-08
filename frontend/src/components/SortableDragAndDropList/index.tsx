@@ -1,6 +1,5 @@
 import update from "immutability-helper";
 import type React from "react";
-import { useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import SortableDragAndDropItem from "./SortableDragAndDropItem";
@@ -13,38 +12,35 @@ interface SortableDragAndDropListProps<T> {
 	className?: string;
 }
 
-function SortableDragAndDropList<T extends { id: string }>({
+export default function SortableDragAndDropList<T extends { id: string }>({
 	typeIdentifier,
 	items,
 	setItems,
 	children,
 	className,
 }: SortableDragAndDropListProps<T>) {
-	const updateItems = useCallback(
-		(dragIndex: number, hoverIndex: number) => {
-			setItems((prevItems) =>
-				update(prevItems, {
-					$splice: [
-						[dragIndex, 1],
-						[hoverIndex, 0, prevItems[dragIndex]],
-					],
-				}),
-			);
-		},
-		[setItems],
-	);
+	const updateItems = (dragIndex: number, hoverIndex: number) => {
+		setItems((prevItems) =>
+			update(prevItems, {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, prevItems[dragIndex]],
+				],
+			}),
+		);
+	};
 
 	return (
 		<DndProvider backend={HTML5Backend}>
 			<ol>
 				{items.map((item, index) => (
 					<SortableDragAndDropItem
-						key={item.id}
+						className={className}
 						id={item.id}
 						index={index}
+						key={item.id}
 						move={updateItems}
 						type={typeIdentifier}
-						className={className}
 					>
 						{children(item)}
 					</SortableDragAndDropItem>
@@ -53,5 +49,3 @@ function SortableDragAndDropList<T extends { id: string }>({
 		</DndProvider>
 	);
 }
-
-export default SortableDragAndDropList;

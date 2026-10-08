@@ -36,11 +36,13 @@ function TableHeader() {
 			<th className={styles.total_header}>Total</th>
 			<th className={styles.cash_header}>Total cash</th>
 			<th className={styles.investments_header}>Total investments</th>
-			{accounts.map((account) => (
-				<th key={account.id} className={styles.account_header}>
-					<span>{account.name}</span>
-				</th>
-			))}
+			{accounts
+				.filter((a) => !a.archived)
+				.map((account) => (
+					<th className={styles.account_header} key={account.id}>
+						<span>{account.name}</span>
+					</th>
+				))}
 			<th></th>
 		</tr>
 	);
@@ -54,15 +56,22 @@ function TableBody() {
 		.map((date) => new Date(Date.parse(date)))
 		.map((date, i) => (
 			<tr
+				className={clsx(styles.row, styles.row_body)}
 				key={date.toISOString()}
 				style={{ height: 26 }}
-				className={clsx(styles.row, styles.row_body)}
 			>
 				<td className={styles.date_cell}>{formatDate(date)}</td>
 				<RowSummary date={date} index={i} totals={totals} />
-				{accounts.map((account) => (
-					<Cell key={account.id} account={account} entry={entries[formatDate(date)]} date={date} />
-				))}
+				{accounts
+					.filter((a) => !a.archived)
+					.map((account) => (
+						<Cell
+							account={account}
+							date={date}
+							entry={entries[formatDate(date)]}
+							key={account.id}
+						/>
+					))}
 				<RowActions date={date} />
 			</tr>
 		));
@@ -72,7 +81,7 @@ function RowActions(_: { date: Date }) {
 	// TODO: Add option to delete an entry
 	return (
 		<td className={styles.actions_cell}>
-			<Button variant="Danger" icon>
+			<Button icon variant="Danger">
 				<Trash />
 			</Button>
 		</td>

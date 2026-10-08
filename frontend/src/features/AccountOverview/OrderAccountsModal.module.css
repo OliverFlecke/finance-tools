@@ -19,3 +19,9 @@
 .header {
 	font-size: var(--font-size-2xl);
 }
+
+.account {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
