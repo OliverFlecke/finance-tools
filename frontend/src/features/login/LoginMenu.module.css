@@ -4,13 +4,9 @@
 	right: 0;
 	z-index: 10;
 	border-radius: var(--radius);
-	background-color: var(--color-gray-100);
+	background-color: var(--color-surface-raised);
 	padding-block: var(--space-4);
 	box-shadow: var(--shadow);
-}
-
-:global(.dark) .menu {
-	background-color: var(--color-gray-700);
 }
 
 .hidden {
@@ -28,8 +24,10 @@
 	}
 }
 
-:global(.dark) .logout:hover {
-	color: var(--color-gray-400);
+@media (prefers-color-scheme: dark) {
+	.logout:hover {
+		color: var(--color-gray-400);
+	}
 }
 
 .icon {

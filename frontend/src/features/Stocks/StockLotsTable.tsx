@@ -1,7 +1,5 @@
-import clsx from "clsx";
-import type React from "react";
+import { Plus } from "lucide-react";
 import { useCallback, useContext } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { useAddStockLotCallback } from "./API/stockApi";
 import type { Stock, StockLot } from "./models";
@@ -14,7 +12,7 @@ interface StockLotsTableProps {
 	lots: StockLot[];
 }
 
-const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLotsTableProps) => {
+export default function StockLotsTable({ lots, stock }: StockLotsTableProps) {
 	const { dispatch } = useContext(StockContext);
 	const addStockLot = useAddStockLotCallback();
 
@@ -53,14 +51,12 @@ const StockLotsTable: React.FC<StockLotsTableProps> = ({ lots, stock }: StockLot
 				</table>
 
 				<div className={styles.footer}>
-					<Button onClick={addLot} className={clsx("btn btn-primary", styles.add_button)}>
-						<IoAddCircleOutline className={styles.icon} />
-						<span className={styles.label}>Add lot</span>
+					<Button onClick={addLot}>
+						<Plus />
+						Add lot
 					</Button>
 				</div>
 			</div>
 		</>
 	);
-};
-
-export default StockLotsTable;
+}

@@ -10,18 +10,10 @@
 }
 
 .label {
-	color: var(--color-black);
-}
-
-:global(.dark) .label {
-	color: var(--color-gray-300);
+	color: var(--color-text-secondary);
 }
 
 .amount {
 	font-size: var(--font-size-2xl);
-	color: var(--color-black);
-}
-
-:global(.dark) .amount {
-	color: var(--color-white);
+	color: var(--color-text);
 }

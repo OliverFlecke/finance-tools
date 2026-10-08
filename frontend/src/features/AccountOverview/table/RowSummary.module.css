@@ -1,41 +1,21 @@
 .gain_positive {
-	color: var(--color-green-700);
-}
-
-:global(.dark) .gain_positive {
-	color: var(--color-green-500);
+	color: var(--color-value-positive);
 }
 
 .gain_negative {
-	color: var(--color-red-700);
-}
-
-:global(.dark) .gain_negative {
-	color: var(--color-red-500);
+	color: var(--color-value-negative);
 }
 
 .total {
-	color: var(--color-blue-700);
-}
-
-:global(.dark) .total {
-	color: var(--color-blue-500);
+	color: var(--color-metric-blue);
 }
 
 .total_cash {
-	color: var(--color-yellow-700);
-}
-
-:global(.dark) .total_cash {
-	color: var(--color-yellow-500);
+	color: var(--color-metric-yellow);
 }
 
 .total_investments {
-	color: var(--color-purple-700);
-}
-
-:global(.dark) .total_investments {
-	color: var(--color-purple-500);
+	color: var(--color-metric-purple);
 }
 
 .cell_summary {

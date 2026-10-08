@@ -4,6 +4,8 @@
 	color: var(--color-fuchsia-700);
 }
 
-:global(.dark) .budget_title {
-	color: var(--color-fuchsia-600);
+@media (prefers-color-scheme: dark) {
+	.budget_title {
+		color: var(--color-fuchsia-600);
+	}
 }

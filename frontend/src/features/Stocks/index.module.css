@@ -9,11 +9,7 @@
 .header_row {
 	vertical-align: bottom;
 	font-size: var(--font-size-sm);
-	color: var(--color-gray-600);
-}
-
-:global(.dark) .header_row {
-	color: var(--color-gray-400);
+	color: var(--color-text-muted);
 }
 
 .action_bar {
@@ -31,8 +27,10 @@
 	}
 }
 
-:global(.dark) .sort_button:focus {
-	box-shadow: 0 0 0 1px var(--color-red-600);
+@media (prefers-color-scheme: dark) {
+	.sort_button:focus {
+		box-shadow: 0 0 0 1px var(--color-red-600);
+	}
 }
 
 .icon {

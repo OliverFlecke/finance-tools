@@ -32,7 +32,7 @@
 	font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
 	&:nth-child(odd) {
-		background-color: var(--color-bg-stripe);
+		background-color: var(--color-bg-elevated);
 	}
 }
 

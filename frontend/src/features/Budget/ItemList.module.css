@@ -9,8 +9,10 @@
 	color: var(--color-fuchsia-700);
 }
 
-:global(.dark) .category_row {
-	color: var(--color-fuchsia-300);
+@media (prefers-color-scheme: dark) {
+	.category_row {
+		color: var(--color-fuchsia-300);
+	}
 }
 
 .category_label {
@@ -40,33 +42,17 @@
 }
 
 .income_bg {
-	background-color: var(--color-green-200);
-}
-
-:global(.dark) .income_bg {
-	background-color: var(--color-green-900);
+	background-color: var(--color-income-bg);
 }
 
 .income_odd:nth-child(odd) {
-	background-color: var(--color-green-300);
-}
-
-:global(.dark) .income_odd:nth-child(odd) {
-	background-color: var(--color-green-700);
+	background-color: var(--color-income-bg-stripe);
 }
 
 .expenses_bg {
-	background-color: var(--color-red-200);
-}
-
-:global(.dark) .expenses_bg {
-	background-color: var(--color-red-900);
+	background-color: var(--color-expense-bg);
 }
 
 .expenses_odd:nth-child(odd) {
-	background-color: var(--color-red-300);
-}
-
-:global(.dark) .expenses_odd:nth-child(odd) {
-	background-color: var(--color-red-700);
+	background-color: var(--color-expense-bg-stripe);
 }

@@ -1,12 +1,8 @@
 .spinner {
 	height: 1.25rem;
 	width: 1.25rem;
-	color: var(--color-black);
+	color: var(--color-text);
 	animation: spin 1s linear infinite;
-}
-
-:global(.dark) .spinner {
-	color: var(--color-white);
 }
 
 .circle {

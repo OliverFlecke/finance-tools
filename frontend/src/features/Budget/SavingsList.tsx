@@ -1,7 +1,7 @@
+import { Eraser, Plus } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import AddButton from "../../components/button/AddButton";
-import RemoveButton from "../../components/button/RemoveButton";
+import { Button } from "@/ui/Button/Button";
 import AddLine from "./AddLine";
 import type { AddItemToBudgetRequest, Item } from "./api";
 import BudgetLineActions from "./BudgetLineActions";
@@ -39,9 +39,13 @@ const SavingsList: React.FC<{
 					<MonthAndYearCells value={total} />
 					<th className={styles.actions_header}>
 						{addVisible ? (
-							<RemoveButton onClick={() => setAddVisible(false)} />
+							<Button onClick={() => setAddVisible(false)}>
+								<Eraser />
+							</Button>
 						) : (
-							<AddButton onClick={() => setAddVisible(true)} />
+							<Button onClick={() => setAddVisible(true)}>
+								<Plus />
+							</Button>
 						)}
 					</th>
 				</tr>

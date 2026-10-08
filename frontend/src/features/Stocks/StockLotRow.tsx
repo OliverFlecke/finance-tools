@@ -1,12 +1,13 @@
 import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
+import { Trash } from "lucide-react";
 import type React from "react";
 import { useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { getValueColorIndicator } from "utils/colors";
 import { formatCurrency, useConverter } from "utils/converters";
 import { formatDate } from "utils/date";
-import DeleteButton from "../../components/DeleteButton";
+import { Button } from "@/ui/Button/Button";
 import { useDeleteStockLotCallback, useUpdateStockLotCallback } from "./API/stockApi";
 import type { Stock, StockLot } from "./models";
 import styles from "./StockLotRow.module.css";
@@ -92,7 +93,9 @@ const StockLotRow: React.FC<StockLotRowProps> = ({ stock, lot }: StockLotRowProp
 				<span>{((marketValue / buyMarketValue - 1) * 100).toFixed(2)} %</span>
 			</td>
 			<td className={styles.delete_cell}>
-				<DeleteButton onClick={deleteLot} />
+				<Button onClick={deleteLot} icon variant="Danger">
+					<Trash />
+				</Button>
 			</td>
 		</tr>
 	);

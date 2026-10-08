@@ -18,6 +18,8 @@
 	color: var(--color-green-400);
 }
 
-:global(.dark) .add_icon {
-	color: var(--color-green-500);
+@media (prefers-color-scheme: dark) {
+	.add_icon {
+		color: var(--color-green-500);
+	}
 }

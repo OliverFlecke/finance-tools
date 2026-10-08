@@ -19,6 +19,10 @@
 		background-color: var(--color-gray-300);
 	}
 
+	&.icon {
+		padding: 0;
+	}
+
 	&.primary {
 		color: var(--color-gray-100);
 		background-color: var(--color-primary);
@@ -80,6 +84,8 @@
 	}
 }
 
-.dark .btn:disabled {
-	background-color: var(--color-gray-600);
+@media (prefers-color-scheme: dark) {
+	.btn:disabled {
+		background-color: var(--color-gray-600);
+	}
 }

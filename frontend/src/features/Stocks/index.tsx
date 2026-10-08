@@ -2,10 +2,10 @@
 
 import type { CurrencyRates } from "features/Currency/api";
 import SettingsContext from "features/Settings/context";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import type React from "react";
 import { type ReactNode, useCallback, useContext, useEffect, useReducer, useState } from "react";
-import { IoCaretDown, IoCaretUp } from "react-icons/io5";
-import { convertToCurrency } from "../../utils/converters";
+import { convertToCurrency } from "@/utils/converters";
 import AddStock from "./AddStock";
 import { useFetchStocks } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
@@ -173,9 +173,9 @@ const Header = ({ sort, children, currentSortKey, sortKey, ascending }: HeaderPr
 	</th>
 );
 
-const Caret = ({ ascending }: { ascending: boolean }) => (
-	<>{ascending ? <IoCaretDown className={styles.icon} /> : <IoCaretUp className={styles.icon} />}</>
-);
+function Caret({ ascending }: { ascending: boolean }) {
+	return <>{ascending ? <ChevronDown /> : <ChevronUp />}</>;
+}
 
 function stocksComparer(
 	currencyRates: CurrencyRates,

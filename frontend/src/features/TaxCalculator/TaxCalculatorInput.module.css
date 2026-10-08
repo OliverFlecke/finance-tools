@@ -29,9 +29,10 @@
 	}
 }
 
-:global(.dark) .salary_input {
-	background-color: var(--color-gray-900);
-	color: var(--color-gray-100);
+@media (prefers-color-scheme: dark) {
+	.salary_input {
+		background-color: var(--color-gray-900);
+	}
 }
 
 .preferred_currency {
@@ -49,6 +50,8 @@
 	color: var(--color-yellow-700);
 }
 
-:global(.dark) .preferred_currency_value {
-	color: var(--color-yellow-400);
+@media (prefers-color-scheme: dark) {
+	.preferred_currency_value {
+		color: var(--color-yellow-400);
+	}
 }

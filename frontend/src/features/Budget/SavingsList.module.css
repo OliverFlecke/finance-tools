@@ -2,8 +2,10 @@
 	background-color: var(--color-blue-100);
 }
 
-:global(.dark) .container {
-	background-color: var(--color-blue-900);
+@media (prefers-color-scheme: dark) {
+	.container {
+		background-color: var(--color-blue-900);
+	}
 }
 
 .title {
@@ -17,17 +19,15 @@
 	background-color: var(--color-blue-200);
 }
 
-:global(.dark) .row:nth-child(odd) {
-	background-color: var(--color-blue-800);
+@media (prefers-color-scheme: dark) {
+	.row:nth-child(odd) {
+		background-color: var(--color-blue-800);
+	}
 }
 
 .name {
 	padding-left: var(--space-8);
-	color: var(--color-fuchsia-700);
-}
-
-:global(.dark) .name {
-	color: var(--color-fuchsia-500);
+	color: var(--color-budget-accent);
 }
 
 .total_row {

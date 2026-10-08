@@ -13,16 +13,27 @@ export type ButtonType =
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: ButtonType;
+	icon?: boolean;
 }
 
 export function Button({
-	variant: buttonType = "Primary",
+	variant = "Primary",
 	className,
+	icon,
 	children,
 	...buttonProps
 }: ButtonProps) {
+	const c = color(variant);
+
 	return (
-		<button className={clsx(styles.btn, colorClass(buttonType), className)} {...buttonProps}>
+		<button
+			className={clsx(styles.btn, colorClass(variant), icon && styles.icon, className)}
+			style={{
+				color: icon ? c?.background : undefined,
+				backgroundColor: icon ? "transparent" : undefined,
+			}}
+			{...buttonProps}
+		>
 			{children}
 		</button>
 	);
@@ -44,5 +55,44 @@ function colorClass(type: ButtonType): string {
 			return styles.secondary;
 		case "Primary":
 			return styles.primary;
+	}
+}
+
+function color(type: ButtonType) {
+	switch (type) {
+		case "Primary":
+			return {
+				color: "var(--color-gray-100)",
+				background: "var(--color-primary)",
+				hoverBackground: "var(--color-primary-hover)",
+			};
+
+		case "Secondary":
+			return {
+				color: "var(--color-secondary-text)",
+				background: "var(--color-secondary)",
+				hoverBackground: "var(--color-secondary-hover)",
+			};
+
+		case "Success":
+			return {
+				color: "var(--color-white)",
+				background: "var(--color-success)",
+				hoverBackground: "var(--color-success-hover)",
+			};
+
+		case "Warning":
+			return {
+				color: "var(--color-gray-900)",
+				background: "var(--color-warning)",
+				hoverBackground: "var(--color-warning-hover)",
+			};
+
+		case "Danger":
+			return {
+				color: "var(--color-white)",
+				background: "var(--color-danger)",
+				hoverBackground: "var(--color-danger-hover)",
+			};
 	}
 }

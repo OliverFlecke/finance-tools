@@ -1,11 +1,7 @@
 .heading {
 	text-align: center;
 	font-size: var(--font-size-2xl);
-	color: var(--color-green-700);
-}
-
-:global(.dark) .heading {
-	color: var(--color-green-400);
+	color: var(--color-action-positive);
 }
 
 .panel {
@@ -15,8 +11,10 @@
 	background-color: var(--color-gray-300);
 }
 
-:global(.dark) .panel {
-	background-color: var(--color-gray-700);
+@media (prefers-color-scheme: dark) {
+	.panel {
+		background-color: var(--color-gray-700);
+	}
 }
 
 .table {

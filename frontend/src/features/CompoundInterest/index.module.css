@@ -1,8 +1,6 @@
 .container {
 	padding-bottom: var(--space-4);
-}
-:global(.dark) .container {
-	background-color: var(--color-gray-800);
+	background-color: var(--color-bg-elevated);
 }
 
 .heading {
@@ -44,8 +42,8 @@
 	}
 }
 
-:global(.dark) .placeholder::placeholder {
-	color: var(--color-gray-600);
+.placeholder::placeholder {
+	color: var(--color-placeholder-text);
 }
 
 .actions {

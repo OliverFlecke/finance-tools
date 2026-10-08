@@ -7,7 +7,7 @@
 .main {
 	height: 100%;
 	flex-grow: 1;
-	background-color: var(--color-bg-elevated);
+	background-color: var(--color-bg);
 	color: var(--color-text);
 	position: relative;
 }

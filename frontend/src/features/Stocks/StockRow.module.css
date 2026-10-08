@@ -5,8 +5,10 @@
 	background-color: var(--color-gray-200);
 }
 
-:global(.dark) .row {
-	background-color: var(--color-gray-800);
+@media (prefers-color-scheme: dark) {
+	.row {
+		background-color: var(--color-gray-800);
+	}
 }
 
 .symbol_cell {

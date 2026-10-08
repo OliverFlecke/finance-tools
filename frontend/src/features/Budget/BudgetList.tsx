@@ -1,7 +1,6 @@
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import type React from "react";
 import { type FC, useCallback, useContext } from "react";
-import DeleteButton from "@/components/DeleteButton";
 import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import {
@@ -83,8 +82,9 @@ const BudgetListItem: FC<{
 			{budget.title}
 		</button>
 		<span>{budget.created_at.toDateString()}</span>
-		<span>
-			<DeleteButton onClick={() => deleteCallback(budget.id)} />
-		</span>
+
+		<Button onClick={() => deleteCallback(budget.id)} icon variant="Danger">
+			<Trash />
+		</Button>
 	</li>
 );

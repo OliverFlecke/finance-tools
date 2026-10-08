@@ -7,19 +7,17 @@
 }
 
 .net_cell {
-	color: var(--color-green-700);
-}
-
-:global(.dark) .net_cell {
-	color: var(--color-green-400);
+	color: var(--color-action-positive);
 }
 
 .taxes_cell {
 	color: var(--color-red-700);
 }
 
-:global(.dark) .taxes_cell {
-	color: var(--color-red-400);
+@media (prefers-color-scheme: dark) {
+	.taxes_cell {
+		color: var(--color-red-400);
+	}
 }
 
 .header_cell {

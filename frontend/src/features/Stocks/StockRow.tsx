@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
+import { Ellipsis, Trash } from "lucide-react";
 import type React from "react";
 import { useCallback, useContext, useState } from "react";
-import { IoEllipsisHorizontalCircleOutline } from "react-icons/io5";
 import { getValueColorIndicator } from "utils/colors";
 import { formatCurrency, useConverter } from "utils/converters";
-import DeleteButton from "../../components/DeleteButton";
+import { Button } from "@/ui/Button/Button";
 import { type Stock, stockAvgPrice, stockGain, stockTotalShares } from "./models";
 import StockLotsTable from "./StockLotsTable";
 import styles from "./StockRow.module.css";
@@ -82,10 +82,12 @@ const StockRowActions = ({ stock, setShowLots }: StockRowActionProps) => {
 
 	return (
 		<td className={styles.actions_cell}>
-			<button type="button" onClick={() => setShowLots((x) => !x)} className={styles.toggle_button}>
-				<IoEllipsisHorizontalCircleOutline size={24} />
-			</button>
-			<DeleteButton onClick={deleteStock} />
+			<Button onClick={() => setShowLots((x) => !x)} icon>
+				<Ellipsis />
+			</Button>
+			<Button onClick={deleteStock} icon variant="Danger">
+				<Trash />
+			</Button>
 		</td>
 	);
 };

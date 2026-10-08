@@ -1,7 +1,7 @@
 import clsx from "clsx";
+import { Plus } from "lucide-react";
 import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
@@ -50,14 +50,10 @@ export default function AddStock() {
 
 	return (
 		<>
-			<button
-				type="button"
-				className={clsx("btn btn-primary", styles.trigger)}
-				onClick={() => setIsOpen(true)}
-			>
-				<IoAddCircleOutline className={styles.icon} />
-				<span className={styles.label}>Add symbol</span>
-			</button>
+			<Button onClick={() => setIsOpen(true)}>
+				<Plus />
+				Add symbol
+			</Button>
 
 			<Dialog title="Add symbol" open={isOpen} onClose={() => setIsOpen(false)}>
 				<form onSubmit={handleSubmit(addSymbol)} className={styles.form}>

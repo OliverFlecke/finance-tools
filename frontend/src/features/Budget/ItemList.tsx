@@ -1,9 +1,9 @@
 import clsx from "clsx";
+import { Eraser, Plus } from "lucide-react";
 import React, { useContext, useMemo, useState } from "react";
 import { formatCurrency } from "utils/converters";
 import { sum } from "utils/math";
-import AddButton from "../../components/button/AddButton";
-import RemoveButton from "../../components/button/RemoveButton";
+import { Button } from "@/ui/Button/Button";
 import AddLine from "./AddLine";
 import type { AddItemToBudgetRequest, Item } from "./api";
 import BudgetLineActions from "./BudgetLineActions";
@@ -87,9 +87,13 @@ const ItemList: React.FC<Props> = ({
 					<th className="currency">{formatCurrency(12 * total, currency)}</th>
 					<th className={styles.actions_header}>
 						{addVisible ? (
-							<RemoveButton onClick={() => setAddVisible(false)} />
+							<Button onClick={() => setAddVisible(false)}>
+								<Eraser />
+							</Button>
 						) : (
-							<AddButton onClick={() => setAddVisible(true)} />
+							<Button onClick={() => setAddVisible(true)}>
+								<Plus />
+							</Button>
 						)}
 					</th>
 				</tr>

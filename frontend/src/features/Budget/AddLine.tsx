@@ -1,7 +1,6 @@
-import clsx from "clsx";
-import type React from "react";
+import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { IoAddCircleOutline } from "react-icons/io5";
+import { Button } from "@/ui/Button/Button";
 import styles from "./AddLine.module.css";
 import type { AddItemToBudgetRequest } from "./api";
 
@@ -10,7 +9,7 @@ interface Props {
 	category?: string;
 }
 
-const AddLine: React.FC<Props> = ({ add, category }) => {
+export default function AddLine({ add, category }: Props) {
 	const { register, handleSubmit } = useForm<AddItemToBudgetRequest>({
 		defaultValues: {
 			category,
@@ -45,15 +44,13 @@ const AddLine: React.FC<Props> = ({ add, category }) => {
 							{...register("amount", { required: true, valueAsNumber: true })}
 						/>
 
-						<button type="submit" className={clsx("btn btn-primary", styles.submit)}>
-							<span>Add</span>
-							<IoAddCircleOutline size={24} className={styles.add_icon} />
-						</button>
+						<Button type="submit">
+							<Plus />
+							Add
+						</Button>
 					</form>
 				</td>
 			</tr>
 		</tbody>
 	);
-};
-
-export default AddLine;
+}

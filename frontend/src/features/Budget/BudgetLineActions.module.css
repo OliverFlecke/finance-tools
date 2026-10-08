@@ -7,9 +7,5 @@
 }
 
 .edit_button {
-	color: var(--color-green-700);
-}
-
-:global(.dark) .edit_button {
-	color: var(--color-green-400);
+	color: var(--color-action-positive);
 }

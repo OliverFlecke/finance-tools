@@ -3,6 +3,8 @@
 	font-weight: var(--font-weight-bold);
 }
 
-:global(.dark) .row {
-	color: var(--color-purple-400);
+@media (prefers-color-scheme: dark) {
+	.row {
+		color: var(--color-purple-400);
+	}
 }

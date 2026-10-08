@@ -34,6 +34,5 @@ const SettingsList: FC = () => (
 	<div className={styles.container}>
 		<DisplayCurrencySetting />
 		<PreferredCurrenciesSetting />
-		{/* <ThemeSetting /> */}
 	</div>
 );

@@ -1,10 +1,6 @@
 .container {
-	background-color: var(--color-sky-300);
+	background-color: var(--color-budget-panel);
 	padding: var(--space-4);
-}
-
-:global(.dark) .container {
-	background-color: var(--color-sky-900);
 }
 
 .header_row {
@@ -14,11 +10,7 @@
 	justify-content: space-between;
 	gap: var(--space-4);
 	font-weight: var(--font-weight-bold);
-	color: var(--color-gray-800);
-}
-
-:global(.dark) .header_row {
-	color: var(--color-gray-300);
+	color: var(--color-text-secondary);
 }
 
 .footer_row {
@@ -41,8 +33,10 @@
 	background-color: var(--color-slate-200);
 }
 
-:global(.dark) .item:nth-child(odd) {
-	background-color: var(--color-slate-800);
+@media (prefers-color-scheme: dark) {
+	.item:nth-child(odd) {
+		background-color: var(--color-slate-800);
+	}
 }
 
 .select_button:hover {

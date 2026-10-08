@@ -31,17 +31,6 @@ function reducer(state: SettingsValues, action: SettingsAction): SettingsValues 
 				preferredCurrencies: state.preferredCurrencies.filter((code) => code === action.code),
 			};
 
-		case "SET THEME":
-			return {
-				...state,
-				preferresDarkMode: action.preferresDarkMode,
-			};
-		case "SET THEME TO FOLLOW OS":
-			return {
-				...state,
-				themeFollowsOS: action.shouldFollowOS,
-			};
-
 		default:
 			console.warn(`Action not handled: ${action}`);
 			return state;

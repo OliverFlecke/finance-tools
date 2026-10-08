@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import type { AccountEntries } from "features/AccountOverview/models/Account";
+import { Trash } from "lucide-react";
 import type { Account } from "@/api/generated/types.gen";
-import DeleteButton from "@/components/DeleteButton";
 import { useAccountContext } from "@/features/AccountOverview/Context";
 import { useSettingsContext } from "@/features/Settings/context";
+import { Button } from "@/ui/Button/Button";
 import { formatDate } from "@/utils/date";
 import Cell from "./Cell";
 import styles from "./index.module.css";
@@ -71,7 +72,9 @@ function RowActions(_: { date: Date }) {
 	// TODO: Add option to delete an entry
 	return (
 		<td className={styles.actions_cell}>
-			<DeleteButton onClick={() => {}} />
+			<Button variant="Danger" icon>
+				<Trash />
+			</Button>
 		</td>
 	);
 }

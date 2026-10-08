@@ -28,9 +28,5 @@
 }
 
 .tooltip_value {
-	color: var(--color-green-700);
-}
-
-:global(.dark) .tooltip_value {
-	color: var(--color-green-500);
+	color: var(--color-value-positive);
 }

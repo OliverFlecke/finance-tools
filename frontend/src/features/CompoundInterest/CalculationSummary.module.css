@@ -22,31 +22,19 @@
 }
 
 .dot_blue {
-	background-color: var(--color-blue-900);
-}
-:global(.dark) .dot_blue {
-	background-color: var(--color-blue-300);
+	background-color: var(--color-chart-blue);
 }
 
 .dot_green {
-	background-color: var(--color-green-900);
-}
-:global(.dark) .dot_green {
-	background-color: var(--color-green-300);
+	background-color: var(--color-chart-green);
 }
 
 .dot_indigo {
-	background-color: var(--color-indigo-900);
-}
-:global(.dark) .dot_indigo {
-	background-color: var(--color-indigo-300);
+	background-color: var(--color-chart-indigo);
 }
 
 .dot_yellow {
-	background-color: var(--color-yellow-900);
-}
-:global(.dark) .dot_yellow {
-	background-color: var(--color-yellow-300);
+	background-color: var(--color-chart-yellow);
 }
 
 .table_wrapper {
@@ -83,43 +71,25 @@
 }
 
 .row:nth-child(odd) {
-	background-color: var(--color-gray-200);
-}
-:global(.dark) .row:nth-child(odd) {
-	background-color: var(--color-gray-900);
+	background-color: var(--color-bg-muted);
 }
 
 .text_deposit {
-	color: var(--color-teal-800);
-}
-:global(.dark) .text_deposit {
-	color: var(--color-teal-400);
+	color: var(--color-stat-teal);
 }
 
 .text_interest {
-	color: var(--color-green-800);
-}
-:global(.dark) .text_interest {
-	color: var(--color-green-400);
+	color: var(--color-stat-green);
 }
 
 .text_total_deposit {
-	color: var(--color-orange-800);
-}
-:global(.dark) .text_total_deposit {
-	color: var(--color-orange-400);
+	color: var(--color-stat-orange);
 }
 
 .text_total_interest {
-	color: var(--color-purple-800);
-}
-:global(.dark) .text_total_interest {
-	color: var(--color-purple-400);
+	color: var(--color-stat-purple);
 }
 
 .text_balance {
-	color: var(--color-red-800);
-}
-:global(.dark) .text_balance {
-	color: var(--color-red-400);
+	color: var(--color-stat-red);
 }

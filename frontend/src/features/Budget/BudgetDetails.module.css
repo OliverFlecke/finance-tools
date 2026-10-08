@@ -12,11 +12,7 @@
 }
 
 .panel_bg {
-	background-color: var(--color-sky-300);
-}
-
-:global(.dark) .panel_bg {
-	background-color: var(--color-sky-900);
+	background-color: var(--color-budget-panel);
 }
 
 .header_row {
@@ -48,10 +44,6 @@
 }
 
 .remaining_row {
-	color: var(--color-fuchsia-700);
+	color: var(--color-budget-accent);
 	text-decoration: underline;
-}
-
-:global(.dark) .remaining_row {
-	color: var(--color-fuchsia-500);
 }
