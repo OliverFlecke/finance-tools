@@ -20,7 +20,12 @@ export default function RowSummary({ index, date, totals }: Readonly<RowSummaryP
 	const gain = index === 0 ? 0 : totals[index] - totals[index - 1];
 	const total = totals[index];
 	const cash = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Cash");
-	const invested = useSummarizedAccounts(accounts, entries, date, (x) => x.kind === "Investment");
+	const invested = useSummarizedAccounts(
+		accounts,
+		entries,
+		date,
+		(x) => x.kind === "Investment" || x.kind === "Pension",
+	);
 
 	const gainClass = gain > 0 ? styles.gain_positive : gain < 0 ? styles.gain_negative : undefined;
 

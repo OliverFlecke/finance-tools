@@ -1,8 +1,10 @@
 import clsx from "clsx";
 import type { AccountEntries } from "features/AccountOverview/models/Account";
 import { Trash } from "lucide-react";
+import { useState } from "react";
 import type { Account } from "@/api/generated/types.gen";
 import { useAccountContext } from "@/features/AccountOverview/Context";
+import EditAccountModal from "@/features/AccountOverview/EditAccountModal";
 import { useSettingsContext } from "@/features/Settings/context";
 import { Button } from "@/ui/Button/Button";
 import { formatDate } from "@/utils/date";
@@ -12,21 +14,30 @@ import RowSummary from "./RowSummary";
 import { summarizedAccounts } from "./useSummarizedAccounts";
 
 export default function Table() {
+	const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+
 	return (
 		<div className={styles.container}>
 			<table className={styles.table}>
 				<thead>
-					<TableHeader />
+					<TableHeader onEditAccount={setEditingAccount} />
 				</thead>
 				<tbody>
 					<TableBody />
 				</tbody>
 			</table>
+			{editingAccount && (
+				<EditAccountModal
+					account={editingAccount}
+					onClose={() => setEditingAccount(null)}
+					open={true}
+				/>
+			)}
 		</div>
 	);
 }
 
-function TableHeader() {
+function TableHeader({ onEditAccount }: { onEditAccount: (account: Account) => void }) {
 	const { accounts } = useAccountContext();
 
 	return (
@@ -40,7 +51,13 @@ function TableHeader() {
 				.filter((a) => !a.archived)
 				.map((account) => (
 					<th className={styles.account_header} key={account.id}>
-						<span>{account.name}</span>
+						<button
+							className={styles.account_header_button}
+							onClick={() => onEditAccount(account)}
+							type="button"
+						>
+							{account.name}
+						</button>
 					</th>
 				))}
 			<th></th>

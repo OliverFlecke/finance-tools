@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userManager } from "api/auth";
 import { getAccountsQueryKey } from "@/api/generated/@tanstack/react-query.gen";
 import { client } from "@/api/generated/client.gen";
-import { addEntry, createAccount, updateAccounts } from "@/api/generated/sdk.gen";
+import { addEntry, createAccount, updateAccount, updateAccounts } from "@/api/generated/sdk.gen";
 import type {
 	Account,
 	AccountResponse,
@@ -50,6 +50,29 @@ export function useAddEntryMutation() {
 							accounts: data.accounts.map((a) =>
 								a.id !== id ? a : { ...a, entries: [...a.entries, entry] },
 							),
+						},
+			);
+		},
+	});
+}
+
+export function useUpdateAccountMutation() {
+	const qc = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({
+			id,
+			...body
+		}: Partial<Pick<Account, "name" | "currency" | "kind">> & { id: string }) =>
+			updateAccount({ path: { id }, body }),
+
+		onSuccess: (_, { id, ...fields }) => {
+			qc.setQueryData<AccountResponse>(getAccountsQueryKey(), (data) =>
+				!data
+					? undefined
+					: {
+							...data,
+							accounts: data.accounts.map((a) => (a.id !== id ? a : { ...a, ...fields })),
 						},
 			);
 		},

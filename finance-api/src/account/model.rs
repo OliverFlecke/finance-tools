@@ -4,4 +4,5 @@
 pub enum AccountKind {
 	Cash,
 	Investment,
+	Pension,
 }

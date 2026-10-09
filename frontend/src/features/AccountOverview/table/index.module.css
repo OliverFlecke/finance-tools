@@ -65,6 +65,16 @@
 	padding-inline: var(--space-4);
 }
 
+.account_header_button {
+	all: unset;
+	cursor: pointer;
+
+	&:hover,
+	&:focus-visible {
+		text-decoration: underline;
+	}
+}
+
 .actions_cell {
 	padding-left: var(--space-4);
 }

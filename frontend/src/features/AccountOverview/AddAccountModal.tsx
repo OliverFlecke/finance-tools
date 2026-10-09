@@ -52,12 +52,12 @@ function Form({ onSuccess }: { onSuccess: () => void }) {
 	const currencyId = useId();
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+		<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 			<div className={styles.field_group}>
 				<fieldset className={styles.fieldset}>
 					<Input
-						placeholder="Savings, Investments..."
 						label="Name"
+						placeholder="Savings, Investments..."
 						{...register("name", { required: true })}
 						errorMessage={errors.name && "Please provide a name for your account"}
 					/>
@@ -66,14 +66,15 @@ function Form({ onSuccess }: { onSuccess: () => void }) {
 						<select className={styles.select} {...register("kind", { required: true })}>
 							<option value={"Cash"}>Cash</option>
 							<option value={"Investment"}>Investment</option>
+							<option value={"Pension"}>Pension</option>
 						</select>
 					</label>
-					<label htmlFor={currencyId} className={styles.field}>
+					<label className={styles.field} htmlFor={currencyId}>
 						<span className={styles.form_label}>Account currency</span>
 						<select
-							id={currencyId}
-							defaultValue={preferredDisplayCurrency}
 							className={styles.select}
+							defaultValue={preferredDisplayCurrency}
+							id={currencyId}
 							{...register("currency", { required: true })}
 						>
 							{Object.keys(currencyRates.usd)
@@ -89,7 +90,7 @@ function Form({ onSuccess }: { onSuccess: () => void }) {
 			</div>
 
 			<ButtonContainer>
-				<Button variant="Transparent" onClick={close}>
+				<Button onClick={close} variant="Transparent">
 					Cancel
 				</Button>
 				<Button type="submit">Add</Button>

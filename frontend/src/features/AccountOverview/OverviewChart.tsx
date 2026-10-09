@@ -64,7 +64,14 @@ export default function OverviewChart() {
 	};
 
 	const types = ["Cash", "Investment"]
-		.map((kind) => summarize(kind, (x) => x.account.kind === kind))
+		.map((kind) =>
+			summarize(
+				kind,
+				kind === "Investment"
+					? (x) => x.account.kind === "Investment" || x.account.kind === "Pension"
+					: (x) => x.account.kind === kind,
+			),
+		)
 		.concat([summarize("Total", () => true)]);
 
 	const [showTotals, setShowTotals] = useState(true);
@@ -80,32 +87,28 @@ export default function OverviewChart() {
 			<XYChart
 				height={500}
 				margin={{ top: 50, bottom: 30, right: 20, left: 70 }}
+				theme={isDarkTheme ? darkTheme : lightTheme}
 				xScale={{ type: "band" }}
 				yScale={{ type: "linear" }}
-				theme={isDarkTheme ? darkTheme : lightTheme}
 			>
-				<AnimatedAxis orientation="bottom" hideAxisLine={true} />
+				<AnimatedAxis hideAxisLine={true} orientation="bottom" />
 				<AnimatedAxis orientation="left" />
 				<AnimatedGrid columns={false} numTicks={4} />
 
 				{showTotals
 					? types.map((d) => (
-							<AnimatedLineSeries key={d.name} dataKey={d.name} data={d.data} {...accessors} />
+							<AnimatedLineSeries data={d.data} dataKey={d.name} key={d.name} {...accessors} />
 						))
 					: data.map((d) => (
 							<AnimatedLineSeries
-								key={d.account.id}
-								dataKey={d.account.id}
 								data={d.data}
+								dataKey={d.account.id}
+								key={d.account.id}
 								{...accessors}
 							/>
 						))}
 
 				<Tooltip
-					snapTooltipToDatumX
-					snapTooltipToDatumY
-					showVerticalCrosshair
-					showSeriesGlyphs
 					renderTooltip={({ tooltipData, colorScale }) => {
 						if (!tooltipData?.nearestDatum || !colorScale) return;
 
@@ -124,6 +127,10 @@ export default function OverviewChart() {
 							</div>
 						);
 					}}
+					showSeriesGlyphs
+					showVerticalCrosshair
+					snapTooltipToDatumX
+					snapTooltipToDatumY
 				/>
 			</XYChart>
 		</div>
