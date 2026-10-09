@@ -1,7 +1,11 @@
 .actions {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
+	gap: var(--space-4);
 	padding: var(--space-4);
-	position: relative;
+
+	@media (min-width: 768px) {
+		flex-direction: row;
+	}
 }

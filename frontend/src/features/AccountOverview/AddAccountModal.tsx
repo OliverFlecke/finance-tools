@@ -17,8 +17,8 @@ export default function AddAccount() {
 			ref={ref}
 			title="Add new account"
 			trigger={
-				<Button type="button">
-					<CreditCardPlus size={16} />
+				<Button variant="Secondary">
+					<CreditCardPlus />
 					Add account
 				</Button>
 			}

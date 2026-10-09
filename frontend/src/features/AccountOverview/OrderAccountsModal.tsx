@@ -8,45 +8,12 @@ import {
 	updateAccountMutation,
 } from "@/api/generated/@tanstack/react-query.gen";
 import type { Account, AccountResponse } from "@/api/generated/types.gen";
-import List from "@/ui/SortableList";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/ui/Button/Button";
 import { Dialog } from "@/ui/Dialog/Dialog";
+import List from "@/ui/SortableList";
 import { useAccountContext } from "./Context";
 import styles from "./OrderAccountsModal.module.css";
-
-function useUpdate(ref: RefObject<HTMLDialogElement | null>) {
-	const { accounts } = useAccountContext();
-
-	const qc = useQueryClient();
-	const setAccounts = (xs: Account[]) => {
-		qc.setQueryData<AccountResponse>(getAccountsQueryKey(), (data) => ({ ...data, accounts: xs }));
-	};
-
-	const [items, setItems] = useState(accounts);
-	useEffect(() => {
-		if (accounts) {
-			setItems(accounts);
-		}
-	}, [accounts]);
-
-	const { mutate, isPending } = useUpdateAccountOrderMutation();
-	const saveOrder = () => {
-		setAccounts(items);
-		mutate(items, {
-			onError: (err) => {
-				setAccounts(accounts);
-				toast.error("Failed to save order", { description: err.message });
-			},
-			onSuccess: (_) => {
-				ref.current?.close();
-				toast.success("Order saved!");
-			},
-		});
-	};
-
-	return { items, setItems, saveOrder, isPending };
-}
 
 export default function OrderAccountsModal() {
 	const ref = useRef<HTMLDialogElement>(null);
@@ -57,7 +24,7 @@ export default function OrderAccountsModal() {
 			ref={ref}
 			title="Reorder accounts"
 			trigger={
-				<Button>
+				<Button variant="Secondary">
 					<Shuffle />
 					Order accounts
 				</Button>
@@ -76,16 +43,21 @@ export default function OrderAccountsModal() {
 }
 
 function AccountCard(account: Account) {
-	const update = useToggleAccountArchived(account);
-
 	return (
 		<div className={styles.account}>
 			<span>{account.name}</span>
-
-			<Button icon onClick={update} variant="Primary">
-				{account.archived ? <EyeOff /> : <Eye />}
-			</Button>
+			<ArchiveToggle {...account} />
 		</div>
+	);
+}
+
+function ArchiveToggle(account: Account) {
+	const update = useToggleAccountArchived(account);
+
+	return (
+		<Button icon onClick={update} variant="Primary">
+			{account.archived ? <EyeOff /> : <Eye />}
+		</Button>
 	);
 }
 
@@ -118,4 +90,37 @@ function useToggleAccountArchived(account: Account) {
 			},
 		);
 	};
+}
+
+function useUpdate(ref: RefObject<HTMLDialogElement | null>) {
+	const { accounts } = useAccountContext();
+
+	const qc = useQueryClient();
+	const setAccounts = (xs: Account[]) => {
+		qc.setQueryData<AccountResponse>(getAccountsQueryKey(), (data) => ({ ...data, accounts: xs }));
+	};
+
+	const [items, setItems] = useState(accounts);
+	useEffect(() => {
+		if (accounts) {
+			setItems(accounts);
+		}
+	}, [accounts]);
+
+	const { mutate, isPending } = useUpdateAccountOrderMutation();
+	const saveOrder = () => {
+		setAccounts(items);
+		mutate(items, {
+			onError: (err) => {
+				setAccounts(accounts);
+				toast.error("Failed to save order", { description: err.message });
+			},
+			onSuccess: (_) => {
+				ref.current?.close();
+				toast.success("Order saved!");
+			},
+		});
+	};
+
+	return { items, setItems, saveOrder, isPending };
 }
