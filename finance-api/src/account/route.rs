@@ -14,6 +14,7 @@ pub fn account_router() -> Router<AppState> {
 	Router::new()
 		.route("/", get(get::read))
 		.route("/", post(post::add))
+		.route("/", patch(patch::update_accounts))
 		.route("/{id}", delete(delete::remove))
 		.route("/{id}", post(entry::post::add))
 		.route("/{id}", patch(patch::update_account))

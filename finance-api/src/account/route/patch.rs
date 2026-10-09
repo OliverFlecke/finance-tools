@@ -70,6 +70,73 @@ pub async fn update_account(
 	Ok(StatusCode::OK)
 }
 
+/// Update properties of multiple accounts in one request.
+#[cfg_attr(
+	feature = "openapi",
+	utoipa::path(
+		operation_id = "update_accounts",
+		patch,
+		tag = "Account",
+		path = "/api/v1/account",
+		request_body = Vec<UpdateAccountsItem>,
+		responses(
+			(status = 200, description = "Accounts updated successfully"),
+			(status = 401, description = "Unauthorized"),
+			(status = 404, description = "An account was not found"),
+			(status = 500, description = "Internal server error"),
+		),
+		security(
+			("bearer" = [])
+		)
+	)
+)]
+#[axum::debug_handler(state = crate::state::AppState)]
+#[tracing::instrument(skip(db))]
+pub async fn update_accounts(
+	State(db): State<Arc<D1Connection>>,
+	user: Claims,
+	Json(requests): Json<Vec<UpdateAccountsItem>>,
+) -> Result<impl IntoResponse, UpdateAccountError> {
+	for request in requests {
+		sqlx_d1::query!(
+			r#"
+			UPDATE account SET
+				name = COALESCE(?, name),
+				currency = COALESCE(?, currency),
+				type = COALESCE(?, type),
+				archived = COALESCE(?, archived),
+				sort_key = COALESCE(?, sort_key)
+			WHERE id = ?
+			  AND project_id IN (SELECT project_id FROM project_access WHERE user_id = ?)
+			RETURNING name
+			"#,
+			request.fields.name,
+			request.fields.currency,
+			request.fields.kind.map(|k| k as u8),
+			request.fields.archived,
+			request.fields.sort_key,
+			request.id.hyphenated().to_string(),
+			user.user_id(),
+		)
+		.fetch_optional(db.as_ref())
+		.await
+		.map_err(UpdateAccountError::DatabaseError)?
+		.ok_or(UpdateAccountError::AccountNotFound)?;
+	}
+
+	Ok(StatusCode::OK)
+}
+
+/// A single account's changes within a bulk update request.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct UpdateAccountsItem {
+	/// ID of the account to update.
+	id: Uuid,
+	#[serde(flatten)]
+	fields: UpdateAccountRequest,
+}
+
 /// Request to update an account.
 #[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, serde::Serialize, serde::Deserialize)]

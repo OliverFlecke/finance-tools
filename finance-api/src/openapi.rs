@@ -9,6 +9,7 @@ use utoipa::{
 		crate::account::route::get::read,
 		crate::account::route::post::add,
 		crate::account::route::patch::update_account,
+		crate::account::route::patch::update_accounts,
 		crate::account::route::delete::remove,
 		crate::account::route::entry::post::add,
 		crate::health::ready,
@@ -23,6 +24,7 @@ use utoipa::{
 			crate::account::route::post::CreateAccountRequest,
 			crate::account::route::post::CreateAccountResponse,
 			crate::account::route::patch::UpdateAccountRequest,
+			crate::account::route::patch::UpdateAccountsItem,
 			crate::account::route::entry::post::AddAccountEntryRequest,
 		)
 	),

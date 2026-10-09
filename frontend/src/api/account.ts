@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userManager } from "api/auth";
 import { getAccountsQueryKey } from "@/api/generated/@tanstack/react-query.gen";
 import { client } from "@/api/generated/client.gen";
-import { addEntry, createAccount, updateAccount } from "@/api/generated/sdk.gen";
+import { addEntry, createAccount, updateAccounts } from "@/api/generated/sdk.gen";
 import type {
 	Account,
 	AccountResponse,
@@ -56,20 +56,15 @@ export function useAddEntryMutation() {
 	});
 }
 
-// There's no bulk reorder endpoint, so persist each account's new sort key individually.
 export function useUpdateAccountOrderMutation() {
 	const qc = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (accounts: Account[]) => {
-			// Sequential, not Promise.all: D1 chokes on a burst of concurrent writes.
-			for (const [sorting, account] of accounts.entries()) {
-				await updateAccount({
-					path: { id: account.id },
-					body: { sort_key: sorting },
-					throwOnError: true,
-				});
-			}
+			await updateAccounts({
+				body: accounts.map((account, sorting) => ({ id: account.id, sort_key: sorting })),
+				throwOnError: true,
+			});
 		},
 		onSuccess: (_, accounts) => {
 			qc.setQueryData<AccountResponse>(getAccountsQueryKey(), (data) =>
