@@ -1,6 +1,6 @@
 import { defineChart, lineY } from "@tanstack/charts";
 import { controlledSignal } from "@tanstack/charts/interaction/signal";
-import { type ZoomXWindow, zoomX } from "@tanstack/charts/interaction/zoom";
+import { type ZoomXChange, type ZoomXWindow, zoomX } from "@tanstack/charts/interaction/zoom";
 import { Chart } from "@tanstack/charts/react";
 import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
@@ -75,12 +75,20 @@ export default function OverviewChart() {
 					})),
 				);
 
+		const visibleValues = rows
+			.filter((row) => row.date >= activeWindow.start && row.date <= activeWindow.end)
+			.map((row) => row.value);
+		const yDomain: readonly [number, number] = [
+			Math.min(0, ...visibleValues),
+			Math.max(0, ...visibleValues),
+		];
+
 		return defineChart({
 			marks: [lineY(rows, { x: "date", y: "value", z: "key" })],
 			scales: {
 				x: { scale: scaleUtc, viewport: { domain: [activeWindow.start, activeWindow.end] } },
 				y: {
-					scale: scaleLinear,
+					scale: scaleLinear().domain(yDomain),
 					nice: true,
 					grid: true,
 					axis: { ticks: { format: (value) => compactNumber.format(value) } },
@@ -88,7 +96,12 @@ export default function OverviewChart() {
 			},
 			controls: [
 				zoomX({
-					window: controlledSignal(activeWindow, (next) => setZoomWindow(next)),
+					window: controlledSignal<ZoomXWindow<Date>, ZoomXChange<Date>>(
+						activeWindow,
+						(next, { reason }) => {
+							if (reason.type === "commit") setZoomWindow(next);
+						},
+					),
 					extent,
 					ariaLabel: "Zoom account balances over time",
 				}),
