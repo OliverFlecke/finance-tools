@@ -6,6 +6,7 @@ import AddEntryModal from "./AddEntryModal";
 import Context from "./Context";
 import styles from "./index.module.css";
 import OrderAccountsModal from "./OrderAccountsModal";
+import OverviewChart from "./OverviewChart";
 import Table from "./table";
 
 export default withAuthenticationRequired(AccountOverview, {
@@ -21,7 +22,7 @@ function AccountOverview() {
 				<OrderAccountsModal />
 				<AddEntryModal />
 			</div>
-			{/* <OverviewChart /> */}
+			<OverviewChart />
 		</Context>
 	);
 }

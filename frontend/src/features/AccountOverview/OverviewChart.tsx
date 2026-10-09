@@ -1,14 +1,9 @@
-import {
-	AnimatedAxis, // any of these can be non-animated equivalents
-	AnimatedGrid,
-	AnimatedLineSeries,
-	darkTheme,
-	lightTheme,
-	Tooltip,
-	XYChart,
-} from "@visx/xychart";
-import useThemeDetector from "hooks/useThemeDetector";
-import { useCallback, useContext, useState } from "react";
+import { defineChart, lineY } from "@tanstack/charts";
+import { Chart } from "@tanstack/charts/react";
+import { scaleLinear } from "@tanstack/charts/scales/linear";
+import { scalePoint } from "@tanstack/charts/scales/point";
+import { tooltip } from "@tanstack/charts/tooltip";
+import { useContext, useMemo, useState } from "react";
 import type { Account } from "@/api/generated/types.gen";
 import SettingsContext from "@/features/Settings/context";
 import { Toggle } from "@/ui/Toggle/Toggle";
@@ -16,65 +11,87 @@ import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";
 import styles from "./OverviewChart.module.css";
 
-const accessors = {
-	// biome-ignore lint/suspicious/noExplicitAny: generic
-	xAccessor: (d: any) => d.x,
-	// biome-ignore lint/suspicious/noExplicitAny: generic
-	yAccessor: (d: any) => d.y,
-};
+interface Row {
+	date: string;
+	key: string;
+	label: string;
+	value: number;
+}
+
+const KINDS: { label: string; match: (account: Account) => boolean }[] = [
+	{ label: "Cash", match: (account) => account.kind === "Cash" },
+	{
+		label: "Investment",
+		match: (account) => account.kind === "Investment" || account.kind === "Pension",
+	},
+	{ label: "Total", match: () => true },
+];
 
 export default function OverviewChart() {
-	const isDarkTheme = useThemeDetector();
 	const { accounts, entries } = useAccountContext();
 	const { values: settings } = useContext(SettingsContext);
-
-	const getEntries = useCallback(
-		(account: Account) => {
-			return Object.keys(entries).map((date) => {
-				const value = entries[date][account.id];
-				const y =
-					value === undefined
-						? undefined
-						: convertToCurrency(
-								value,
-								settings.currencyRates.usd,
-								account.currency,
-								settings.preferredDisplayCurrency,
-							);
-				return { x: date, y };
-			});
-		},
-		[settings.currencyRates.usd, settings.preferredDisplayCurrency, entries],
-	);
-
-	const data = accounts.map((account) => ({
-		account: account,
-		data: getEntries(account),
-	}));
-
-	const summarize = (name: string, predicate: (x: { account: Account }) => boolean) => {
-		const filteredData = data.filter(predicate).map((x) => x.data);
-		return {
-			name,
-			data: Object.keys(entries).map((date, i) => ({
-				x: date,
-				y: filteredData.map((x) => x[i].y ?? 0).reduce((sum, v) => sum + v, 0),
-			})),
-		};
-	};
-
-	const types = ["Cash", "Investment"]
-		.map((kind) =>
-			summarize(
-				kind,
-				kind === "Investment"
-					? (x) => x.account.kind === "Investment" || x.account.kind === "Pension"
-					: (x) => x.account.kind === kind,
-			),
-		)
-		.concat([summarize("Total", () => true)]);
-
 	const [showTotals, setShowTotals] = useState(true);
+
+	const definition = useMemo(() => {
+		const dates = Object.keys(entries);
+		const valueFor = (account: Account, date: string) => {
+			const value = entries[date][account.id];
+			return value === undefined
+				? undefined
+				: convertToCurrency(
+						value,
+						settings.currencyRates.usd,
+						account.currency,
+						settings.preferredDisplayCurrency,
+					);
+		};
+
+		const rows: Row[] = showTotals
+			? KINDS.flatMap(({ label, match }) => {
+					const matching = accounts.filter(match);
+					return dates.map((date) => ({
+						date,
+						key: label,
+						label,
+						value: matching.reduce((sum, account) => sum + (valueFor(account, date) ?? 0), 0),
+					}));
+				})
+			: accounts.flatMap((account) =>
+					dates.map((date) => ({
+						date,
+						key: account.id,
+						label: account.name,
+						value: valueFor(account, date) ?? 0,
+					})),
+				);
+
+		return defineChart({
+			marks: [lineY(rows, { x: "date", y: "value", z: "key" })],
+			scales: {
+				x: { scale: () => scalePoint<string>().padding(0.2) },
+				y: { scale: scaleLinear, nice: true, grid: true },
+			},
+			tooltip: {
+				use: tooltip,
+				items: [
+					{ channel: "x", label: "Date" },
+					{ field: "label", label: "Account" },
+					{
+						channel: "y",
+						label: "Value",
+						text: (point) =>
+							formatCurrency(point.yValue as number, settings.preferredDisplayCurrency),
+					},
+				],
+			},
+		});
+	}, [
+		accounts,
+		entries,
+		showTotals,
+		settings.currencyRates.usd,
+		settings.preferredDisplayCurrency,
+	]);
 
 	return (
 		<div className={styles.wrapper}>
@@ -84,55 +101,7 @@ export default function OverviewChart() {
 					<Toggle checked={showTotals} onChange={(e) => setShowTotals(e.target.checked)} />
 				</span>
 			</div>
-			<XYChart
-				height={500}
-				margin={{ top: 50, bottom: 30, right: 20, left: 70 }}
-				theme={isDarkTheme ? darkTheme : lightTheme}
-				xScale={{ type: "band" }}
-				yScale={{ type: "linear" }}
-			>
-				<AnimatedAxis hideAxisLine={true} orientation="bottom" />
-				<AnimatedAxis orientation="left" />
-				<AnimatedGrid columns={false} numTicks={4} />
-
-				{showTotals
-					? types.map((d) => (
-							<AnimatedLineSeries data={d.data} dataKey={d.name} key={d.name} {...accessors} />
-						))
-					: data.map((d) => (
-							<AnimatedLineSeries
-								data={d.data}
-								dataKey={d.account.id}
-								key={d.account.id}
-								{...accessors}
-							/>
-						))}
-
-				<Tooltip
-					renderTooltip={({ tooltipData, colorScale }) => {
-						if (!tooltipData?.nearestDatum || !colorScale) return;
-
-						return (
-							<div className={styles.tooltip}>
-								<div style={{ color: colorScale(tooltipData.nearestDatum.key) }}>
-									{tooltipData.nearestDatum.key}
-								</div>
-								<span>{accessors.xAccessor(tooltipData.nearestDatum.datum)}</span>
-								<span className={styles.tooltip_value}>
-									{formatCurrency(
-										accessors.yAccessor(tooltipData.nearestDatum.datum),
-										settings.preferredDisplayCurrency,
-									)}
-								</span>
-							</div>
-						);
-					}}
-					showSeriesGlyphs
-					showVerticalCrosshair
-					snapTooltipToDatumX
-					snapTooltipToDatumY
-				/>
-			</XYChart>
+			<Chart ariaLabel="Account balances over time" definition={definition} height={500} />
 		</div>
 	);
 }

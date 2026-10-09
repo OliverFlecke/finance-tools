@@ -21,12 +21,3 @@
 	height: 100%;
 	vertical-align: middle;
 }
-
-.tooltip {
-	display: flex;
-	flex-direction: column;
-}
-
-.tooltip_value {
-	color: var(--color-value-positive);
-}
