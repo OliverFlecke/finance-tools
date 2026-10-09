@@ -7,21 +7,15 @@
 	padding: var(--space-4);
 	display: flex;
 	flex-direction: column;
-}
-
-.list {
-	margin: var(--space-4);
-	border-radius: var(--radius);
-	background-color: var(--color-green-500);
-	padding: var(--space-2);
-}
-
-.header {
-	font-size: var(--font-size-2xl);
+	gap: var(--space-4);
 }
 
 .account {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+
+	border-radius: var(--radius);
+	background-color: var(--color-value-bg-positive);
+	padding: var(--space-2);
 }
