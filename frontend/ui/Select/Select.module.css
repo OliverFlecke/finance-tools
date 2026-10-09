@@ -10,6 +10,7 @@
 	padding: var(--space-2) var(--space-4);
 	box-shadow: var(--shadow);
 	color: var(--color-text);
+	appearance: none;
 
 	&:focus {
 		border-color: var(--color-focus-ring);

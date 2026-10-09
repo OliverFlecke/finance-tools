@@ -23,7 +23,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 		return (
 			<label className={styles.label}>
-				<span className="input-label">{label}</span>
+				<span>{label}</span>
 				<select
 					className={clsx(styles.select, className)}
 					onChange={onChange}
