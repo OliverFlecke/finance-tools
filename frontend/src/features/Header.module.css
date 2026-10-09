@@ -2,8 +2,11 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	background-color: var(--color-emerald-900);
-	padding: var(--space-2) var(--space-4);
+	background-color: var(--color-chrome);
+	padding-top: max(var(--space-2), env(safe-area-inset-top));
+	padding-bottom: var(--space-2);
+	padding-left: max(var(--space-4), env(safe-area-inset-left));
+	padding-right: max(var(--space-4), env(safe-area-inset-right));
 	color: var(--color-gray-300);
 }
 

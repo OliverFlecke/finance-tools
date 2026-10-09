@@ -168,6 +168,9 @@
 	--color-focus-ring: var(--color-indigo-400);
 	--color-backdrop: rgb(0 0 0 / 0.4);
 
+	/* Shared bar background for Header + Footer */
+	--color-chrome: var(--color-emerald-900);
+
 	/* Feature-specific accent tokens: single source of truth for colors that
 	   repeat across a feature's components or vary between light/dark. */
 	--color-placeholder-text: var(--color-gray-400);

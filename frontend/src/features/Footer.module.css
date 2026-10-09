@@ -3,9 +3,10 @@
 	height: 100%;
 	flex-direction: row-reverse;
 	border-radius: var(--radius);
-	background-color: var(--color-green-900);
-	padding-inline: var(--space-4);
-	padding-bottom: var(--space-4);
+	background-color: var(--color-chrome);
+	padding-left: max(var(--space-4), env(safe-area-inset-left));
+	padding-right: max(var(--space-4), env(safe-area-inset-right));
+	padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
 	padding-top: var(--space-2);
 	color: var(--color-gray-300);
 }
