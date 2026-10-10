@@ -6,11 +6,11 @@ import { scaleUtc } from "d3-scale";
 import { useContext, useMemo, useState } from "react";
 import type { Account } from "@/api/generated/types.gen";
 import SettingsContext from "@/features/Settings/context";
+import { Label } from "@/ui/Label/Label";
 import { Toggle } from "@/ui/Toggle/Toggle";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";
 import styles from "./OverviewChart.module.css";
-import { Label } from "@/ui/Label/Label";
 
 interface Row {
 	date: Date;
