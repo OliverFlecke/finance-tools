@@ -23,10 +23,8 @@ const compactNumber = new Intl.NumberFormat(undefined, { notation: "compact" });
 
 const KINDS: { label: string; match: (account: Account) => boolean }[] = [
 	{ label: "Cash", match: (account) => account.kind === "Cash" },
-	{
-		label: "Investment",
-		match: (account) => account.kind === "Investment" || account.kind === "Pension",
-	},
+	{ label: "Investment", match: (account) => account.kind === "Investment" },
+	{ label: "Pension", match: (account) => account.kind === "Pension" },
 	{ label: "Total", match: () => true },
 ];
 
