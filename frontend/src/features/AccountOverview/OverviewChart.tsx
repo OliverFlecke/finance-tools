@@ -1,6 +1,4 @@
 import { defineChart, lineY } from "@tanstack/charts";
-import { controlledSignal } from "@tanstack/charts/interaction/signal";
-import { type ZoomXChange, type ZoomXWindow, zoomX } from "@tanstack/charts/interaction/zoom";
 import { Chart } from "@tanstack/charts/react";
 import { scaleLinear } from "@tanstack/charts/scales/linear";
 import { tooltip } from "@tanstack/charts/tooltip";
@@ -8,11 +6,11 @@ import { scaleUtc } from "d3-scale";
 import { useContext, useMemo, useState } from "react";
 import type { Account } from "@/api/generated/types.gen";
 import SettingsContext from "@/features/Settings/context";
-import { Button } from "@/ui/Button/Button";
 import { Toggle } from "@/ui/Toggle/Toggle";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import { useAccountContext } from "./Context";
 import styles from "./OverviewChart.module.css";
+import { Label } from "@/ui/Label/Label";
 
 interface Row {
 	date: Date;
@@ -32,17 +30,51 @@ const KINDS: { label: string; match: (account: Account) => boolean }[] = [
 	{ label: "Total", match: () => true },
 ];
 
+type RangePreset = "All" | "5Y" | "3Y" | "1Y" | "YTD" | "6M" | "3M" | "1M";
+
+const RANGE_PRESETS: { key: RangePreset; years?: number; months?: number; ytd?: boolean }[] = [
+	{ key: "All" },
+	{ key: "5Y", years: 5 },
+	{ key: "3Y", years: 3 },
+	{ key: "1Y", years: 1 },
+	{ key: "YTD", ytd: true },
+	{ key: "6M", months: 6 },
+	{ key: "3M", months: 3 },
+	{ key: "1M", months: 1 },
+];
+
+function windowForPreset(
+	preset: (typeof RANGE_PRESETS)[number],
+	extent: readonly [Date, Date],
+): { start: Date; end: Date } {
+	const end = extent[1];
+	let start: Date;
+	if (preset.ytd) {
+		start = new Date(Date.UTC(end.getUTCFullYear(), 0, 1));
+	} else if (preset.years) {
+		start = new Date(end);
+		start.setUTCFullYear(start.getUTCFullYear() - preset.years);
+	} else if (preset.months) {
+		start = new Date(end);
+		start.setUTCMonth(start.getUTCMonth() - preset.months);
+	} else {
+		return { start: extent[0], end };
+	}
+	return { start: start < extent[0] ? extent[0] : start, end };
+}
+
 export default function OverviewChart() {
 	const { accounts, entries } = useAccountContext();
 	const { values: settings } = useContext(SettingsContext);
 	const [showTotals, setShowTotals] = useState(true);
-	const [zoomWindow, setZoomWindow] = useState<ZoomXWindow<Date> | null>(null);
+	const [preset, setPreset] = useState<RangePreset>("All");
 
 	const definition = useMemo(() => {
 		const dates = Object.keys(entries).map((date) => new Date(date));
 		const extent: readonly [Date, Date] =
 			dates.length > 0 ? [dates[0], dates[dates.length - 1]] : [new Date(), new Date()];
-		const activeWindow = zoomWindow ?? { start: extent[0], end: extent[1] };
+		const activePreset = RANGE_PRESETS.find((p) => p.key === preset) ?? RANGE_PRESETS[0];
+		const activeWindow = windowForPreset(activePreset, extent);
 
 		const valueFor = (account: Account, date: string) => {
 			const value = entries[date][account.id];
@@ -86,7 +118,7 @@ export default function OverviewChart() {
 		return defineChart({
 			marks: [lineY(rows, { x: "date", y: "value", z: "key" })],
 			scales: {
-				x: { scale: scaleUtc, viewport: { domain: [activeWindow.start, activeWindow.end] } },
+				x: { scale: scaleUtc().domain([activeWindow.start, activeWindow.end]) },
 				y: {
 					scale: scaleLinear().domain(yDomain),
 					nice: true,
@@ -94,18 +126,6 @@ export default function OverviewChart() {
 					axis: { ticks: { format: (value) => compactNumber.format(value) } },
 				},
 			},
-			controls: [
-				zoomX({
-					window: controlledSignal<ZoomXWindow<Date>, ZoomXChange<Date>>(
-						activeWindow,
-						(next, { reason }) => {
-							if (reason.type === "commit") setZoomWindow(next);
-						},
-					),
-					extent,
-					ariaLabel: "Zoom account balances over time",
-				}),
-			],
 			tooltip: {
 				use: tooltip,
 				items: [
@@ -124,25 +144,36 @@ export default function OverviewChart() {
 		accounts,
 		entries,
 		showTotals,
-		zoomWindow,
+		preset,
 		settings.currencyRates.usd,
 		settings.preferredDisplayCurrency,
 	]);
 
 	return (
-		<div className={styles.wrapper}>
-			<div className={styles.toggle_row}>
-				{zoomWindow && (
-					<Button onClick={() => setZoomWindow(null)} type="button" variant="Secondary">
-						Reset zoom
-					</Button>
-				)}
-				<span className={styles.toggle_label}>
-					<span className={styles.toggle_text}>Show totals</span>
-					<Toggle checked={showTotals} onChange={(e) => setShowTotals(e.target.checked)} />
-				</span>
-			</div>
+		<div className={styles.container}>
 			<Chart ariaLabel="Account balances over time" definition={definition} height={500} />
+
+			<div className={styles.actions}>
+				<Label className={styles.toggle}>
+					Show totals
+					<Toggle checked={showTotals} onChange={(e) => setShowTotals(e.target.checked)} />
+				</Label>
+
+				<div aria-label="Date range" className={styles.range_group} role="radiogroup">
+					{RANGE_PRESETS.map(({ key }) => (
+						<label className={styles.range_option} key={key}>
+							<input
+								checked={preset === key}
+								name="chart-range"
+								onChange={() => setPreset(key)}
+								type="radio"
+								value={key}
+							/>
+							<span>{key}</span>
+						</label>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }
