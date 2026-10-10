@@ -6,12 +6,16 @@ use duplicate::duplicate_item;
 use sqlx_d1::D1Connection;
 use worker::{D1Database, Env};
 
-use crate::auth::{AuthConfig, Jwk, JwkRepository, JwkValidator, MockJwkRepository};
+use crate::{
+	auth::{AuthConfig, Jwk, JwkRepository, JwkValidator, MockJwkRepository},
+	finnhub::FinnhubClient,
+};
 
 #[derive(Debug, Clone, Getters)]
 pub struct AppState {
 	jwks_repository: Arc<dyn JwkValidator>,
 	db: Arc<D1Connection>,
+	finnhub_client: Arc<FinnhubClient>,
 }
 
 impl AppState {
@@ -19,9 +23,15 @@ impl AppState {
 		let conn = sqlx_d1::D1Connection::new(db);
 		let db = Arc::new(conn);
 
+		let finnhub_api_key = env
+			.secret("FINNHUB_API_KEY")
+			.expect("secret 'FINNHUB_API_KEY' to be set")
+			.to_string();
+
 		Ok(Self {
 			jwks_repository: create_jwk_validator(env).await,
 			db,
+			finnhub_client: Arc::new(FinnhubClient::new(finnhub_api_key)),
 		})
 	}
 }
@@ -35,6 +45,7 @@ impl FromRef<AppState> for Arc<dyn JwkValidator> {
 #[duplicate_item(
     service              field;
 	[ D1Connection ]     [ db ];
+	[ FinnhubClient ]    [ finnhub_client ];
 )]
 impl FromRef<AppState> for Arc<service> {
 	fn from_ref(app_state: &AppState) -> Self {

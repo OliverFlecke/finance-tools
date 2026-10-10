@@ -12,7 +12,7 @@ export async function createWorker(bindings?: Record<string, string>) {
 		d1Databases: {
 			prod_d1_finance: "91b36f0c-b572-4232-b6e3-dbf491bb7395",
 		},
-		bindings,
+		bindings: { FINNHUB_API_KEY: "test-finnhub-key", ...bindings },
 	});
 	return mf;
 }

@@ -1,8 +1,10 @@
 pub mod account;
 pub mod auth;
+pub mod finnhub;
 pub mod health;
 mod router;
 pub mod state;
+pub mod stock;
 
 #[cfg(feature = "openapi")]
 pub mod openapi;

@@ -14,6 +14,7 @@ use utoipa::{
 		crate::account::route::entry::post::add,
 		crate::health::ready,
 		crate::health::liveness,
+		crate::stock::route::get::lookup,
 	),
 	components(
 		schemas(
@@ -26,6 +27,9 @@ use utoipa::{
 			crate::account::route::patch::UpdateAccountRequest,
 			crate::account::route::patch::UpdateAccountsItem,
 			crate::account::route::entry::post::AddAccountEntryRequest,
+			crate::stock::route::get::StockLookupResponse,
+			crate::stock::route::get::StockLookupResult,
+			crate::finnhub::SymbolMatch,
 		)
 	),
 	info(
