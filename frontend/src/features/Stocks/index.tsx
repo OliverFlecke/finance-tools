@@ -9,6 +9,7 @@ import { convertToCurrency } from "@/utils/converters";
 import AddStock from "./AddStock";
 import { useFetchStocks } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
+import ImportStocks from "./ImportStocks";
 import styles from "./index.module.css";
 import { type Stock, type StockList, stockAvgPrice, stockGain, stockTotalShares } from "./models";
 import RefreshStocksButton from "./RefreshStocksButton";
@@ -145,6 +146,7 @@ function StockActionBar() {
 	return (
 		<div className={styles.action_bar}>
 			<AddStock />
+			<ImportStocks />
 			<RefreshStocksButton />
 		</div>
 	);
