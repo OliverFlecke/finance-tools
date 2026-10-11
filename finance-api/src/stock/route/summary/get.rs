@@ -57,6 +57,7 @@ async fn summarize(
 			, e.quantity as "quantity: f64"
 			, e.price as "price: f64"
 			, e.commission as "commission: f64"
+			, e.currency
 		FROM stock_event e
 		JOIN project_access p ON p.project_id = e.project_id AND CAST(p.user_id AS TEXT) = ?
 		ORDER BY e.trade_date ASC
@@ -67,11 +68,12 @@ async fn summarize(
 	.await
 	.map_err(GetStockSummaryError::DatabaseError)?;
 
-	let mut groups: HashMap<(String, String), Vec<Lot>> = HashMap::new();
+	let mut groups: HashMap<(String, String), (String, Vec<Lot>)> = HashMap::new();
 	for row in rows {
 		groups
 			.entry((row.portfolio, row.symbol))
-			.or_default()
+			.or_insert_with(|| (row.currency.clone(), Vec::new()))
+			.1
 			.push(Lot {
 				kind: StockEventKind::from_repr(row.kind as u8).expect("to be a valid event kind"),
 				quantity: Decimal::from_f64(row.quantity).unwrap_or_default(),
@@ -82,9 +84,16 @@ async fn summarize(
 
 	let positions: Vec<_> = groups
 		.into_iter()
-		.map(|((portfolio, symbol), lots)| {
+		.map(|((portfolio, symbol), (currency, lots))| {
 			let (quantity, cost_basis, realized_profit) = aggregate(&lots);
-			(portfolio, symbol, quantity, cost_basis, realized_profit)
+			(
+				portfolio,
+				symbol,
+				currency,
+				quantity,
+				cost_basis,
+				realized_profit,
+			)
 		})
 		.collect();
 
@@ -104,13 +113,14 @@ async fn summarize(
 	let summaries = positions
 		.into_iter()
 		.map(
-			|(portfolio, symbol, quantity, cost_basis, realized_profit)| {
+			|(portfolio, symbol, currency, quantity, cost_basis, realized_profit)| {
 				let current_price = prices.get(&symbol).copied().flatten();
 				let unrealized_profit = current_price.map(|price| quantity * price - cost_basis);
 
 				StockSummary {
 					portfolio,
 					symbol,
+					currency,
 					quantity,
 					cost_basis,
 					realized_profit,
@@ -174,6 +184,8 @@ pub struct StockSummaryResponse {
 pub struct StockSummary {
 	portfolio: String,
 	symbol: String,
+	/// ISO currency code the price fields are quoted in, e.g. `USD` or `GBp`.
+	currency: String,
 	/// Current number of shares held.
 	#[serde(with = "rust_decimal::serde::float")]
 	quantity: Decimal,

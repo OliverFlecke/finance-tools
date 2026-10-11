@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use axum::{Json, extract::State, response::IntoResponse};
 use chrono::NaiveDate;
@@ -6,8 +6,9 @@ use http::StatusCode;
 use rust_decimal::Decimal;
 use sqlx_d1::D1Connection;
 use uuid::Uuid;
+use worker::send::IntoSendFuture;
 
-use crate::{auth::Claims, stock::model::StockEventKind};
+use crate::{auth::Claims, stock::model::StockEventKind, yahoo::YahooClient};
 
 /// Import stock buy/sell events from a broker CSV export (e.g. Interactive Brokers).
 ///
@@ -33,24 +34,53 @@ use crate::{auth::Claims, stock::model::StockEventKind};
 	)
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
-#[tracing::instrument(skip(db, request))]
+#[tracing::instrument(skip(db, yahoo, request))]
 pub async fn import(
 	State(db): State<Arc<D1Connection>>,
+	State(yahoo): State<Arc<YahooClient>>,
 	user: Claims,
 	Json(request): Json<ImportStockEventsRequest>,
+) -> Result<Json<ImportStockEventsResponse>, ImportStockEventsError> {
+	// See `stock::route::get::lookup` for why this is wrapped: `reqwest`'s wasm
+	// backend returns a `!Send` future, but axum's `Handler` trait requires `Send`.
+	async move { do_import(db, yahoo, user, request).await }
+		.into_send()
+		.await
+}
+
+async fn do_import(
+	db: Arc<D1Connection>,
+	yahoo: Arc<YahooClient>,
+	user: Claims,
+	request: ImportStockEventsRequest,
 ) -> Result<Json<ImportStockEventsResponse>, ImportStockEventsError> {
 	let rows = parse_csv(&request.csv, &request.portfolio)?;
 	tracing::info!(count = rows.len(), portfolio = %request.portfolio, "Importing stock events");
 
+	// Look up each distinct symbol's quote currency once. Falls back to USD if
+	// the quote can't be fetched, rather than failing the whole import.
+	let mut currencies: HashMap<&str, String> = HashMap::new();
 	for row in &rows {
+		if !currencies.contains_key(row.symbol.as_str()) {
+			let currency = yahoo
+				.quote(&row.symbol)
+				.await
+				.map(|q| q.currency)
+				.unwrap_or_else(|_| "USD".to_string());
+			currencies.insert(&row.symbol, currency);
+		}
+	}
+
+	for row in &rows {
+		let currency = &currencies[row.symbol.as_str()];
 		sqlx_d1::query!(
 			r#"
 			WITH project AS (
 				SELECT project_id as id FROM project_access
 				WHERE user_id = ? ORDER BY project_id LIMIT 1
 			)
-			INSERT INTO stock_event (id, project_id, portfolio, symbol, kind, trade_date, quantity, price, commission, comment)
-			SELECT ?, p.id, ?, ?, ?, ?, ?, ?, ?, ?
+			INSERT INTO stock_event (id, project_id, portfolio, symbol, kind, trade_date, quantity, price, commission, comment, currency)
+			SELECT ?, p.id, ?, ?, ?, ?, ?, ?, ?, ?, ?
 			FROM project p
 			"#,
 			user.user_id(),
@@ -63,6 +93,7 @@ pub async fn import(
 			row.price,
 			row.commission,
 			row.comment,
+			currency,
 		)
 		.execute(db.as_ref())
 		.await

@@ -28,6 +28,9 @@ pub(super) struct ChartMeta {
 	pub regular_market_price: f64,
 	#[serde(rename = "chartPreviousClose")]
 	pub previous_close: f64,
+	/// ISO currency code the price is quoted in, e.g. `USD` or `GBp` (pence, for
+	/// London-listed instruments).
+	pub currency: String,
 }
 
 /// Latest quote for a symbol.
@@ -38,6 +41,8 @@ pub struct Quote {
 	pub price: f64,
 	/// Previous close price.
 	pub previous_close: f64,
+	/// ISO currency code the price is quoted in, e.g. `USD` or `GBp`.
+	pub currency: String,
 }
 
 impl From<ChartMeta> for Quote {
@@ -45,6 +50,7 @@ impl From<ChartMeta> for Quote {
 		Self {
 			price: meta.regular_market_price,
 			previous_close: meta.previous_close,
+			currency: meta.currency,
 		}
 	}
 }
@@ -56,7 +62,7 @@ mod test {
 	#[test]
 	fn parses_successful_response() {
 		let json = r#"{"chart":{"result":[{"meta":{
-			"regularMarketPrice":841.26,"chartPreviousClose":838.64
+			"regularMarketPrice":841.26,"chartPreviousClose":838.64,"currency":"USD"
 		}}],"error":null}}"#;
 
 		let body: ChartResponse = serde_json::from_str(json).unwrap();
@@ -72,6 +78,7 @@ mod test {
 
 		assert_eq!(quote.price, 841.26);
 		assert_eq!(quote.previous_close, 838.64);
+		assert_eq!(quote.currency, "USD");
 	}
 
 	#[test]
