@@ -1,10 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { Upload } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { importStockEventsMutation } from "@/api/generated/@tanstack/react-query.gen";
+import {
+	getStockEventsQueryKey,
+	getStockSummaryQueryKey,
+	importStockEventsMutation,
+} from "@/api/generated/@tanstack/react-query.gen";
 import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
@@ -18,6 +22,7 @@ interface ImportStocksForm {
 
 export default function ImportStocks() {
 	const { mutateAsync } = useMutation(importStockEventsMutation());
+	const qc = useQueryClient();
 
 	const [isOpen, setIsOpen] = useState(false);
 	const {
@@ -33,6 +38,8 @@ export default function ImportStocks() {
 				const csv = await file[0].text();
 				const { imported } = await mutateAsync({ body: { portfolio, csv } });
 				toast.success(`Imported ${imported} event${imported === 1 ? "" : "s"}`);
+				qc.invalidateQueries({ queryKey: getStockEventsQueryKey() });
+				qc.invalidateQueries({ queryKey: getStockSummaryQueryKey() });
 				reset();
 				setIsOpen(false);
 			} catch (error) {
@@ -41,7 +48,7 @@ export default function ImportStocks() {
 				});
 			}
 		},
-		[mutateAsync, reset],
+		[mutateAsync, qc, reset],
 	);
 
 	return (

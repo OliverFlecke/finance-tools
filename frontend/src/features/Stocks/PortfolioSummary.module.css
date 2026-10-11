@@ -1,0 +1,30 @@
+.wrapper {
+	margin-top: var(--space-8);
+}
+
+.heading {
+	text-align: center;
+	font-size: var(--font-size-2xl);
+	color: var(--color-action-positive);
+}
+
+.table {
+	width: 100%;
+
+	& th {
+		font-size: var(--font-size-sm);
+		color: var(--color-text-muted);
+		text-align: left;
+	}
+
+	& td,
+	& th {
+		padding: var(--space-2) var(--space-4);
+	}
+}
+
+.error {
+	text-align: center;
+	color: var(--color-value-negative);
+	padding: var(--space-4);
+}

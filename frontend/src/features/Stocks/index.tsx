@@ -11,6 +11,7 @@ import { useFetchStocks } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
 import ImportStocks from "./ImportStocks";
 import styles from "./index.module.css";
+import PortfolioSummary from "./PortfolioSummary";
 import { type Stock, type StockList, stockAvgPrice, stockGain, stockTotalShares } from "./models";
 import RefreshStocksButton from "./RefreshStocksButton";
 import StockErrorDisplay from "./StockErrorDisplay";
@@ -47,6 +48,7 @@ export default function Stocks() {
 			<StockErrorDisplay error={state.error} />
 			<StocksTable stocks={state.stocks} />
 			<StockActionBar />
+			<PortfolioSummary />
 		</StockContext.Provider>
 	);
 }
