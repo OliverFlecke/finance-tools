@@ -5,6 +5,7 @@ pub mod health;
 mod router;
 pub mod state;
 pub mod stock;
+pub mod yahoo;
 
 #[cfg(feature = "openapi")]
 pub mod openapi;

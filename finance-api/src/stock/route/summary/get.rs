@@ -6,12 +6,12 @@ use rust_decimal::{Decimal, prelude::FromPrimitive};
 use sqlx_d1::D1Connection;
 use worker::send::IntoSendFuture;
 
-use crate::{auth::Claims, finnhub::FinnhubClient, stock::model::StockEventKind};
+use crate::{auth::Claims, stock::model::StockEventKind, yahoo::YahooClient};
 
 /// Get an aggregated view of all stock events, grouped by portfolio and symbol.
 ///
 /// Reports the current lot (share) count and cost basis, realized and unrealized
-/// profit using the average cost method, and the latest price from Finnhub.
+/// profit using the average cost method, and the latest price from Yahoo Finance.
 #[cfg_attr(
 	feature = "openapi",
 	utoipa::path(
@@ -30,22 +30,22 @@ use crate::{auth::Claims, finnhub::FinnhubClient, stock::model::StockEventKind};
 	)
 )]
 #[axum::debug_handler(state = crate::state::AppState)]
-#[tracing::instrument(skip(db, finnhub))]
+#[tracing::instrument(skip(db, yahoo))]
 pub async fn summary(
 	State(db): State<Arc<D1Connection>>,
-	State(finnhub): State<Arc<FinnhubClient>>,
+	State(yahoo): State<Arc<YahooClient>>,
 	user: Claims,
 ) -> Result<Json<StockSummaryResponse>, GetStockSummaryError> {
 	// See `stock::route::get::lookup` for why this is wrapped: `reqwest`'s wasm
 	// backend returns a `!Send` future, but axum's `Handler` trait requires `Send`.
-	async move { summarize(db, finnhub, user).await }
+	async move { summarize(db, yahoo, user).await }
 		.into_send()
 		.await
 }
 
 async fn summarize(
 	db: Arc<D1Connection>,
-	finnhub: Arc<FinnhubClient>,
+	yahoo: Arc<YahooClient>,
 	user: Claims,
 ) -> Result<Json<StockSummaryResponse>, GetStockSummaryError> {
 	let rows = sqlx_d1::query!(
@@ -92,11 +92,11 @@ async fn summarize(
 	let mut prices: HashMap<String, Option<Decimal>> = HashMap::new();
 	for (_, symbol, ..) in &positions {
 		if !prices.contains_key(symbol) {
-			let price = finnhub
+			let price = yahoo
 				.quote(symbol)
 				.await
 				.ok()
-				.and_then(|q| Decimal::from_f64(q.c));
+				.and_then(|q| Decimal::from_f64(q.price));
 			prices.insert(symbol.clone(), price);
 		}
 	}
@@ -182,7 +182,7 @@ pub struct StockSummary {
 	cost_basis: Decimal,
 	#[serde(with = "rust_decimal::serde::float")]
 	realized_profit: Decimal,
-	/// Latest price from Finnhub. `None` if the quote could not be retrieved.
+	/// Latest price from Yahoo Finance. `None` if the quote could not be retrieved.
 	#[serde(with = "rust_decimal::serde::float_option")]
 	current_price: Option<Decimal>,
 	/// `None` if the current price could not be retrieved.
