@@ -4,4 +4,4 @@ pub mod model;
 
 pub use client::FinnhubClient;
 pub use error::FinnhubError;
-pub use model::{SymbolMatch, SymbolSearchResponse};
+pub use model::{QuoteResponse, SymbolMatch, SymbolSearchResponse};

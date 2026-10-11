@@ -15,6 +15,9 @@ use utoipa::{
 		crate::health::ready,
 		crate::health::liveness,
 		crate::stock::route::get::lookup,
+		crate::stock::route::event::get::list,
+		crate::stock::route::event::post::import,
+		crate::stock::route::summary::get::summary,
 	),
 	components(
 		schemas(
@@ -30,6 +33,13 @@ use utoipa::{
 			crate::stock::route::get::StockLookupResponse,
 			crate::stock::route::get::StockLookupResult,
 			crate::finnhub::SymbolMatch,
+			crate::stock::model::StockEventKind,
+			crate::stock::route::event::get::StockEventResponse,
+			crate::stock::route::event::get::StockEvent,
+			crate::stock::route::event::post::ImportStockEventsRequest,
+			crate::stock::route::event::post::ImportStockEventsResponse,
+			crate::stock::route::summary::get::StockSummaryResponse,
+			crate::stock::route::summary::get::StockSummary,
 		)
 	),
 	info(

@@ -7,6 +7,17 @@ pub struct SymbolSearchResponse {
 	pub result: Vec<SymbolMatch>,
 }
 
+/// Response from the Finnhub quote endpoint.
+/// See <https://finnhub.io/docs/api/quote>.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct QuoteResponse {
+	/// Current price.
+	pub c: f64,
+	/// Previous close price.
+	pub pc: f64,
+}
+
 #[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct SymbolMatch {

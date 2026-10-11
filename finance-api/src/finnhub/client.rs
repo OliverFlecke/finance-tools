@@ -1,4 +1,7 @@
-use crate::finnhub::{error::FinnhubError, model::SymbolSearchResponse};
+use crate::finnhub::{
+	error::FinnhubError,
+	model::{QuoteResponse, SymbolSearchResponse},
+};
 
 const BASE_URL: &str = "https://finnhub.io/api/v1";
 
@@ -30,6 +33,26 @@ impl FinnhubClient {
 		let response = reqwest::Client::new()
 			.get(format!("{BASE_URL}/search"))
 			.query(&[("q", query), ("token", self.api_key.as_str())])
+			.send()
+			.await?;
+
+		if !response.status().is_success() {
+			return Err(FinnhubError::Api {
+				status: response.status().as_u16(),
+				body: response.text().await.unwrap_or_default(),
+			});
+		}
+
+		Ok(response.json().await?)
+	}
+
+	/// Get the latest quote for a symbol.
+	/// See <https://finnhub.io/docs/api/quote>.
+	#[tracing::instrument(skip(self))]
+	pub async fn quote(&self, symbol: &str) -> Result<QuoteResponse, FinnhubError> {
+		let response = reqwest::Client::new()
+			.get(format!("{BASE_URL}/quote"))
+			.query(&[("symbol", symbol), ("token", self.api_key.as_str())])
 			.send()
 			.await?;
 
