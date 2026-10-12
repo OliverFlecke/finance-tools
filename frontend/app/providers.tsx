@@ -20,6 +20,10 @@ client.setConfig({
 			return user.access_token;
 		}
 
+		if (typeof window === "undefined") {
+			return;
+		}
+
 		const renewedUser = await userManager.signinSilent();
 		return renewedUser?.access_token;
 	},

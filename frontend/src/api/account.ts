@@ -1,7 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { userManager } from "api/auth";
 import { getAccountsQueryKey } from "@/api/generated/@tanstack/react-query.gen";
-import { client } from "@/api/generated/client.gen";
 import { addEntry, createAccount, updateAccount, updateAccounts } from "@/api/generated/sdk.gen";
 import type {
 	Account,
@@ -9,18 +7,6 @@ import type {
 	AddAccountEntryRequest,
 	CreateAccountRequest,
 } from "@/api/generated/types.gen";
-
-client.setConfig({
-	baseUrl: process.env.NEXT_PUBLIC_API_HOST,
-	auth: async () => {
-		const user = await userManager.getUser();
-		if (user && !user.expired) {
-			return user.access_token;
-		}
-		const renewedUser = await userManager.signinSilent();
-		return renewedUser?.access_token;
-	},
-});
 
 export function useAddAccountMutation() {
 	return useMutation({
