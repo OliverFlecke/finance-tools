@@ -13,12 +13,9 @@ function formatNumber(value?: number | null): string {
 	return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// `currencyDisplay: "code"` instead of the default "symbol": rows can hold a
-// mix of currencies that share a symbol (e.g. $ for USD and SGD), which would
-// otherwise read as the same amount.
 function formatAmount(value: number | undefined, currency: string): string {
 	if (value === undefined || Number.isNaN(value)) return "–";
-	return formatCurrency(value, currency, { currencyDisplay: "code" });
+	return formatCurrency(value, currency);
 }
 
 export default function PortfolioSummary() {
