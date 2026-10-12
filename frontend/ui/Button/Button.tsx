@@ -14,12 +14,14 @@ export type ButtonType =
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: ButtonType;
 	icon?: boolean;
+	full?: boolean;
 }
 
 export function Button({
 	variant = "Primary",
 	className,
 	icon,
+	full,
 	children,
 	...buttonProps
 }: ButtonProps) {
@@ -27,7 +29,13 @@ export function Button({
 
 	return (
 		<button
-			className={clsx(styles.btn, colorClass(variant), icon && styles.icon, className)}
+			className={clsx(
+				styles.btn,
+				colorClass(variant),
+				icon && styles.icon,
+				full && styles.full,
+				className,
+			)}
 			style={{
 				color: icon ? c?.background : undefined,
 				backgroundColor: icon ? "transparent" : undefined,

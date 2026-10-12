@@ -351,3 +351,10 @@ input.budget {
 .value-bg-negative {
 	background-color: var(--color-value-bg-negative);
 }
+
+.center {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}

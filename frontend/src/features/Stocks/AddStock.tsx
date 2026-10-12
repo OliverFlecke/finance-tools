@@ -1,51 +1,50 @@
 import clsx from "clsx";
 import { Plus } from "lucide-react";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { useStockSymbolExists } from "@/api/stock";
 import { Button } from "@/ui/Button/Button";
 import { ButtonContainer } from "@/ui/ButtonContainer/ButtonContainer";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { Input } from "@/ui/Input/Input";
 import styles from "./AddStock.module.css";
-import { useTrackStockCallback } from "./API/stockApi";
-import { useSharesCallback } from "./API/yahoo";
-import type { Stock } from "./models";
-import { StockContext } from "./state";
+
+interface AddStockForm {
+	symbol: string;
+}
 
 export default function AddStock() {
-	const { dispatch } = useContext(StockContext);
-	const fetchShares = useSharesCallback();
-	const trackStock = useTrackStockCallback();
+	const symbolExists = useStockSymbolExists();
 
 	const [isOpen, setIsOpen] = useState(false);
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		setError,
+		formState: { errors, isSubmitting },
 		reset,
-	} = useForm<Stock>();
+	} = useForm<AddStockForm>();
 
-	const addSymbol = useCallback(
-		async (stock: Stock) => {
-			const quotes = await fetchShares(stock.symbol);
-
-			if (quotes === null || quotes.length === 0) {
-				// TODO: Better error dialog to inform user that stock quote was not found
-				alert(`Stock with symbol '${stock.symbol}' was not found`);
-			} else {
-				await trackStock(stock.symbol);
-				dispatch({
-					type: "ADD STOCK",
-					stock: {
-						...quotes[0],
-						symbol: stock.symbol,
-						lots: [],
-					},
+	const checkSymbol = useCallback(
+		async ({ symbol }: AddStockForm) => {
+			try {
+				if (!(await symbolExists(symbol))) {
+					setError("symbol", { message: `Stock with symbol '${symbol}' was not found` });
+					return;
+				}
+			} catch (error) {
+				toast.error("Failed to look up symbol", {
+					description: error instanceof Error ? error.message : undefined,
 				});
-				reset();
+				return;
 			}
+
+			toast.success(`Symbol '${symbol.toUpperCase()}' found`);
+			reset();
+			setIsOpen(false);
 		},
-		[dispatch, fetchShares, reset, trackStock],
+		[reset, setError, symbolExists],
 	);
 
 	return (
@@ -55,22 +54,28 @@ export default function AddStock() {
 				Add symbol
 			</Button>
 
-			<Dialog title="Add symbol" open={isOpen} onClose={() => setIsOpen(false)}>
-				<form onSubmit={handleSubmit(addSymbol)} className={styles.form}>
+			<Dialog onClose={() => setIsOpen(false)} open={isOpen} title="Add symbol">
+				<form className={styles.form} onSubmit={handleSubmit(checkSymbol)}>
 					<fieldset className={styles.fieldset}>
 						<Input
-							placeholder="AAPL, MSFT..."
 							label="Symbol"
+							placeholder="AAPL, MSFT..."
 							{...register("symbol", { required: true })}
-							errorMessage={errors.symbol && "Please provide a symbol to add"}
+							errorMessage={
+								errors.symbol?.message ?? (errors.symbol && "Please provide a symbol to add")
+							}
 						/>
 					</fieldset>
 
 					<ButtonContainer>
-						<Button type="submit" className={clsx("btn btn-primary", styles.submit_button)}>
-							Add
+						<Button
+							className={clsx("btn btn-primary", styles.submit_button)}
+							disabled={isSubmitting}
+							type="submit"
+						>
+							Check
 						</Button>
-						<Button variant="Transparent" onClick={() => setIsOpen(false)}>
+						<Button onClick={() => setIsOpen(false)} variant="Transparent">
 							Cancel
 						</Button>
 					</ButtonContainer>

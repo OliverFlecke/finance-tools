@@ -7,9 +7,27 @@ import Header from "features/Header";
 import Settings from "features/Settings";
 import type React from "react";
 import { AuthProvider } from "react-oidc-context";
+import { client } from "@/api/generated/client.gen";
 import styles from "./providers.module.css";
 
 const queryClient = new QueryClient();
+
+client.setConfig({
+	baseUrl: process.env.NEXT_PUBLIC_API_HOST,
+	auth: async () => {
+		const user = await userManager.getUser();
+		if (user && !user.expired) {
+			return user.access_token;
+		}
+
+		if (typeof window === "undefined") {
+			return;
+		}
+
+		const renewedUser = await userManager.signinSilent();
+		return renewedUser?.access_token;
+	},
+});
 
 export default function Providers({ children }: { children: React.ReactNode }) {
 	return (

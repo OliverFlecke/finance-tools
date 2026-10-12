@@ -2,7 +2,9 @@ use axum::Router;
 use http::{HeaderValue, request::Parts as RequestParts};
 use tower_http::cors::{AllowOrigin, CorsLayer};
 
-use crate::{account::account_router, health::health_check_router, state::AppState};
+use crate::{
+	account::account_router, health::health_check_router, state::AppState, stock::stock_router,
+};
 
 pub fn build_router(state: AppState) -> Router {
 	// TODO: CORS should not be necessary when running in production.
@@ -23,6 +25,7 @@ pub fn build_router(state: AppState) -> Router {
 
 	Router::new()
 		.nest("/api/v1/account", account_router())
+		.nest("/api/v1/stock", stock_router())
 		.with_state(state)
 		.merge(health_check_router())
 		.layer(cors)
