@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -54,23 +54,20 @@ function Form({ close }: { close: () => void }) {
 		reset,
 	} = useForm<AddTransactionForm>({ defaultValues: { kind: "Buy", commission: 0 } });
 
-	const addTransaction = useCallback(
-		async (body: AddTransactionForm) => {
-			try {
-				await mutateAsync({ body });
-				toast.success(`Added ${body.kind.toLowerCase()} transaction for ${body.symbol}`);
-				qc.invalidateQueries({ queryKey: getStockEventsQueryKey() });
-				qc.invalidateQueries({ queryKey: getStockSummaryQueryKey() });
-				reset();
-				close();
-			} catch (error) {
-				toast.error("Failed to add transaction", {
-					description: error instanceof Error ? error.message : undefined,
-				});
-			}
-		},
-		[mutateAsync, qc, reset, close],
-	);
+	const addTransaction = async (body: AddTransactionForm) => {
+		try {
+			await mutateAsync({ body });
+			toast.success(`Added ${body.kind.toLowerCase()} transaction for ${body.symbol}`);
+			qc.invalidateQueries({ queryKey: getStockEventsQueryKey() });
+			qc.invalidateQueries({ queryKey: getStockSummaryQueryKey() });
+			reset();
+			close();
+		} catch (error) {
+			toast.error("Failed to add transaction", {
+				description: error instanceof Error ? error.message : undefined,
+			});
+		}
+	};
 
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(addTransaction)}>

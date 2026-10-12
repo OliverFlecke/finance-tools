@@ -70,14 +70,18 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
 					onClose={close}
 					ref={dialogRef}
 				>
-					<div className={styles.header}>
-						<h2>{title}</h2>
-						<button type="button" onClick={close} aria-label="Close">
-							<X />
-						</button>
-					</div>
+					{open && (
+						<>
+							<div className={styles.header}>
+								<h2>{title}</h2>
+								<button aria-label="Close" onClick={close} type="button">
+									<X />
+								</button>
+							</div>
 
-					{children}
+							{children}
+						</>
+					)}
 				</dialog>
 			</>
 		);
