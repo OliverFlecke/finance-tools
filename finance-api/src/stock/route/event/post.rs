@@ -48,6 +48,95 @@ pub async fn import(
 		.await
 }
 
+/// Record a single stock buy or sell transaction.
+#[cfg_attr(
+	feature = "openapi",
+	utoipa::path(
+		operation_id = "add_stock_event",
+		post,
+		tag = "Stock",
+		path = "/api/v1/stock/event",
+		request_body = AddStockEventRequest,
+		responses(
+			(status = 200, description = "Event recorded successfully"),
+			(status = 401, description = "Unauthorized"),
+			(status = 500, description = "Internal server error"),
+		),
+		security(
+			("bearer" = [])
+		)
+	)
+)]
+#[axum::debug_handler(state = crate::state::AppState)]
+#[tracing::instrument(skip(db, yahoo, request))]
+pub async fn create(
+	State(db): State<Arc<D1Connection>>,
+	State(yahoo): State<Arc<YahooClient>>,
+	user: Claims,
+	Json(request): Json<AddStockEventRequest>,
+) -> Result<StatusCode, ImportStockEventsError> {
+	// See `stock::route::get::lookup` for why this is wrapped: `reqwest`'s wasm
+	// backend returns a `!Send` future, but axum's `Handler` trait requires `Send`.
+	async move { do_create(db, yahoo, user, request).await }
+		.into_send()
+		.await
+}
+
+async fn do_create(
+	db: Arc<D1Connection>,
+	yahoo: Arc<YahooClient>,
+	user: Claims,
+	request: AddStockEventRequest,
+) -> Result<StatusCode, ImportStockEventsError> {
+	let currency = yahoo
+		.quote(&request.symbol)
+		.await
+		.map(|q| q.currency)
+		.unwrap_or_else(|_| "USD".to_string());
+
+	sqlx_d1::query!(
+		r#"
+		WITH project AS (
+			SELECT project_id as id FROM project_access
+			WHERE user_id = ? ORDER BY project_id LIMIT 1
+		)
+		INSERT INTO stock_event (id, project_id, portfolio, symbol, kind, trade_date, quantity, price, commission, currency)
+		SELECT ?, p.id, ?, ?, ?, date('now'), ?, ?, ?, ?
+		FROM project p
+		"#,
+		user.user_id(),
+		Uuid::now_v7().hyphenated().to_string(),
+		request.portfolio,
+		request.symbol,
+		request.kind as u8,
+		request.quantity,
+		request.price,
+		request.commission,
+		currency,
+	)
+	.execute(db.as_ref())
+	.await
+	.map_err(ImportStockEventsError::DatabaseError)?;
+
+	Ok(StatusCode::OK)
+}
+
+/// Request to record a single stock buy or sell transaction.
+#[cfg_attr(feature = "openapi", derive(utoipa::ToSchema))]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct AddStockEventRequest {
+	/// Portfolio this event belongs to. The same stock can be held in multiple portfolios.
+	portfolio: String,
+	symbol: String,
+	kind: StockEventKind,
+	#[serde(with = "rust_decimal::serde::float")]
+	quantity: Decimal,
+	#[serde(with = "rust_decimal::serde::float")]
+	price: Decimal,
+	#[serde(with = "rust_decimal::serde::float")]
+	commission: Decimal,
+}
+
 async fn do_import(
 	db: Arc<D1Connection>,
 	yahoo: Arc<YahooClient>,
