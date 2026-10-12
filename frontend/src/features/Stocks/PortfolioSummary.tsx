@@ -8,21 +8,8 @@ import { getValueColorIndicator } from "@/utils/colors";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import styles from "./PortfolioSummary.module.css";
 
-function formatNumber(value?: number | null): string {
-	if (value === undefined || value === null || Number.isNaN(value)) return "–";
-	return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function formatAmount(value: number | undefined, currency: string): string {
-	if (value === undefined || Number.isNaN(value)) return "–";
-	return formatCurrency(value, currency);
-}
-
 export default function PortfolioSummary() {
 	const { data, error, isLoading } = useQuery(getStockSummaryOptions());
-	const {
-		values: { currencyRates, preferredDisplayCurrency },
-	} = useContext(SettingsContext);
 
 	if (isLoading) return null;
 	if (error) {
@@ -36,10 +23,81 @@ export default function PortfolioSummary() {
 		(a, b) => a.portfolio.localeCompare(b.portfolio) || a.symbol.localeCompare(b.symbol),
 	);
 
+	return (
+		<div className={styles.wrapper}>
+			<h2 className={styles.heading}>Portfolios</h2>
+
+			<table className={styles.table}>
+				<thead>
+					<tr className={styles.row}>
+						<th>Portfolio</th>
+						<th>Symbol</th>
+						<th>Shares</th>
+						<th>Cost basis</th>
+						<th>Avg cost</th>
+						<th>Current price</th>
+						<th>Market value</th>
+						<th>Realized</th>
+						<th>Unrealized</th>
+					</tr>
+				</thead>
+				<tbody>
+					{sorted.map((summary) => (
+						<SummaryRow key={`${summary.portfolio}:${summary.symbol}`} summary={summary} />
+					))}
+				</tbody>
+
+				<Footer data={sorted} />
+			</table>
+		</div>
+	);
+}
+
+function SummaryRow({ summary }: { summary: StockSummary }) {
+	const {
+		portfolio,
+		symbol,
+		currency,
+		quantity,
+		cost_basis,
+		realized_profit,
+		current_price,
+		unrealized_profit,
+	} = summary;
+	const avgCost = quantity !== 0 ? cost_basis / quantity : undefined;
+	const marketValue =
+		current_price !== undefined && current_price !== null ? quantity * current_price : undefined;
+
+	return (
+		<tr className={styles.row}>
+			<td>{portfolio}</td>
+			<td>{symbol}</td>
+			<td>
+				{quantity.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+			</td>
+			<td>{formatCurrency(cost_basis, currency)}</td>
+			<td>{formatCurrency(avgCost, currency)}</td>
+			<td>{formatCurrency(current_price ?? undefined, currency)}</td>
+			<td>{formatCurrency(marketValue, currency)}</td>
+			<td className={getValueColorIndicator(realized_profit)}>
+				{formatCurrency(realized_profit, currency)}
+			</td>
+			<td className={clsx(unrealized_profit && getValueColorIndicator(unrealized_profit))}>
+				{formatCurrency(unrealized_profit ?? undefined, currency)}
+			</td>
+		</tr>
+	);
+}
+
+function Footer({ data }: { data: StockSummary[] }) {
+	const {
+		values: { currencyRates, preferredDisplayCurrency },
+	} = useContext(SettingsContext);
+
 	const toDisplayCurrency = (value: number, currency: string) =>
 		convertToCurrency(value, currencyRates.usd, currency, preferredDisplayCurrency);
 
-	const totals = sorted.reduce(
+	const totals = data.reduce(
 		(acc, summary) => {
 			const marketValue =
 				summary.current_price !== undefined && summary.current_price !== null
@@ -63,74 +121,17 @@ export default function PortfolioSummary() {
 	);
 
 	return (
-		<div className={styles.wrapper}>
-			<h2 className={styles.heading}>Portfolios</h2>
-			<table className={styles.table}>
-				<thead>
-					<tr>
-						<th>Portfolio</th>
-						<th>Symbol</th>
-						<th>Shares</th>
-						<th>Cost basis</th>
-						<th>Avg cost</th>
-						<th>Current price</th>
-						<th>Market value</th>
-						<th>Realized</th>
-						<th>Unrealized</th>
-					</tr>
-				</thead>
-				<tbody>
-					{sorted.map((summary) => (
-						<SummaryRow key={`${summary.portfolio}:${summary.symbol}`} summary={summary} />
-					))}
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colSpan={6}>Total ({preferredDisplayCurrency})</th>
-						<td>{formatAmount(totals.marketValue, preferredDisplayCurrency)}</td>
-						<td className={getValueColorIndicator(totals.realizedProfit)}>
-							{formatAmount(totals.realizedProfit, preferredDisplayCurrency)}
-						</td>
-						<td className={getValueColorIndicator(totals.unrealizedProfit)}>
-							{formatAmount(totals.unrealizedProfit, preferredDisplayCurrency)}
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-	);
-}
-
-function SummaryRow({ summary }: { summary: StockSummary }) {
-	const {
-		portfolio,
-		symbol,
-		currency,
-		quantity,
-		cost_basis,
-		realized_profit,
-		current_price,
-		unrealized_profit,
-	} = summary;
-	const avgCost = quantity !== 0 ? cost_basis / quantity : undefined;
-	const marketValue =
-		current_price !== undefined && current_price !== null ? quantity * current_price : undefined;
-
-	return (
-		<tr>
-			<td>{portfolio}</td>
-			<td>{symbol}</td>
-			<td>{formatNumber(quantity)}</td>
-			<td>{formatAmount(cost_basis, currency)}</td>
-			<td>{formatAmount(avgCost, currency)}</td>
-			<td>{formatAmount(current_price ?? undefined, currency)}</td>
-			<td>{formatAmount(marketValue, currency)}</td>
-			<td className={getValueColorIndicator(realized_profit)}>
-				{formatAmount(realized_profit, currency)}
-			</td>
-			<td className={clsx(unrealized_profit && getValueColorIndicator(unrealized_profit))}>
-				{formatAmount(unrealized_profit ?? undefined, currency)}
-			</td>
-		</tr>
+		<tfoot>
+			<tr className={styles.footer}>
+				<th colSpan={6}>Total ({preferredDisplayCurrency})</th>
+				<td>{formatCurrency(totals.marketValue, preferredDisplayCurrency)}</td>
+				<td className={getValueColorIndicator(totals.realizedProfit)}>
+					{formatCurrency(totals.realizedProfit, preferredDisplayCurrency)}
+				</td>
+				<td className={getValueColorIndicator(totals.unrealizedProfit)}>
+					{formatCurrency(totals.unrealizedProfit, preferredDisplayCurrency)}
+				</td>
+			</tr>
+		</tfoot>
 	);
 }
