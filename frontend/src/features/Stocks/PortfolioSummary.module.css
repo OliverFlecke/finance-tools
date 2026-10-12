@@ -1,9 +1,4 @@
-.wrapper {
-	margin-top: var(--space-8);
-}
-
 .heading {
-	text-align: center;
 	font-size: var(--font-size-2xl);
 	color: var(--color-action-positive);
 }

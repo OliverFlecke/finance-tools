@@ -1,3 +1,5 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { Upload } from "lucide-react";
@@ -68,9 +70,9 @@ export default function ImportStocks() {
 							errorMessage={errors.portfolio && "Please provide a portfolio name"}
 						/>
 						<Input
+							accept=".csv,text/csv"
 							label="CSV file"
 							type="file"
-							accept=".csv,text/csv"
 							{...register("file", { required: true })}
 							errorMessage={errors.file && "Please select a CSV file to import"}
 						/>

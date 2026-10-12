@@ -1,30 +1,58 @@
-import { useQuery } from "@tanstack/react-query";
+"use client";
+
+import { QueryErrorResetBoundary, useSuspenseQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import SettingsContext from "features/Settings/context";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { PacmanLoader } from "react-spinners";
 import { getStockSummaryOptions } from "@/api/generated/@tanstack/react-query.gen";
 import type { StockSummary } from "@/api/generated/types.gen";
+import { Button } from "@/ui/Button/Button";
 import { getValueColorIndicator } from "@/utils/colors";
 import { convertToCurrency, formatCurrency } from "@/utils/converters";
 import styles from "./PortfolioSummary.module.css";
 
 export default function PortfolioSummary() {
-	const { data, error, isLoading } = useQuery(getStockSummaryOptions());
+	return (
+		<QueryErrorResetBoundary>
+			{({ reset }) => (
+				<ErrorBoundary
+					fallbackRender={({ resetErrorBoundary, error }) => (
+						<div>
+							<h2>Failed to load portfolios</h2>
+							<div>{error as string}</div>
 
-	if (isLoading) return null;
-	if (error) {
-		return <div className={styles.error}>Failed to load portfolio summary</div>;
-	}
+							<Button onClick={() => resetErrorBoundary()}>Try again</Button>
+						</div>
+					)}
+					onReset={reset}
+				>
+					<Suspense
+						fallback={
+							<div className="center">
+								<PacmanLoader color="var(--color-text)" />
+							</div>
+						}
+					>
+						<Inner />
+					</Suspense>
+				</ErrorBoundary>
+			)}
+		</QueryErrorResetBoundary>
+	);
+}
 
-	const summaries = data?.summaries ?? [];
-	if (summaries.length === 0) return null;
+function Inner() {
+	const { data } = useSuspenseQuery(getStockSummaryOptions());
 
-	const sorted = [...summaries].sort(
+	if (data.summaries.length === 0) return null;
+	const sorted = [...data.summaries].sort(
 		(a, b) => a.portfolio.localeCompare(b.portfolio) || a.symbol.localeCompare(b.symbol),
 	);
 
 	return (
-		<div className={styles.wrapper}>
+		<>
 			<h2 className={styles.heading}>Portfolios</h2>
 
 			<table className={styles.table}>
@@ -49,7 +77,7 @@ export default function PortfolioSummary() {
 
 				<Footer data={sorted} />
 			</table>
-		</div>
+		</>
 	);
 }
 
