@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS stock_event (
 	quantity NUMERIC(20, 6) NOT NULL,
 	price NUMERIC(20, 6) NOT NULL,
 	commission NUMERIC(20, 6) NOT NULL DEFAULT 0,
+	currency text NOT NULL DEFAULT 'USD',
 	comment text,
 	created_at TEXT NOT NULL DEFAULT (datetime('now')),
 
