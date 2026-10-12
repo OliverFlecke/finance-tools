@@ -11,10 +11,9 @@ import { useFetchStocks } from "./API/stockApi";
 import { useSharesCallback } from "./API/yahoo";
 import ImportStocks from "./ImportStocks";
 import styles from "./index.module.css";
-import PortfolioSummary from "./PortfolioSummary";
 import { type Stock, type StockList, stockAvgPrice, stockGain, stockTotalShares } from "./models";
+import PortfolioSummary from "./PortfolioSummary";
 import RefreshStocksButton from "./RefreshStocksButton";
-import StockErrorDisplay from "./StockErrorDisplay";
 import StockRow from "./StockRow";
 import StockSummaryRow from "./StockSummaryRow";
 import { getDefaultStockState, StockContext, stockReducer } from "./state";
@@ -45,10 +44,10 @@ export default function Stocks() {
 
 	return (
 		<StockContext.Provider value={{ state, dispatch }}>
-			<StockErrorDisplay error={state.error} />
-			<StocksTable stocks={state.stocks} />
-			<StockActionBar />
+			{/* <StockErrorDisplay error={state.error} /> */}
+			{/* <StocksTable stocks={state.stocks} /> */}
 			<PortfolioSummary />
+			<StockActionBar />
 		</StockContext.Provider>
 	);
 }
@@ -119,25 +118,25 @@ function StockTableHeader({ sortKey, ascending, setAscending, setSortKey }: Stoc
 
 	return (
 		<tr className={styles.header_row}>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Symbol"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Symbol"}>
 				Symbol
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Current price"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Current price"}>
 				Price
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Total value"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Total value"}>
 				Total value
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Total shares"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Total shares"}>
 				Shares
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Average price"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Average price"}>
 				Avg price
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey={"Gain"} ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey={"Gain"}>
 				Gain
 			</Header>
-			<Header sort={sort} currentSortKey={sortKey} sortKey="Gain percentage" ascending={ascending}>
+			<Header ascending={ascending} currentSortKey={sortKey} sort={sort} sortKey="Gain percentage">
 				Percentage
 			</Header>
 		</tr>
@@ -147,9 +146,9 @@ function StockTableHeader({ sortKey, ascending, setAscending, setSortKey }: Stoc
 function StockActionBar() {
 	return (
 		<div className={styles.action_bar}>
-			<AddStock />
+			{/* <AddStock /> */}
 			<ImportStocks />
-			<RefreshStocksButton />
+			{/* <RefreshStocksButton /> */}
 		</div>
 	);
 }

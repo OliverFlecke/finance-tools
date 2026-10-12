@@ -53,8 +53,15 @@ export default function PortfolioSummary() {
 }
 
 function SummaryRow({ summary }: { summary: StockSummary }) {
-	const { portfolio, symbol, quantity, cost_basis, realized_profit, current_price, unrealized_profit } =
-		summary;
+	const {
+		portfolio,
+		symbol,
+		quantity,
+		cost_basis,
+		realized_profit,
+		current_price,
+		unrealized_profit,
+	} = summary;
 	const avgCost = quantity !== 0 ? cost_basis / quantity : undefined;
 	const marketValue =
 		current_price !== undefined && current_price !== null ? quantity * current_price : undefined;
