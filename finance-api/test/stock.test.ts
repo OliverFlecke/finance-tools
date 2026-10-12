@@ -120,4 +120,54 @@ describe("stock event endpoints", () => {
 
 		await mf.dispose();
 	});
+
+	it("POST /api/v1/stock/event without auth returns 401", async () => {
+		const { mf } = await authWorker();
+		const res = await mf.dispatchFetch("http://localhost/api/v1/stock/event", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				portfolio: "IBKR",
+				symbol: "AAPL",
+				kind: "Buy",
+				quantity: 1,
+				price: 1,
+				commission: 0,
+			}),
+		});
+		expect(res.status).toBe(401);
+		await mf.dispose();
+	});
+
+	it("POST /api/v1/stock/event records a single transaction, visible via GET", async () => {
+		const { mf, token } = await authWorker();
+
+		const res = await mf.dispatchFetch("http://localhost/api/v1/stock/event", {
+			method: "POST",
+			headers: authHeaders(token),
+			body: JSON.stringify({
+				portfolio: "IBKR",
+				symbol: "AAPL",
+				kind: "Sell",
+				quantity: 10,
+				price: 123.45,
+				commission: 1.5,
+			}),
+		});
+		expect(res.status).toBe(200);
+
+		const getRes = await mf.dispatchFetch("http://localhost/api/v1/stock/event", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const body: any = await getRes.json();
+		expect(body.events.length).toBe(1);
+		expect(body.events[0].portfolio).toBe("IBKR");
+		expect(body.events[0].symbol).toBe("AAPL");
+		expect(body.events[0].kind).toBe("Sell");
+		expect(body.events[0].quantity).toBe(10);
+		expect(body.events[0].price).toBe(123.45);
+		expect(body.events[0].commission).toBe(1.5);
+
+		await mf.dispose();
+	});
 });
