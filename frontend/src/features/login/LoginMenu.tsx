@@ -26,6 +26,7 @@ function LogoutButton() {
 					post_logout_redirect_uri: window.location.origin,
 				});
 			}}
+			variant="Link"
 		>
 			<LogOut />
 			Logout
