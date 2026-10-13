@@ -6,7 +6,7 @@
 
 Dashboard for tracking personal finances — accounts, stock lots, and compound interest calculations.
 
-Deployed at [finance.oliverflecke.me](https://finance.oliverflecke.me).
+Deployed at [finance.flecke.xyz](https://finance.flecke.xyz).
 
 ## Structure
 

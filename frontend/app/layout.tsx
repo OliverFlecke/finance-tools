@@ -1,9 +1,11 @@
-import "main.css";
 import type { Metadata, Viewport } from "next";
+import { Geist } from "next/font/google";
 import type React from "react";
 import { Toaster } from "sonner";
 import styles from "./layout.module.css";
 import Providers from "./providers";
+
+import "main.css";
 
 export const metadata: Metadata = {
 	title: { default: "Finance", template: "%s | Finance" },
@@ -14,6 +16,10 @@ export const metadata: Metadata = {
 	},
 	manifest: "/manifest.json",
 };
+
+const geistSans = Geist({
+	subsets: ["latin"],
+});
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -28,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html className={geistSans.className} lang="en">
 			<body className={styles.body}>
 				<Providers>{children}</Providers>
 				<Toaster closeButton richColors theme="system" />

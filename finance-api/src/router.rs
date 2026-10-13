@@ -17,7 +17,7 @@ pub fn build_router(state: AppState) -> Router {
 			};
 			matches!(
 				origin,
-				"https://finance.oliverflecke.me" | "https://finance-tools.oliverfl.workers.dev"
+				"https://finance.oliverflecke.me" | "https://finance.flecke.xyz"
 			) || origin.starts_with("http://localhost:")
 				|| origin.starts_with("https://localhost:")
 		},

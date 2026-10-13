@@ -22,7 +22,15 @@ interface Props {
 	variant?: "income" | "expenses";
 }
 
-export default function ItemList({ title, items, total, addItem, deleteItem, updateItem, variant }: Props) {
+export default function ItemList({
+	title,
+	items,
+	total,
+	addItem,
+	deleteItem,
+	updateItem,
+	variant,
+}: Props) {
 	const {
 		state: { hideItems },
 	} = useContext(BudgetContext);
