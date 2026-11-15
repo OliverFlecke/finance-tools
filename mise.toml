@@ -1,7 +1,7 @@
 [tools]
 biome = "2.5.4"
 node = "26"
-pnpm = "12.16"
+pnpm = "12.18"
 rust = "nightly"
 sqlite = "3.54.1"
 wrangler = "4.149"
