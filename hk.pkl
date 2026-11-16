@@ -1,5 +1,5 @@
-amends "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Builtins.pkl"
 
 local frontend = new Group {
 	dir = "frontend"
@@ -27,25 +27,25 @@ local shared = new Mapping<String, Step> {
 		glob = List("**/*.yaml", "**/*.yml")
 		exclude = List("**/node_modules/**", "**/pnpm-lock.yaml")
 	}
-	["trailing-whitespace"] = Builtins.trailing_whitespace,
-	["mixed-line-ending"] = Builtins.mixed_line_ending,
-	// ["end-of-file-fixer"] = Builtins.end_of_file_fixer,
-	["fix-smart-quotes"] = Builtins.fix_smart_quotes,
-	["check-case-conflict"] = Builtins.check_case_conflict,
-	["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs,
+	["trailing-whitespace"] = Builtins.trailing_whitespace
+	["mixed-line-ending"] = Builtins.mixed_line_ending
+	// ["end-of-file-fixer"] = Builtins.end_of_file_fixer
+	["fix-smart-quotes"] = Builtins.fix_smart_quotes
+	["check-case-conflict"] = Builtins.check_case_conflict
+	["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs
 }
 
 hooks {
 	["pre-commit"] {
 		fix = true
 		stash = "git"
-		steps = {
-			["frontend"] = frontend,
-			["backend"] = backend,
-			...shared,
-			["check-merge-conflict"] = Builtins.check_merge_conflict,
-			["check-added-large-files"] = Builtins.check_added_large_files,
-			["detect-private-key"] = Builtins.detect_private_key,
+		steps {
+			["frontend"] = frontend
+			["backend"] = backend
+			...shared
+			["check-merge-conflict"] = Builtins.check_merge_conflict
+			["check-added-large-files"] = Builtins.check_added_large_files
+			["detect-private-key"] = Builtins.detect_private_key
 		}
 	}
 	["commit-msg"] {
@@ -57,17 +57,17 @@ hooks {
 	}
 	["fix"] {
 		fix = true
-		steps = {
-			["frontend"] = frontend,
-			["backend"] = backend,
-			...shared,
+		steps {
+			["frontend"] = frontend
+			["backend"] = backend
+			...shared
 		}
 	}
 	["check"] {
-		steps = {
-			["frontend"] = frontend,
-			["backend"] = backend,
-			...shared,
+		steps {
+			["frontend"] = frontend
+			["backend"] = backend
+			...shared
 		}
 	}
 }

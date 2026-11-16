@@ -1,5 +1,6 @@
 [tools]
 biome = "2.5.4"
+hk = "2.12.0"
 node = "26"
 pnpm = "12.18"
 rust = "nightly"
