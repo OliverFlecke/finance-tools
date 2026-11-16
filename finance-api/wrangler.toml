@@ -7,7 +7,7 @@ AUTH_ISSUER = "https://auth.flecke.xyz/"
 AUTH_AUDIENCE = "finance.flecke.xyz"
 
 [build]
-command = "cargo install -q \"worker-build@^0.8\" && worker-build --release --panic-unwind"
+command = "cargo install -q \"worker-build@^0.9\" && worker-build --release --panic-unwind"
 
 [[d1_databases]]
 binding = "prod_d1_finance"
