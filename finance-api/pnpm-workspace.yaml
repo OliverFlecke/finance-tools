@@ -12,4 +12,4 @@ minimumReleaseAgeExclude:
   - workerd@1.20261116.1
 overrides:
   undici: ^8.0.0
-  workerd: 1.20261119.1
+  workerd: 1.20261120.1
